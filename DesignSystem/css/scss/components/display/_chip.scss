@@ -1,0 +1,51 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+// 라벨
+$chipSize: (
+  l: (h:3rem,   fs: set.$ft-bd-m,  pd:.6rem 1.2rem),
+  m: (h:2.4rem, fs: set.$ft-bd-s,  pd:.4rem .8rem),
+  s: (h:2rem,   fs: set.$ft-bd-xs, pd:.2rem .6rem),
+);
+$chipState: (
+  nm: (bg: set.$gray-10,     fc: set.$gray-40),
+  po: (bg: set.$mCol-10,     fc: set.$mCol-60),
+  de: (bg: set.$sst-dCol-10, fc: set.$sst-dCol-60),
+  su: (bg: set.$sst-sCol-10, fc: set.$sst-sCol-60),
+  wa: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
+  if: (bg: set.$sst-iCol-10, fc: set.$sst-iCol-60),
+);
+
+
+
+
+@each $size, $size_prop in $chipSize {
+  @each $type, $type_prop in $chipState {
+    .chip {
+      gap: .8rem;
+      border-radius: 100rem;
+      position: relative;
+      display: flex; align-items: center;
+      font-weight: set.$fw-b;
+      line-height: 1;
+      text-box: set.$tbSet;
+      .chip-kill { width: 0; height: 0; position: absolute; clip-path: inset(0% 100% 100% 0%); left: 0; top: 0; }
+      span { display: block;  }
+      &:has(.chip-kill:checked) { display: none; }
+    }
+    .chip-#{$type}-#{$size} {
+      @extend .chip;
+      background: map.get($type_prop, bg);
+      color: map.get($type_prop, fc);
+      height: map.get($size_prop, h);
+      font-size: map.get($size_prop, fs);
+      padding: map.get($size_prop, pd);
+      i { @include set.ico-close($color: map.get($type_prop, fc)); }
+    }
+  }
+}
+
+
+

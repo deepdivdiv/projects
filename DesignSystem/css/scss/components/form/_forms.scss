@@ -2,7 +2,7 @@
 @use '../../utils' as set;
 @use "sass:map";
 // 사용자입력요소
-// input, 유효성상태, textarea, select, checkbox, radio, toggle, file, form-group
+// input, 유효성상태, textarea, select, checkbox, radio, toggle, file
 @keyframes outline-pumping {
     0% {
         outline-width: 0rem;
@@ -377,6 +377,7 @@ $cauColors: (
     }
 }
 
+// 인풋 반복문
 @each $size, $prop in $inputSize {
     .form-#{$size} {
         @extend .form;
@@ -420,6 +421,8 @@ $cauColors: (
         }
     }
 }
+
+// 캡션 반복문
 @each $size, $prop in $cauSizes {
     @each $name, $color in $cauColors {
         .cau-#{$name}-#{$size} {

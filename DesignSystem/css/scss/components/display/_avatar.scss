@@ -1,0 +1,54 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+@use "sass:math";
+
+// 아바타
+$avaSizes: (
+  xs: (w:2.4rem, fs: set.$ft-bd-xs),
+  s:  (w:3.2rem, fs: set.$ft-bd-s ),
+  m:  (w:4.0rem, fs: set.$ft-bd-m ),
+  l:  (w:4.8rem, fs: set.$ft-tt-s ),
+  xl: (w:6.4rem, fs: set.$ft-hd-s ),
+);
+
+
+.ava {
+  aspect-ratio: 1/1;
+  background: set.$mCol-10 set.icon(ico-user, set.$mCol-60) no-repeat center center / 58%;
+  display: inline-flex;
+  border-radius: 100rem;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  &:not(:empty) {
+    background-image: none;
+    font-size: set.$ft-tt-s;
+    color: set.$mCol-60;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+
+  
+}
+@each $size, $prop in $avaSizes {
+  .avata-chip {
+    display: flex; align-items: center;
+    [class^="ava-"] {
+      outline: calc(map.get($prop, w) / 12) solid set.$gray-0;
+      &:not(:first-of-type) {
+        margin-left: calc(#{map.get($prop, w)} * -0.26);
+      } 
+    }
+
+  }
+  .ava-#{$size} {
+    @extend .ava;
+    width: map.get($prop, w);
+    &:not(:empty) {
+      font-size: map.get($prop, fs);
+    }
+  }
+}
+
+

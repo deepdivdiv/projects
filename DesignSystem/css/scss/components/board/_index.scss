@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
-
-@forward 'board.core';
-@forward 'board.detail';
-@forward 'board.grid';
-@forward 'board.list';
+@forward 'core';    // 검색/필터 정렬 드롭다운, 건수표시 등 상단 툴바
+@forward 'list';    // 보드 리스트형
+@forward 'grid';    // 보드 썸네일형
+@forward 'detail';  // 보드 뷰

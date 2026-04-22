@@ -4,7 +4,6 @@
 
 
 // 라벨
-
 $labelSizes: (
   l: (h:3rem,   fs: set.$ft-bd-m, pd:.6rem 1.2rem),
   m: (h:2.4rem, fs: set.$ft-bd-s, pd:.4rem .8rem),
@@ -12,28 +11,28 @@ $labelSizes: (
 );
 $labelColors: (
   st: (bg: set.$sst-dCol-60, fc: set.$gray-0),
-  imp: (bg: set.$mCol-60, fc: set.$gray-0),
-  ne: (bg: set.$gray-100, fc: set.$gray-0),
-  po: (bg: set.$mCol-10, fc: set.$mCol-60),
+  imp: (bg: set.$mCol-60,    fc: set.$gray-0),
+  ne: (bg: set.$gray-100,    fc: set.$gray-0),
+  po: (bg: set.$mCol-10,     fc: set.$mCol-60),
   de: (bg: set.$sst-dCol-10, fc: set.$sst-dCol-60),
   su: (bg: set.$sst-sCol-10, fc: set.$sst-sCol-60),
   wa: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
   if: (bg: set.$sst-iCol-10, fc: set.$sst-iCol-60),
-  nm: (bg: set.$gray-10, fc: set.$gray-40),
+  nm: (bg: set.$gray-10,     fc: set.$gray-40),
 );
-.lb {
-  border-radius: 100rem;
-  display: flex; align-items: center; gap: 0.4rem;
-  justify-content: center;
-  background: set.$mCol-10;
-  font-weight: 400;
-  line-height: 1;
-  text-box: set.$tbSet;
-}
 
 
 @each $size, $size_prop in $labelSizes {
   @each $type, $type_prop in $labelColors {
+    .lb {
+      border-radius: 100rem;
+      display: flex; align-items: center; gap: 0.4rem;
+      justify-content: center;
+      background: set.$mCol-10;
+      font-weight: 400;
+      line-height: 1;
+      text-box: set.$tbSet;
+    }
     .lb-#{$type}-#{$size} {
       @extend .lb;
       background: map.get($type_prop, bg);
