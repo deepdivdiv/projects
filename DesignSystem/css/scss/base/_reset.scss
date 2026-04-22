@@ -1,0 +1,192 @@
+@charset "UTF-8";
+@use '../utils' as set;
+// margin 10rem ~ 100rem 
+@for $i from 1 through 10 {
+  .m#{$i + "0"} {
+    margin: #{$i}rem !important;
+  }
+}
+// margin-top 10rem ~ 100rem 
+@for $i from 1 through 10 {
+  .mt#{$i + "0"} {
+    margin-top: #{$i}rem !important;
+  }
+}
+// margin-bottom 10rem ~ 100rem 
+@for $i from 1 through 10 {
+  .mb#{$i + "0"} {
+    margin-bottom: #{$i}rem !important;
+  }
+}
+// padding 10rem ~ 100rem 
+@for $i from 1 through 10 {
+  .p#{$i + "0"} {
+    padding: #{$i}rem !important;
+  }
+}
+// padding-top 10rem ~ 100rem 
+@for $i from 1 through 10 {
+  .pt#{$i + "0"} {
+    padding-top: #{$i}rem !important;
+  }
+}
+// padding-bottom 10rem ~ 100rem 
+@for $i from 1 through 10 {
+  .pb#{$i + "0"} {
+    padding-bottom: #{$i}rem !important;
+  }
+}
+// width 10% ~ 100% 
+@for $i from 1 through 10 {
+  .wp#{$i + "0"} {
+    width: #{$i + "0%"} !important;
+  }
+}
+// max-width 12rem, 30rem
+@for $i from 12 through 30 {
+  .mw#{$i + "0"} {
+    width: 100%;
+    max-width: #{$i}rem !important;
+  }
+}
+
+
+
+.none { display: none; }
+.hide { height: 0; width: 0; clip-path: inset(100% 100% 0% 0%); opacity: 0; position: absolute; left: 0; top: 0; overflow: visible;}
+/* Reset.css */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strong, sub, sup, var,
+b, u, i,
+dl, dt, dd, ol, ul, li, menu,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header,
+nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-weight: set.$fw-m;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, 
+footer, header, menu, nav, section, picture, source {
+    display: block;
+}
+body {
+    line-height: 1.5;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 62.5%;
+    /* box-sizng 꼭 체크할 것 */
+}
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+ol, ul, menu {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+caption {
+    text-align: left;
+    font-weight: normal;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+img {
+    vertical-align: bottom;
+}
+img, video, audio {
+    max-width: 100%;
+    height: auto;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+input, button {
+    appearance: auto;
+    border-radius: 0;
+    padding: 0;
+}
+button { border: none; background: transparent; }
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+select::-ms-expand {
+    display: none;
+    /* 화살표없애기 for ie10, 11 */
+}
+input, textarea, select, button {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+button, input[type="button"], input[type="submit"] {
+    cursor: pointer;
+}
+
+
+
+
+
+
+html {
+    font-size: 62.5%;
+    font-family: "Pretendard", sans-serif; 
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -o-text-size-adjust: none;
+    line-height: 1.4;
+    /* text크기를 자동으로 조절하지 말아라 */
+}
+
+
+#skip {
+    position: relative;
+    z-index: 99;
+}
+#skip > a {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 35px;
+    background: #333;
+    color: #fff;
+    line-height: 35px;
+    text-align: center;
+    left: 0;
+    top: -35px;
+}
+#skip > a:focus, 
+#skip > a:active {
+    top: 0;
+}

@@ -1,0 +1,43 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+$pgSize: (
+    xs: ( h:0.6rem, p: 0.1rem ),
+     s: ( h:1.0rem, p: 0.2rem ),
+     m: ( h:1.4rem, p: 0.2rem ),
+     l: ( h:1.8rem, p: 0.3rem ),
+    xl: ( h:2.2rem, p: 0.3rem ),
+);
+
+@each $size, $prop in $pgSize {
+    .pg-#{$size} {
+        appearance: none;
+        width: 100%;
+        height: map.get($prop, h);
+        border-radius: 100rem;
+        padding: map.get($prop, p);
+        border: 1px solid set.$gray-20;
+        overflow: hidden;
+        &::-webkit-progress-bar {
+            background: set.$gray-0;
+        }
+        &::-webkit-progress-value {
+            background: set.$mCol-60;
+            border-radius: 100rem;
+            transition: all set.$aniSet;
+        }
+        &.fail {
+            &::-webkit-progress-value { background: set.$sst-dCol-60; }
+        }
+        &.comple {
+            &::-webkit-progress-value { background: set.$sst-sCol-60; }
+        }
+        &.wa {
+            &::-webkit-progress-value { background: set.$sst-wCol-60; }
+        }
+        &.ne {
+            &::-webkit-progress-value { background: set.$gray-100; }
+        }
+    }
+}

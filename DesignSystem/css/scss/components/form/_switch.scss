@@ -1,0 +1,137 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+$toggleSizes: (
+    xs: (w: 3.0rem, t-w:3.4rem, h: 1.6rem, d-w: 1.0rem, fs: 0.8rem, bw: 0.1rem, tum: .3rem),
+    s:  (w: 3.6rem, t-w:4.0rem, h: 2.0rem, d-w: 1.4rem, fs: 0.8rem, bw: 0.1rem, tum: .3rem),
+    m:  (w: 4.4rem, t-w:5.0rem, h: 2.4rem, d-w: 1.8rem, fs: 1.0rem, bw: 0.1rem, tum: .3rem),
+    l:  (w: 5.3rem, t-w:6.0rem, h: 2.8rem, d-w: 2.0rem, fs: 1.2rem, bw: 0.1rem, tum: .4rem),
+    xl: (w: 6.0rem, t-w:7.0rem, h: 3.2rem, d-w: 2.2rem, fs: 1.4rem, bw: 0.2rem, tum: .4rem),
+);
+
+.tog {
+    position: relative;
+    input[type=checkbox] {
+        width: 0; height: 0; position: absolute;
+        left: 0; top: 0; overflow: visible; clip-path: inset(0 100% 100% 0);
+        & + label {
+            border-radius: 100rem;
+            position: relative;
+            display: block;
+            &::after {
+                content: "";
+                aspect-ratio: 1/1;
+                position: absolute;
+                border-radius: 100rem;
+                top: 50%;
+                left: 0;
+                transition: all set.$aniSet;
+            }
+        }
+    }
+    @each $size, $prop in $toggleSizes {
+        &-t-#{$size} {
+            @extend .tog;
+            input[type=checkbox] {
+                transition: all set.$aniSet;
+                & + label {
+                    background: set.$gray-0;
+                    width:  map.get($prop, t-w);
+                    height: map.get($prop, h);
+                    border: map.get($prop, bw) solid set.$gray-30;
+                    transition: all set.$aniSet;
+                    &::before {
+                        content: "OFF";
+                        font-family: set.$ft-basic;
+                        font-weight: 700;
+                        color: set.$gray-40;
+                        text-box: set.$tbSet;
+                        line-height: 1;
+                        position: absolute;
+                        width: 100%; top: 50%; transform: translateY(-50%);
+                        transition: all set.$aniSet;
+                        font-size: map.get($prop, fs);
+                        padding-left: calc(map.get($prop, d-w) * 1.4);
+                    }
+                    &::after {
+                        background: set.$gray-30;
+                        transform: translate(map.get($prop, tum), -50%);
+                        width: map.get($prop, d-w);
+                    }
+                    &:hover {
+                        border-color: set.$mCol-30;
+                        &::before {
+                            color: set.$mCol-40;
+                        }
+                        &::after {
+                            background: set.$mCol-30;
+                        }
+                    }
+                }
+                &:checked + label {
+                    border-color: set.$mCol-60;
+                    &::before {
+                        content: "ON";
+                        color: set.$mCol-60;
+                        padding-left: calc(map.get($prop, tum) * 1.4);
+                    }
+                    &::after {
+                        background: set.$mCol-60;
+                        left: calc(100% - calc(map.get($prop, tum) * 2) - map.get($prop, d-w));
+                    }
+                    &:hover {
+                        border-color: set.$mCol-70;
+                        &::before { color: set.$mCol-70; }
+                        &::after { background: set.$mCol-70; }
+                    }
+                }
+                @if $size == xs or $size == s {
+                    & + label {
+                        &::before { font-weight: 600; }
+                    }
+                }
+            }
+        }
+        &-#{$size} {
+            @extend .tog;
+            input[type=checkbox] {
+                transition: all set.$aniSet;
+                & + label {
+                    width:  map.get($prop, w);
+                    height: map.get($prop, h);
+                    border: map.get($prop, bw) solid set.$gray-30;
+                    background: set.$gray-30;
+                    transition: all set.$aniSet;
+                    &::after {
+                        background: set.$gray-0;
+                        transform: translate(map.get($prop, tum), -50%);
+                        width: map.get($prop, d-w);
+                    }
+                    &:hover {
+                        border-color: set.$mCol-30;
+                        background: set.$mCol-30;
+                    }
+                }
+                &:checked + label {
+                    border-color: set.$mCol-60;
+                    background: set.$mCol-60;
+                    &::after {
+                        background: set.$gray-0;
+                        left: calc(100% - calc(map.get($prop, tum) * 2) - map.get($prop, d-w));
+                    }
+                    &:hover {
+                        border-color: set.$mCol-70;
+                          background: set.$mCol-70;
+                    }
+                }
+                @if $size == xs or $size == s {
+                    & + label {
+                        &::before { font-weight: 600; }
+                    }
+                }
+            }
+        }
+    }
+}
+

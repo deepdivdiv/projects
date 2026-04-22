@@ -1,0 +1,450 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+// 사용자입력요소
+// input, 유효성상태, textarea, select, checkbox, radio, toggle, file, form-group
+@keyframes outline-pumping {
+    0% {
+        outline-width: 0rem;
+    }
+    100% {
+        outline-width: .4rem;
+    }
+}
+
+$inputSize: (
+  l:  (h: 6.4rem,  hs: 4.8rem, ft: set.$ft-bd-l, fts:set.$ft-tt-s, po:2rem,  pos:2rem,   pd:1.9rem 2rem, pds:1.3rem 2rem),
+  m:   (h: 4rem,   hs: 3.2rem, ft: set.$ft-bd-m, fts:set.$ft-bd-m, po:1rem,  pos:0.7rem, pd:1rem, pds:0.7rem),
+  s:   (h: 3.2rem, hs: 2.4rem, ft: set.$ft-bd-s, fts:set.$ft-bd-m, po:.7rem, pos:0.5rem, pd:0.7rem, pds:.5rem),
+
+);
+$formState: (
+    imp:     (d: set.$mCol-60,     d-h: set.$mCol-80),
+    comple:  (d: set.$sst-sCol-60, d-h: set.$sst-sCol-80),
+    fail:    (d: set.$sst-dCol-60, d-h: set.$sst-dCol-70),
+);
+$cauSizes: (
+     s: (fs:set.$ft-bd-s,  is: 1.6rem,),
+     m: (fs:set.$ft-bd-m,  is: 2.0rem,),
+     l: (fs:set.$ft-bd-l,  is: 2.4rem,),
+);
+$cauColors: (
+    nm: (c:set.$gray-40, ),
+    imp:(c:set.$gray-100, ),
+    er: (c:set.$sst-dCol-60, ),
+    ca: (c:set.$sst-wCol-60, ),
+    su: (c:set.$sst-sCol-60, ),
+    de: (c:set.$sst-dCol-60, ),
+    if: (c:set.$sst-iCol-60, ),
+);
+
+// 폼, 셀렉트, 인풋, 텍스트에리어
+.form { 
+    background: set.$gray-0;
+    position: relative;
+    // 셀렉트
+    select {
+        border-radius: .2rem;
+        background: set.$gray-0;
+        align-items: center;
+        border: 1px solid set.$gray-30;
+        appearance: base-select;
+        position: relative;
+        color: set.$gray-50;
+        flex-grow: 1;
+        
+        &::picker-icon {
+            content: "";
+            background: set.icon(che-top, set.$gray-30) no-repeat center center / contain;
+            position: absolute;
+            width: 1rem; aspect-ratio: 1/1;
+            top: 50%; transform: translateY(-55%);
+            transform-origin: 50% 0;
+            rotate: 0deg;
+            transition: rotate set.$aniSet;
+        }
+        &:not(:open){
+            &:hover, &.hover {
+                border-color: set.$mCol-30;
+                color: set.$mCol-40;
+                &::picker-icon {
+                    background: set.icon(che-top, set.$mCol-30) no-repeat center center / contain !important;
+                }
+            }
+            &:focus, &.focus {
+                border-color: set.$mCol-60;
+                color: set.$mCol-60;
+                &::picker-icon {
+                    background: set.icon(che-top, set.$mCol-60) no-repeat center center / contain !important;
+                }
+            }
+        } 
+        &:open {
+            border-radius: .2rem .2rem 0 0;
+            color: set.$mCol-60; font-weight: set.$fw-b;
+            border-color: set.$mCol-60;
+            border-bottom: 1px solid transparent;
+            &::picker-icon {
+                rotate: -180deg;
+            }
+            option {
+                appearance: base-select;
+                background: set.$gray-0;
+            }
+            &::picker-icon {
+                background: set.icon(che-top, set.$mCol-60) no-repeat center center / contain !important;
+            }
+        }
+        &::picker(select) {
+            @include set.scrollBar($color:set.$mCol-60);
+            appearance: base-select;
+            color: set.$gray-0;
+            overflow-y: auto;
+            border: 1px solid set.$mCol-60;
+            border-top: 1px solid transparent;
+            position: absolute;
+            top: anchor(bottom);
+            left: anchor(left);
+            right: anchor(right);
+            position-try-fallbacks: none;
+            position-try-order: normal;
+            max-height: 30rem;
+            height: auto;
+        }
+        &:disabled {
+            border-color: set.$gray-30 !important;
+            color: set.$gray-30 !important;
+            background: set.$gray-10 !important;
+            pointer-events: none;
+            &::picker-icon {
+                background: set.icon(che-top, set.$gray-30) no-repeat center center / contain !important;
+            }
+        }
+        option {
+            background: set.$gray-0;
+            color: set.$gray-100;
+            line-height: 1.4;
+            font-weight: set.$fw-m;
+            transition: all set.$aniSet;
+            color: set.$gray-50;
+            // &:first-child { padding-top: 2rem; }
+            // &:last-child { padding-bottom: 2rem; }
+            // padding: .6rem 0;
+            line-height: 1.6;
+            
+            &:hover,
+            &:focus,
+            &:focus-visible,
+            &:state(--active) {
+                background: set.$mCol-5;
+                color: set.$mCol-60;
+                font-weight: set.$fw-b;
+                outline: none;
+            }
+            &:checked {
+                color: set.$mCol-60;
+                font-weight: set.$fw-b;
+            }
+            &::checkmark {
+                content: none;
+            }
+        }
+    }
+    // 내부 안에 캡션있는경우
+    *:has([class^="cau"]) {
+        display: flex; flex-direction: column; gap: 1rem;
+        flex-grow: 1;
+    }
+    // 비활성일경우 캡션 전체 숨김
+    > *:has(:disabled) {
+        [class^="cau"] { display: none !important; }
+    }
+    // 인풋 기본설정 (셀렉트제외)
+    input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
+        border: 1px solid set.$gray-30;
+        background-color: set.$gray-0;
+        color: set.$gray-100;
+        resize: none;
+        outline: 2px solid transparent;
+        transition: all set.$aniSet;
+        flex-grow: 1;
+        &::placeholder {
+            color: set.$gray-40;
+            font-weight: set.$fw-l;
+        }
+        &:hover, &.hover {
+            background: set.$mCol-5;
+            border-color: set.$mCol-30;
+        }
+        &:focus-visible, &.focus {
+            outline: .4rem solid rgba(set.$mCol-60, 0.2);
+            border-color: set.$mCol-60;
+            background: set.$mCol-10;
+            animation: outline-pumping 400ms alternate infinite both
+        }
+        &:not(:placeholder-shown) {
+            background: set.$mCol-10;
+            border-color: set.$mCol-70;
+        }
+        &:disabled {
+            background: set.$gray-5 !important;
+            border-color: set.$gray-20 !important;
+            pointer-events: none;
+            &::placeholder {
+                color: set.$gray-30 !important;
+            }
+        }
+    }
+    // 파일찾기 비활성화
+    input[type="file"] {
+        width: 0; height: 0; position: absolute; 
+        clip-path: inset(0% 100% 100% 0);
+        overflow: visible;
+    }
+    // 캡션 핸들링 일반상태에는 nm 캡션만 노출되게
+    [class^="cau-"]   { display: none; } 
+    [class^="cau-nm"] { display: flex; } 
+    // 폼 세팅
+    $formStates: (
+        er: (bd: set.$sst-dCol-60, bd-h: set.$sst-dCol-70, bg: set.$sst-dCol-5, bg-h: set.$sst-dCol-10, ),
+        su: (bd: set.$sst-sCol-60, bd-h: set.$sst-sCol-70, bg: set.$sst-sCol-5, bg-h: set.$sst-sCol-10, ),
+        ca: (bd: set.$sst-wCol-60, bd-h: set.$sst-wCol-70, bg: set.$sst-wCol-5, bg-h: set.$sst-wCol-10, ),
+    );
+    @each $value, $prop in $formStates {
+        .set__#{$value} {
+            @include set.scrollBar($color:map.get($prop, bd));
+            input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
+                border: 1px solid map.get($prop, bd);
+                &::placeholder {
+                    color: map.get($prop, bd);
+                    font-weight: set.$fw-l;
+                }
+                &:hover, &.hover {
+                    background: map.get($prop, bg);
+                    border-color: map.get($prop, bd);
+                }
+                &:focus-visible, &.focus {
+                    outline: .4rem solid rgba(map.get($prop, bd), 0.2);
+                    border-color: map.get($prop, bd);
+                    background: map.get($prop, bg);
+                    animation: outline-pumping 400ms alternate infinite both
+                }
+                &:not(:placeholder-shown) {
+                    background: map.get($prop, bg);
+                    border-color: map.get($prop, bd);
+                }
+            }
+            select {
+                color: map.get($prop, bd);
+                flex-grow: 1;
+                border-color: map.get($prop, bd);
+                &::picker-icon {
+                    content: "";
+                    background: set.icon(che-top, map.get($prop, bd)) no-repeat center center / contain;
+                }
+                &:not(:open){
+                    &:hover, &.hover {
+                        border-color: map.get($prop, bd);
+                        color: map.get($prop, bd);
+                        &::picker-icon {
+                            background: set.icon(che-top, map.get($prop, bd)) no-repeat center center / contain !important;
+                        }
+                    }
+                    &:focus, &.focus {
+                        border-color: map.get($prop, bd);
+                        color: map.get($prop, bd);
+                        &::picker-icon {
+                            background: set.icon(che-top, map.get($prop, bd)) no-repeat center center / contain !important;
+                        }
+                    }
+                }
+                &:open {
+                    color: map.get($prop, bd);
+                    border-color: map.get($prop, bd);
+                    border-bottom: 1px solid transparent;
+                    background-color: map.get($prop, bg);
+                    option {
+                        background: map.get($prop, bg);
+                        color: map.get($prop, bd);
+                        &:hover, &:focus {
+                            background: map.get($prop, bg-h);
+                        }
+                    }
+                    &::picker-icon {
+                        background: set.icon(che-top, map.get($prop, bd)) no-repeat center center / contain !important;
+                    }
+                }
+                &::picker(select) {
+                    @include set.scrollBar($color:map.get($prop, bd));
+                    border: 1px solid map.get($prop, bd);
+                    border-top: 1px solid map-get($prop, bg);
+                    background: map.get($prop, bg);
+                }
+                &:hover, &.hover {
+                    background: map.get($prop, bg);
+                }
+                &.focus {
+                    background: map.get($prop, bg);
+                }
+            }
+
+            [class^="cau-nm"] {
+                display: none;
+            }
+
+            @if $value == er {
+                [class^="cau-er"] {
+                    display: flex;
+                }
+            }
+            @else if $value == su {
+                [class^="cau-su"] {
+                    display: flex;
+                }
+            }
+            @else if $value == ca {
+                [class^="cau-ca"] {
+                    display: flex;
+                }
+            }
+        }
+    }
+
+}
+// 캡션
+.cau {
+    display: flex; 
+    align-items: center;
+    gap: 0.4rem;
+
+    line-height: 1.4;
+    i {
+        aspect-ratio: 1/1;
+        display: inline-block; flex-shrink: 0;
+        align-self: flex-start;
+        position: relative;
+        top: 0.1rem;
+    }
+    span { font-size: inherit; }
+    b, strong {
+        font-weight: 600;
+        &.imp { color: set.$sst-dCol-60; }
+        &.po { color: set.$mCol-60; }
+        &.suc { color: set.$sst-sCol-60; }
+        &.fail { color: set.$sst-dCol-60; }
+        &.info { color: set.$sst-iCol-60; }
+    }
+    ul {
+        display: flex; flex-direction: column; gap: 0.4rem;
+        li {
+            font-size: set.$ft-bd-m; text-indent: -.8rem; padding-left: 1.6rem; line-height: 1.4;
+            &::before { content: "※"; display: inline-block; margin-right: 0.2rem; font-family: sans-serif; line-height: 1; flex-shrink: 0 }
+        }
+    }
+
+}
+// 파일드롭형
+.file-drop {
+    position: relative;
+    width: 100%;
+    min-height: 30rem;
+    background: set.$gray-5;
+    border-radius: .4rem;
+    padding: 6rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    transition: all set.$aniSet;
+    p {
+        font-size: set.$ft-hd-m;
+        font-family: set.$ft-point;
+        font-weight: 800;
+        color: set.$gray-100;
+        transition: all set.$aniSet;
+    }
+    span {
+        font-size: set.$ft-bd-l;
+        color: set.$gray-60;
+        display: block; margin-bottom: 2rem;
+    }
+    &:hover {
+        background: set.$mCol-5;
+        p { color: set.$mCol-60 }
+    }
+    input[type="file"] {
+        width: 0; height: 0; position: absolute; 
+        clip-path: inset(0% 100% 100% 0);
+        overflow: visible;
+    }
+}
+
+@each $size, $prop in $inputSize {
+    .form-#{$size} {
+        @extend .form;
+        textarea { height: auto; }
+        input, select { height: map.get($prop, h); }
+        select {
+            height: map.get($prop, h);
+            &::picker-icon {
+                right: map.get($prop, po);
+            }
+            &::picker(select) {
+                padding: map.get($prop, po) 0;
+            }
+            option {
+                font-size: map.get($prop, ft);
+                padding: calc(map.get($prop, po) / 2.4) map.get($prop, po);
+                padding-left: map.get($prop, po);
+                
+                &:checked {
+                    // background: set.$gray-10;
+                    // color: set.$gray-40;
+                }
+            }
+            @include set.res-tab-lap() {
+                option {
+                    font-size: map.get($prop, fts);
+                }
+                &::picker-icon {
+                    right: map.get($prop, pos);
+                }
+            }
+        }
+        input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea, select {
+            font-size: map.get($prop, ft);
+            padding: map.get($prop, pd);
+            @include set.res-tab-lap() {
+                height: map.get($prop, hs);
+                font-size: map.get($prop, fts);
+                padding: map.get($prop, pds);
+            }
+        }
+    }
+}
+@each $size, $prop in $cauSizes {
+    @each $name, $color in $cauColors {
+        .cau-#{$name}-#{$size} {
+            @extend .cau;
+            color: map.get($color, c);
+            font-size: map.get($prop, fs);
+            i {
+                width: map.get($prop, is);
+            }
+            @if $name == su {
+                i { background: set.icon(ico-success, map.get($color, c)) no-repeat center center / contain; }
+            }
+            @else if $name == er {
+                i { background: set.icon(ico-fail, map.get($color, c)) no-repeat center center / contain; }
+            }
+            @else if $name == if {
+                i { background: set.icon(ico-info, map.get($color, c)) no-repeat center center / contain; }
+            }
+            @else {
+                i { background: set.icon(ico-warning, map.get($color, c)) no-repeat center center / contain; }
+            }
+        }
+    }
+}
+
+
+
+

@@ -1,0 +1,13 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+
+.flexBox {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; flex-grow: 1;
+  &.f-cen { justify-content: center; }
+  &.f-left { justify-content:flex-start; }
+  &.f-right { justify-content:flex-end; }
+  &.a-top { align-items: flex-start; }
+  &.a-cen { align-items: flex-start; }
+  &.a-bot { align-items: flex-end; }
+}

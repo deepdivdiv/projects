@@ -1,0 +1,280 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+$selectSizes: (
+    xs: (w: 1.4rem, d-w: 0.6rem, l-w:.5rem, fs:set.$ft-bd-xs, bw: .1rem, bw-h: .4rem),
+    s:  (w: 1.6rem, d-w: 0.8rem, l-w:.5rem, fs:set.$ft-bd-s,  bw: .1rem, bw-h: .5rem),
+    m:  (w: 2rem,   d-w: 1rem,   l-w:.6rem, fs:set.$ft-bd-m,  bw: .1rem, bw-h: .6rem),
+    l:  (w: 2.4rem, d-w: 1.2rem, l-w:.6rem, fs:set.$ft-bd-l,  bw: .2rem, bw-h: .7rem),
+    xl: (w: 2.8rem, d-w: 1.2rem, l-w:.8rem, fs:set.$ft-tt-s,  bw: .2rem, bw-h: 1rem ),
+);
+
+$selectState: (
+    imp:     (d: set.$mCol-60,     d-h: set.$mCol-80),
+    comple:  (d: set.$sst-sCol-60, d-h: set.$sst-sCol-80),
+    fail:    (d: set.$sst-dCol-60, d-h: set.$sst-dCol-70),
+);
+
+// 라디오, 체크박스
+.sel {
+    // 도트
+    i {
+        aspect-ratio: 1/1; display: block;
+        transition: all set.$aniSet;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 0 1px set.$gray-30 inset;
+        &::before {
+            content: "";
+        }
+    }
+    // 선택
+    label {
+        color: set.$gray-60;
+    }
+    // 하위자식에게 무조건 플렉스 처리 : 무조건 박스안에 태그로 하나 감싸주고 사용해야함
+    > * {
+        position: relative; display: flex; align-items: center; gap: 2rem 1rem; flex-wrap: wrap;
+    }
+    input[type=checkbox],
+    input[type=radio] {
+        width: 0; height: 0; position: absolute;
+        left: 0; top: 0; overflow: visible; clip-path: inset(0 100% 100% 0);
+        strong, b { font-weight: set.$fw-b; }
+        & + label {
+            display: flex; align-items: center; gap: 0.5rem;
+            &:hover, &.hover {
+                color: set.$gray-100;
+                i { border-color: set.$gray-100; }
+            }
+        }
+        &:disabled + label {
+            pointer-events: none;
+            color: set.$gray-30 !important;
+            i {
+                border-color: set.$gray-20 !important;
+                background-color: set.$gray-10 !important;
+            }
+        }
+        &:checked:disabled + label {
+            pointer-events: none;
+            color: set.$gray-30 !important;
+            i {
+                // border-color: set.$gray-20 !important;
+                background-color: set.$gray-10 !important;
+                &::before { opacity: 1 !important; }
+            }
+        }
+    }
+    input[type=checkbox]:disabled + label i {
+        background-image: none !important;
+    }
+    input[type=radio]:disabled + label i {
+        box-shadow: none !important;
+    }
+    @each $name, $prop in $selectState {
+        @each $size, $value in $selectSizes {
+            .#{$name} {
+                i {
+                    box-shadow: 0 0 0 1px map.get($prop, d) inset;
+                }
+                label {
+                    color: map.get($prop, d);
+                    font-weight: set.$fw-m;
+                }
+                // 라디오버튼의 경우
+                input[type=radio] {
+                    & + label {
+                        color: map.get($prop, d);
+                        font-weight: set.$fw-m;
+                        &:hover, &.hover {
+                            color: map.get($prop, d);
+                            i {
+                                border-color: map.get($prop, d);
+                                &::before {
+                                    background-color: map.get($prop, d);
+                                }
+                            }
+                        }
+                    }
+                    &:checked + label {
+                        color: map.get($prop, d);
+                        i {
+                            box-shadow: 0 0 0 map.get($value, l-w) map.get($prop, d) inset;
+                            &::before {
+                                opacity: 0;
+                            }
+                        }
+                        &:hover, &.hover {
+                            i {
+                                box-shadow: 0 0 0 map.get($value, l-w) map.get($prop, d-h) inset;
+                            }
+                        }
+                    }
+                }
+                // 체크박스의 경우
+                input[type=checkbox] {
+                    & + label {
+                        font-weight: set.$fw-m;
+                        &:hover, &.hover {
+                            color: map.get($prop, d);
+                            i {
+                                border-color: map.get($prop, d);
+                                background-image: set.icon(ico-check, map.get($prop, d));
+                            }
+                        }
+                    }
+                    &:checked + label {
+                        color: map.get($prop, d);
+                        i {
+                            border-color: map.get($prop, d);
+                            background-color: map.get($prop, d);
+                            background-image: set.icon(ico-check, set.$gray-0);
+                        }
+                        &:hover, &.hover {
+                            color: map.get($prop, d-h);
+                            i {
+                                border-color: map.get($prop, d-h);
+                                background-color: map.get($prop, d-h);
+                                background-image: set.icon(ico-check, set.$gray-0);
+                            }   
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+    @each $size, $prop in $selectSizes {
+        &-#{$size} {
+            @extend .sel;
+            // 공통
+            i {
+                width: map.get($prop, w);
+            }
+            label {
+                font-size: map.get($prop, fs);
+            }
+
+
+
+            //라디오
+            input[type=radio] {
+                & + label {
+                    display: flex; align-items: center; gap: 0.5rem; color: set.$gray-60;
+                    i {
+                        border-radius: 100rem;
+                        overflow: hidden;
+                        position: relative;
+                        &::before {
+                            content: "";
+                            width: 0rem;
+                            aspect-ratio: 1/1;
+                            transition: all set.$aniSet;
+                            border-radius: 100rem;
+                            position: absolute;
+                            left: 50%; top: 50%; transform: translate(-50%, -50%);
+                        }
+                    }
+                    &:hover {
+                        color: set.$gray-100;
+                        i {
+                            border-color: set.$gray-100;
+                            &::before {
+                                content: "";
+                                width: map.get($prop, d-w);
+                                background-color: set.$gray-100;
+                            }
+                        }
+                    }
+                }
+                &:checked + label {
+                    border-color: set.$gray-100;
+                    color: set.$gray-100;
+                    i {
+                        box-shadow: 0 0 0 map.get($prop, l-w) set.$gray-100 inset;
+                        &::before {
+                            background: set.$gray-0;
+                            z-index: 1;
+                        }
+                    }
+                    &:hover {
+                        i {
+                            box-shadow: 0 0 0 map.get($prop, l-w) set.$gray-110 inset;
+                            &::before {
+                                background: set.$gray-0;
+                            }
+                        }
+                    }
+                }
+                &:checked:disabled + label {
+                    i {
+                        &::before {
+                            width: map.get($prop, d-w);
+                            background: set.$gray-20;
+                            z-index: 1;
+                        }
+                    }
+                }
+                &:checked:disabled + label,
+                &:disabled + label {
+                    i {
+                        box-shadow: 0 0 0 map.get($prop, bw) set.$gray-20 inset !important;
+                    }
+                }
+                
+            }
+
+            //체크박스
+            input[type=checkbox] {
+                & + label {
+                    display: flex; align-items: center; gap: 0.5rem;
+                    transition: all set.$aniSet;
+                    i { 
+                        display: block;
+                        width: map.get($prop, w);
+                        border-radius: .2rem;  
+                        background: url() no-repeat center center / map.get($prop, d-w);
+                        background-image: set.icon(ico-check, set.$gray-0);
+                    }
+                    &:hover, &.hover {
+                        color: set.$gray-100;
+                        i {
+                            border-color: set.$gray-100;
+                            background-image: set.icon(ico-check, set.$gray-100);
+                        }
+                    }
+                }
+                &:checked + label {
+                    color: set.$gray-100;
+                    font-weight: 600;
+                    i {
+                        border-color: set.$gray-100;
+                        background-color: set.$gray-100;
+                        background-image: set.icon(ico-check, set.$gray-0);
+                    }
+                    &:hover, &.hover {
+                        color: set.$gray-120;
+                        font-weight: 600;
+                        i {
+                            border-color: set.$gray-120;
+                            background-color: set.$gray-120;
+                            background-image: set.icon(ico-check, set.$gray-0);
+                        }    
+                    }
+                }
+                &:checked:disabled + label {
+                    font-weight: 400;
+                    i {
+                        background-image: set.icon(ico-check, set.$gray-20);
+                    }
+                }
+            }
+
+        }
+    }
+
+
+}

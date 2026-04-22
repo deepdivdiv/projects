@@ -1,0 +1,91 @@
+@charset "UTF-8";
+@use "sass:map";
+@use '../utils' as set;
+$typoSize: (
+    dp-l:  (fs:set.$ft-dp-l ),
+    dp-m:  (fs:set.$ft-dp-m ),
+    dp-s:  (fs:set.$ft-dp-s ),
+    hd-l:  (fs:set.$ft-hd-l ),
+    hd-m:  (fs:set.$ft-hd-m ),
+    hd-s:  (fs:set.$ft-hd-s ),
+    tt-l:  (fs:set.$ft-tt-l ),
+    tt-m:  (fs:set.$ft-tt-m ),
+    tt-s:  (fs:set.$ft-tt-s ),
+    bd-l:  (fs:set.$ft-bd-l ),
+    bd-m:  (fs:set.$ft-bd-m ),
+    bd-s:  (fs:set.$ft-bd-s ),
+    bd-xs: (fs:set.$ft-bd-xs),
+);
+.styleGuide {
+    width: 100%;
+    display: flex; flex-direction: column; gap: 10rem;
+    background: set.$gray-5;
+    padding: 3vw;
+    .sg_inner {
+        display: flex; flex-direction: column; gap: 4rem;
+        background: set.$gray-0;
+        padding: 5vw;
+        border-radius: 2rem;
+    }
+    .sg_tit {
+        display: flex; flex-direction: column; gap: 2rem;
+        h1 { font-size: set.$ft-dp-m; font-family: set.$ft-point; font-weight: 800; color: set.$gray-100; text-box: set.$tbSet; line-height: 1.2; }
+        p {
+            font-size: set.$ft-bd-l;
+            color: set.$gray-50;
+            line-height: 1.4;
+        }
+    }
+    .sg_area {
+        > p {
+            font-size: set.$ft-tt-s; font-weight: 600; color: set.$gray-100;
+            &:has(+ .sg_box) { margin-bottom: 1rem; }
+        }
+    }
+
+    .sg_box {
+        padding: 4rem; border-radius: 1rem; border: 1px solid set.$gray-30;
+        display: flex; flex-direction: column; gap: 4rem;
+        dl {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        dt { font-weight: 200; color: set.$gray-50; font-size: set.$ft-tt-s; }
+        dd { 
+            color: set.$gray-100; line-height: 1;
+            font-weight: set.$fw-b;
+            p, span { text-box: set.$tbSet; font-size: inherit; font-weight: inherit; line-height: 1.2; }
+        }
+        .ft-po {
+            font-family: set.$ft-point;
+        }
+        .fw-b { font-weight: set.$fw-b; }
+        .fw-m { font-weight: set.$fw-m; }
+        .fw-l { font-weight: set.$fw-l; }
+
+        @each $size, $prop in $typoSize {
+            .ft-#{$size} {
+                font-size: map.get($prop, fs)
+            }
+        }
+        .source {
+            padding: 3rem;
+            background: set.$gray-5;
+            border-radius: .4rem;
+            margin-top: 2rem;
+            em {
+                font-size: set.$ft-bd-s;
+                color: set.$gray-40;
+                font-weight: 700;
+                display: block;
+                margin-bottom: 1rem;
+            }
+            p, xmp {
+                color: set.$gray-70;
+                font-size: set.$ft-tt-s;
+                font-weight: 200;
+                line-height: 1.4;
+                font-family: set.$ft-basic;
+            }
+        }
+    }
+}

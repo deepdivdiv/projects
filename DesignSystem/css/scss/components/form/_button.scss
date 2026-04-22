@@ -1,0 +1,272 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+// 버튼
+// d - 기본, h - 호버, a - 프레스, o - 활성화 on, active
+$colors-a: (
+  nm: (d: set.$gray-5, h: set.$gray-10, a: set.$gray-20, o: set.$gray-100),
+  po: (d: set.$mCol-60, h: set.$mCol-70, a: set.$mCol-80, o: set.$mCol-60),
+  ne: (d: set.$gray-100, h: set.$gray-110, a: set.$gray-120, o: set.$gray-100),
+  de: (d: set.$sst-dCol-60, h: set.$sst-dCol-70, a: set.$sst-dCol-80, o: set.$sst-dCol-60),
+  ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-70, a: set.$sst-wCol-80, o: set.$sst-wCol-60),
+  su: (d: set.$sst-sCol-60, h: set.$sst-sCol-70, a: set.$sst-sCol-80, o: set.$sst-sCol-60),
+  if: (d: set.$sst-iCol-60, h: set.$sst-iCol-70, a: set.$sst-iCol-80, o: set.$sst-iCol-60),
+);
+
+$colors-b: (
+  nm: (d: set.$gray-20, h: set.$gray-30, a: set.$gray-40, o: set.$gray-50),
+  po: (d: set.$mCol-60, h: set.$mCol-70, a: set.$mCol-80, o: set.$mCol-60),
+  ne: (d: set.$gray-100, h: set.$gray-110, a: set.$gray-120, o: set.$gray-100),
+  de: (d: set.$sst-dCol-60, h: set.$sst-dCol-70, a: set.$sst-dCol-80, o: set.$sst-dCol-60),
+  ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-70, a: set.$sst-wCol-80, o: set.$sst-wCol-60),
+  su: (d: set.$sst-sCol-60, h: set.$sst-sCol-70, a: set.$sst-sCol-80, o: set.$sst-sCol-60),
+  if: (d: set.$sst-iCol-60, h: set.$sst-iCol-70, a: set.$sst-iCol-80, o: set.$sst-iCol-60),
+);
+
+$colors-c: (
+  nm: (d: set.$gray-50,     h: set.$gray-5,     a: set.$gray-10, o: set.$gray-100),
+  po: (d: set.$mCol-60,     h: set.$mCol-5,     a: set.$mCol-10, o: set.$mCol-60),
+  ne: (d: set.$gray-100,    h: set.$gray-5,    a: set.$gray-10, o: set.$gray-100),
+  de: (d: set.$sst-dCol-60, h: set.$sst-dCol-5, a: set.$sst-dCol-10, o: set.$sst-dCol-60),
+  ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-5, a: set.$sst-wCol-10, o: set.$sst-wCol-60),
+  su: (d: set.$sst-sCol-60, h: set.$sst-sCol-5, a: set.$sst-sCol-10, o: set.$sst-sCol-60),
+  if: (d: set.$sst-iCol-60, h: set.$sst-iCol-5, a: set.$sst-iCol-10, o: set.$sst-iCol-60),
+);
+
+// 통합 테마 맵
+$theme-groups: (
+  "a": $colors-a,
+  "b": $colors-b,
+  "c": $colors-c
+);
+
+$sizes: (
+  xxl: (h: 8rem, hs: 6.4rem, ft: set.$ft-hd-s,  fts:set.$ft-tt-m , pd:2.5rem 3rem, pds:1.9rem 2rem),
+  xl:  (h: 6.4rem, hs: 4.8rem, ft: set.$ft-tt-m,  fts:set.$ft-tt-s , pd:1.9rem 2rem, pds:1.3rem 2rem),
+  l:   (h: 4.8rem, hs: 4rem, ft: set.$ft-tt-s,  fts:set.$ft-bd-l , pd:1.3rem 2rem, pds:1.3rem 2rem),
+  m:   (h: 4rem, hs: 3.2rem, ft: set.$ft-bd-l,  fts:set.$ft-bd-m , pd:1rem, pds:0.7rem),
+  s:   (h: 3.2rem, hs: 2.4rem, ft: set.$ft-bd-m,  fts:set.$ft-bd-m , pd:0.7rem, pds:.5rem),
+  xs:  (h: 2.4rem, hs: 2rem, ft: set.$ft-bd-xs,  fts:set.$ft-bd-xs , pd:0.5rem, pds:.5rem),
+);
+
+// 2. 기본 공통 스타일
+.bt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: set.$fw-m;
+  font-family: inherit;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all set.$aniSet;
+  line-height: 1;
+  border: 1px solid transparent;
+  background: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 0.2rem;
+  gap:0.6rem;
+  font-weight: 400;
+
+  &:disabled {
+    background: set.$gray-10 !important;
+    border-color: set.$gray-20 !important;
+    color: set.$gray-30 !important;
+    font-weight: 400 !important;
+    cursor: default;
+    i {
+      filter: grayscale(100%) contrast(0%) !important;
+      opacity: 0.3;
+    }
+  }
+}
+
+// 3. 버튼 변체 Mixin
+@mixin set-bt-variant($theme-key, $t-key, $color-map) {
+  $default: map-get($color-map, d);
+  $hover:   map-get($color-map, h);
+  $active:  map-get($color-map, a);
+  $on:      map-get($color-map, o);
+  &:focus-visible  { outline: 5px solid rgba($default, 0.08); outline-offset: 0px;}
+
+
+  i {
+    display: flex; height: 65%; aspect-ratio: 1/1; flex-shrink: 0; align-items: center; justify-content: center;
+    &.ico-success { background: set.icon(ico-success, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-info    { background: set.icon(ico-info, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-warning { background: set.icon(ico-warning, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-lang { background: set.icon(ico-lang, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-qr { background: set.icon(ico-qr, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-reply { background: set.icon(ico-reply, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-search { background: set.icon(ico-search, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-share { background: set.icon(ico-share, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-lock-y { background: set.icon(ico-lock-y, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-lock-n { background: set.icon(ico-lock-n, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-not { background: set.icon(ico-not, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.arr-left { background: set.icon(arr-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.arr-right { background: set.icon(arr-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.che-left { background: set.icon(che-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
+    &.che-right { background: set.icon(che-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
+    &.che-top { background: set.icon(che-top, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.che-bot { background: set.icon(che-bot, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+  }
+  
+  // 솔리드 : 중요도 높음
+  @if $theme-key == "a" {
+    // Solid 스타일
+    background-color: $default;
+    border-color: $default;
+    color: set.$gray-0;
+    transition: all set.$aniSet;
+    
+    @if $t-key == "nm" {
+      color: set.$gray-60;
+        i { filter: brightness(0.9); }
+        &.on, &.active {
+          color: $on;
+          i { filter: brightness(0.6); }
+        }
+    } @else {
+      &:not(.on, .active) {
+        i { filter: brightness(100); }
+      }
+    }
+    &:hover, &.hover { background-color: $hover; border-color: $hover; }
+    &:focus-visible, &:active, &.press { background-color: $active; border-color: $active; }
+    &:focus-visible {
+      outline: 2px dotted set.$gray-100;
+      outline-offset: 4px;
+    }
+    &.on, &.active { 
+      color: $on;
+      background-color: set.$gray-0; border-color: $on;
+    }
+    
+  } 
+
+  // 아웃라인 : 중요도 보통
+  @else if $theme-key == "b" {
+    background-color: set.$gray-0;  // 보통 gray-0
+    border-color: $default;       // b맵의 a값을 선색으로 활용
+    color: $default;              // b맵의 a값을 글자색으로 활용
+    @if $t-key == "nm" {
+      color: set.$gray-40;
+      border-color: $default;
+      &:hover, &.hover {
+        border-color: $hover;
+      }
+      &:active, &.press {
+        background-color: set.$gray-5;
+        border-color:$active;
+        color: set.$gray-60;
+        i { filter: brightness(0.9); }
+      }
+      &.on, &.active {
+        background-color: $on;
+        color: set.$gray-0;
+        i { filter: brightness(100); }
+      }
+    } @else {
+    &:hover, &.hover {
+      border-color: $hover;
+    }
+    &:active, &.press {
+      background-color: rgba($active, 0.05);
+      border-color: $active;
+      color: $active;
+      i { filter: brightness(0.9); }
+    }
+    &.on, &.active {
+      background-color: $on;
+      color: set.$gray-0;
+      i { filter: brightness(100); }
+    }
+
+    }
+
+    
+  }
+
+  // 고스트 : 중요도 낮음
+  @else if $theme-key == "c" {
+    // Outline / Ghost 스타일
+    background-color: set.$gray-0;
+    color: $default;
+    &:hover, &.hover {
+      background: $hover;
+    }
+    &:active, &.press {
+      background: $active;
+    }
+    &.on, &.active {
+      background: $on;
+      color: set.$gray-0;
+      i { filter: brightness(100); }
+    }
+  }
+}
+
+// 4. 풀셋 조합 클래스 생성 (예: .bt-a-nm-l)
+@each $theme-key, $type-map in $theme-groups {
+  @each $t-key, $color-values in $type-map {
+    @each $s-key, $s-val in $sizes {
+      .bt-#{$theme-key}-#{$t-key}-#{$s-key} {
+        @extend .bt;
+        @include set-bt-variant($theme-key, $t-key, $color-values);
+        height: map-get($s-val, h);
+        font-size: map-get($s-val, ft);
+        padding: map-get($s-val, pd);
+        @include set.res-tab-lap() {
+          height: map-get($s-val, hs);
+          font-size: map-get($s-val, fts);
+          padding: map-get($s-val, pds);
+          gap:0.3rem;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+// 아바타 
+
+$avaSizes: (
+  xs: (w:2.4rem, fs: set.$ft-bd-xs),
+  s:  (w:3.2rem, fs: set.$ft-bd-s ),
+  m:  (w:4.0rem, fs: set.$ft-bd-m ),
+  l:  (w:4.8rem, fs: set.$ft-tt-s ),
+  xl: (w:6.4rem, fs: set.$ft-hd-s ),
+);
+
+
+.ava {
+  aspect-ratio: 1/1;
+  background: set.$mCol-10 set.icon(ico-user, set.$mCol-60) no-repeat center center / 58%;
+  display: inline-flex;
+  border-radius: 100rem;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  &:not(:empty) {
+    background-image: none;
+    font-size: set.$ft-tt-s;
+    color: set.$mCol-60;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+
+  @each $size, $prop in $avaSizes {
+    &-#{$size} {
+      @extend .ava;
+      width: map.get($prop, w);
+      &:not(:empty) {
+        font-size: map.get($prop, fs);
+      }
+    }
+  }
+
+}
+

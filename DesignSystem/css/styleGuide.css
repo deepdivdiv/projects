@@ -1,0 +1,142 @@
+.styleGuide {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10rem;
+  background: #f7f7fc;
+  padding: 3vw;
+}
+.styleGuide .sg_inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  background: #ffffff;
+  padding: 5vw;
+  border-radius: 2rem;
+}
+.styleGuide .sg_tit {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.styleGuide .sg_tit h1 {
+  font-size: clamp(4.6rem, 6.25vw, 6.4rem);
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 800;
+  color: #3b3844;
+  text-box: trim-both cap alphabetic;
+  line-height: 1.2;
+}
+.styleGuide .sg_tit p {
+  font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
+  color: #9590a2;
+  line-height: 1.4;
+}
+.styleGuide .sg_area > p {
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  font-weight: 600;
+  color: #3b3844;
+}
+.styleGuide .sg_area > p:has(+ .sg_box) {
+  margin-bottom: 1rem;
+}
+.styleGuide .sg_box {
+  padding: 4rem;
+  border-radius: 1rem;
+  border: 1px solid #ccc9d5;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+.styleGuide .sg_box dl {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.styleGuide .sg_box dt {
+  font-weight: 200;
+  color: #9590a2;
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+}
+.styleGuide .sg_box dd {
+  color: #3b3844;
+  line-height: 1;
+  font-weight: 600;
+}
+.styleGuide .sg_box dd p, .styleGuide .sg_box dd span {
+  text-box: trim-both cap alphabetic;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+}
+.styleGuide .sg_box .ft-po {
+  font-family: "Paperlogy", sans-serif;
+}
+.styleGuide .sg_box .fw-b {
+  font-weight: 600;
+}
+.styleGuide .sg_box .fw-m {
+  font-weight: 400;
+}
+.styleGuide .sg_box .fw-l {
+  font-weight: 200;
+}
+.styleGuide .sg_box .ft-dp-l {
+  font-size: clamp(5rem, 7.6172vw, 7.8rem);
+}
+.styleGuide .sg_box .ft-dp-m {
+  font-size: clamp(4.6rem, 6.25vw, 6.4rem);
+}
+.styleGuide .sg_box .ft-dp-s {
+  font-size: clamp(4.2rem, 5.2734vw, 5.4rem);
+}
+.styleGuide .sg_box .ft-hd-l {
+  font-size: clamp(3.6rem, 4.6875vw, 4.8rem);
+}
+.styleGuide .sg_box .ft-hd-m {
+  font-size: clamp(3.2rem, 3.9063vw, 4rem);
+}
+.styleGuide .sg_box .ft-hd-s {
+  font-size: clamp(3rem, 3.5156vw, 3.6rem);
+}
+.styleGuide .sg_box .ft-tt-l {
+  font-size: clamp(2.6rem, 2.9297vw, 3rem);
+}
+.styleGuide .sg_box .ft-tt-m {
+  font-size: clamp(2.2rem, 2.5391vw, 2.6rem);
+}
+.styleGuide .sg_box .ft-tt-s {
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+}
+.styleGuide .sg_box .ft-bd-l {
+  font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
+}
+.styleGuide .sg_box .ft-bd-m {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+}
+.styleGuide .sg_box .ft-bd-s {
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+}
+.styleGuide .sg_box .ft-bd-xs {
+  font-size: 1.2rem;
+}
+.styleGuide .sg_box .source {
+  padding: 3rem;
+  background: #f7f7fc;
+  border-radius: 0.4rem;
+  margin-top: 2rem;
+}
+.styleGuide .sg_box .source em {
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  color: #aea9ba;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 1rem;
+}
+.styleGuide .sg_box .source p, .styleGuide .sg_box .source xmp {
+  color: #7a7588;
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  font-weight: 200;
+  line-height: 1.4;
+  font-family: "Pretendard", sans-serif;
+}

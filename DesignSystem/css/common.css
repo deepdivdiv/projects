@@ -1,0 +1,31 @@
+@charset "UTF-8";
+/* 헤더 */
+/* 푸터 */
+/* 네비게이션 */
+.flexBox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+.flexBox.f-cen {
+  justify-content: center;
+}
+.flexBox.f-left {
+  justify-content: flex-start;
+}
+.flexBox.f-right {
+  justify-content: flex-end;
+}
+.flexBox.a-top {
+  align-items: flex-start;
+}
+.flexBox.a-cen {
+  align-items: flex-start;
+}
+.flexBox.a-bot {
+  align-items: flex-end;
+}
+
+/* 전체 레이아웃 */

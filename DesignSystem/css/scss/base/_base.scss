@@ -1,0 +1,81 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+
+h1 { font-size: set.$ft-hd-l; }
+h2 { font-size: set.$ft-hd-m; }
+h3 { font-size: set.$ft-hd-s; }
+h4 { font-size: set.$ft-tt-l; }
+h5 { font-size: set.$ft-tt-m; }
+h6 { font-size: set.$ft-tt-s; }
+
+h1, h2, h3 h4, h5, h6 {
+    font-weight: set.$fw-l;
+}
+h1, h2, h3 { strong, b { font-weight: set.$fw-eb; } }
+h4, h5, h6 { strong, b { font-weight: set.$fw-b; } }
+
+
+// ::-webkit-scrollbar {
+//     width: 6px;
+// }
+// ::-webkit-scrollbar-track {
+//     background: set.$gray-10;
+
+// }
+// ::-webkit-scrollbar-thumb {
+//     background: set.$mCol-60;
+//     border-right: 2px solid set.$gray-10;
+//     &:hover {
+//         background: darken(set.$mCol-60, 10%);
+//     }
+// }
+* {
+    scrollbar-width: thin;
+    scrollbar-color: set.$mCol-60 set.$gray-5;
+}
+
+.hidden { width: 0; height: 0; clip-path:inset(100% 100% 100% 100%); display: block; position: absolute; }
+.none { width:0;height:0;text-indent:-9999px; display: none !important; }
+br {
+    &.forPC { display: block; }
+}
+
+/* 키프레임 */
+@keyframes shake-left {
+    0% { rotate: -1deg;}
+    100% { rotate: 3deg;}
+}
+@keyframes shake-left-point {
+    0% { rotate: -1deg;}
+    100% { rotate: 1deg;}
+}
+@keyframes shake-right-point {
+    0% { rotate: 1deg;}
+    100% { rotate: -1deg;}
+}
+@keyframes shake-left-s {
+  0%   { rotate: 0deg; }
+  25%  { rotate: -10deg; }
+  50%  { rotate: 5deg; }
+  75%  { rotate: -10deg; }
+  100% { rotate: 0deg; }
+}
+@keyframes shake-right {
+    0% { rotate: 1deg;}
+    100% { rotate: -3deg;}
+}
+@keyframes swing-left {
+    0% { transform: translateX(-.5rem);}
+    100% { transform: translateX(0);}
+}
+@keyframes swing-top {
+    0% { transform: translateY(-1rem);}
+    100% { transform: translateY(0);}
+}
+@keyframes ani-flicker {
+    0% { opacity: 1;}
+    100% { opacity: 0;}
+}
+
+
