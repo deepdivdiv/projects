@@ -1,0 +1,55 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+// 라벨
+$tagSize: (
+  l: (h:3rem,   fs: set.$ft-bd-m,  pd:.6rem 1.2rem),
+  m: (h:2.4rem, fs: set.$ft-bd-s,  pd:.4rem .8rem),
+  s: (h:2rem,   fs: set.$ft-bd-xs, pd:.2rem .6rem),
+);
+$tagState: (
+  po: (bg: set.$mCol-10,     fc: set.$mCol-60),
+  de: (bg: set.$sst-dCol-10, fc: set.$sst-dCol-60),
+  su: (bg: set.$sst-sCol-10, fc: set.$sst-sCol-60),
+  wa: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
+  if: (bg: set.$sst-iCol-10, fc: set.$sst-iCol-60),
+);
+
+@each $size, $size_prop in $tagSize {
+  @each $type, $type_prop in $tagState {
+    .tag {
+      gap: .3rem;
+      border-radius: .2rem;
+      position: relative;
+      display: flex; align-items: center;
+      font-weight: set.$fw-b;
+      line-height: 1;
+      text-box: set.$tbSet;
+      &::before {
+        content: "#";
+        font-weight: set.$fw-m;
+      }
+    }
+    .tag-#{$size} {
+      @extend .tag;
+        background: set.$gray-10;
+        color: set.$gray-40;
+        height: map.get($size_prop, h);
+        font-size: map.get($size_prop, fs);
+        padding: map.get($size_prop, pd);
+      &.#{$type} {
+        background: map.get($type_prop, bg);
+        color: map.get($type_prop, fc);
+        height: map.get($size_prop, h);
+        font-size: map.get($size_prop, fs);
+        padding: map.get($size_prop, pd);
+        i { @include set.ico-close($color: map.get($type_prop, fc)); }
+      }
+    }
+  }
+}
+
+
+
