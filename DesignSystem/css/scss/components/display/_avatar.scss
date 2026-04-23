@@ -13,6 +13,9 @@ $avaSizes: (
 );
 
 
+.avata-chip {
+  display: flex; align-items: center;
+}
 .ava {
   aspect-ratio: 1/1;
   background: set.$mCol-10 set.icon(ico-user, set.$mCol-60) no-repeat center center / 58%;
@@ -27,20 +30,15 @@ $avaSizes: (
     font-weight: 700;
     white-space: nowrap;
   }
-
-
-  
 }
 @each $size, $prop in $avaSizes {
   .avata-chip {
-    display: flex; align-items: center;
     [class^="ava-"] {
       outline: calc(map.get($prop, w) / 12) solid set.$gray-0;
       &:not(:first-of-type) {
         margin-left: calc(#{map.get($prop, w)} * -0.26);
       } 
     }
-
   }
   .ava-#{$size} {
     @extend .ava;

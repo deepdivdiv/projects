@@ -1,8 +1,6 @@
 @charset "UTF-8";
 @use '../../utils' as set;
 @use "sass:map";
-
-
 $rangeSize:(
     xs: (d-w: 1.0rem, h: 0.2rem ),
      s: (d-w: 1.4rem, h: 0.4rem ),
@@ -38,7 +36,7 @@ $rangeSize:(
             }
         }
     }
-    :is(.range-#{$size}, .gauge-#{$size}) {
+    .range-#{$size}, .gauge-#{$size} {
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -167,6 +165,5 @@ $rangeSize:(
                 }
             }
         }
-
     }
 }

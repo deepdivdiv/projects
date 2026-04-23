@@ -50,22 +50,22 @@
   flex-direction: column;
   gap: 4rem;
 }
-.styleGuide .sg_box dl {
+.styleGuide .sg_box > dl {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.styleGuide .sg_box dt {
+.styleGuide .sg_box > dl > dt {
   font-weight: 200;
   color: #9590a2;
   font-size: clamp(1.8rem, 1.9531vw, 2rem);
 }
-.styleGuide .sg_box dd {
+.styleGuide .sg_box > dl > dd {
   color: #3b3844;
   line-height: 1;
   font-weight: 600;
 }
-.styleGuide .sg_box dd p, .styleGuide .sg_box dd span {
+.styleGuide .sg_box > dl > dd p, .styleGuide .sg_box > dl > dd span {
   text-box: trim-both cap alphabetic;
   font-size: inherit;
   font-weight: inherit;
@@ -141,4 +141,10 @@
   font-weight: 200;
   line-height: 1.4;
   font-family: "Pretendard", sans-serif;
+  margin-block: 0;
+  text-box: trim-both cap alphabetic;
+}
+.styleGuide .sg_box .source xmp {
+  margin-block: -2ex;
+  text-wrap-mode: wrap;
 }

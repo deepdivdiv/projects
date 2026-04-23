@@ -19,21 +19,20 @@ $chipState: (
 
 
 
-
+.chip {
+  gap: .8rem;
+  border-radius: 100rem;
+  position: relative;
+  display: flex; align-items: center;
+  font-weight: set.$fw-b;
+  line-height: 1;
+  text-box: set.$tbSet;
+  .chip-kill { width: 0; height: 0; position: absolute; clip-path: inset(0% 100% 100% 0%); left: 0; top: 0; }
+  span { display: block;  }
+  &:has(.chip-kill:checked) { display: none; }
+}
 @each $size, $size_prop in $chipSize {
   @each $type, $type_prop in $chipState {
-    .chip {
-      gap: .8rem;
-      border-radius: 100rem;
-      position: relative;
-      display: flex; align-items: center;
-      font-weight: set.$fw-b;
-      line-height: 1;
-      text-box: set.$tbSet;
-      .chip-kill { width: 0; height: 0; position: absolute; clip-path: inset(0% 100% 100% 0%); left: 0; top: 0; }
-      span { display: block;  }
-      &:has(.chip-kill:checked) { display: none; }
-    }
     .chip-#{$size} {
       @extend .chip;
       background: set.$gray-10;

@@ -16,22 +16,21 @@ $tagState: (
   wa: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
   if: (bg: set.$sst-iCol-10, fc: set.$sst-iCol-60),
 );
-
+.tag {
+  gap: .3rem;
+  border-radius: .2rem;
+  position: relative;
+  display: flex; align-items: center;
+  font-weight: set.$fw-b;
+  line-height: 1;
+  text-box: set.$tbSet;
+  &::before {
+    content: "#";
+    font-weight: set.$fw-m;
+  }
+}
 @each $size, $size_prop in $tagSize {
   @each $type, $type_prop in $tagState {
-    .tag {
-      gap: .3rem;
-      border-radius: .2rem;
-      position: relative;
-      display: flex; align-items: center;
-      font-weight: set.$fw-b;
-      line-height: 1;
-      text-box: set.$tbSet;
-      &::before {
-        content: "#";
-        font-weight: set.$fw-m;
-      }
-    }
     .tag-#{$size} {
       @extend .tag;
         background: set.$gray-10;

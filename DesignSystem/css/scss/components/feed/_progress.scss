@@ -3,41 +3,57 @@
 @use "sass:map";
 
 $pgSize: (
-    xs: ( h:0.6rem, p: 0.1rem ),
-     s: ( h:1.0rem, p: 0.2rem ),
-     m: ( h:1.4rem, p: 0.2rem ),
-     l: ( h:1.8rem, p: 0.3rem ),
-    xl: ( h:2.2rem, p: 0.3rem ),
+    xs: ( h:0.6rem, p: 0.1rem, fs: set.$ft-bd-xs, ),
+     s: ( h:1.0rem, p: 0.2rem, fs: set.$ft-bd-s,  ),
+     m: ( h:1.4rem, p: 0.2rem, fs: set.$ft-bd-m,  ),
+     l: ( h:1.8rem, p: 0.3rem, fs: set.$ft-bd-l,  ),
+    xl: ( h:2.2rem, p: 0.3rem, fs: set.$ft-tt-s,  ),
 );
-
+[class^="pg-"] {
+    width: 100%;
+    &:has(dl) {
+        display: flex; flex-direction: column; gap: 1rem;
+        > dl {
+            display: flex; align-items: center; gap: min(6vw, 4rem); justify-content: space-between;
+            dt, dd { color: set.$gray-100; line-height: 1.4; }
+            dt { font-weight: set.$fw-b; }
+            dd { font-weight: set.$fw-m; }
+        }
+    }
+}
 @each $size, $prop in $pgSize {
     .pg-#{$size} {
-        appearance: none;
-        width: 100%;
-        height: map.get($prop, h);
-        border-radius: 100rem;
-        padding: map.get($prop, p);
-        border: 1px solid set.$gray-20;
-        overflow: hidden;
-        &::-webkit-progress-bar {
-            background: set.$gray-0;
+        > dl {
+            dt, dd { font-size: map.get($prop, fs); }
         }
-        &::-webkit-progress-value {
-            background: set.$mCol-60;
+        progress {
+            appearance: none;
+            width: 100%;
+            height: map.get($prop, h);
             border-radius: 100rem;
-            transition: all set.$aniSet;
-        }
-        &.fail {
-            &::-webkit-progress-value { background: set.$sst-dCol-60; }
-        }
-        &.comple {
-            &::-webkit-progress-value { background: set.$sst-sCol-60; }
-        }
-        &.wa {
-            &::-webkit-progress-value { background: set.$sst-wCol-60; }
-        }
-        &.ne {
-            &::-webkit-progress-value { background: set.$gray-100; }
+            padding: map.get($prop, p);
+            border: 1px solid set.$gray-20;
+            overflow: hidden;
+            &::-webkit-progress-bar {
+                background: set.$gray-0;
+            }
+            &::-webkit-progress-value {
+                background: set.$mCol-60;
+                border-radius: 100rem;
+                transition: all set.$aniSet;
+            }
+            &.fail {
+                &::-webkit-progress-value { background: set.$sst-dCol-60; }
+            }
+            &.comple {
+                &::-webkit-progress-value { background: set.$sst-sCol-60; }
+            }
+            &.wa {
+                &::-webkit-progress-value { background: set.$sst-wCol-60; }
+            }
+            &.ne {
+                &::-webkit-progress-value { background: set.$gray-100; }
+            }
         }
     }
 }
