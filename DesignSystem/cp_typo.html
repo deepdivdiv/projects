@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/styleGuide.css">
+
+</head>
+<body>
+    
+    <div class="styleGuide">
+        <!-- 타이포 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>Typography</h1>
+                <p>텍스트 스타일과 계층 구조를 정의합니다</p>
+            </div>
+            <div class="sg_area">
+                <p>사이즈</p>
+                <div class="sg_box typo">
+                    <dl>
+                        <dt>$ft-dp-l</dt>
+                        <dd class="ft-dp-l ft-po"><p>디스플레이 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-dp-m</dt>
+                        <dd class="ft-dp-m ft-po"><p>디스플레이 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-dp-s</dt>
+                        <dd class="ft-dp-s ft-po"><p>디스플레이 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-hd-l</dt>
+                        <dd class="ft-hd-l ft-po"><p>헤드 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-hd-m</dt>
+                        <dd class="ft-hd-m ft-po"><p>헤드 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-hd-s</dt>
+                        <dd class="ft-hd-s ft-po"><p>헤드 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-tt-l</dt>
+                        <dd class="ft-tt-l ft-po"><p>타이틀 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-tt-m</dt>
+                        <dd class="ft-tt-m ft-po"><p>타이틀 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-tt-s</dt>
+                        <dd class="ft-tt-s ft-po"><p>타이틀 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-bd-l</dt>
+                        <dd class="ft-bd-l ft-po"><p>바디 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-bd-m</dt>
+                        <dd class="ft-bd-m ft-po"><p>바디 텍스트</p></dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-bd-s</dt>
+                        <dd class="ft-bd-s ft-po"><p>바디 텍스트</p></dd>
+                    </dl>
+                    
+                    <div class="source">
+                        <em>SCSS</em>
+                        <p> h1 { font-size: set.$ft-dp-l; } </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sg_area">
+                <p>스타일</p>
+                <div class="sg_box typo">
+                    <dl>
+                        <dt>$ft-point</dt>
+                        <dd class="ft-dp-l ft-po">디스플레이 텍스트</dd>
+                    </dl>
+                    <dl>
+                        <dt>$ft-base</dt>
+                        <dd class="ft-dp-l">디스플레이 텍스트</dd>
+                    </dl>
+                    <div class="source">
+                        <em>SCSS</em>
+                        <p> h1 { font-family: set.$ft-point; } </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sg_area">
+                <p>굵기</p>
+                <div class="sg_box typo">
+                    <dl>
+                        <dt>$fw-b</dt>
+                        <dd class="ft-dp-l ft-po fw-b">Weight 700</dd>
+                    </dl>
+                    <dl>
+                        <dt>$fw-m</dt>
+                        <dd class="ft-dp-l fw-m">Weight 400</dd>
+                    </dl>
+                    <dl>
+                        <dt>$fw-l</dt>
+                        <dd class="ft-dp-l fw-l">Weight 200</dd>
+                    </dl>
+                    <div class="source">
+                        <em>SCSS</em>
+                        <p> h1 { font-weight: set.$fw-b; } </p>
+                        <p> h1 { font-weight: set.$fw-m; } </p>
+                        <p> h1 { font-weight: set.$fw-l; } </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

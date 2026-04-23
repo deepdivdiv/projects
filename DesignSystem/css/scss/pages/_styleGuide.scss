@@ -21,11 +21,13 @@ $typoSize: (
     display: flex; flex-direction: column; gap: 10rem;
     background: set.$gray-5;
     padding: 3vw;
+    min-height: 100vh;
     .sg_inner {
         display: flex; flex-direction: column; gap: 4rem;
         background: set.$gray-0;
         padding: 5vw;
         border-radius: 2rem;
+        flex-grow: 1;
     }
     .sg_tit {
         display: flex; flex-direction: column; gap: 2rem;

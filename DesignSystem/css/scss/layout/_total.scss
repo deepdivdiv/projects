@@ -10,4 +10,6 @@
   &.a-top { align-items: flex-start; }
   &.a-cen { align-items: flex-start; }
   &.a-bot { align-items: flex-end; }
+  &.d-col { flex-direction: column; }
+  &.d-row { flex-direction: column; align-items: flex-start; }
 }

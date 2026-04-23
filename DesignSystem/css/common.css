@@ -27,5 +27,12 @@
 .flexBox.a-bot {
   align-items: flex-end;
 }
+.flexBox.d-col {
+  flex-direction: column;
+}
+.flexBox.d-row {
+  flex-direction: column;
+  align-items: flex-start;
+}
 
 /* 전체 레이아웃 */

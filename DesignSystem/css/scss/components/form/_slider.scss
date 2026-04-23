@@ -1,0 +1,172 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+$rangeSize:(
+    xs: (d-w: 1.0rem, h: 0.2rem ),
+     s: (d-w: 1.4rem, h: 0.4rem ),
+     m: (d-w: 1.6rem, h: 0.6rem ),
+     l: (d-w: 1.8rem, h: 0.8rem ),
+    xl: (d-w: 2.0rem, h: 1.0rem ),
+);
+@each $size, $prop in $rangeSize {
+    .range-#{$size} {
+        input[type="range"] {
+            &::-webkit-slider-thumb {
+                width: map.get($prop, d-w); aspect-ratio: 1/1;
+                margin-top: calc((map.get($prop, h) - map.get($prop, d-w)) / 2);
+                outline: calc(map.get($prop, d-w) / 4) solid set.$gray-0;
+                background: set.$mCol-60;
+                border-radius: 100rem;
+                cursor: pointer;
+                transition: all set.$aniSet;
+                &:hover {
+                    width: calc(map.get($prop, d-w) * 1.2);
+                    background: set.$mCol-80;
+                    outline: calc(map.get($prop, d-w) / 3) solid set.$gray-0;
+                    margin-top: calc((map.get($prop, h) - calc(map.get($prop, d-w) * 1.2)) / 2);
+                }
+            }
+        }
+    }
+    .gauge-#{$size} {
+        input[type="range"] {
+            border-radius: .2rem;
+            &::-webkit-slider-thumb {
+                width: 0; height: 0;
+            }
+        }
+    }
+    :is(.range-#{$size}, .gauge-#{$size}) {
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            width: 100%;
+            height: map.get($prop, d-w);
+            --val: attr(value type(<number>), 50);
+            --min: attr(min type(<number>), 0);
+            --max: attr(max type(<number>), 100);
+            --pct: calc((var(--val) - var(--min)) / (var(--max) - var(--min)) * 100%);
+            &:hover {
+                &::-webkit-slider-runnable-track {
+                    cursor: pointer;
+                    background: linear-gradient(
+                        to right,
+                        set.$mCol-80 0 var(--pct),
+                        set.$gray-10 var(--pct) 100%
+                    );
+                }
+            }
+            &::-webkit-slider-runnable-track {
+                height: map.get($prop, h);
+                border-radius: 100rem;
+                transition: all set.$aniSet;
+                background: linear-gradient(
+                    to right,
+                    set.$mCol-60 0 var(--pct),
+                    set.$gray-10 var(--pct) 100%
+                );
+            }
+
+            &::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    background: set.$mCol-60;
+                    cursor: pointer;
+            }
+            &::-webkit-slider-runnable-track {
+                height: map.get($prop, h);
+                background: linear-gradient(
+                    to right,
+                    set.$mCol-60 0 var(--pct),
+                    set.$gray-10 var(--pct) 100%
+                );
+            }
+
+
+            &:disabled {
+                pointer-events: none !important;
+                &::-webkit-slider-runnable-track {
+                    background: linear-gradient(
+                        to right,
+                        set.$gray-20 0 var(--pct),
+                        set.$gray-10 var(--pct) 100%
+                    ) !important;
+                }
+                &::-webkit-slider-thumb {
+                    background: set.$gray-30 !important;
+                }
+            }
+            &::-moz-range-track    { height: map.get($prop, h); background: set.$gray-10; border-radius: 100rem; }
+            &::-moz-range-progress { height: map.get($prop, h); background: set.$mCol-60; border-radius: 100rem; }
+            &::-moz-range-thumb {
+                width: map.get($prop, d-w);
+                aspect-ratio: 1/1;
+                background: set.$gray-10;
+                border: 0.2rem solid set.$mCol-60;
+                border-radius: 100rem;
+                cursor: pointer;
+            }
+
+        }
+        &.imp {
+            input[type="range"] {
+                &::-webkit-slider-runnable-track {
+                    background: linear-gradient(
+                        to right,
+                        set.$mCol-60 0 var(--pct),
+                        set.$mCol-5 var(--pct) 100%
+                    );
+                }
+                &::-webkit-slider-thumb {
+                    background: set.$mCol-60;
+                }
+            }
+        }
+        &.fail {
+            input[type="range"] {
+                &::-webkit-slider-runnable-track {
+                    background: linear-gradient(
+                        to right,
+                        set.$sst-dCol-60 0 var(--pct),
+                        set.$sst-dCol-5 var(--pct) 100%
+                    );
+                }
+                &::-webkit-slider-thumb {
+                    background: set.$sst-dCol-60;
+                }
+            }
+        }
+        &.warning {
+            input[type="range"] {
+                &::-webkit-slider-runnable-track {
+                    background: linear-gradient(
+                        to right,
+                        set.$sst-wCol-60 0 var(--pct),
+                        set.$sst-wCol-5 var(--pct) 100%
+                    );
+                }
+                &::-webkit-slider-thumb {
+                    background: set.$sst-wCol-60;
+                }
+            }
+        }
+        &.comple {
+            input[type="range"] {
+                &::-webkit-slider-runnable-track {
+                    background: linear-gradient(
+                        to right,
+                        set.$sst-sCol-60 0 var(--pct),
+                        set.$sst-sCol-5 var(--pct) 100%
+                    );
+                }
+                &::-webkit-slider-thumb {
+                    background: set.$sst-sCol-60;
+                }
+            }
+        }
+
+    }
+}
