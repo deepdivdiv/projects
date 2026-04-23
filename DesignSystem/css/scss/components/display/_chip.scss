@@ -35,14 +35,19 @@ $chipState: (
       span { display: block;  }
       &:has(.chip-kill:checked) { display: none; }
     }
-    .chip-#{$type}-#{$size} {
+    .chip-#{$size} {
       @extend .chip;
-      background: map.get($type_prop, bg);
-      color: map.get($type_prop, fc);
+      background: set.$gray-10;
+      color: set.$gray-40;
       height: map.get($size_prop, h);
       font-size: map.get($size_prop, fs);
       padding: map.get($size_prop, pd);
-      i { @include set.ico-close($color: map.get($type_prop, fc)); }
+      i { @include set.ico-close($color:  set.$gray-40); }
+      &.#{$type} {
+        background: map.get($type_prop, bg);
+        color: map.get($type_prop, fc);
+        i { @include set.ico-close($color: map.get($type_prop, fc)); }
+      }
     }
   }
 }

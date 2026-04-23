@@ -18,7 +18,6 @@ $labelColors: (
   su: (bg: set.$sst-sCol-10, fc: set.$sst-sCol-60),
   wa: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
   if: (bg: set.$sst-iCol-10, fc: set.$sst-iCol-60),
-  nm: (bg: set.$gray-10,     fc: set.$gray-40),
 );
 
 
@@ -33,19 +32,22 @@ $labelColors: (
       line-height: 1;
       text-box: set.$tbSet;
     }
-    .lb-#{$type}-#{$size} {
+    .lb-#{$size} {
       @extend .lb;
-      background: map.get($type_prop, bg);
-      color: map.get($type_prop, fc);
+      background: set.$gray-10;
+      color: set.$gray-40;
       height: map.get($size_prop, h);
       font-size: map.get($size_prop, fs);
       padding: map.get($size_prop, pd);
       i {
         display: flex; height: 100%; aspect-ratio: 1/1; flex-shrink: 0; align-items: center; justify-content: center;
-        &.ico-warning    { background: set.icon(ico-warning, map.get($type_prop, fc)) no-repeat center / contain; }
-        &.ico-info    { background: set.icon(ico-info, map.get($type_prop, fc)) no-repeat center / contain; }
       }
-
+      &.#{$type} {
+        background: map.get($type_prop, bg);
+        color: map.get($type_prop, fc);
+        i.ico-warning    { background: set.icon(ico-warning, map.get($type_prop, fc)) no-repeat center / contain; }
+        i.ico-info    { background: set.icon(ico-info, map.get($type_prop, fc)) no-repeat center / contain; }
+      }
     }
   }
 }

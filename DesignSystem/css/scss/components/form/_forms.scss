@@ -151,13 +151,13 @@ $cauColors: (
         }
     }
     // 내부 안에 캡션있는경우
-    *:has([class^="cau"]) {
+    *:has([class^="cau-"]) {
         display: flex; flex-direction: column; gap: 1rem;
         flex-grow: 1;
     }
     // 비활성일경우 캡션 전체 숨김
     > *:has(:disabled) {
-        [class^="cau"] { display: none !important; }
+        [class^="cau-"] { display: none !important; }
     }
     // 인풋 기본설정 (셀렉트제외)
     input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
@@ -202,8 +202,8 @@ $cauColors: (
         overflow: visible;
     }
     // 캡션 핸들링 일반상태에는 nm 캡션만 노출되게
-    [class^="cau-"]   { display: none; } 
-    [class^="cau-nm"] { display: flex; } 
+    [class^="cau-"] { display: flex; } 
+    [class^="cau-"]:is(.er, .su, .ca, .de, .imp, .if) { display: none; } 
     // 폼 세팅
     $formStates: (
         er: (bd: set.$sst-dCol-60, bd-h: set.$sst-dCol-70, bg: set.$sst-dCol-5, bg-h: set.$sst-dCol-10, ),
@@ -288,22 +288,22 @@ $cauColors: (
                 }
             }
 
-            [class^="cau-nm"] {
+            [class^="cau-"] {
                 display: none;
             }
 
             @if $value == er {
-                [class^="cau-er"] {
+                [class^="cau-"].er {
                     display: flex;
                 }
             }
             @else if $value == su {
-                [class^="cau-su"] {
+                [class^="cau-"].su {
                     display: flex;
                 }
             }
             @else if $value == ca {
-                [class^="cau-ca"] {
+                [class^="cau"].ca {
                     display: flex;
                 }
             }
@@ -425,13 +425,17 @@ $cauColors: (
 // 캡션 반복문
 @each $size, $prop in $cauSizes {
     @each $name, $color in $cauColors {
-        .cau-#{$name}-#{$size} {
+        .cau-#{$size} {
             @extend .cau;
-            color: map.get($color, c);
+            color: set.$gray-40;
             font-size: map.get($prop, fs);
             i {
                 width: map.get($prop, is);
+                background: set.icon(ico-warning, set.$gray-40) no-repeat center center / contain;
             }
+
+            &.#{$name} {
+            color: map.get($color, c);
             @if $name == su {
                 i { background: set.icon(ico-success, map.get($color, c)) no-repeat center center / contain; }
             }
@@ -443,6 +447,7 @@ $cauColors: (
             }
             @else {
                 i { background: set.icon(ico-warning, map.get($color, c)) no-repeat center center / contain; }
+            }
             }
         }
     }

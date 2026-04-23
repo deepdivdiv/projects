@@ -119,15 +119,18 @@ $sizes: (
     border-color: $default;
     color: set.$gray-0;
     transition: all set.$aniSet;
-    
     @if $t-key == "nm" {
       color: set.$gray-60;
-        i { filter: brightness(0.9); }
-        &.on, &.active {
-          color: $on;
-          i { filter: brightness(0.6); }
-        }
+      i { filter: brightness(0.9); }
+      &.on, &.active {
+        color: $on;
+        i { filter: brightness(0.6); }
+      }
     } @else {
+      &.on, &.active {
+        color: $on;
+        i { filter: brightness(1); }
+      }
       &:not(.on, .active) {
         i { filter: brightness(100); }
       }
@@ -209,19 +212,29 @@ $sizes: (
 
 // 4. 풀셋 조합 클래스 생성 (예: .bt-a-nm-l)
 @each $theme-key, $type-map in $theme-groups {
-  @each $t-key, $color-values in $type-map {
-    @each $s-key, $s-val in $sizes {
-      .bt-#{$theme-key}-#{$t-key}-#{$s-key} {
-        @extend .bt;
-        @include set-bt-variant($theme-key, $t-key, $color-values);
-        height: map-get($s-val, h);
-        font-size: map-get($s-val, ft);
-        padding: map-get($s-val, pd);
-        @include set.res-tab-lap() {
-          height: map-get($s-val, hs);
-          font-size: map-get($s-val, fts);
-          padding: map-get($s-val, pds);
-          gap:0.3rem;
+  @each $s-key, $s-val in $sizes {
+    .bt-#{$theme-key}-#{$s-key} {
+      @extend .bt;
+
+      height: map-get($s-val, h);
+      font-size: map-get($s-val, ft);
+      padding: map-get($s-val, pd);
+      @include set.res-tab-lap() {
+        height: map-get($s-val, hs);
+        font-size: map-get($s-val, fts);
+        padding: map-get($s-val, pds);
+        gap:0.3rem;
+      }
+
+      // 기본(미지정) = nm
+      @include set-bt-variant($theme-key, nm, map-get($type-map, nm));
+
+      // 타입별 override (nm은 기본값이므로 제외)
+      @each $t-key, $color-values in $type-map {
+        @if $t-key != nm {
+          &.#{$t-key} {
+            @include set-bt-variant($theme-key, $t-key, $color-values);
+          }
         }
       }
     }
