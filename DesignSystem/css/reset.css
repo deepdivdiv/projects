@@ -1,5 +1,13 @@
 @charset "UTF-8";
 @import url(../font/font.css);
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
 .m10 {
   margin: 1rem !important;
 }
@@ -600,79 +608,4 @@ h4 strong, h4 b, h5 strong, h5 b, h6 strong, h6 b {
 
 br.forPC {
   display: block;
-}
-
-/* 키프레임 */
-@keyframes shake-left {
-  0% {
-    rotate: -1deg;
-  }
-  100% {
-    rotate: 3deg;
-  }
-}
-@keyframes shake-left-point {
-  0% {
-    rotate: -1deg;
-  }
-  100% {
-    rotate: 1deg;
-  }
-}
-@keyframes shake-right-point {
-  0% {
-    rotate: 1deg;
-  }
-  100% {
-    rotate: -1deg;
-  }
-}
-@keyframes shake-left-s {
-  0% {
-    rotate: 0deg;
-  }
-  25% {
-    rotate: -10deg;
-  }
-  50% {
-    rotate: 5deg;
-  }
-  75% {
-    rotate: -10deg;
-  }
-  100% {
-    rotate: 0deg;
-  }
-}
-@keyframes shake-right {
-  0% {
-    rotate: 1deg;
-  }
-  100% {
-    rotate: -3deg;
-  }
-}
-@keyframes swing-left {
-  0% {
-    transform: translateX(-0.5rem);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-@keyframes swing-top {
-  0% {
-    transform: translateY(-1rem);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-@keyframes ani-flicker {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
 }

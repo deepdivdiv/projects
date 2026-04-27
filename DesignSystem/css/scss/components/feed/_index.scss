@@ -1,4 +1,5 @@
 @charset "UTF-8";
 
 
-@forward 'progress';
+@forward 'progress';       // 프로그레스바
+@forward 'loader';         // 스피너, 스켈레톤 로더 등 

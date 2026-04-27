@@ -1,0 +1,154 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+$spinSize: (
+    xxl: (h:8.0rem),
+     xl: (h:6.4rem),
+      l: (h:4.8rem),
+      m: (h:4.0rem),
+      s: (h:3.2rem),
+     xs: (h:2.4rem),
+);
+
+
+// 스피너
+.ico-spinner {
+    @include set.spinner(set.$gray-100);
+    flex-grow: 1;
+    @each $height, $prop in $spinSize {
+        &.#{$height} {
+            max-height: map.get($prop, h);
+        }
+    }
+
+}
+
+// 로딩 
+@keyframes ani-wait {
+    0% {
+        transform: translateY(0rem);
+        opacity: 0.3;   
+    }
+    100% {
+        transform: translateY(-.4rem);
+        opacity: 0.6;
+    }
+}
+.ico-loading {
+    background: set.$gray-5;
+    width: 100%;
+    max-width: 8rem;
+    aspect-ratio: 1/1;
+    justify-content: center;
+    border-radius: 100rem;
+}
+.ico-loading, .loading {
+    display: flex; align-items: center; gap: 0.5rem;
+    > * {
+        background: set.$gray-80;
+        aspect-ratio: 1/1;
+        border-radius: 100rem;
+        // opacity: calc(sibling-index() * 0.8);
+        animation: ani-wait 500ms ease-in-out infinite calc(sibling-index() * 0.1s) alternate backwards; 
+    }
+}
+$loadingSize:(
+  xxl: ( ico-w: 8.0rem, gap:.7rem, dot-w: .8rem ),
+   xl: ( ico-w: 6.4rem, gap:.5rem, dot-w: .7rem ),
+    l: ( ico-w: 4.8rem, gap:.4rem, dot-w: .6rem ),
+    m: ( ico-w: 4.0rem, gap:.4rem, dot-w: .5rem ),
+    s: ( ico-w: 3.2rem, gap:.3rem, dot-w: .4rem ),
+   xs: ( ico-w: 2.4rem, gap:.2rem, dot-w: .3rem ),
+);
+@each $size, $prop in $loadingSize {
+    .ico-loading.#{$size} {
+        width: map.get($prop, ico-w);
+    }
+    .ico-loading, .loading {
+        &.#{$size} {
+            gap: map.get($prop, gap);
+            > * {
+                width: map.get($prop, dot-w);
+            }
+        }
+    }
+}
+
+$blinkSize: (
+    l: (w:4rem, wp:180%),
+    m: (w:2rem, wp:200%),
+    s: (w:1rem, wp:220%),
+);
+$blinkState: (
+    de: (c:set.$sst-dCol-60),
+    wa: (c:set.$sst-wCol-60),
+    su: (c:set.$sst-sCol-60),
+);
+@keyframes ani-appeal {
+    0% { width: 100%; }
+}
+@keyframes ani-blink {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+.appeal, .blink {
+    width: 1rem;
+    aspect-ratio: 1/1;
+    border-radius: 100rem;
+    background: set.$mCol-60;
+    display: block;
+    position: relative;
+}
+// 점멸
+.appeal {
+    &::before {
+        content: "";
+        width: 300%;
+        aspect-ratio: 1/1;
+        position: absolute;
+        border-radius: 100rem;
+        background: rgba(set.$mCol-60, 0.1);
+        left: 50%; top: 50%; transform: translate(-50%, -50%);
+        z-index: -1;
+        animation: ani-appeal 500ms linear infinite alternate-reverse backwards;
+    }
+    &::before { animation-delay: 0s; }
+}
+.blink {
+    opacity: 0;
+    animation: ani-blink 600ms linear infinite alternate-reverse backwards;
+}
+
+@each $size, $value in $blinkSize {
+    @each $state, $color in $blinkState {
+        .appeal {
+            &-#{$size} {
+                @extend .appeal;
+                width: map.get($value, w);
+                &::before {
+                    width: map.get($value, wp);
+                }
+            }
+            &.#{$state} {
+                background: map.get($color, c);
+                &::before {
+                    background: rgba(map.get($color, c), 0.1);
+                }
+            }
+        }
+        .blink {
+            &-#{$size} {
+                @extend .blink;
+                width: map.get($value, w);
+                &::before {
+                    width: map.get($value, wp);
+                }
+            }
+            &.#{$state} {
+                background: map.get($color, c);
+            }
+        }
+    }
+}

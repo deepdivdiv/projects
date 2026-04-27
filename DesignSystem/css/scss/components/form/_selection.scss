@@ -59,6 +59,7 @@ $selectState: (
         }
         &:checked:disabled + label {
             pointer-events: none;
+            border-color: set.$gray-30 !important;
             color: set.$gray-30 !important;
             i {
                 // border-color: set.$gray-20 !important;

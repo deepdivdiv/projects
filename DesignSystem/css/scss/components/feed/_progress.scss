@@ -9,6 +9,12 @@ $pgSize: (
      l: ( h:1.8rem, p: 0.3rem, fs: set.$ft-bd-l,  ),
     xl: ( h:2.2rem, p: 0.3rem, fs: set.$ft-tt-s,  ),
 );
+$pgState: (
+    fail:   ( c:set.$sst-dCol-60 ),
+    comple: ( c:set.$sst-sCol-60 ),
+    warning:     ( c:set.$sst-wCol-60 ),
+    ne:     ( c:set.$gray-100 ),
+);
 [class^="pg-"] {
     width: 100%;
     &:has(dl) {
@@ -42,18 +48,18 @@ $pgSize: (
                 border-radius: 100rem;
                 transition: all set.$aniSet;
             }
-            &.fail {
-                &::-webkit-progress-value { background: set.$sst-dCol-60; }
-            }
-            &.comple {
-                &::-webkit-progress-value { background: set.$sst-sCol-60; }
-            }
-            &.wa {
-                &::-webkit-progress-value { background: set.$sst-wCol-60; }
-            }
-            &.ne {
-                &::-webkit-progress-value { background: set.$gray-100; }
+        }
+        @each $state, $color in $pgState {
+            &.#{$state} {
+                progress {
+                    &::-webkit-progress-value { background: map.get($color, c); }
+                }
             }
         }
+
+
     }
 }
+
+
+

@@ -110,6 +110,10 @@ $sizes: (
     &.che-right { background: set.icon(che-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
     &.che-top { background: set.icon(che-top, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
     &.che-bot { background: set.icon(che-bot, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.ico-spinner {
+      @include set.spinner(if($t-key == 'nm', set.$gray-70, $default));
+    }
+    &.loading { * > { background: if($t-key == 'nm', set.$gray-70, $default) } }
   }
   
   // 솔리드 : 중요도 높음
