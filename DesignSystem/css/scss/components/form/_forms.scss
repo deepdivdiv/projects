@@ -11,11 +11,10 @@
         outline-width: .4rem;
     }
 }
-
 $inputSize: (
-  l:  (h: 6.4rem,  hs: 4.8rem, ft: set.$ft-bd-l, fts:set.$ft-tt-s, po:2rem,  pos:2rem,   pd:1.9rem 2rem, pds:1.3rem 2rem),
-  m:   (h: 4rem,   hs: 3.2rem, ft: set.$ft-bd-m, fts:set.$ft-bd-m, po:1rem,  pos:0.7rem, pd:1rem, pds:0.7rem),
-  s:   (h: 3.2rem, hs: 2.4rem, ft: set.$ft-bd-s, fts:set.$ft-bd-m, po:.7rem, pos:0.5rem, pd:0.7rem, pds:.5rem),
+  l:  (h: 6.4rem,  hs: 4.8rem, ft: set.$ft-bd-l, fts:set.$ft-tt-s, ico:1.3rem, po:2rem,  pos:2rem,   pd:1.9rem 2rem, pds:1.3rem 2rem),
+  m:   (h: 4rem,   hs: 3.2rem, ft: set.$ft-bd-m, fts:set.$ft-bd-m, ico:1rem,   po:1rem,  pos:0.7rem, pd:1rem, pds:0.7rem),
+  s:   (h: 3.2rem, hs: 2.4rem, ft: set.$ft-bd-s, fts:set.$ft-bd-m, ico:.7rem,  po:.7rem, pos:0.5rem, pd:0.7rem, pds:.5rem),
 
 );
 $formState: (
@@ -42,6 +41,26 @@ $cauColors: (
 .form { 
     background: set.$gray-0;
     position: relative;
+    &.st2 {
+        select {
+            border: none;
+            option {
+                background: set.$mCol-5;
+            }
+            &::picker(select) {
+                border: none;
+                background: set.$mCol-5;
+            }
+            &:open {
+                background: set.$mCol-5;
+                option {
+                    &:hover {
+                        background: set.$mCol-10;
+                    }
+                }
+            }
+        }
+    }
     // 셀렉트
     select {
         border-radius: .2rem;
@@ -52,16 +71,36 @@ $cauColors: (
         position: relative;
         color: set.$gray-50;
         flex-grow: 1;
-        
+        min-width: 8rem;
+        &.sel_time, &.sel_cal {
+            &::before {
+                content: "";
+                display: block;
+                height: 100%;
+                aspect-ratio: 1/1;
+                background: url() no-repeat center center / contain;
+            }
+        }
+        &.sel_time {
+            &::before {
+                background-image: set.icon(ico-clock, set.$mCol-60);
+            }
+        }
+        &.sel_cal {
+            &::before {
+                background-image: set.icon(ico-calendar, set.$mCol-60);
+            }
+        }
         &::picker-icon {
             content: "";
             background: set.icon(che-top, set.$gray-30) no-repeat center center / contain;
-            position: absolute;
-            width: 1rem; aspect-ratio: 1/1;
-            top: 50%; transform: translateY(-55%);
-            transform-origin: 50% 0;
+            aspect-ratio: 1/1;
+            flex-shrink: 0;
+            align-self: center;
+            transform-origin: 50% 50%;
             rotate: 0deg;
             transition: rotate set.$aniSet;
+            pointer-events: none;
         }
         &:not(:open){
             &:hover, &.hover {
@@ -89,7 +128,6 @@ $cauColors: (
             }
             option {
                 appearance: base-select;
-                background: set.$gray-0;
             }
             &::picker-icon {
                 background: set.icon(che-top, set.$mCol-60) no-repeat center center / contain !important;
@@ -160,7 +198,7 @@ $cauColors: (
         [class^="cau-"] { display: none !important; }
     }
     // 인풋 기본설정 (셀렉트제외)
-    input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
+    input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
         border: 1px solid set.$gray-30;
         background-color: set.$gray-0;
         color: set.$gray-100;
@@ -182,10 +220,7 @@ $cauColors: (
             background: set.$mCol-10;
             animation: outline-pumping 400ms alternate infinite both
         }
-        &:not(:placeholder-shown) {
-            background: set.$mCol-10;
-            border-color: set.$mCol-70;
-        }
+
         &:disabled {
             background: set.$gray-5 !important;
             border-color: set.$gray-20 !important;
@@ -195,11 +230,51 @@ $cauColors: (
             }
         }
     }
+    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
+        &:not(:placeholder-shown) {
+            background: set.$mCol-10;
+            border-color: set.$mCol-70;
+        }
+    }
+
     // 파일찾기 비활성화
     input[type="file"] {
         width: 0; height: 0; position: absolute; 
         clip-path: inset(0% 100% 100% 0);
         overflow: visible;
+    }
+    input[type="time"], input[type="date"] {
+        &::-webkit-calendar-picker-indicator {
+            order: -1;
+            margin-left: 0;
+            margin-right: 0.6rem;
+            padding: 0;
+            background: url() no-repeat center center / contain;
+        }
+        &::-webkit-datetime-edit { padding: 0 .4rem; }
+        &::-webkit-datetime-edit-hour-field,
+        &::-webkit-datetime-edit-minute-field {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            color: set.$gray-100;
+            padding: 0;
+        }
+        &::-webkit-datetime-edit-text {
+            color: set.$gray-50;
+            font-weight: 200;
+            padding: 0;
+            margin: 0.2rem;
+        }
+    }
+    input[type="time"] {
+        &::-webkit-calendar-picker-indicator {
+            background-image: set.icon(ico-clock, set.$mCol-60);
+        }
+    }
+    input[type="date"] {
+        &::-webkit-calendar-picker-indicator {
+            background-image: set.icon(ico-calendar, set.$mCol-60);
+        }
     }
     // 캡션 핸들링 일반상태에는 nm 캡션만 노출되게
     [class^="cau-"] { display: flex; } 
@@ -211,9 +286,33 @@ $cauColors: (
         ca: (bd: set.$sst-wCol-60, bd-h: set.$sst-wCol-70, bg: set.$sst-wCol-5, bg-h: set.$sst-wCol-10, ),
     );
     @each $value, $prop in $formStates {
+        &.st2 {
+            .set__#{$value} {
+                select {
+                    border: none;
+                    option {
+                        background: map.get($prop, bg);
+                    }
+                    &::picker(select) {
+                        border: none;
+                        background: map.get($prop, bg);
+                    }
+                    &:open {
+                        background: map.get($prop, bg);
+                        option {
+                            &:hover {
+                                background: map.get($prop, bg-h);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
         .set__#{$value} {
             @include set.scrollBar($color:map.get($prop, bd));
-            input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
+   
+            input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
                 border: 1px solid map.get($prop, bd);
                 &::placeholder {
                     color: map.get($prop, bd);
@@ -238,6 +337,16 @@ $cauColors: (
                 color: map.get($prop, bd);
                 flex-grow: 1;
                 border-color: map.get($prop, bd);
+                &.sel_time {
+                    &::before {
+                        background-image: set.icon(ico-clock, map.get($prop, bd));
+                    }
+                }
+                &.sel_cal {
+                    &::before {
+                        background-image: set.icon(ico-calendar, map.get($prop, bd));
+                    }
+                }
                 &::picker-icon {
                     content: "";
                     background: set.icon(che-top, map.get($prop, bd)) no-repeat center center / contain;
@@ -384,11 +493,16 @@ $cauColors: (
         input, select { height: map.get($prop, h); }
         select {
             height: map.get($prop, h);
+            font-size: map.get($prop, ft);
+            padding: map.get($prop, pd);
+            padding-right: map.get($prop, po);
+            gap: map.get($prop, po);
             &::picker-icon {
-                right: map.get($prop, po);
+                width: map.get($prop, ico);
             }
             &::picker(select) {
                 padding: map.get($prop, po) 0;
+                z-index: 1;
             }
             option {
                 font-size: map.get($prop, ft);
@@ -400,16 +514,19 @@ $cauColors: (
                     // color: set.$gray-40;
                 }
             }
+
             @include set.res-tab-lap() {
+                height: map.get($prop, hs);
+                font-size: map.get($prop, fts);
+                padding: map.get($prop, pds);
+                padding-right: map.get($prop, pos);
+                gap: map.get($prop, pos);
                 option {
                     font-size: map.get($prop, fts);
                 }
-                &::picker-icon {
-                    right: map.get($prop, pos);
-                }
             }
         }
-        input[type=text], input[type=password], input[type=time], input[type=url], input[type=data], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea, select {
+        input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
             font-size: map.get($prop, ft);
             padding: map.get($prop, pd);
             @include set.res-tab-lap() {
