@@ -1,3 +1,11 @@
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
 .styleGuide {
   width: 100%;
   display: flex;
@@ -50,22 +58,22 @@
   flex-direction: column;
   gap: 4rem;
 }
-.styleGuide .sg_box > dl {
+.styleGuide .sg_box > dl, .styleGuide .sg_box .flexBox > dl {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.styleGuide .sg_box > dl > dt {
+.styleGuide .sg_box > dl > dt, .styleGuide .sg_box .flexBox > dl > dt {
   font-weight: 200;
   color: #9590a2;
   font-size: clamp(1.8rem, 1.9531vw, 2rem);
 }
-.styleGuide .sg_box > dl > dd {
+.styleGuide .sg_box > dl > dd, .styleGuide .sg_box .flexBox > dl > dd {
   color: #3b3844;
   line-height: 1;
   font-weight: 600;
 }
-.styleGuide .sg_box > dl > dd p, .styleGuide .sg_box > dl > dd span {
+.styleGuide .sg_box > dl > dd p, .styleGuide .sg_box > dl > dd span, .styleGuide .sg_box .flexBox > dl > dd p, .styleGuide .sg_box .flexBox > dl > dd span {
   text-box: trim-both cap alphabetic;
   font-size: inherit;
   font-weight: inherit;

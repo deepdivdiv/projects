@@ -2,6 +2,9 @@
 @use 'vari' as set;
 @use 'func' as fun;
 
+// 키프레임 믹스인
+@mixin ani-rotate($dur: 1000ms) { animation: ani-spinner 1000ms infinite linear reverse backwards; }
+
 // 말줄임
 @mixin lineCut($line:2) {
     text-overflow: ellipsis;
@@ -75,16 +78,6 @@
     box-sizing: border-box; 
 }
 
-// 키프레임 믹스인
-// @mixin shake-left() { animation: shake-left 1000ms ease-in-out infinite 500ms alternate-reverse; animation-fill-mode: backwards }
-// @mixin shake-left-point() { animation: shake-left-point 2000ms ease-in-out infinite 500ms alternate-reverse; animation-fill-mode: backwards }
-// @mixin shake-right-point() { animation: shake-right-point 2000ms ease-in-out infinite 500ms alternate-reverse; animation-fill-mode: backwards }
-// @mixin shake-left-s() { animation: shake-left-s 2000ms ease-in-out infinite 500ms ; animation-fill-mode:backwards; animation-direction:reverse; animation-fill-mode: backwards }
-// @mixin shake-right() { animation: shake-right 1000ms ease-in-out infinite 500ms alternate-reverse; }
-// @mixin swing-top($dur: 1000ms) { animation: swing-top $dur ease-in-out infinite 500ms alternate-reverse }
-// @mixin swing-left($dur: 1000ms) { animation: swing-left $dur ease-in-out infinite 500ms alternate-reverse }
-// @mixin ani-flicker($dur: 1000ms) { animation: ani-flicker $dur ease-in-out infinite 500ms alternate-reverse }
-
 
 @mixin ico-close($color) {
     display: block;
@@ -103,4 +96,22 @@
     }
     &::before { rotate: -45deg; }
     &::after  { rotate: 45deg; }
+}
+
+// 스피너
+
+
+@mixin spinner($color) {
+    display: block;
+    aspect-ratio: 1/1;
+    height: 100%;
+    max-height: 8rem;
+    background: fun.icon(ico-spinner, $color) no-repeat center center / contain;
+    @include ani-rotate(1000ms);
+}
+
+
+// 아이콘 믹스인
+@mixin getIcon($value, $color: #555555) {
+    background: fun.icon($value, $color) no-repeat center center / contain;
 }

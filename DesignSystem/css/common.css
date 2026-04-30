@@ -1,4 +1,12 @@
 @charset "UTF-8";
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
 /* 헤더 */
 /* 푸터 */
 /* 네비게이션 */

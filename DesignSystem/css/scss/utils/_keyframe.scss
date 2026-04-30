@@ -1,0 +1,18 @@
+@charset "UTF-8";
+@use 'vari' as set;
+
+@keyframes ani-spinner {
+    0% { rotate: (0turn); }
+    100% { rotate: (1turn); }
+}
+
+
+// @mixin shake-left() { animation: shake-left 1000ms ease-in-out infinite 500ms alternate-reverse; animation-fill-mode: backwards }
+// @mixin shake-left-point() { animation: shake-left-point 2000ms ease-in-out infinite 500ms alternate-reverse; animation-fill-mode: backwards }
+// @mixin shake-right-point() { animation: shake-right-point 2000ms ease-in-out infinite 500ms alternate-reverse; animation-fill-mode: backwards }
+// @mixin shake-left-s() { animation: shake-left-s 2000ms ease-in-out infinite 500ms ; animation-fill-mode:backwards; animation-direction:reverse; animation-fill-mode: backwards }
+// @mixin shake-right() { animation: shake-right 1000ms ease-in-out infinite 500ms alternate-reverse; }
+// @mixin swing-top($dur: 1000ms) { animation: swing-top $dur ease-in-out infinite 500ms alternate-reverse }
+// @mixin swing-left($dur: 1000ms) { animation: swing-left $dur ease-in-out infinite 500ms alternate-reverse }
+// @mixin ani-flicker($dur: 1000ms) { animation: ani-flicker $dur ease-in-out infinite 500ms alternate-reverse }
+
