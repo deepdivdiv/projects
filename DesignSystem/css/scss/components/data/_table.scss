@@ -2,3 +2,281 @@
 @use '../../utils' as set;
 @use "sass:map";
 
+*:has(> .tooltip) {
+    anchor-name: --tooltip-anchor;
+}
+
+.tooltip {
+    position: fixed;
+    z-index: 10;
+    position-anchor: --tooltip-anchor;
+    top: calc(anchor(bottom) + 1rem);
+    left: calc(anchor(left) - 1rem);
+
+    padding: 1rem; border-radius: .4rem;
+    color: set.$gray-100;
+    background: set.$gray-0;
+    font-size: set.$ft-bd-m;
+    border: 1px solid set.$gray-100;
+    &::before {
+        content: "";
+        width: .9rem;
+        background: #fff;
+        aspect-ratio: 1/1;
+        border-top: 1px solid transparent;
+        border-left: 1px solid transparent;
+        border-color: set.$gray-100;
+        position: absolute;
+        rotate: 45deg;
+        top: 0;
+        transform: translateY(calc(-100% + 2px));
+        
+    }
+}
+
+// 폼형
+.tb-form {
+    table {
+        border-top: .1rem solid set.$gray-20;
+    }
+    tr {
+        border-bottom: .1rem solid set.$gray-20;
+        text-align: left;
+    }
+    th {
+        font-size: set.$ft-bd-m;
+        font-weight: set.$fw-eb;
+        line-height: 1;
+        height: 6rem;
+        vertical-align: middle;
+        background: set.$gray-5;
+        color: set.$gray-100;
+        border: 1px solid set.$gray-20;
+        border-bottom: none;
+        padding: 2rem;
+        border-left: none;
+        &.imp {
+            &::after {
+                content: "*";
+                line-height: 0;
+                text-box: set.$tbSet;
+                display: inline-flex;
+                align-self: flex-start;
+                font-size: set.$ft-tt-s;
+                font-weight: 400;
+                color: set.$sst-dCol-70;
+                padding-left: .2rem;
+            }
+        }
+    }
+    td {
+        padding: 1rem;
+        height: 6rem;
+        text-align: left;
+        font-size: set.$ft-bd-m;
+        vertical-align: middle;
+        color: set.$gray-70;
+    }
+    @include set.res-laptop {
+        table {
+            border: none;
+            col { width: 100%; }
+            thead, tbody {
+                display: flex; flex-direction: column; gap: 1rem;
+            }
+            th:first-child + td { margin-bottom: 1rem; }
+            tr {
+                display: flex;
+                flex-direction: column;
+                border: none;
+                th, td { width: 100%; height: auto; padding: 1.4rem; border: none; }
+                th { border: 1px solid set.$gray-20; border-bottom: none; }
+                td { border: 1px solid set.$gray-20; border-top: none; }
+            }
+        }
+
+    }
+}
+
+
+// 그리드형 - 테이블
+.tb-grid {
+    overflow-x: auto;
+    table {
+        min-width: 102.4rem;
+        thead {
+            border-bottom: .2rem solid set.$gray-100;
+            th, td {
+                font-size: set.$ft-bd-m;
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                height: 6rem;
+                vertical-align: middle;
+                background: set.$gray-5;
+                color: set.$gray-100;
+                border: 1px solid set.$gray-20;
+                border-bottom: none;
+                &:first-of-type { border-left: none; }
+                &:last-of-type { border-right: none; }
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-20;
+            th, td {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+                border: 1px solid set.$gray-20;
+                &[rowspan] {
+                    &:first-child { border-left: none; }
+                    &:last-child { border-right: none; }
+                }
+                &:first-of-type { border-left: none; }
+                &:last-of-type { border-right: none; }
+            }
+        }
+        // 말줄임
+        .reduce {
+            @include set.lineCut($line:3);
+        }
+        a.reduce {
+            @include set.lineCut($line:1);
+        }
+    }
+}
+
+// 라인형 테이블 - 게시판
+.tb-line {
+    overflow-x: auto;
+    table {
+        min-width: 102.4rem;
+        thead {
+            border-bottom: .2rem solid set.$gray-100;
+            th, td {
+                font-size: set.$ft-bd-m;
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                height: 6rem;
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                background: set.$gray-5;
+                color: set.$gray-100;
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            th, td {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+            }
+        }
+    }
+}
+
+// 심플 라인형 테이블 - 게시판2
+.tb-sim {
+    overflow-x: auto;
+    table {
+        min-width: 102.4rem;
+        thead {
+            border-bottom: .2rem solid set.$gray-100;
+            th, td {
+                font-size: set.$ft-bd-m;
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-100;
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            th, td {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+            }
+        }
+    }
+}
+
+// 심플 라인형 테이블 - 게시판2
+.tb-min {
+    overflow-x: auto;
+    table {
+        min-width: 102.4rem;
+        thead {
+            th, td {
+                font-size: set.$ft-bd-m;
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                height: 5rem;
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-100;
+                background: set.$gray-5;
+                &:first-child { border-radius: .4rem 0 0 .4rem; }
+                &:last-child  { border-radius: 0 .4rem .4rem 0; }
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            th, td {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+            }
+        }
+    }
+}
+
+// 심플 라인형 테이블 - 게시판2
+.tb-date {
+    overflow-x: auto;
+    table {
+        min-width: 102.4rem;
+        thead {
+            th, td {
+                font-size: set.$ft-bd-m;
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                height: 5rem;
+                vertical-align: middle;
+                color: set.$gray-0;
+                background: set.$gray-100;
+                padding: 1rem;
+                &:first-child { border-radius: .4rem 0 0 .4rem; }
+                &:last-child  { border-radius: 0 .4rem .4rem 0; }
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            tr:nth-of-type(even) { background: set.$mCol-5; }
+            th, td {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+            }
+        }
+    }
+}

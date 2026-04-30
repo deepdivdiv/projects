@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@use 'sass:map';
 @use '../utils' as set;
 
 
@@ -15,21 +16,19 @@ h1, h2, h3 h4, h5, h6 {
 h1, h2, h3 { strong, b { font-weight: set.$fw-eb; } }
 h4, h5, h6 { strong, b { font-weight: set.$fw-b; } }
 
-
-// ::-webkit-scrollbar {
-//     width: 6px;
-// }
-// ::-webkit-scrollbar-track {
-//     background: set.$gray-10;
-
-// }
-// ::-webkit-scrollbar-thumb {
-//     background: set.$mCol-60;
-//     border-right: 2px solid set.$gray-10;
-//     &:hover {
-//         background: darken(set.$mCol-60, 10%);
-//     }
-// }
+$alignSet:(
+    left: (ta:baseline, va:baseline, fa:flex-start,),
+    cen: (ta:center,   va:center,   fa:center,),
+    right: (ta:end,      va:bottom,   fa:flex-end,),
+);
+@each $size, $prop in $alignSet {
+    .ta-#{$size} { text-align: map.get($prop, ta) !important; }
+    .va-#{$size} { vertical-align: map.get($prop, va) !important; }
+    .f-#{$size} { justify-content: map.get($prop, fa) !important; }
+    .a-#{$size} { align-items: map.get($prop, fa) !important; }
+}
+.d-col { flex-direction: column !important; }
+.d-row { flex-direction: row !important; }
 * {
     scrollbar-width: thin;
     scrollbar-color: set.$mCol-60 set.$gray-5;

@@ -43,14 +43,20 @@
   }
 }
 // max-width 12rem, 30rem
-@for $i from 12 through 30 {
-  .mw#{$i + "0"} {
+@for $i from 10 through 30 {
+  .mwp#{$i + "0"} {
     width: 100%;
     max-width: #{$i}rem !important;
   }
 }
 
-
+// 말줄임
+.reduce {
+    @include set.lineCut($line:3);
+}
+a.reduce {
+    @include set.lineCut($line:1);
+}
 
 .none { display: none; }
 .hide { height: 0; width: 0; clip-path: inset(100% 100% 0% 0%); opacity: 0; position: absolute; left: 0; top: 0; overflow: visible;}

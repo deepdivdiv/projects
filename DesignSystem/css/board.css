@@ -12152,10 +12152,6 @@
   background: #eee5ff;
   animation: outline-pumping 400ms alternate infinite both;
 }
-.form input[type=text]:not(:placeholder-shown), .form-s input[type=text]:not(:placeholder-shown), .form-m input[type=text]:not(:placeholder-shown), .form-l input[type=text]:not(:placeholder-shown), .form input[type=password]:not(:placeholder-shown), .form-s input[type=password]:not(:placeholder-shown), .form-m input[type=password]:not(:placeholder-shown), .form-l input[type=password]:not(:placeholder-shown), .form input[type=time]:not(:placeholder-shown), .form-s input[type=time]:not(:placeholder-shown), .form-m input[type=time]:not(:placeholder-shown), .form-l input[type=time]:not(:placeholder-shown), .form input[type=url]:not(:placeholder-shown), .form-s input[type=url]:not(:placeholder-shown), .form-m input[type=url]:not(:placeholder-shown), .form-l input[type=url]:not(:placeholder-shown), .form input[type=data]:not(:placeholder-shown), .form-s input[type=data]:not(:placeholder-shown), .form-m input[type=data]:not(:placeholder-shown), .form-l input[type=data]:not(:placeholder-shown), .form input[type=week]:not(:placeholder-shown), .form-s input[type=week]:not(:placeholder-shown), .form-m input[type=week]:not(:placeholder-shown), .form-l input[type=week]:not(:placeholder-shown), .form input[type=email]:not(:placeholder-shown), .form-s input[type=email]:not(:placeholder-shown), .form-m input[type=email]:not(:placeholder-shown), .form-l input[type=email]:not(:placeholder-shown), .form input[type=month]:not(:placeholder-shown), .form-s input[type=month]:not(:placeholder-shown), .form-m input[type=month]:not(:placeholder-shown), .form-l input[type=month]:not(:placeholder-shown), .form input[type=file]:not(:placeholder-shown), .form-s input[type=file]:not(:placeholder-shown), .form-m input[type=file]:not(:placeholder-shown), .form-l input[type=file]:not(:placeholder-shown), .form input[type=number]:not(:placeholder-shown), .form-s input[type=number]:not(:placeholder-shown), .form-m input[type=number]:not(:placeholder-shown), .form-l input[type=number]:not(:placeholder-shown), .form input[type=submit]:not(:placeholder-shown), .form-s input[type=submit]:not(:placeholder-shown), .form-m input[type=submit]:not(:placeholder-shown), .form-l input[type=submit]:not(:placeholder-shown), .form input[type=tel]:not(:placeholder-shown), .form-s input[type=tel]:not(:placeholder-shown), .form-m input[type=tel]:not(:placeholder-shown), .form-l input[type=tel]:not(:placeholder-shown), .form input[type=search]:not(:placeholder-shown), .form-s input[type=search]:not(:placeholder-shown), .form-m input[type=search]:not(:placeholder-shown), .form-l input[type=search]:not(:placeholder-shown), .form input[type=datetime]:not(:placeholder-shown), .form-s input[type=datetime]:not(:placeholder-shown), .form-m input[type=datetime]:not(:placeholder-shown), .form-l input[type=datetime]:not(:placeholder-shown), .form textarea:not(:placeholder-shown), .form-s textarea:not(:placeholder-shown), .form-m textarea:not(:placeholder-shown), .form-l textarea:not(:placeholder-shown) {
-  background: #eee5ff;
-  border-color: #6521e1;
-}
 .form input[type=text]:disabled, .form-s input[type=text]:disabled, .form-m input[type=text]:disabled, .form-l input[type=text]:disabled, .form input[type=password]:disabled, .form-s input[type=password]:disabled, .form-m input[type=password]:disabled, .form-l input[type=password]:disabled, .form input[type=time]:disabled, .form-s input[type=time]:disabled, .form-m input[type=time]:disabled, .form-l input[type=time]:disabled, .form input[type=url]:disabled, .form-s input[type=url]:disabled, .form-m input[type=url]:disabled, .form-l input[type=url]:disabled, .form input[type=data]:disabled, .form-s input[type=data]:disabled, .form-m input[type=data]:disabled, .form-l input[type=data]:disabled, .form input[type=week]:disabled, .form-s input[type=week]:disabled, .form-m input[type=week]:disabled, .form-l input[type=week]:disabled, .form input[type=email]:disabled, .form-s input[type=email]:disabled, .form-m input[type=email]:disabled, .form-l input[type=email]:disabled, .form input[type=month]:disabled, .form-s input[type=month]:disabled, .form-m input[type=month]:disabled, .form-l input[type=month]:disabled, .form input[type=file]:disabled, .form-s input[type=file]:disabled, .form-m input[type=file]:disabled, .form-l input[type=file]:disabled, .form input[type=number]:disabled, .form-s input[type=number]:disabled, .form-m input[type=number]:disabled, .form-l input[type=number]:disabled, .form input[type=submit]:disabled, .form-s input[type=submit]:disabled, .form-m input[type=submit]:disabled, .form-l input[type=submit]:disabled, .form input[type=tel]:disabled, .form-s input[type=tel]:disabled, .form-m input[type=tel]:disabled, .form-l input[type=tel]:disabled, .form input[type=search]:disabled, .form-s input[type=search]:disabled, .form-m input[type=search]:disabled, .form-l input[type=search]:disabled, .form input[type=datetime]:disabled, .form-s input[type=datetime]:disabled, .form-m input[type=datetime]:disabled, .form-l input[type=datetime]:disabled, .form textarea:disabled, .form-s textarea:disabled, .form-m textarea:disabled, .form-l textarea:disabled {
   background: #f7f7fc !important;
   border-color: #e0dfe8 !important;
@@ -12197,10 +12193,6 @@
   border-color: #e61e21;
   background: #fff2f2;
   animation: outline-pumping 400ms alternate infinite both;
-}
-.form .set__er input[type=text]:not(:placeholder-shown), .form-s .set__er input[type=text]:not(:placeholder-shown), .form-m .set__er input[type=text]:not(:placeholder-shown), .form-l .set__er input[type=text]:not(:placeholder-shown), .form .set__er input[type=password]:not(:placeholder-shown), .form-s .set__er input[type=password]:not(:placeholder-shown), .form-m .set__er input[type=password]:not(:placeholder-shown), .form-l .set__er input[type=password]:not(:placeholder-shown), .form .set__er input[type=time]:not(:placeholder-shown), .form-s .set__er input[type=time]:not(:placeholder-shown), .form-m .set__er input[type=time]:not(:placeholder-shown), .form-l .set__er input[type=time]:not(:placeholder-shown), .form .set__er input[type=url]:not(:placeholder-shown), .form-s .set__er input[type=url]:not(:placeholder-shown), .form-m .set__er input[type=url]:not(:placeholder-shown), .form-l .set__er input[type=url]:not(:placeholder-shown), .form .set__er input[type=data]:not(:placeholder-shown), .form-s .set__er input[type=data]:not(:placeholder-shown), .form-m .set__er input[type=data]:not(:placeholder-shown), .form-l .set__er input[type=data]:not(:placeholder-shown), .form .set__er input[type=week]:not(:placeholder-shown), .form-s .set__er input[type=week]:not(:placeholder-shown), .form-m .set__er input[type=week]:not(:placeholder-shown), .form-l .set__er input[type=week]:not(:placeholder-shown), .form .set__er input[type=email]:not(:placeholder-shown), .form-s .set__er input[type=email]:not(:placeholder-shown), .form-m .set__er input[type=email]:not(:placeholder-shown), .form-l .set__er input[type=email]:not(:placeholder-shown), .form .set__er input[type=month]:not(:placeholder-shown), .form-s .set__er input[type=month]:not(:placeholder-shown), .form-m .set__er input[type=month]:not(:placeholder-shown), .form-l .set__er input[type=month]:not(:placeholder-shown), .form .set__er input[type=file]:not(:placeholder-shown), .form-s .set__er input[type=file]:not(:placeholder-shown), .form-m .set__er input[type=file]:not(:placeholder-shown), .form-l .set__er input[type=file]:not(:placeholder-shown), .form .set__er input[type=number]:not(:placeholder-shown), .form-s .set__er input[type=number]:not(:placeholder-shown), .form-m .set__er input[type=number]:not(:placeholder-shown), .form-l .set__er input[type=number]:not(:placeholder-shown), .form .set__er input[type=submit]:not(:placeholder-shown), .form-s .set__er input[type=submit]:not(:placeholder-shown), .form-m .set__er input[type=submit]:not(:placeholder-shown), .form-l .set__er input[type=submit]:not(:placeholder-shown), .form .set__er input[type=tel]:not(:placeholder-shown), .form-s .set__er input[type=tel]:not(:placeholder-shown), .form-m .set__er input[type=tel]:not(:placeholder-shown), .form-l .set__er input[type=tel]:not(:placeholder-shown), .form .set__er input[type=search]:not(:placeholder-shown), .form-s .set__er input[type=search]:not(:placeholder-shown), .form-m .set__er input[type=search]:not(:placeholder-shown), .form-l .set__er input[type=search]:not(:placeholder-shown), .form .set__er input[type=datetime]:not(:placeholder-shown), .form-s .set__er input[type=datetime]:not(:placeholder-shown), .form-m .set__er input[type=datetime]:not(:placeholder-shown), .form-l .set__er input[type=datetime]:not(:placeholder-shown), .form .set__er textarea:not(:placeholder-shown), .form-s .set__er textarea:not(:placeholder-shown), .form-m .set__er textarea:not(:placeholder-shown), .form-l .set__er textarea:not(:placeholder-shown) {
-  background: #fff2f2;
-  border-color: #e61e21;
 }
 .form .set__er select, .form-s .set__er select, .form-m .set__er select, .form-l .set__er select {
   color: #e61e21;
@@ -12281,10 +12273,6 @@
   background: #f0ffed;
   animation: outline-pumping 400ms alternate infinite both;
 }
-.form .set__su input[type=text]:not(:placeholder-shown), .form-s .set__su input[type=text]:not(:placeholder-shown), .form-m .set__su input[type=text]:not(:placeholder-shown), .form-l .set__su input[type=text]:not(:placeholder-shown), .form .set__su input[type=password]:not(:placeholder-shown), .form-s .set__su input[type=password]:not(:placeholder-shown), .form-m .set__su input[type=password]:not(:placeholder-shown), .form-l .set__su input[type=password]:not(:placeholder-shown), .form .set__su input[type=time]:not(:placeholder-shown), .form-s .set__su input[type=time]:not(:placeholder-shown), .form-m .set__su input[type=time]:not(:placeholder-shown), .form-l .set__su input[type=time]:not(:placeholder-shown), .form .set__su input[type=url]:not(:placeholder-shown), .form-s .set__su input[type=url]:not(:placeholder-shown), .form-m .set__su input[type=url]:not(:placeholder-shown), .form-l .set__su input[type=url]:not(:placeholder-shown), .form .set__su input[type=data]:not(:placeholder-shown), .form-s .set__su input[type=data]:not(:placeholder-shown), .form-m .set__su input[type=data]:not(:placeholder-shown), .form-l .set__su input[type=data]:not(:placeholder-shown), .form .set__su input[type=week]:not(:placeholder-shown), .form-s .set__su input[type=week]:not(:placeholder-shown), .form-m .set__su input[type=week]:not(:placeholder-shown), .form-l .set__su input[type=week]:not(:placeholder-shown), .form .set__su input[type=email]:not(:placeholder-shown), .form-s .set__su input[type=email]:not(:placeholder-shown), .form-m .set__su input[type=email]:not(:placeholder-shown), .form-l .set__su input[type=email]:not(:placeholder-shown), .form .set__su input[type=month]:not(:placeholder-shown), .form-s .set__su input[type=month]:not(:placeholder-shown), .form-m .set__su input[type=month]:not(:placeholder-shown), .form-l .set__su input[type=month]:not(:placeholder-shown), .form .set__su input[type=file]:not(:placeholder-shown), .form-s .set__su input[type=file]:not(:placeholder-shown), .form-m .set__su input[type=file]:not(:placeholder-shown), .form-l .set__su input[type=file]:not(:placeholder-shown), .form .set__su input[type=number]:not(:placeholder-shown), .form-s .set__su input[type=number]:not(:placeholder-shown), .form-m .set__su input[type=number]:not(:placeholder-shown), .form-l .set__su input[type=number]:not(:placeholder-shown), .form .set__su input[type=submit]:not(:placeholder-shown), .form-s .set__su input[type=submit]:not(:placeholder-shown), .form-m .set__su input[type=submit]:not(:placeholder-shown), .form-l .set__su input[type=submit]:not(:placeholder-shown), .form .set__su input[type=tel]:not(:placeholder-shown), .form-s .set__su input[type=tel]:not(:placeholder-shown), .form-m .set__su input[type=tel]:not(:placeholder-shown), .form-l .set__su input[type=tel]:not(:placeholder-shown), .form .set__su input[type=search]:not(:placeholder-shown), .form-s .set__su input[type=search]:not(:placeholder-shown), .form-m .set__su input[type=search]:not(:placeholder-shown), .form-l .set__su input[type=search]:not(:placeholder-shown), .form .set__su input[type=datetime]:not(:placeholder-shown), .form-s .set__su input[type=datetime]:not(:placeholder-shown), .form-m .set__su input[type=datetime]:not(:placeholder-shown), .form-l .set__su input[type=datetime]:not(:placeholder-shown), .form .set__su textarea:not(:placeholder-shown), .form-s .set__su textarea:not(:placeholder-shown), .form-m .set__su textarea:not(:placeholder-shown), .form-l .set__su textarea:not(:placeholder-shown) {
-  background: #f0ffed;
-  border-color: #41c028;
-}
 .form .set__su select, .form-s .set__su select, .form-m .set__su select, .form-l .set__su select {
   color: #41c028;
   flex-grow: 1;
@@ -12363,10 +12351,6 @@
   border-color: #eaa810;
   background: #fffaf0;
   animation: outline-pumping 400ms alternate infinite both;
-}
-.form .set__ca input[type=text]:not(:placeholder-shown), .form-s .set__ca input[type=text]:not(:placeholder-shown), .form-m .set__ca input[type=text]:not(:placeholder-shown), .form-l .set__ca input[type=text]:not(:placeholder-shown), .form .set__ca input[type=password]:not(:placeholder-shown), .form-s .set__ca input[type=password]:not(:placeholder-shown), .form-m .set__ca input[type=password]:not(:placeholder-shown), .form-l .set__ca input[type=password]:not(:placeholder-shown), .form .set__ca input[type=time]:not(:placeholder-shown), .form-s .set__ca input[type=time]:not(:placeholder-shown), .form-m .set__ca input[type=time]:not(:placeholder-shown), .form-l .set__ca input[type=time]:not(:placeholder-shown), .form .set__ca input[type=url]:not(:placeholder-shown), .form-s .set__ca input[type=url]:not(:placeholder-shown), .form-m .set__ca input[type=url]:not(:placeholder-shown), .form-l .set__ca input[type=url]:not(:placeholder-shown), .form .set__ca input[type=data]:not(:placeholder-shown), .form-s .set__ca input[type=data]:not(:placeholder-shown), .form-m .set__ca input[type=data]:not(:placeholder-shown), .form-l .set__ca input[type=data]:not(:placeholder-shown), .form .set__ca input[type=week]:not(:placeholder-shown), .form-s .set__ca input[type=week]:not(:placeholder-shown), .form-m .set__ca input[type=week]:not(:placeholder-shown), .form-l .set__ca input[type=week]:not(:placeholder-shown), .form .set__ca input[type=email]:not(:placeholder-shown), .form-s .set__ca input[type=email]:not(:placeholder-shown), .form-m .set__ca input[type=email]:not(:placeholder-shown), .form-l .set__ca input[type=email]:not(:placeholder-shown), .form .set__ca input[type=month]:not(:placeholder-shown), .form-s .set__ca input[type=month]:not(:placeholder-shown), .form-m .set__ca input[type=month]:not(:placeholder-shown), .form-l .set__ca input[type=month]:not(:placeholder-shown), .form .set__ca input[type=file]:not(:placeholder-shown), .form-s .set__ca input[type=file]:not(:placeholder-shown), .form-m .set__ca input[type=file]:not(:placeholder-shown), .form-l .set__ca input[type=file]:not(:placeholder-shown), .form .set__ca input[type=number]:not(:placeholder-shown), .form-s .set__ca input[type=number]:not(:placeholder-shown), .form-m .set__ca input[type=number]:not(:placeholder-shown), .form-l .set__ca input[type=number]:not(:placeholder-shown), .form .set__ca input[type=submit]:not(:placeholder-shown), .form-s .set__ca input[type=submit]:not(:placeholder-shown), .form-m .set__ca input[type=submit]:not(:placeholder-shown), .form-l .set__ca input[type=submit]:not(:placeholder-shown), .form .set__ca input[type=tel]:not(:placeholder-shown), .form-s .set__ca input[type=tel]:not(:placeholder-shown), .form-m .set__ca input[type=tel]:not(:placeholder-shown), .form-l .set__ca input[type=tel]:not(:placeholder-shown), .form .set__ca input[type=search]:not(:placeholder-shown), .form-s .set__ca input[type=search]:not(:placeholder-shown), .form-m .set__ca input[type=search]:not(:placeholder-shown), .form-l .set__ca input[type=search]:not(:placeholder-shown), .form .set__ca input[type=datetime]:not(:placeholder-shown), .form-s .set__ca input[type=datetime]:not(:placeholder-shown), .form-m .set__ca input[type=datetime]:not(:placeholder-shown), .form-l .set__ca input[type=datetime]:not(:placeholder-shown), .form .set__ca textarea:not(:placeholder-shown), .form-s .set__ca textarea:not(:placeholder-shown), .form-m .set__ca textarea:not(:placeholder-shown), .form-l .set__ca textarea:not(:placeholder-shown) {
-  background: #fffaf0;
-  border-color: #eaa810;
 }
 .form .set__ca select, .form-s .set__ca select, .form-m .set__ca select, .form-l .set__ca select {
   color: #eaa810;
@@ -15052,6 +15036,312 @@
 }
 .range-xl.comple input[type=range]::-webkit-slider-thumb, .gauge-xl.comple input[type=range]::-webkit-slider-thumb {
   background: #41c028;
+}
+
+*:has(> .tooltip) {
+  anchor-name: --tooltip-anchor;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 10;
+  position-anchor: --tooltip-anchor;
+  top: calc(anchor(bottom) + 1rem);
+  left: calc(anchor(left) - 1rem);
+  padding: 1rem;
+  border-radius: 0.4rem;
+  color: #3b3844;
+  background: #ffffff;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  border: 1px solid #3b3844;
+}
+.tooltip::before {
+  content: "";
+  width: 0.9rem;
+  background: #fff;
+  aspect-ratio: 1/1;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-color: #3b3844;
+  position: absolute;
+  rotate: 45deg;
+  top: 0;
+  transform: translateY(calc(-100% + 2px));
+}
+
+.tb-form table {
+  border-top: 0.1rem solid #e0dfe8;
+}
+.tb-form tr {
+  border-bottom: 0.1rem solid #e0dfe8;
+  text-align: left;
+}
+.tb-form th {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+  height: 6rem;
+  vertical-align: middle;
+  background: #f7f7fc;
+  color: #3b3844;
+  border: 1px solid #e0dfe8;
+  border-bottom: none;
+  padding: 2rem;
+  border-left: none;
+}
+.tb-form th.imp::after {
+  content: "*";
+  line-height: 0;
+  text-box: trim-both cap alphabetic;
+  display: inline-flex;
+  align-self: flex-start;
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  font-weight: 400;
+  color: #cf0d11;
+  padding-left: 0.2rem;
+}
+.tb-form td {
+  padding: 1rem;
+  height: 6rem;
+  text-align: left;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
+}
+@media screen and (max-width: 1024px) {
+  .tb-form table {
+    border: none;
+  }
+  .tb-form table col {
+    width: 100%;
+  }
+  .tb-form table thead, .tb-form table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .tb-form table th:first-child + td {
+    margin-bottom: 1rem;
+  }
+  .tb-form table tr {
+    display: flex;
+    flex-direction: column;
+    border: none;
+  }
+  .tb-form table tr th, .tb-form table tr td {
+    width: 100%;
+    height: auto;
+    padding: 1.4rem;
+    border: none;
+  }
+  .tb-form table tr th {
+    border: 1px solid #e0dfe8;
+    border-bottom: none;
+  }
+  .tb-form table tr td {
+    border: 1px solid #e0dfe8;
+    border-top: none;
+  }
+}
+
+.tb-grid {
+  overflow-x: auto;
+}
+.tb-grid table {
+  min-width: 102.4rem;
+}
+.tb-grid table thead {
+  border-bottom: 0.2rem solid #3b3844;
+}
+.tb-grid table thead th, .tb-grid table thead td {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+  height: 6rem;
+  vertical-align: middle;
+  background: #f7f7fc;
+  color: #3b3844;
+  border: 1px solid #e0dfe8;
+  border-bottom: none;
+}
+.tb-grid table thead th:first-of-type, .tb-grid table thead td:first-of-type {
+  border-left: none;
+}
+.tb-grid table thead th:last-of-type, .tb-grid table thead td:last-of-type {
+  border-right: none;
+}
+.tb-grid table tbody {
+  border-bottom: 0.1rem solid #e0dfe8;
+}
+.tb-grid table tbody th, .tb-grid table tbody td {
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
+  border: 1px solid #e0dfe8;
+}
+.tb-grid table tbody th[rowspan]:first-child, .tb-grid table tbody td[rowspan]:first-child {
+  border-left: none;
+}
+.tb-grid table tbody th[rowspan]:last-child, .tb-grid table tbody td[rowspan]:last-child {
+  border-right: none;
+}
+.tb-grid table tbody th:first-of-type, .tb-grid table tbody td:first-of-type {
+  border-left: none;
+}
+.tb-grid table tbody th:last-of-type, .tb-grid table tbody td:last-of-type {
+  border-right: none;
+}
+.tb-grid table .reduce {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.tb-grid table a.reduce {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+.tb-line {
+  overflow-x: auto;
+}
+.tb-line table {
+  min-width: 102.4rem;
+}
+.tb-line table thead {
+  border-bottom: 0.2rem solid #3b3844;
+}
+.tb-line table thead th, .tb-line table thead td {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+  height: 6rem;
+  padding: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  background: #f7f7fc;
+  color: #3b3844;
+}
+.tb-line table tbody {
+  border-bottom: 0.1rem solid #f3f3f8;
+}
+.tb-line table tbody th, .tb-line table tbody td {
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
+}
+
+.tb-sim {
+  overflow-x: auto;
+}
+.tb-sim table {
+  min-width: 102.4rem;
+}
+.tb-sim table thead {
+  border-bottom: 0.2rem solid #3b3844;
+}
+.tb-sim table thead th, .tb-sim table thead td {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  vertical-align: middle;
+  color: #3b3844;
+}
+.tb-sim table tbody {
+  border-bottom: 0.1rem solid #f3f3f8;
+}
+.tb-sim table tbody th, .tb-sim table tbody td {
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
+}
+
+.tb-min {
+  overflow-x: auto;
+}
+.tb-min table {
+  min-width: 102.4rem;
+}
+.tb-min table thead th, .tb-min table thead td {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+  height: 5rem;
+  padding: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  color: #3b3844;
+  background: #f7f7fc;
+}
+.tb-min table thead th:first-child, .tb-min table thead td:first-child {
+  border-radius: 0.4rem 0 0 0.4rem;
+}
+.tb-min table thead th:last-child, .tb-min table thead td:last-child {
+  border-radius: 0 0.4rem 0.4rem 0;
+}
+.tb-min table tbody {
+  border-bottom: 0.1rem solid #f3f3f8;
+}
+.tb-min table tbody th, .tb-min table tbody td {
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
+}
+
+.tb-date {
+  overflow-x: auto;
+}
+.tb-date table {
+  min-width: 102.4rem;
+}
+.tb-date table thead th, .tb-date table thead td {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1;
+  height: 5rem;
+  vertical-align: middle;
+  color: #ffffff;
+  background: #3b3844;
+  padding: 1rem;
+}
+.tb-date table thead th:first-child, .tb-date table thead td:first-child {
+  border-radius: 0.4rem 0 0 0.4rem;
+}
+.tb-date table thead th:last-child, .tb-date table thead td:last-child {
+  border-radius: 0 0.4rem 0.4rem 0;
+}
+.tb-date table tbody {
+  border-bottom: 0.1rem solid #f3f3f8;
+}
+.tb-date table tbody tr:nth-of-type(even) {
+  background: #f7f3ff;
+}
+.tb-date table tbody th, .tb-date table tbody td {
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
 }
 
 .avata-chip {

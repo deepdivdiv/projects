@@ -9,30 +9,5 @@
   flex-wrap: wrap;
   flex-grow: 1;
 }
-.flexBox.f-cen {
-  justify-content: center;
-}
-.flexBox.f-left {
-  justify-content: flex-start;
-}
-.flexBox.f-right {
-  justify-content: flex-end;
-}
-.flexBox.a-top {
-  align-items: flex-start;
-}
-.flexBox.a-cen {
-  align-items: flex-start;
-}
-.flexBox.a-bot {
-  align-items: flex-end;
-}
-.flexBox.d-col {
-  flex-direction: column;
-}
-.flexBox.d-row {
-  flex-direction: column;
-  align-items: flex-start;
-}
 
 /* 전체 레이아웃 */
