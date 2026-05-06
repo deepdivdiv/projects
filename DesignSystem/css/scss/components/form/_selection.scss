@@ -55,6 +55,7 @@ $selectState: (
             i {
                 border-color: set.$gray-20 !important;
                 background-color: set.$gray-10 !important;
+                box-shadow: 0 0 0 1px set.$gray-20 inset !important;
             }
         }
         &:checked:disabled + label {
@@ -62,8 +63,9 @@ $selectState: (
             border-color: set.$gray-30 !important;
             color: set.$gray-30 !important;
             i {
-                // border-color: set.$gray-20 !important;
+                border-color: set.$gray-20 !important;
                 background-color: set.$gray-10 !important;
+                box-shadow: 0 0 0 1px set.$gray-20 inset !important;
                 &::before { opacity: 1 !important; }
             }
         }

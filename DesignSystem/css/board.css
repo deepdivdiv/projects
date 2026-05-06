@@ -14557,6 +14557,7 @@
 .sel-xs input[type=radio]:disabled + label i {
   border-color: #e0dfe8 !important;
   background-color: #f3f3f8 !important;
+  box-shadow: 0 0 0 1px #e0dfe8 inset !important;
 }
 .sel input[type=checkbox]:checked:disabled + label, .sel-xl input[type=checkbox]:checked:disabled + label, .sel-l input[type=checkbox]:checked:disabled + label, .sel-m input[type=checkbox]:checked:disabled + label, .sel-s input[type=checkbox]:checked:disabled + label, .sel-xs input[type=checkbox]:checked:disabled + label,
 .sel input[type=radio]:checked:disabled + label,
@@ -14576,7 +14577,9 @@
 .sel-m input[type=radio]:checked:disabled + label i,
 .sel-s input[type=radio]:checked:disabled + label i,
 .sel-xs input[type=radio]:checked:disabled + label i {
+  border-color: #e0dfe8 !important;
   background-color: #f3f3f8 !important;
+  box-shadow: 0 0 0 1px #e0dfe8 inset !important;
 }
 .sel input[type=checkbox]:checked:disabled + label i::before, .sel-xl input[type=checkbox]:checked:disabled + label i::before, .sel-l input[type=checkbox]:checked:disabled + label i::before, .sel-m input[type=checkbox]:checked:disabled + label i::before, .sel-s input[type=checkbox]:checked:disabled + label i::before, .sel-xs input[type=checkbox]:checked:disabled + label i::before,
 .sel input[type=radio]:checked:disabled + label i::before,
