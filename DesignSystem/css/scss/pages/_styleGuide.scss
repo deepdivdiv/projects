@@ -56,7 +56,7 @@ $typoSize: (
             > dd { 
                 color: set.$gray-100; line-height: 1;
                 font-weight: set.$fw-b;
-                p, span { text-box: set.$tbSet; font-size: inherit; font-weight: inherit; line-height: 1.2; }
+                p, span { text-box: set.$tbSet; }
             }
         }
         .ft-po {

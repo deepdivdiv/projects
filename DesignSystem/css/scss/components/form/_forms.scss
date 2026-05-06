@@ -22,6 +22,11 @@ $formState: (
     comple:  (d: set.$sst-sCol-60, d-h: set.$sst-sCol-80),
     fail:    (d: set.$sst-dCol-60, d-h: set.$sst-dCol-70),
 );
+$formStates: (
+    er: (bd: set.$sst-dCol-60, bd-h: set.$sst-dCol-70, bg: set.$sst-dCol-5, bg-h: set.$sst-dCol-10, ),
+    su: (bd: set.$sst-sCol-60, bd-h: set.$sst-sCol-70, bg: set.$sst-sCol-5, bg-h: set.$sst-sCol-10, ),
+    ca: (bd: set.$sst-wCol-60, bd-h: set.$sst-wCol-70, bg: set.$sst-wCol-5, bg-h: set.$sst-wCol-10, ),
+);
 $cauSizes: (
      s: (fs:set.$ft-bd-s,  is: 1.6rem,),
      m: (fs:set.$ft-bd-m,  is: 2.0rem,),
@@ -30,13 +35,114 @@ $cauSizes: (
 $cauColors: (
     nm: (c:set.$gray-40, ),
     imp:(c:set.$gray-100, ),
-    er: (c:set.$sst-dCol-60, ),
+    po: (c:set.$mCol-60, ),
+    de: (c:set.$sst-dCol-60, ),
     ca: (c:set.$sst-wCol-60, ),
     su: (c:set.$sst-sCol-60, ),
-    de: (c:set.$sst-dCol-60, ),
+    er: (c:set.$sst-dCol-60, ),
     if: (c:set.$sst-iCol-60, ),
 );
 
+*:has(> [class^="tip-"]) {
+    anchor-name: --tooltip-anchor;
+    anchor-scope: --tooltip-anchor;
+    cursor: pointer;
+    &:hover {
+        [class^="tip-"] {
+            opacity: 1;
+            z-index: 99;
+            transform: translateY(0);
+        }
+    }
+}
+
+
+$tipColors:(
+    nm:(bg:set.$gray-0,   fCol: set.$gray-100, bd: set.$gray-100, ),
+   imp:(bg:set.$mCol-60,  fCol: set.$gray-0,   bd: set.$mCol-60,  ),
+    ne:(bg:set.$gray-100, fCol: set.$gray-0,   bd: set.$gray-100, ),
+    po:(bg:set.$gray-0,   fCol: set.$mCol-60,  bd: set.$mCol-60,  ),
+    ca:(bg:set.$gray-0,   fCol: set.$sst-wCol-60,   bd: set.$sst-wCol-60,  ),
+    su:(bg:set.$gray-0,  fCol: set.$sst-sCol-60,   bd: set.$sst-sCol-60,  ),
+    er:(bg:set.$gray-0,  fCol: set.$sst-dCol-60,   bd: set.$sst-dCol-60,  ),
+    de:(bg:set.$sst-dCol-60,  fCol: set.$gray-0,   bd: set.$sst-dCol-60,  ),
+    if:(bg:set.$gray-0,  fCol: set.$sst-iCol-60,   bd: set.$sst-iCol-60,  ),
+);
+.tip {
+    position: fixed;
+    z-index: 10;
+    position-anchor: --tooltip-anchor;
+    top: calc(anchor(bottom) + 1rem);
+    left: calc(anchor(left) - 1rem);
+    padding: 1rem 1rem;
+    border-radius: .4rem;
+    line-height: 1.4;
+    z-index: -1;
+    opacity: 0;
+    transform: translateY(.5rem);
+    pointer-events: none;
+    transition: all set.$aniSet;
+    &::before {
+        content: "";
+        width: 1rem;
+        aspect-ratio: 1/1;
+        border-top: 1px solid transparent;
+        border-left: 1px solid transparent;
+        position: absolute;
+        rotate: 45deg;
+        top: 0;
+        border-radius: .2rem 0 .2rem 0;
+        transform: translateY(calc(-100% + 2px));
+    }
+}
+@each $name, $prop in $tipColors {
+    .tip-#{$name} {
+        @extend .tip;
+        color: map.get($prop, fCol);
+        background: map.get($prop, bg);
+        font-size: set.$ft-bd-m;
+        border: 1px solid map.get($prop, bd);
+        text-box: set.$tbSet;
+        word-break: break-all;
+        text-wrap-style: pretty;
+        &:has(i) { display: flex; gap: 0.4rem; align-items: flex-start; }
+        &::before {
+            content: "";
+            background: map.get($prop, bg);
+            border-color: map.get($prop, bd)
+        }
+        i {
+            width: 1.8rem;
+            aspect-ratio: 1/1;
+            display: block;
+            margin-top: calc((1lh - 1.8rem) / 2);
+            flex-shrink: 0;
+            background: set.icon(ico-info, map.get($prop, fCol)) no-repeat center center / contain;
+        }
+        @if #{$name} == er {
+            i {
+                background: set.icon(ico-fail, map.get($prop, fCol)) no-repeat center center / contain;
+            }
+        }
+
+
+    }
+}
+[class^="form-"] {
+    // 내부 안에 캡션있는경우
+    *:has([class^="cau-"]) {
+        display: flex; flex-direction: column; gap: 1rem;
+        flex-grow: 1;
+    }
+    // 비활성일경우 캡션 전체 숨김
+    > *:has(:disabled) {
+        [class^="cau-"] { display: none !important; }
+        
+    }
+    // 캡션 핸들링 일반상태에는 nm 캡션만 노출되게
+    [class^="cau-"] { display: flex; } 
+    [class^="cau-"]:is(.er, .su, .ca, .de, .imp, .if) { display: none; } 
+}
 // 폼, 셀렉트, 인풋, 텍스트에리어
 .form { 
     background: set.$gray-0;
@@ -188,15 +294,7 @@ $cauColors: (
             }
         }
     }
-    // 내부 안에 캡션있는경우
-    *:has([class^="cau-"]) {
-        display: flex; flex-direction: column; gap: 1rem;
-        flex-grow: 1;
-    }
-    // 비활성일경우 캡션 전체 숨김
-    > *:has(:disabled) {
-        [class^="cau-"] { display: none !important; }
-    }
+
     // 인풋 기본설정 (셀렉트제외)
     input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
         border: 1px solid set.$gray-30;
@@ -220,14 +318,6 @@ $cauColors: (
             background: set.$mCol-10;
             animation: outline-pumping 400ms alternate infinite both
         }
-<<<<<<< HEAD
-        // &:not(:placeholder-shown) {
-        //     background: set.$mCol-10;
-        //     border-color: set.$mCol-70;
-        // }
-=======
-
->>>>>>> main
         &:disabled {
             background: set.$gray-5 !important;
             border-color: set.$gray-20 !important;
@@ -235,12 +325,6 @@ $cauColors: (
             &::placeholder {
                 color: set.$gray-30 !important;
             }
-        }
-    }
-    input[type=text], input[type=password], input[type=url], input[type=email], input[type=file], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
-        &:not(:placeholder-shown) {
-            background: set.$mCol-10;
-            border-color: set.$mCol-70;
         }
     }
 
@@ -283,9 +367,7 @@ $cauColors: (
             background-image: set.icon(ico-calendar, set.$mCol-60);
         }
     }
-    // 캡션 핸들링 일반상태에는 nm 캡션만 노출되게
-    [class^="cau-"] { display: flex; } 
-    [class^="cau-"]:is(.er, .su, .ca, .de, .imp, .if) { display: none; } 
+
     // 폼 세팅
     $formStates: (
         er: (bd: set.$sst-dCol-60, bd-h: set.$sst-dCol-70, bg: set.$sst-dCol-5, bg-h: set.$sst-dCol-10, ),
@@ -492,56 +574,57 @@ $cauColors: (
     }
 }
 
-// 인풋 반복문
-@each $size, $prop in $inputSize {
-    .form-#{$size} {
-        @extend .form;
-        textarea { height: auto; }
-        input, select { height: map.get($prop, h); }
-        select {
-            height: map.get($prop, h);
+// 인풋 사이즈 mixin
+@mixin form-size($size) {
+    $prop: map.get($inputSize, $size);
+    @extend .form;
+    textarea { height: auto; }
+    input, select { height: map.get($prop, h); }
+    select {
+        height: map.get($prop, h);
+        font-size: map.get($prop, ft);
+        padding: map.get($prop, pd);
+        padding-right: map.get($prop, po);
+        gap: map.get($prop, po);
+        &::picker-icon {
+            width: map.get($prop, ico);
+        }
+        &::picker(select) {
+            padding: map.get($prop, po) 0;
+            z-index: 1;
+        }
+        option {
             font-size: map.get($prop, ft);
-            padding: map.get($prop, pd);
-            padding-right: map.get($prop, po);
-            gap: map.get($prop, po);
-            &::picker-icon {
-                width: map.get($prop, ico);
-            }
-            &::picker(select) {
-                padding: map.get($prop, po) 0;
-                z-index: 1;
-            }
-            option {
-                font-size: map.get($prop, ft);
-                padding: calc(map.get($prop, po) / 2.4) map.get($prop, po);
-                padding-left: map.get($prop, po);
-                
-                &:checked {
-                    // background: set.$gray-10;
-                    // color: set.$gray-40;
-                }
-            }
+            padding: calc(map.get($prop, po) / 2.4) map.get($prop, po);
+            padding-left: map.get($prop, po);
+        }
 
-            @include set.res-tab-lap() {
-                height: map.get($prop, hs);
+        @include set.res-tab-lap() {
+            height: map.get($prop, hs);
+            font-size: map.get($prop, fts);
+            padding: map.get($prop, pds);
+            padding-right: map.get($prop, pos);
+            gap: map.get($prop, pos);
+            option {
                 font-size: map.get($prop, fts);
-                padding: map.get($prop, pds);
-                padding-right: map.get($prop, pos);
-                gap: map.get($prop, pos);
-                option {
-                    font-size: map.get($prop, fts);
-                }
             }
         }
-        input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
-            font-size: map.get($prop, ft);
-            padding: map.get($prop, pd);
-            @include set.res-tab-lap() {
-                height: map.get($prop, hs);
-                font-size: map.get($prop, fts);
-                padding: map.get($prop, pds);
-            }
+    }
+    input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {
+        font-size: map.get($prop, ft);
+        padding: map.get($prop, pd);
+        @include set.res-tab-lap() {
+            height: map.get($prop, hs);
+            font-size: map.get($prop, fts);
+            padding: map.get($prop, pds);
         }
+    }
+}
+
+// 인풋 반복문
+@each $size in map.keys($inputSize) {
+    .form-#{$size} {
+        @include form-size($size);
     }
 }
 

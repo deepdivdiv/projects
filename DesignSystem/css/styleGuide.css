@@ -75,9 +75,6 @@
 }
 .styleGuide .sg_box > dl > dd p, .styleGuide .sg_box > dl > dd span, .styleGuide .sg_box .flexBox > dl > dd p, .styleGuide .sg_box .flexBox > dl > dd span {
   text-box: trim-both cap alphabetic;
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: 1.2;
 }
 .styleGuide .sg_box .ft-po {
   font-family: "Paperlogy", sans-serif;

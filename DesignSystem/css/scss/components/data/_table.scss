@@ -1,43 +1,20 @@
 @charset "UTF-8";
 @use '../../utils' as set;
+@use '../form/forms' as form;
 @use "sass:map";
 
-*:has(> .tooltip) {
-    anchor-name: --tooltip-anchor;
-}
-
-.tooltip {
-    position: fixed;
-    z-index: 10;
-    position-anchor: --tooltip-anchor;
-    top: calc(anchor(bottom) + 1rem);
-    left: calc(anchor(left) - 1rem);
-
-    padding: 1rem; border-radius: .4rem;
-    color: set.$gray-100;
-    background: set.$gray-0;
-    font-size: set.$ft-bd-m;
-    border: 1px solid set.$gray-100;
-    &::before {
-        content: "";
-        width: .9rem;
-        background: #fff;
-        aspect-ratio: 1/1;
-        border-top: 1px solid transparent;
-        border-left: 1px solid transparent;
-        border-color: set.$gray-100;
-        position: absolute;
-        rotate: 45deg;
-        top: 0;
-        transform: translateY(calc(-100% + 2px));
-        
-    }
+.tb-form, .tb-grid, .tb-line, .tb-min, .tb-sim, .tb-date {
+    @include form.form-size(m);
+    input[type="text"], input[type="password"], select, textarea { width: 100%; }
+    scrollbar-width: thin;
+    scrollbar-color: set.$gray-30 set.$gray-5;
 }
 
 // 폼형
 .tb-form {
-    table {
-        border-top: .1rem solid set.$gray-20;
+    border-top: .1rem solid set.$gray-20;
+    & + .tb-form {
+        border-top: none;
     }
     tr {
         border-bottom: .1rem solid set.$gray-20;
@@ -52,6 +29,7 @@
         background: set.$gray-5;
         color: set.$gray-100;
         border: 1px solid set.$gray-20;
+        border-top: none;
         border-bottom: none;
         padding: 2rem;
         border-left: none;
@@ -78,6 +56,10 @@
         color: set.$gray-70;
     }
     @include set.res-laptop {
+        & + .tb-form {
+            margin-top: 1rem;
+        }
+        table + table { margin-top: 1rem; }
         table {
             border: none;
             col { width: 100%; }
@@ -213,7 +195,7 @@
     }
 }
 
-// 심플 라인형 테이블 - 게시판2
+// 미니멀
 .tb-min {
     overflow-x: auto;
     table {
@@ -247,8 +229,9 @@
     }
 }
 
-// 심플 라인형 테이블 - 게시판2
+// 데이터
 .tb-date {
+    @include form.form-size(m);
     overflow-x: auto;
     table {
         min-width: 102.4rem;
