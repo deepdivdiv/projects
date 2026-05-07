@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상태 피드백</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/styleGuide.css">
+
+</head>
+<body>
+    <div class="styleGuide">
+        
+        <!-- 프로그레스 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>Form</h1>
+                <p>폼 형식의 테이블</p>
+            </div>
+
+            <!-- 사이즈 -->
+            <div class="sg_area">
+                <div class="sg_box">
+                    <div class="tb-form">
+                        <table>
+                            <colgroup>
+                                <col width="15%">
+                                <col width="35%">
+                                <col width="15%">
+                                <col width="35%">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th class="imp">아이디</th>
+                                    <td><div class="flexBox"><input type="text"><button type="button" class="bt-a-m ne"><i class="ico-search"></i>중복확인</button></div></td>
+                                    <th class="imp">비밀번호</th>
+                                    <td><input type="text"></td>
+                                </tr>
+                                <tr>
+                                    <th class="imp">핸드폰번호</th>
+                                    <td><div class="flexBox">
+                                            <select name="" id="">
+                                                <option value="">010</option>
+                                                <option value="">011</option>
+                                            </select>
+                                            <input type="text">
+                                            <input type="text">
+                                        </div>
+                                    </td>
+                                    <th class="imp">이메일</th>
+                                    <td>
+                                        <div class="flexBox">
+                                            <input type="text"><span>@</span><input type="text">
+                                            <select name="" id="">
+                                                <option value="">naver.com</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="imp">이름</th>
+                                    <td>
+                                        <input type="text">
+                                    </td>
+                                    <th class="imp">성별</th>
+                                    <td>
+                                        <div class="sel-m">
+                                            <span>
+                                                <input type="radio" name="gender" id="g-female">
+                                                <label for="g-female"><i></i>여자</label>
+                                            </span>
+                                            <span>
+                                                <input type="radio" name="gender" id="g-male">
+                                                <label for="g-male"><i></i>남자</label>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="imp">관심사</th>
+                                    <td>
+                                        <div class="sel-m flexBox">
+                                            <span>
+                                                <input type="checkbox" name="" id="">
+                                                <label for=""><i></i>영화</label>
+                                            </span>
+                                            <span>
+                                                <input type="checkbox" name="" id="">
+                                                <label for=""><i></i>영화</label>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+<div class="pg-xl">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-l">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-m">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-s">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-xs">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 스타일 -->
+            <div class="sg_area">
+                <p>스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>Default</dt>
+                        <dd>
+                            <div class="pg-xl">
+                                <dl>
+                                    <dt>게이지</dt>
+                                    <dd>50%</dd>
+                                </dl>
+                                <progress id="" max="100" value="70"></progress>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Negative</dt>
+                        <dd>
+                            <div class="pg-xl ne">
+                                <dl>
+                                    <dt>게이지</dt>
+                                    <dd>50%</dd>
+                                </dl>
+                                <progress id="" max="100" value="70"></progress>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Error</dt>
+                        <dd>
+                            <div class="pg-xl fail">
+                                <dl>
+                                    <dt>게이지</dt>
+                                    <dd>50%</dd>
+                                </dl>
+                                <progress id="" max="100" value="70"></progress>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Warning</dt>
+                        <dd>
+                            <div class="pg-xl warning">
+                                <dl>
+                                    <dt>게이지</dt>
+                                    <dd>50%</dd>
+                                </dl>
+                                <progress id="" max="100" value="70"></progress>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Success</dt>
+                        <dd>
+                            <div class="pg-xl comple">
+                                <dl>
+                                    <dt>게이지</dt>
+                                    <dd>50%</dd>
+                                </dl>
+                                <progress id="" max="100" value="70"></progress>
+                            </div>
+                        </dd>
+                    </dl>
+                    
+                    <div class="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+<div class="pg-xl">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-xl ne">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-xl fail">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-xl comple">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-xl warning">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+<div class="pg-xl comple">
+    <dl>
+        <dt>게이지</dt>
+        <dd>50%</dd>
+    </dl>
+    <progress id="" max="100" value="70"></progress>
+</div>
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 스피너 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>Spinner</h1>
+                <p>로딩을 안내하는 스피너 아이콘</p>
+            </div>
+
+            <!-- 사이즈 -->
+            <div class="sg_area">
+                <p>사이즈</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>XXL</dt>
+                        <dd><i class="ico-spinner xxl"></i></dd>
+                    </dl>
+                    <dl>
+                        <dt>XL</dt>
+                        <dd><i class="ico-spinner xl"></i></dd>
+                    </dl>
+                    <dl>
+                        <dt>L</dt>
+                        <dd><i class="ico-spinner l"></i></dd>
+                    </dl>
+                    <dl>
+                        <dt>M</dt>
+                        <dd><i class="ico-spinner m"></i></dd>
+                    </dl>
+                    <dl>
+                        <dt>S</dt>
+                        <dd><i class="ico-spinner s"></i></dd>
+                    </dl>
+                    <dl>
+                        <dt>XS</dt>
+                        <dd><i class="ico-spinner xs"></i></dd>
+                    </dl>
+                    
+                    <div class="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+<i class="ico-spinner xxl"></i>
+<i class="ico-spinner xl"></i>
+<i class="ico-spinner l"></i>
+<i class="ico-spinner m"></i>
+<i class="ico-spinner s"></i>
+<i class="ico-spinner xs"></i>
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 스타일 -->
+            <div class="sg_area">
+                <p>스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>Icon</dt>
+                        <dd class="flexBox">
+                            <i class="ico-spinner xxl"></i>
+                            <i class="ico-spinner xl"></i>
+                            <i class="ico-spinner l"></i>
+                            <i class="ico-spinner m"></i>
+                            <i class="ico-spinner s"></i>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Button</dt>
+                        <dd class="flexBox">
+                            <button class="bt-a-xxl po"><i class="ico-spinner"></i>로딩중</button>
+                            <button class="bt-a-xl po"><i class="ico-spinner"></i>로딩중</button>
+                            <button class="bt-a-l po"><i class="ico-spinner"></i>로딩중</button>
+                            <button class="bt-a-m po"><i class="ico-spinner"></i>로딩중</button>
+                            <button class="bt-a-s po"><i class="ico-spinner"></i>로딩중</button>
+                            <button class="bt-a-xs po"><i class="ico-spinner"></i>로딩중</button>
+                        </dd>
+                    </dl>
+                    <div class="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+<i class="ico-spinner xxl"></i>
+<i class="ico-spinner xl"></i>
+<i class="ico-spinner l"></i>
+<i class="ico-spinner m"></i>
+<i class="ico-spinner s"></i>
+<i class="ico-spinner xs"></i>
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 로딩중 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>Loading</h1>
+                <p>진행중을 표시하는 로딩 아이콘</p>
+            </div>
+
+            <!-- 사이즈 -->
+            <div class="sg_area">
+                <p>사이즈</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>XXL</dt>
+                        <dd>
+                            <div class="loading xxl">
+                                <span></span><span></span><span></span>
+                            </div>          
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>XL</dt>
+                        <dd>
+                            <div class="loading xl">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>L</dt>
+                        <dd>
+                            <div class="loading l">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>M</dt>
+                        <dd>
+                            <div class="loading m">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>S</dt>
+                        <dd>
+                            <div class="loading s">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>XS</dt>
+                        <dd>
+                            <div class="loading xs">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </dd>
+                    </dl>
+                    
+                    <div class="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+<i class="ico-spinner xxl"></i>
+<i class="ico-spinner xl"></i>
+<i class="ico-spinner l"></i>
+<i class="ico-spinner m"></i>
+<i class="ico-spinner s"></i>
+<i class="ico-spinner xs"></i>
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 스타일 -->
+            <div class="sg_area">
+                <p>스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>Icon</dt>
+                        <dd class="flexBox">
+                            <div class="ico-loading xxl">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="ico-loading xl">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="ico-loading l">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="ico-loading l">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Button</dt>
+                        <dd class="flexBox">
+                            <button class="bt-a-xxl po"><i class="loading xxl"><span></span><span></span><span></span></i>입력중</button>
+                            <button class="bt-a-xl po"><i class="loading xl"><span></span><span></span><span></span></i>입력중</button>
+                            <button class="bt-a-l po"><i class="loading l"><span></span><span></span><span></span></i>입력중</button>
+                            <button class="bt-a-m po"><i class="loading m"><span></span><span></span><span></span></i>입력중</button>
+                            <button class="bt-a-s po"><i class="loading s"><span></span><span></span><span></span></i>입력중</button>
+                            <button class="bt-a-xs po"><i class="loading xs"><span></span><span></span><span></span></i>입력중</button>
+                        </dd>
+                    </dl>
+                    <div class="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+<i class="ico-spinner xxl"></i>
+<i class="ico-spinner xl"></i>
+<i class="ico-spinner l"></i>
+<i class="ico-spinner m"></i>
+<i class="ico-spinner s"></i>
+<i class="loading xxl"><span></span><span></span><span></span></i>
+<i class="loading xl"><span></span><span></span><span></span></i>
+<i class="loading l"><span></span><span></span><span></span></i>
+<i class="loading m"><span></span><span></span><span></span></i>
+<i class="loading s"><span></span><span></span><span></span></i>
+<i class="loading xs"><span></span><span></span><span></span></i>
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

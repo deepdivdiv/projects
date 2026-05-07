@@ -5,7 +5,7 @@
 
 .tb-form, .tb-grid, .tb-line, .tb-min, .tb-sim, .tb-date {
     @include form.form-size(m);
-    input[type="text"], input[type="password"], select, textarea { width: 100%; }
+    // input[type="text"], input[type="password"], select, textarea { width: 100%; }
     scrollbar-width: thin;
     scrollbar-color: set.$gray-30 set.$gray-5;
 }
@@ -54,6 +54,12 @@
         font-size: set.$ft-bd-m;
         vertical-align: middle;
         color: set.$gray-70;
+        .flexBox {
+            & > select, input {
+                flex: 1 1 0;
+                min-width: 0;
+            }
+        }
     }
     @include set.res-laptop {
         & + .tb-form {

@@ -92,7 +92,7 @@ $sizes: (
 
 
   i {
-    display: flex; height: 65%; aspect-ratio: 1/1; flex-shrink: 0; align-items: center; justify-content: center;
+    display: flex; height: 1lh; aspect-ratio: 1/1; flex-shrink: 0; align-items: center; justify-content: center;
     &.ico-success { background: set.icon(ico-success, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
     &.ico-info    { background: set.icon(ico-info, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
     &.ico-warning { background: set.icon(ico-warning, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
@@ -104,8 +104,8 @@ $sizes: (
     &.ico-lock-y { background: set.icon(ico-lock-y, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
     &.ico-lock-n { background: set.icon(ico-lock-n, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
     &.ico-not { background: set.icon(ico-not, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.arr-left { background: set.icon(arr-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.arr-right { background: set.icon(arr-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.arr-left {   height: .7lh; background: set.icon(arr-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &.arr-right {  height: .7lh; background: set.icon(arr-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
     &.che-left { background: set.icon(che-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
     &.che-right { background: set.icon(che-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
     &.che-top { background: set.icon(che-top, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }

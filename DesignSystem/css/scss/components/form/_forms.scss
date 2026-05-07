@@ -304,6 +304,7 @@ $tipColors:(
         outline: 2px solid transparent;
         transition: all set.$aniSet;
         flex-grow: 1;
+        width: 100%;
         &::placeholder {
             color: set.$gray-40;
             font-weight: set.$fw-l;
