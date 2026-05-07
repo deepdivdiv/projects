@@ -16949,7 +16949,7 @@
   min-width: 102.4rem;
 }
 .tb-grid table thead {
-  border-bottom: 0.2rem solid #3b3844;
+  border-top: 0.2rem solid #3b3844;
 }
 .tb-grid table thead th, .tb-grid table thead td {
   font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
@@ -16971,7 +16971,7 @@
 .tb-grid table tbody {
   border-bottom: 0.1rem solid #e0dfe8;
 }
-.tb-grid table tbody th, .tb-grid table tbody td {
+.tb-grid table tbody td {
   padding: 1rem;
   height: 6rem;
   text-align: center;
@@ -16980,16 +16980,41 @@
   color: #7a7588;
   border: 1px solid #e0dfe8;
 }
-.tb-grid table tbody th[rowspan]:first-child, .tb-grid table tbody td[rowspan]:first-child {
+.tb-grid table tbody td[rowspan]:first-child {
   border-left: none;
 }
-.tb-grid table tbody th[rowspan]:last-child, .tb-grid table tbody td[rowspan]:last-child {
+.tb-grid table tbody td[rowspan]:last-child {
   border-right: none;
 }
-.tb-grid table tbody th:first-of-type, .tb-grid table tbody td:first-of-type {
+.tb-grid table tbody td:first-child {
   border-left: none;
 }
-.tb-grid table tbody th:last-of-type, .tb-grid table tbody td:last-of-type {
+.tb-grid table tbody td:last-child {
+  border-right: none;
+}
+.tb-grid table tbody th {
+  padding: 1rem;
+  height: 6rem;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  vertical-align: middle;
+  color: #7a7588;
+  border: 1px solid #e0dfe8;
+  background: #f7f7fc;
+  border-right: 1px solid #e0dfe8;
+  font-weight: 600;
+  color: #3b3844;
+}
+.tb-grid table tbody th[rowspan]:first-child {
+  border-left: none;
+}
+.tb-grid table tbody th[rowspan]:last-child {
+  border-right: none;
+}
+.tb-grid table tbody th:first-child {
+  border-left: none;
+}
+.tb-grid table tbody th:last-child {
   border-right: none;
 }
 .tb-grid table .reduce {

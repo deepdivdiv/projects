@@ -93,7 +93,7 @@
     table {
         min-width: 102.4rem;
         thead {
-            border-bottom: .2rem solid set.$gray-100;
+            border-top: .2rem solid set.$gray-100;
             th, td {
                 font-size: set.$ft-bd-m;
                 font-weight: set.$fw-eb;
@@ -110,7 +110,7 @@
         }
         tbody {
             border-bottom: .1rem solid set.$gray-20;
-            th, td {
+            td {
                 padding: 1rem;
                 height: 6rem;
                 text-align: center;
@@ -122,9 +122,29 @@
                     &:first-child { border-left: none; }
                     &:last-child { border-right: none; }
                 }
-                &:first-of-type { border-left: none; }
-                &:last-of-type { border-right: none; }
+                &:first-child { border-left: none; }
+                &:last-child { border-right: none; }
             }
+            th {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+                border: 1px solid set.$gray-20;
+                background: set.$gray-5;
+                border-right: 1px solid set.$gray-20;
+                font-weight: set.$fw-b;
+                color: set.$gray-100;
+                &[rowspan] {
+                    &:first-child { border-left: none; }
+                    &:last-child { border-right: none; }
+                }
+                &:first-child { border-left: none; }
+                &:last-child { border-right: none; }
+            }
+            
         }
         // 말줄임
         .reduce {
