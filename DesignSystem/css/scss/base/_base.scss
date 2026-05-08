@@ -17,9 +17,9 @@ h1, h2, h3 { strong, b { font-weight: set.$fw-eb; } }
 h4, h5, h6 { strong, b { font-weight: set.$fw-b; } }
 
 $alignSet:(
-    left: (ta:baseline, va:baseline, fa:flex-start,),
+    left: (ta:left, va:baseline, fa:flex-start,),
     cen: (ta:center,   va:center,   fa:center,),
-    right: (ta:end,      va:bottom,   fa:flex-end,),
+    right: (ta:right,      va:bottom,   fa:flex-end,),
 );
 @each $size, $prop in $alignSet {
     .ta-#{$size} { text-align: map.get($prop, ta) !important; }

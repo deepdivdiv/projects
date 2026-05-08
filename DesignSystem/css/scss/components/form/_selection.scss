@@ -239,8 +239,8 @@ $selectState: (
                         display: block;
                         width: map.get($prop, w);
                         border-radius: .2rem;  
-                        background: url() no-repeat center center / map.get($prop, d-w);
-                        background-image: set.icon(ico-check, set.$gray-0);
+                        background: set.$gray-0 url() no-repeat center center / map.get($prop, d-w);
+                        background-image: set.icon(ico-check, set.$gray-20);
                     }
                     &:hover, &.hover {
                         color: set.$gray-100;
@@ -256,6 +256,7 @@ $selectState: (
                     i {
                         border-color: set.$gray-100;
                         background-color: set.$gray-100;
+                        box-shadow: none;
                         background-image: set.icon(ico-check, set.$gray-0);
                     }
                     &:hover, &.hover {

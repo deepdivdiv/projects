@@ -25,9 +25,9 @@ $colors-b: (
 );
 
 $colors-c: (
-  nm: (d: set.$gray-50,     h: set.$gray-5,     a: set.$gray-10, o: set.$gray-100),
-  po: (d: set.$mCol-60,     h: set.$mCol-5,     a: set.$mCol-10, o: set.$mCol-60),
-  ne: (d: set.$gray-100,    h: set.$gray-5,    a: set.$gray-10, o: set.$gray-100),
+  nm: (d: set.$gray-50,     h: set.$gray-5,     a: set.$gray-10,     o: set.$gray-100),
+  po: (d: set.$mCol-60,     h: set.$mCol-5,     a: set.$mCol-10,     o: set.$mCol-60),
+  ne: (d: set.$gray-100,    h: set.$gray-5,     a: set.$gray-10,     o: set.$gray-100),
   de: (d: set.$sst-dCol-60, h: set.$sst-dCol-5, a: set.$sst-dCol-10, o: set.$sst-dCol-60),
   ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-5, a: set.$sst-wCol-10, o: set.$sst-wCol-60),
   su: (d: set.$sst-sCol-60, h: set.$sst-sCol-5, a: set.$sst-sCol-10, o: set.$sst-sCol-60),
@@ -42,12 +42,12 @@ $theme-groups: (
 );
 
 $sizes: (
-  xxl: (h: 8rem, hs: 6.4rem, ft: set.$ft-hd-s,  fts:set.$ft-tt-m , pd:2.5rem 3rem, pds:1.9rem 2rem),
-  xl:  (h: 6.4rem, hs: 4.8rem, ft: set.$ft-tt-m,  fts:set.$ft-tt-s , pd:1.9rem 2rem, pds:1.3rem 2rem),
-  l:   (h: 4.8rem, hs: 4rem, ft: set.$ft-tt-s,  fts:set.$ft-bd-l , pd:1.3rem 2rem, pds:1.3rem 2rem),
-  m:   (h: 4rem, hs: 3.2rem, ft: set.$ft-bd-l,  fts:set.$ft-bd-m , pd:1rem, pds:0.7rem),
-  s:   (h: 3.2rem, hs: 2.4rem, ft: set.$ft-bd-m,  fts:set.$ft-bd-m , pd:0.7rem, pds:.5rem),
-  xs:  (h: 2.4rem, hs: 2rem, ft: set.$ft-bd-xs,  fts:set.$ft-bd-xs , pd:0.5rem, pds:.5rem),
+  xxl: (h: 8rem,   hs: 6.4rem, ft: set.$ft-hd-s,  fts:set.$ft-tt-m, pd:2.5rem 3rem, pds:1.9rem 2rem),
+  xl:  (h: 6.4rem, hs: 4.8rem, ft: set.$ft-tt-s,  fts:set.$ft-tt-m, pd:1.9rem 2rem, pds:1.3rem 2rem),
+  l:   (h: 4.8rem, hs: 4rem,   ft: set.$ft-bd-l,  fts:set.$ft-bd-m, pd:1.3rem 2rem, pds:1.3rem 2rem),
+  m:   (h: 4rem,   hs: 3.2rem, ft: set.$ft-bd-m,  fts:set.$ft-bd-s, pd:1rem, pds:0.7rem),
+  s:   (h: 3.2rem, hs: 2.4rem, ft: set.$ft-bd-s,  fts:set.$ft-bd-xs, pd:0.7rem, pds:.5rem),
+  xs:  (h: 2.4rem, hs: 2rem,   ft: set.$ft-bd-xs, fts:set.$ft-bd-xs, pd:0.5rem, pds:.5rem),
 );
 
 // 2. 기본 공통 스타일

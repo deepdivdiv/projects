@@ -613,7 +613,7 @@ h4 strong, h4 b, h5 strong, h5 b, h6 strong, h6 b {
 }
 
 .ta-left {
-  text-align: baseline !important;
+  text-align: left !important;
 }
 
 .va-left {
@@ -645,7 +645,7 @@ h4 strong, h4 b, h5 strong, h5 b, h6 strong, h6 b {
 }
 
 .ta-right {
-  text-align: end !important;
+  text-align: right !important;
 }
 
 .va-right {

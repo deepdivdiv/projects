@@ -3,11 +3,34 @@
 @use '../form/forms' as form;
 @use "sass:map";
 
-.tb-form, .tb-grid, .tb-line, .tb-min, .tb-sim, .tb-date {
+.tb-form, .tb-grid, .tb-line, .tb-min, .tb-data, .tb-log {
     @include form.form-size(m);
     // input[type="text"], input[type="password"], select, textarea { width: 100%; }
     scrollbar-width: thin;
     scrollbar-color: set.$gray-30 set.$gray-5;
+    tr.fail {
+        background: set.$sst-dCol-10;
+    }
+    tr.comple {
+        background: set.$sst-sCol-10;
+    }
+    .data-up { color: set.$sst-iCol-60; }
+    .data-down { color: set.$sst-dCol-60; }
+    .data-week {
+        display: flex; align-items: center; gap: 0.4rem; justify-content: center;
+        & > * {
+            line-height: 1; width: 2.4rem; aspect-ratio: 1/1;
+            background: set.$gray-10; border-radius: 100rem;
+            color: set.$gray-70;
+            display: flex; align-items: center; justify-content: center;
+            font-size: set.$ft-bd-s;
+            flex-shrink: 0;
+            &.on {
+                color: set.$sst-sCol-60;
+                background: set.$sst-sCol-5;
+            }
+        }
+    }
 }
 
 // 폼형
@@ -189,38 +212,6 @@
     }
 }
 
-// 심플 라인형 테이블 - 게시판2
-.tb-sim {
-    overflow-x: auto;
-    table {
-        min-width: 102.4rem;
-        thead {
-            border-bottom: .2rem solid set.$gray-100;
-            th, td {
-                font-size: set.$ft-bd-m;
-                font-weight: set.$fw-eb;
-                line-height: 1;
-                padding: 1rem;
-                height: 6rem;
-                text-align: center;
-                vertical-align: middle;
-                color: set.$gray-100;
-            }
-        }
-        tbody {
-            border-bottom: .1rem solid set.$gray-10;
-            th, td {
-                padding: 1rem;
-                height: 6rem;
-                text-align: center;
-                font-size: set.$ft-bd-m;
-                vertical-align: middle;
-                color: set.$gray-70;
-            }
-        }
-    }
-}
-
 // 미니멀
 .tb-min {
     overflow-x: auto;
@@ -256,7 +247,39 @@
 }
 
 // 데이터
-.tb-date {
+.tb-data {
+    overflow-x: auto;
+    table {
+        min-width: 102.4rem;
+        thead {
+            border-bottom: .2rem solid set.$gray-100;
+            th, td {
+                font-size: set.$ft-bd-m;
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-100;
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            th, td {
+                padding: 1rem;
+                height: 6rem;
+                text-align: center;
+                font-size: set.$ft-bd-m;
+                vertical-align: middle;
+                color: set.$gray-70;
+            }
+        }
+    }
+}
+
+// 로그
+.tb-log {
     @include form.form-size(m);
     overflow-x: auto;
     table {
