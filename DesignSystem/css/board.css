@@ -17278,7 +17278,7 @@
   aspect-ratio: 1/1;
   margin-right: 0.8rem;
   width: 0.7rem;
-  margin-top: calc((2.3ex - 0.7rem) / 2);
+  margin-top: calc((2.4ex - 0.7rem) / 2);
 }
 .dot-list-l > li > p::before {
   background: #3b3844;
@@ -17403,7 +17403,7 @@
   aspect-ratio: 1/1;
   margin-right: 0.8rem;
   width: 0.7rem;
-  margin-top: calc((2.3ex - 0.7rem) / 2);
+  margin-top: calc((2.4ex - 0.7rem) / 2);
 }
 .box-list-l > li > p::before {
   background: #3b3844;
@@ -17510,11 +17510,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  margin-top: 0.8rem;
 }
 .cau-list-l li {
   color: #8d869b;
-  font-weight: 300;
   font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
   line-height: 1.4;
   text-box: trim-both ex alphabetic;
@@ -17522,6 +17520,7 @@
 .cau-list-l li > p {
   display: flex;
   align-items: flex-start;
+  font-weight: 300;
 }
 .cau-list-l li > p > span {
   color: #9590a2;
@@ -17542,7 +17541,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  margin-top: 0.8rem;
 }
 .dash-list-l li {
   font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
@@ -17552,6 +17550,7 @@
 .dash-list-l li > p {
   display: flex;
   align-items: flex-start;
+  font-weight: 300;
 }
 .dash-list-l li > p > span {
   color: #9590a2;
@@ -17562,6 +17561,7 @@
 .dash-list-l li > p::before {
   content: "-";
   display: block;
+  line-height: 1.1;
   margin-right: 0.8rem;
 }
 
@@ -17820,11 +17820,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0.5rem;
 }
 .cau-list-m li {
   color: #8d869b;
-  font-weight: 300;
   font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
   line-height: 1.4;
   text-box: trim-both ex alphabetic;
@@ -17832,6 +17830,7 @@
 .cau-list-m li > p {
   display: flex;
   align-items: flex-start;
+  font-weight: 300;
 }
 .cau-list-m li > p > span {
   color: #9590a2;
@@ -17852,7 +17851,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0.5rem;
 }
 .dash-list-m li {
   font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
@@ -17862,6 +17860,7 @@
 .dash-list-m li > p {
   display: flex;
   align-items: flex-start;
+  font-weight: 300;
 }
 .dash-list-m li > p > span {
   color: #9590a2;
@@ -17872,6 +17871,7 @@
 .dash-list-m li > p::before {
   content: "-";
   display: block;
+  line-height: 1.1;
   margin-right: 0.5rem;
 }
 
@@ -18130,11 +18130,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin-top: 0.4rem;
 }
 .cau-list-s li {
   color: #8d869b;
-  font-weight: 300;
   font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
   line-height: 1.4;
   text-box: trim-both ex alphabetic;
@@ -18142,6 +18140,7 @@
 .cau-list-s li > p {
   display: flex;
   align-items: flex-start;
+  font-weight: 300;
 }
 .cau-list-s li > p > span {
   color: #9590a2;
@@ -18162,7 +18161,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin-top: 0.4rem;
 }
 .dash-list-s li {
   font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
@@ -18172,6 +18170,7 @@
 .dash-list-s li > p {
   display: flex;
   align-items: flex-start;
+  font-weight: 300;
 }
 .dash-list-s li > p > span {
   color: #9590a2;
@@ -18182,6 +18181,7 @@
 .dash-list-s li > p::before {
   content: "-";
   display: block;
+  line-height: 1.1;
   margin-right: 0.4rem;
 }
 

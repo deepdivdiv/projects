@@ -6,7 +6,7 @@
 
 
 $listSize: (
-    l: (fs:set.$ft-bd-l, dotW: .7rem, g: .8rem, l:2.3ex),
+    l: (fs:set.$ft-bd-l, dotW: .7rem, g: .8rem, l:2.4ex),
     m: (fs:set.$ft-bd-m, dotW: .6rem, g: .5rem, l:2.1ex),
     s: (fs:set.$ft-bd-s, dotW: .5rem, g: .4rem, l:2ex),
 );
@@ -89,15 +89,14 @@ $listMaxDepth: 10;
         display: flex;
         flex-direction: column;
         gap: map.get($prop, g);
-        margin-top: map.get($prop, g);
         li {
             color: set.$gray-60;
-            font-weight: 300;
             font-size: map.get($prop, fs);
             line-height: 1.4; text-box: trim-both ex alphabetic;
             > p {
                 display: flex;
                 align-items: flex-start;
+                font-weight: 300;
                 > span { color: set.$gray-50; }
                 > b, > strong { font-weight: 600; }
                 &::before {
@@ -115,18 +114,19 @@ $listMaxDepth: 10;
         display: flex;
         flex-direction: column;
         gap: map.get($prop, g);
-        margin-top: map.get($prop, g);
         li {
             font-size: map.get($prop, fs);
             line-height: 1.4; text-box: trim-both ex alphabetic;
             > p {
                 display: flex;
                 align-items: flex-start;
+                font-weight: 300;
                 > span { color: set.$gray-50; }
                 > b, > strong { font-weight: 600; }
                 &::before {
                     content: "-";
                     display: block;
+                    line-height: 1.1;
                     margin-right: map.get($prop, g);
                 }
             }
