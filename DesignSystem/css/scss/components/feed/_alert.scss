@@ -1,0 +1,61 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+.alertWrap {
+    width: 100%; height: 100%; position: fixed; isolation: isolate;
+    background: rgba(0,0,0,0.8);
+    left: 0; top: 0;
+    backdrop-filter: blur(.3rem);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999999999999;
+    transition: opacity set.$aniSet, visibility 0s set.$aniSet;
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        
+        transition: opacity set.$aniSet, visibility 0s 0s;
+        .alertItem {
+            scale: 1;
+            i { scale: 1; transform: translateY(0) }
+            p { transform: translateY(0); opacity: 1; }
+            span { transform: translateY(0); opacity: 1; }
+        }
+    }
+    .alertItem {
+        padding: 4.5rem; border-radius: 1rem;
+        background: set.$gray-0;
+        width: 100%;
+        max-width: 44rem;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        scale: 0.5;
+        transform-origin: 0 0;
+        transition: all set.$aniSet;
+        .alertClose { 
+            position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+            box-sizing: border-box;
+            &:hover {
+                &::before, &::after {
+                    background: set.$gray-100;
+                }
+            }
+            &::before, &::after {
+                content: "";
+                width:70%; height: 0.1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+        }
+        > i { width: 5rem; aspect-ratio: 1/1; display: block; background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain; margin: 0 auto 1rem; transition: all 500ms cubic-bezier(.25,1.23,.44,1.1);scale: 0; transition-delay: 200ms;}
+        > p { font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; transition: all set.$aniSet; transform: translateY(1rem); transition-delay: 300ms; opacity: 0; }
+        > span { font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; transition: all set.$aniSet;  transform: translateY(2rem); transition-delay: 350ms; display: block; opacity: 0; margin-top: 0.4rem; }
+
+
+    }
+}

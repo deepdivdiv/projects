@@ -1,0 +1,91 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+*:has(> [class^="tip-"]) {
+    anchor-name: --tooltip-anchor;
+    anchor-scope: --tooltip-anchor;
+    cursor: pointer;
+    &:hover {
+        [class^="tip-"] {
+            opacity: 1;
+            z-index: 99;
+            transform: translateY(0);
+        }
+    }
+}
+
+
+$tipColors:(
+    nm:(bg:set.$gray-0,   fCol: set.$gray-100, bd: set.$gray-100, ),
+   imp:(bg:set.$mCol-60,  fCol: set.$gray-0,   bd: set.$mCol-60,  ),
+    ne:(bg:set.$gray-100, fCol: set.$gray-0,   bd: set.$gray-100, ),
+    po:(bg:set.$gray-0,   fCol: set.$mCol-60,  bd: set.$mCol-60,  ),
+    ca:(bg:set.$gray-0,   fCol: set.$sst-wCol-60,   bd: set.$sst-wCol-60,  ),
+    su:(bg:set.$gray-0,  fCol: set.$sst-sCol-60,   bd: set.$sst-sCol-60,  ),
+    er:(bg:set.$gray-0,  fCol: set.$sst-dCol-60,   bd: set.$sst-dCol-60,  ),
+    de:(bg:set.$sst-dCol-60,  fCol: set.$gray-0,   bd: set.$sst-dCol-60,  ),
+    if:(bg:set.$gray-0,  fCol: set.$sst-iCol-60,   bd: set.$sst-iCol-60,  ),
+);
+.tip {
+    position: fixed;
+    z-index: 10;
+    position-anchor: --tooltip-anchor;
+    top: calc(anchor(bottom) + 1rem);
+    left: calc(anchor(left) - 1rem);
+    padding: 1rem 1rem;
+    border-radius: .4rem;
+    line-height: 1.4;
+    z-index: -1;
+    opacity: 0;
+    transform: translateY(.5rem);
+    pointer-events: none;
+    transition: all set.$aniSet;
+    &::before {
+        content: "";
+        width: 1rem;
+        aspect-ratio: 1/1;
+        border-top: 1px solid transparent;
+        border-left: 1px solid transparent;
+        position: absolute;
+        rotate: 45deg;
+        top: 0;
+        border-radius: .2rem 0 .2rem 0;
+        transform: translateY(calc(-100% + 2px));
+    }
+}
+@each $name, $prop in $tipColors {
+    .tip-#{$name} {
+        @extend .tip;
+        color: map.get($prop, fCol);
+        background: map.get($prop, bg);
+        font-size: set.$ft-bd-m;
+        border: 1px solid map.get($prop, bd);
+        text-box: set.$tbSet;
+        word-break: break-all;
+        text-wrap-style: pretty;
+        &:has(i) { display: flex; gap: 0.4rem; align-items: flex-start; }
+        &::before {
+            content: "";
+            background: map.get($prop, bg);
+            border-color: map.get($prop, bd)
+        }
+        i {
+            width: 1.8rem;
+            aspect-ratio: 1/1;
+            display: block;
+            margin-top: calc((1lh - 1.8rem) / 2);
+            flex-shrink: 0;
+            background: set.icon(ico-info, map.get($prop, fCol)) no-repeat center center / contain;
+        }
+        @if #{$name} == er {
+            i {
+                background: set.icon(ico-fail, map.get($prop, fCol)) no-repeat center center / contain;
+            }
+        }
+
+
+    }
+}
+
