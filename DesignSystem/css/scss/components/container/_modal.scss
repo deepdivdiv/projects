@@ -1,0 +1,179 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+body:has(#modalArea.open) {
+    overflow-y: hidden;
+}
+@keyframes ani-wiggle {
+    0% { rotate: 0deg; }
+    25% { rotate: 5deg; }
+    50% { rotate: -5deg; }
+    100% { rotate: 0deg; }
+}
+#modalArea {
+    width: 100%; height: 100%; position: fixed; isolation: isolate;
+    background: rgba(0,0,0,0.8);
+    left: 0; top: 0;
+    backdrop-filter: blur(.3rem);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999;
+    transition: opacity set.$aniSet, visibility 0s set.$aniSet;
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity set.$aniSet, visibility 0s 0s;
+        .modalItem {
+            scale: 1;
+            .mdBtn { transform: translateY(0); opacity: 1;}
+            > i {
+                scale: 1; transform: translateY(0);
+                animation: ani-wiggle 400ms linear 2 alternate backwards;
+            }
+            > p { transform: translateY(0); opacity: 1; }
+            > span { transform: translateY(0); opacity: 1; }
+        }
+    }
+    .modalItem {
+        padding: 4.5rem; border-radius: 1rem;
+        background: set.$gray-0;
+        width: calc(100% - 3rem);
+        max-width: 44rem;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        scale: 0.5;
+        transform-origin: 0 0;
+        transition: all set.$aniSet;
+        box-shadow: 0 0 0 .3rem rgba(255,255,255,0.2);
+        .mdBtn {
+            width: 70%;
+            opacity: 0;
+            gap: 1rem;
+            display: flex;
+            margin: 2rem auto 0;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(2rem);
+            transition: all set.$aniSet;
+            transition-delay: 450ms;
+            a, button { flex-grow: 1; }
+        }
+        .modalClose { 
+            position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+            box-sizing: border-box;
+            &:hover {
+                &::before, &::after {
+                    background: set.$gray-100;
+                }
+            }
+            &::before, &::after {
+                content: "";
+                width:70%; height: 0.1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+        }
+        > i {
+            width: 5rem; aspect-ratio: 1/1; display: block; margin: 0 auto 1rem; transition: all 500ms cubic-bezier(.25,1.23,.44,1.1); scale: 0; transition-delay: 300ms;
+            border-radius: 100rem;
+        }
+        > p { font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; transition: all set.$aniSet; transform: translateY(1rem); transition-delay: 300ms; opacity: 0; }
+        > span { font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; transition: all set.$aniSet;  transform: translateY(2rem); transition-delay: 350ms; display: block; opacity: 0; margin-top: 0.4rem; }
+        
+        > i:not([class]) { 
+            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        }
+        > i.error    { background: set.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
+        > i.comple  { background: set.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
+        > i.warning { background: set.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }
+        > i.info    { background: set.icon(ico-info,    set.$sst-iCol-60) no-repeat center center / contain; }
+        > i.quest   { background: set.icon(ico-quest,   set.$sst-wCol-60) no-repeat center center / contain; }
+    }
+}
+#dialogArea {
+    width: 100%; height: 100%; position: fixed; isolation: isolate;
+    background: rgba(0,0,0,0.8);
+    left: 0; top: 0;
+    backdrop-filter: blur(.3rem);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999;
+    transition: opacity set.$aniSet, visibility 0s set.$aniSet;
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity set.$aniSet, visibility 0s 0s;
+        .dialogItem {
+            scale: 1;
+            .dlBtn { transform: translateY(0); opacity: 1;}
+            > i {
+                scale: 1; transform: translateY(0);
+                animation: ani-wiggle 400ms linear 2 alternate backwards;
+            }
+            > p { transform: translateY(0); opacity: 1; }
+            > span { transform: translateY(0); opacity: 1; }
+        }
+    }
+    .dialogItem {
+        padding: 4.5rem; border-radius: 1rem;
+        background: set.$gray-0;
+        width: calc(100% - 3rem);
+        max-width: 72rem;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        scale: 0.5;
+        transform-origin: 0 0;
+        transition: all set.$aniSet;
+        box-shadow: 0 0 0 .3rem rgba(255,255,255,0.2);
+        .dlBtn {
+            width: 70%;
+            opacity: 0;
+            gap: 1rem;
+            display: flex;
+            margin: 2rem auto 0;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(2rem);
+            transition: all set.$aniSet;
+            transition-delay: 450ms;
+            a, button { flex-grow: 1; }
+        }
+        .dialogClose { 
+            position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+            box-sizing: border-box;
+            &:hover {
+                &::before, &::after {
+                    background: set.$gray-100;
+                }
+            }
+            &::before, &::after {
+                content: "";
+                width:70%; height: 0.1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+        }
+        > i {
+            width: 5rem; aspect-ratio: 1/1; display: block; margin: 0 auto 1rem; transition: all 500ms cubic-bezier(.25,1.23,.44,1.1); scale: 0; transition-delay: 300ms;
+            border-radius: 100rem;
+        }
+        > p { font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; transition: all set.$aniSet; transform: translateY(1rem); transition-delay: 300ms; opacity: 0; }
+        > span { font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; transition: all set.$aniSet;  transform: translateY(2rem); transition-delay: 350ms; display: block; opacity: 0; margin-top: 0.4rem; }
+        
+        > i:not([class]) { 
+            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        }
+        > i.error    { background: set.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
+        > i.comple  { background: set.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
+        > i.warning { background: set.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }
+        > i.info    { background: set.icon(ico-info,    set.$sst-iCol-60) no-repeat center center / contain; }
+        > i.quest   { background: set.icon(ico-quest,   set.$sst-wCol-60) no-repeat center center / contain; }
+    }
+}

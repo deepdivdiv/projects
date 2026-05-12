@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상태 피드백</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/styleGuide.css">
+    <script src="js/common.js"></script>
+</head>
+<body>
+    <div class="styleGuide">
+
+        <!-- 모달 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>Modal</h1>
+                <p>여러 스타일의 테이블 컴포넌트</p>
+            </div>
+            <!-- 스타일 -->
+            <div class="sg_area">
+                <p>스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>Normal</dt>
+                        <dd>
+                            <button type="button" id="modal-normal" class="bt-a-xl ne">버튼클릭</button>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Error</dt>
+                        <dd>
+                            <button type="button" id="modal-error" class="bt-a-xl de">버튼클릭</button>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Success</dt>
+                        <dd>
+                            <button type="button" id="modal-comple" class="bt-a-xl su">버튼클릭</button>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Warning</dt>
+                        <dd>
+                            <button type="button" id="modal-warning" class="bt-a-xl ca">버튼클릭</button>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Information</dt>
+                        <dd>
+                            <button type="button" id="modal-info" class="bt-a-xl if">버튼클릭</button>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Question</dt>
+                        <dd>
+                            <button type="button" id="modal-quest" class="bt-a-xl ca">버튼클릭</button>
+                        </dd>
+                    </dl>
+                    
+                    <script>
+                    document.getElementById('modal-normal').addEventListener('click', function() {
+                        sstModal({
+                            icon: '', // 아이콘 유형 [ fail, comple, warning, info, quest ]
+                            title: '게시글을 삭제하시겠습니까?', // 제목 텍스트
+                            text: '삭제하면 다시 복구할수없습니다', // 내용 텍스트
+                            showConfirm: false, // 승인버튼 노출 여부
+                            showCancel: false, // 취소버튼 노출 여부
+                            confirmText: '확인', // 승인버튼 텍스트
+                            cancelText: '취소', // 취소버튼 텍스트
+                            onConfirm: function() {
+                                console.log('승인버튼을 눌렀을때');
+                            },
+                            onCancel: function() {
+                                console.log('취소버튼을 눌렀을때');
+                            }
+                        });
+                    });
+
+                    // 에러
+                    document.getElementById('modal-error').addEventListener('click', function() {
+                        sstModal({
+                            icon: 'error', // 아이콘 유형 [ fail, comple, warning, info, quest ]
+                            title: '인증 실패하였습니다', // 제목 텍스트
+                            text: '다시 한번 확인한 후 시도해주세요', // 내용 텍스트
+                            showConfirm: false, // 승인버튼 노출 여부
+                            showCancel: false, // 취소버튼 노출 여부
+                            confirmText: '확인', // 승인버튼 텍스트
+                            cancelText: '취소', // 취소버튼 텍스트
+                            onConfirm: function() {
+                                console.log('승인버튼을 눌렀을때');
+                            },
+                            onCancel: function() {
+                                console.log('취소버튼을 눌렀을때');
+                            }
+                        });
+                    });
+
+                    // 성공
+                    document.getElementById('modal-comple').addEventListener('click', function() {
+                        sstModal({
+                            icon: 'comple', // 아이콘 유형 [ fail, comple, warning, info, quest ]
+                            title: '인증에 성공하였습니다', // 제목 텍스트
+                            text: '이제 사이트를 이용하실 수 있습니다', // 내용 텍스트
+                            showConfirm: false, // 승인버튼 노출 여부
+                            showCancel: false, // 취소버튼 노출 여부
+                            confirmText: '확인', // 승인버튼 텍스트
+                            cancelText: '취소', // 취소버튼 텍스트
+                            onConfirm: function() {
+                                console.log('승인버튼을 눌렀을때');
+                            },
+                            onCancel: function() {
+                                console.log('취소버튼을 눌렀을때');
+                            }
+                        });
+                    });
+
+                    // 경고
+                    document.getElementById('modal-warning').addEventListener('click', function() {
+                        sstModal({
+                            icon: 'warning', // 아이콘 유형 [ fail, comple, warning, info, quest ]
+                            title: '보안에 주의가 필요합니다', // 제목 텍스트
+                            text: '비밀번호 변경을 권장드립니다.', // 내용 텍스트
+                            showConfirm: false, // 승인버튼 노출 여부
+                            showCancel: false, // 취소버튼 노출 여부
+                            confirmText: '확인', // 승인버튼 텍스트
+                            cancelText: '취소', // 취소버튼 텍스트
+                            onConfirm: function() {
+                                console.log('승인버튼을 눌렀을때');
+                            },
+                            onCancel: function() {
+                                console.log('취소버튼을 눌렀을때');
+                            }
+                        });
+                    });
+
+                    // 정보
+                    document.getElementById('modal-info').addEventListener('click', function() {
+                        sstModal({
+                            icon: 'info', // 아이콘 유형 [ fail, comple, warning, info, quest ]
+                            title: '인증에 성공하였습니다', // 제목 텍스트
+                            text: '이제 사이트를 이용하실 수 있습니다', // 내용 텍스트
+                            showConfirm: false, // 승인버튼 노출 여부
+                            showCancel: false, // 취소버튼 노출 여부
+                            confirmText: '확인', // 승인버튼 텍스트
+                            cancelText: '취소', // 취소버튼 텍스트
+                            onConfirm: function() {
+                                console.log('승인버튼을 눌렀을때');
+                            },
+                            onCancel: function() {
+                                console.log('취소버튼을 눌렀을때');
+                            }
+                        });
+                    });
+
+                    // 질문
+                    document.getElementById('modal-quest').addEventListener('click', function() {
+                        sstModal({
+                            icon: 'quest', // 아이콘 유형 [ fail, comple, warning, info, quest ]
+                            title: '비밀번호를 변경하시겠습니까?', // 제목 텍스트
+                            text: '비밀번호를 다시 한번 확인해주세요', // 내용 텍스트
+                            showConfirm: false, // 승인버튼 노출 여부
+                            showCancel: false, // 취소버튼 노출 여부
+                            confirmText: '확인', // 승인버튼 텍스트
+                            cancelText: '취소', // 취소버튼 텍스트
+                            onConfirm: function() {
+                                console.log('승인버튼을 눌렀을때');
+                            },
+                            onCancel: function() {
+                                console.log('취소버튼을 눌렀을때');
+                            }
+                        });
+                    });
+                    </script>
+                    <div class="source">
+                        <em>Script</em>
+                        <div>
+                        <xmp>
+sstModal({
+    icon: '', // 아이콘 유형 [ 빈값은 기본 아이콘, fail, comple, warning, info, quest ]
+    title: '게시글을 삭제하시겠습니까?', // 제목 텍스트
+    text: '삭제하면 다시 복구할수없습니다', // 내용 텍스트
+    showConfirm: false, // 승인버튼 노출 여부
+    showCancel: false, // 취소버튼 노출 여부
+    confirmText: '확인', // 승인버튼 텍스트
+    cancelText: '취소', // 취소버튼 텍스트
+    onConfirm: function() {
+        console.log('승인버튼을 눌렀을때');
+    },
+    onCancel: function() {
+        console.log('취소버튼을 눌렀을때');
+    }
+});
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리스트 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>List</h1>
+                <p>리스트 스타일 컴포넌트</p>
+            </div>
+            <div class="sg_area">
+                <p>사이즈</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>L</dt>
+                        <dd>
+                            <ul class="dot-list-l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>M</dt>
+                        <dd>
+                            <ul class="dot-list-m">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>S</dt>
+                        <dd>
+                            <ul class="dot-list-s">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="sg_area">
+                <p>ul 스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>Circle</dt>
+                        <dd>
+                            <ul class="dot-list-l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Square</dt>
+                        <dd>
+                            <ul class="box-list-l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Dash</dt>
+                        <dd>
+                            <ul class="dash-list-l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Caution</dt>
+                        <dd>
+                            <ul class="cau-list-l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <!-- ol -->
+            <div class="sg_area">
+                <p>ol 스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>number</dt>
+                        <dd>
+                            <ol class="num-list-l">
+                                <li>
+                                    텍스트제목
+                                    <ul>
+                                        <li>
+                                            텍스트를 입력하세요
+                                            <ul>
+                                                <li>텍스트를 입력하세요</li>
+                                            </ul>
+                                        </li>
+                                        <li>텍스트를 입력하세요</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>latin</dt>
+                        <dd>
+                            <ol class="latin-list-l">
+                                <li>
+                                    텍스트제목
+                                    <ul>
+                                        <li>
+                                            텍스트를 입력하세요
+                                            <ul>
+                                                <li>텍스트를 입력하세요</li>
+                                            </ul>
+                                        </li>
+                                        <li>텍스트를 입력하세요</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>roman</dt>
+                        <dd>
+                            <ol class="roman-list-l">
+                                <li>
+                                    텍스트제목
+                                    <ul>
+                                        <li>
+                                            텍스트를 입력하세요
+                                            <ul>
+                                                <li>텍스트를 입력하세요</li>
+                                            </ul>
+                                        </li>
+                                        <li>텍스트를 입력하세요</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>
