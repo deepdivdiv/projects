@@ -124,6 +124,7 @@ $tabSize: (
         text-align: center;
         border-bottom: .1rem solid set.$gray-30;
         cursor: pointer;
+        flex: 1 1 0;
         &:has(a, button) {
             padding: 0;
             a, button {

@@ -115,3 +115,29 @@
 @mixin getIcon($value, $color: #555555) {
     background: fun.icon($value, $color) no-repeat center center / contain;
 }
+
+// 팝업 레이어 배경세팅
+@mixin popupSet() {
+    width: 100%; height: 100%; position: fixed; isolation: isolate;
+    background: rgba(0,0,0,0.8);
+    left: 0; top: 0;
+    backdrop-filter: blur(.3rem);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999;
+    transition: opacity set.$aniSet, visibility 0s set.$aniSet;
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity set.$aniSet, visibility 0s 0s;
+    }
+
+
+  i.error   { background: fun.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
+  i.comple  { background: fun.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
+  i.warning { background: fun.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }
+  i.info    { background: fun.icon(ico-info,    set.$sst-iCol-60) no-repeat center center / contain; }
+  i.quest   { background: fun.icon(ico-quest,   set.$sst-wCol-60) no-repeat center center / contain; }
+
+}

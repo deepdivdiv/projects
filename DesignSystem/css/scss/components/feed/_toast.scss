@@ -3,3 +3,59 @@
 @use "sass:map";
 
 
+.tstArea {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    border-radius: 1rem;
+    background: set.$gray-0;
+    padding: 2rem;
+    display: flex; gap: 1rem; align-items: center;
+    width: calc(100% - 3rem);
+    max-width: 52rem;
+    &:has(dl) {
+        align-items: flex-start;
+    }
+    border: .1rem solid set.$gray-20;
+    i {
+        display: block;
+        width: 2rem;
+        aspect-ratio: 1/1;
+        flex-shrink: 0;
+        &:not([class]) { 
+            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        }
+        &.error   { background: set.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
+        &.comple  { background: set.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
+        &.warning { background: set.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }
+        &.info    { background: set.icon(ico-info,    set.$sst-iCol-60) no-repeat center center / contain; }
+        &.quest   { background: set.icon(ico-quest,   set.$sst-wCol-60) no-repeat center center / contain; }
+    }
+    &:has(i.error) { dt, > span { color: set.$sst-dCol-60; } }
+    &:has(i.warning) { dt, > span { color: set.$sst-wCol-60; } }
+    &:has(i.comple) { dt, > span { color: set.$sst-sCol-60; } }
+    &:has(i.info) { dt, > span { color: set.$sst-iCol-60; } }
+    &:has(i.quest) { dt, > span { color: set.$sst-wCol-60; } }
+    dl {
+        display: flex; flex-direction: column; gap: 1rem;
+    }
+    dt, dd, > span { word-break: break-all; text-wrap-style: pretty; }
+    dt, > span  { font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; line-height: 1.25; }
+    dd{ font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50;  line-height: 1.4; text-box: set.$tbSet; }
+    .toastClose { 
+        position: absolute; width: 2rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+        box-sizing: border-box;
+        &:hover {
+            &::before, &::after {
+                background: set.$gray-100;
+            }
+        }
+        &::before, &::after {
+            content: "";
+            width:70%; height: 0.1rem; background: set.$gray-30;
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+        }
+        &::before { rotate: 45deg; }
+        &::after { rotate: -45deg; }
+    }
+}

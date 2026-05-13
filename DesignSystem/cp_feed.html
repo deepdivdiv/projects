@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/board.css">
     <link rel="stylesheet" href="css/styleGuide.css">
+    <script src="js/common.js"></script>
 
 </head>
 <body>
@@ -472,7 +473,6 @@
             </div>
         </div>
 
-
         <!-- 툴팁 -->
         <div class="sg_inner">
             <div class="sg_tit">
@@ -569,6 +569,134 @@
 <div class="tip-imp"><i></i>마우스를 내려보세요</div>
 <div class="tip-ne"><i></i>마우스를 내려보세요</div>
 <div class="tip-de"><i></i>마우스를 내려보세요</div>
+
+</xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 토스트 -->
+        <div class="sg_inner">
+            <div class="sg_tit">
+                <h1>Toast</h1>
+                <p>다양한 스타일의 토스트 컴포넌트</p>
+            </div>
+            <div class="sg_area">
+                <p>스타일</p>
+                <div class="sg_box">
+                    <dl>
+                        <dt>Normal</dt>
+                        <dd>
+                            <div class="flexBox">
+                                <button type="button" class="bt-a-m po" id="tst-normal">클릭하세요</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Success</dt>
+                        <dd>
+                            <div class="flexBox">
+                                <button type="button" class="bt-a-m po" id="tst-comple">클릭하세요</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Error</dt>
+                        <dd>
+                            <div class="flexBox">
+                                <button type="button" class="bt-a-m po" id="tst-error">클릭하세요</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Warning</dt>
+                        <dd>
+                            <div class="flexBox">
+                                <button type="button" class="bt-a-m po" id="tst-warning">클릭하세요</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Info</dt>
+                        <dd>
+                            <div class="flexBox">
+                                <button type="button" class="bt-a-m po" id="tst-info">클릭하세요</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Quest</dt>
+                        <dd>
+                            <div class="flexBox">
+                                <button type="button" class="bt-a-m po" id="tst-quest">클릭하세요</button>
+                            </div>
+                        </dd>
+                    </dl>
+                    
+
+                    <script>
+                        document.getElementById('tst-normal').addEventListener('click', function() {
+                            sstToast({
+                                icon: '',
+                                title: '기본 상태',
+                                text: '기본 상태입니다',
+                                duration: 3000
+                            });
+                        });
+                        document.getElementById('tst-comple').addEventListener('click', function() {
+                            sstToast({
+                                icon: 'comple',
+                                title: '저장 완료',
+                                text: '저장이 완료되었습니다',
+                                duration: 3000
+                            });
+                        });
+                        document.getElementById('tst-error').addEventListener('click', function() {
+                            sstToast({
+                                icon: 'error',
+                                title: '에러 상태',
+                                text: '에러 상태입니다',
+                                duration: 3000
+                            });
+                        });
+                        document.getElementById('tst-warning').addEventListener('click', function() {
+                            sstToast({
+                                icon: 'warning',
+                                title: '경고 상태',
+                                text: '경고 상태입니다',
+                                duration: 3000
+                            });
+                        });
+                        document.getElementById('tst-info').addEventListener('click', function() {
+                            sstToast({
+                                icon: 'info',
+                                title: '경고 상태',
+                                text: '경고 상태입니다',
+                                duration: 3000
+                            });
+                        });
+                        document.getElementById('tst-quest').addEventListener('click', function() {
+                            sstToast({
+                                icon: 'quest',
+                                title: '감지 불가',
+                                text: '상태를 감지할 수 없습니다',
+                                duration: 3000
+                            });
+                        });
+                    </script>
+
+                    <div class="source">
+                        <em>Script</em>
+                        <div>
+<xmp>
+sstToast({
+    icon: '', // 'error' | 'comple' | 'warning' | 'info' | 'quest'
+    title: '기본 상태',
+    text: '기본 상태입니다',
+    duration: 3000
+});
 
 </xmp>
                         </div>
