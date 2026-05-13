@@ -22728,14 +22728,231 @@ body:has(#modalArea.open) {
   background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cg clip-path='url(%23clip0_55_9679)'%3E%3Cpath d='M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM8 12C7.52 12 7.2 11.68 7.2 11.2C7.2 10.72 7.52 10.4 8 10.4C8.48 10.4 8.8 10.72 8.8 11.2C8.8 11.68 8.48 12 8 12ZM8.8 8C8.8 8.48 8.48 8.8 8 8.8C7.52 8.8 7.2 8.48 7.2 8V4.8C7.2 4.32 7.52 4 8 4C8.48 4 8.8 4.32 8.8 4.8V8Z' fill='%233b3844'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_55_9679'%3E%3Crect width='16' height='16' fill='%233b3844'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E") no-repeat center center/contain;
 }
 
-.tab-xs:not(.det, .ud, .line) {
+:root {
+  interpolate-size: allow-keywords;
+}
+
+.acd-s {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.acd-s details {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 0.1rem solid #e0dfe8;
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+}
+.acd-s details:hover summary:hover::after {
+  content: "";
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' viewBox='0 0 16 9' fill='none'%3E%3Cpath d='M0.334739 7.07964C-0.11158 7.51899 -0.11158 8.23114 0.334739 8.67049C0.781057 9.10984 1.50451 9.10984 1.95083 8.67049L8 2.71579L14.0492 8.67049C14.4955 9.10984 15.2189 9.10984 15.6653 8.67049C16.1116 8.23114 16.1116 7.51899 15.6653 7.07964L8.80804 0.329511C8.36173 -0.109837 7.63827 -0.109837 7.19196 0.329511L0.334739 7.07964Z' fill='%237226ff'/%3E%3C/svg%3E");
+}
+.acd-s details summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #3b3844;
+  outline: none;
+  font-weight: 600;
+}
+.acd-s details summary em {
+  font-size: 1.2rem;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+  display: block;
+  background: #3b3844;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 0.9rem 1.2rem 1rem;
+  border-radius: 100rem;
+}
+.acd-s details summary::marker {
+  content: "";
+}
+.acd-s details summary::after {
+  content: "";
+  width: 2rem;
+  aspect-ratio: 1/1;
+  position: absolute;
+  right: 0;
+  top: calc(50% - 0.2rem);
+  transform: translateY(-50%);
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' viewBox='0 0 16 9' fill='none'%3E%3Cpath d='M0.334739 7.07964C-0.11158 7.51899 -0.11158 8.23114 0.334739 8.67049C0.781057 9.10984 1.50451 9.10984 1.95083 8.67049L8 2.71579L14.0492 8.67049C14.4955 9.10984 15.2189 9.10984 15.6653 8.67049C16.1116 8.23114 16.1116 7.51899 15.6653 7.07964L8.80804 0.329511C8.36173 -0.109837 7.63827 -0.109837 7.19196 0.329511L0.334739 7.07964Z' fill='%23aea9ba'/%3E%3C/svg%3E") no-repeat center center/40%;
+  transition: transform 0.3s ease;
+}
+.acd-s details[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+.acd-s details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: all 300ms ease-in-out;
+  opacity: 0;
+}
+.acd-s details[open]::details-content {
+  block-size: auto;
+  margin-top: 1.5rem;
+  opacity: 1;
+}
+.acd-s details summary + div {
+  border-top: 0.1rem solid #e0dfe8;
+  line-height: 1.4;
+  padding-top: 1.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.acd-m {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.acd-m details {
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 0.1rem solid #e0dfe8;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+}
+.acd-m details:hover summary:hover::after {
+  content: "";
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' viewBox='0 0 16 9' fill='none'%3E%3Cpath d='M0.334739 7.07964C-0.11158 7.51899 -0.11158 8.23114 0.334739 8.67049C0.781057 9.10984 1.50451 9.10984 1.95083 8.67049L8 2.71579L14.0492 8.67049C14.4955 9.10984 15.2189 9.10984 15.6653 8.67049C16.1116 8.23114 16.1116 7.51899 15.6653 7.07964L8.80804 0.329511C8.36173 -0.109837 7.63827 -0.109837 7.19196 0.329511L0.334739 7.07964Z' fill='%237226ff'/%3E%3C/svg%3E");
+}
+.acd-m details summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #3b3844;
+  outline: none;
+  font-weight: 600;
+}
+.acd-m details summary em {
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+  display: block;
+  background: #3b3844;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 0.9rem 1.2rem 1rem;
+  border-radius: 100rem;
+}
+.acd-m details summary::marker {
+  content: "";
+}
+.acd-m details summary::after {
+  content: "";
+  width: 3rem;
+  aspect-ratio: 1/1;
+  position: absolute;
+  right: 0;
+  top: calc(50% - 0.2rem);
+  transform: translateY(-50%);
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' viewBox='0 0 16 9' fill='none'%3E%3Cpath d='M0.334739 7.07964C-0.11158 7.51899 -0.11158 8.23114 0.334739 8.67049C0.781057 9.10984 1.50451 9.10984 1.95083 8.67049L8 2.71579L14.0492 8.67049C14.4955 9.10984 15.2189 9.10984 15.6653 8.67049C16.1116 8.23114 16.1116 7.51899 15.6653 7.07964L8.80804 0.329511C8.36173 -0.109837 7.63827 -0.109837 7.19196 0.329511L0.334739 7.07964Z' fill='%23aea9ba'/%3E%3C/svg%3E") no-repeat center center/40%;
+  transition: transform 0.3s ease;
+}
+.acd-m details[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+.acd-m details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: all 300ms ease-in-out;
+  opacity: 0;
+}
+.acd-m details[open]::details-content {
+  block-size: auto;
+  margin-top: 2rem;
+  opacity: 1;
+}
+.acd-m details summary + div {
+  border-top: 0.1rem solid #e0dfe8;
+  line-height: 1.4;
+  padding-top: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.acd-l {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.acd-l details {
+  padding: 2.4rem;
+  border-radius: 1rem;
+  border: 0.1rem solid #e0dfe8;
+  font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
+}
+.acd-l details:hover summary:hover::after {
+  content: "";
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' viewBox='0 0 16 9' fill='none'%3E%3Cpath d='M0.334739 7.07964C-0.11158 7.51899 -0.11158 8.23114 0.334739 8.67049C0.781057 9.10984 1.50451 9.10984 1.95083 8.67049L8 2.71579L14.0492 8.67049C14.4955 9.10984 15.2189 9.10984 15.6653 8.67049C16.1116 8.23114 16.1116 7.51899 15.6653 7.07964L8.80804 0.329511C8.36173 -0.109837 7.63827 -0.109837 7.19196 0.329511L0.334739 7.07964Z' fill='%237226ff'/%3E%3C/svg%3E");
+}
+.acd-l details summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #3b3844;
+  outline: none;
+  font-weight: 600;
+}
+.acd-l details summary em {
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+  display: block;
+  background: #3b3844;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 0.9rem 1.2rem 1rem;
+  border-radius: 100rem;
+}
+.acd-l details summary::marker {
+  content: "";
+}
+.acd-l details summary::after {
+  content: "";
+  width: 4rem;
+  aspect-ratio: 1/1;
+  position: absolute;
+  right: 0;
+  top: calc(50% - 0.2rem);
+  transform: translateY(-50%);
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9' viewBox='0 0 16 9' fill='none'%3E%3Cpath d='M0.334739 7.07964C-0.11158 7.51899 -0.11158 8.23114 0.334739 8.67049C0.781057 9.10984 1.50451 9.10984 1.95083 8.67049L8 2.71579L14.0492 8.67049C14.4955 9.10984 15.2189 9.10984 15.6653 8.67049C16.1116 8.23114 16.1116 7.51899 15.6653 7.07964L8.80804 0.329511C8.36173 -0.109837 7.63827 -0.109837 7.19196 0.329511L0.334739 7.07964Z' fill='%23aea9ba'/%3E%3C/svg%3E") no-repeat center center/40%;
+  transition: transform 0.3s ease;
+}
+.acd-l details[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+.acd-l details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: all 300ms ease-in-out;
+  opacity: 0;
+}
+.acd-l details[open]::details-content {
+  block-size: auto;
+  margin-top: 2.4rem;
+  opacity: 1;
+}
+.acd-l details summary + div {
+  border-top: 0.1rem solid #e0dfe8;
+  line-height: 1.4;
+  padding-top: 2.4rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+
+.tab-xs:not(.nar, .ud, .line) {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   flex-grow: 1;
   flex-wrap: wrap;
 }
-.tab-xs:not(.det, .ud, .line) li {
+.tab-xs:not(.nar, .ud, .line) li {
   font-size: 1.2rem;
   color: #9590a2;
   position: relative;
@@ -22752,10 +22969,10 @@ body:has(#modalArea.open) {
   overflow: hidden;
   cursor: pointer;
 }
-.tab-xs:not(.det, .ud, .line) li:has(a, button) {
+.tab-xs:not(.nar, .ud, .line) li:has(a, button) {
   padding: 0;
 }
-.tab-xs:not(.det, .ud, .line) li:has(a, button) a, .tab-xs:not(.det, .ud, .line) li:has(a, button) button {
+.tab-xs:not(.nar, .ud, .line) li:has(a, button) a, .tab-xs:not(.nar, .ud, .line) li:has(a, button) button {
   padding: 0 1.2rem;
   display: flex;
   flex-grow: 1;
@@ -22763,7 +22980,7 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-xs:not(.det, .ud, .line) li::before {
+.tab-xs:not(.nar, .ud, .line) li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -22775,21 +22992,21 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-xs:not(.det, .ud, .line) li:hover, .tab-xs:not(.det, .ud, .line) li.on {
+.tab-xs:not(.nar, .ud, .line) li:hover, .tab-xs:not(.nar, .ud, .line) li.on {
   border-color: #7226ff;
   color: #ffffff;
 }
-.tab-xs:not(.det, .ud, .line) li:hover::before, .tab-xs:not(.det, .ud, .line) li:hover::after, .tab-xs:not(.det, .ud, .line) li.on::before, .tab-xs:not(.det, .ud, .line) li.on::after {
+.tab-xs:not(.nar, .ud, .line) li:hover::before, .tab-xs:not(.nar, .ud, .line) li:hover::after, .tab-xs:not(.nar, .ud, .line) li.on::before, .tab-xs:not(.nar, .ud, .line) li.on::after {
   height: 100%;
   opacity: 1;
 }
 
-.tab-xs.det {
+.tab-xs.nar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
-.tab-xs.det li {
+.tab-xs.nar li {
   font-size: 1.2rem;
   color: #9590a2;
   position: relative;
@@ -22803,10 +23020,10 @@ body:has(#modalArea.open) {
   justify-content: center;
   cursor: pointer;
 }
-.tab-xs.det li:has(a, button) {
+.tab-xs.nar li:has(a, button) {
   padding: 0;
 }
-.tab-xs.det li:has(a, button) a, .tab-xs.det li:has(a, button) button {
+.tab-xs.nar li:has(a, button) a, .tab-xs.nar li:has(a, button) button {
   padding: 0 1.2rem;
   display: flex;
   flex-grow: 1;
@@ -22814,10 +23031,10 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-xs.det li:not(:first-child) {
+.tab-xs.nar li:not(:first-child) {
   margin-left: -0.1rem;
 }
-.tab-xs.det li::before {
+.tab-xs.nar li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -22829,11 +23046,12 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-xs.det li:hover, .tab-xs.det li.on {
+.tab-xs.nar li:hover, .tab-xs.nar li.on {
   border-color: #7226ff;
   color: #ffffff;
+  background: #7226ff;
 }
-.tab-xs.det li:hover::before, .tab-xs.det li:hover::after, .tab-xs.det li.on::before, .tab-xs.det li.on::after {
+.tab-xs.nar li:hover::before, .tab-xs.nar li:hover::after, .tab-xs.nar li.on::before, .tab-xs.nar li.on::after {
   height: 100%;
   opacity: 1;
 }
@@ -22907,6 +23125,7 @@ body:has(#modalArea.open) {
   padding-bottom: 0.6rem;
   position: relative;
   transition: all 300ms ease-in-out;
+  list-style: none;
   cursor: pointer;
 }
 .tab-xs.ud li::before {
@@ -22927,14 +23146,14 @@ body:has(#modalArea.open) {
   width: 100%;
 }
 
-.tab-s:not(.det, .ud, .line) {
+.tab-s:not(.nar, .ud, .line) {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   flex-grow: 1;
   flex-wrap: wrap;
 }
-.tab-s:not(.det, .ud, .line) li {
+.tab-s:not(.nar, .ud, .line) li {
   font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
   color: #9590a2;
   position: relative;
@@ -22951,10 +23170,10 @@ body:has(#modalArea.open) {
   overflow: hidden;
   cursor: pointer;
 }
-.tab-s:not(.det, .ud, .line) li:has(a, button) {
+.tab-s:not(.nar, .ud, .line) li:has(a, button) {
   padding: 0;
 }
-.tab-s:not(.det, .ud, .line) li:has(a, button) a, .tab-s:not(.det, .ud, .line) li:has(a, button) button {
+.tab-s:not(.nar, .ud, .line) li:has(a, button) a, .tab-s:not(.nar, .ud, .line) li:has(a, button) button {
   padding: 0 1.7rem;
   display: flex;
   flex-grow: 1;
@@ -22962,7 +23181,7 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-s:not(.det, .ud, .line) li::before {
+.tab-s:not(.nar, .ud, .line) li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -22974,21 +23193,21 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-s:not(.det, .ud, .line) li:hover, .tab-s:not(.det, .ud, .line) li.on {
+.tab-s:not(.nar, .ud, .line) li:hover, .tab-s:not(.nar, .ud, .line) li.on {
   border-color: #7226ff;
   color: #ffffff;
 }
-.tab-s:not(.det, .ud, .line) li:hover::before, .tab-s:not(.det, .ud, .line) li:hover::after, .tab-s:not(.det, .ud, .line) li.on::before, .tab-s:not(.det, .ud, .line) li.on::after {
+.tab-s:not(.nar, .ud, .line) li:hover::before, .tab-s:not(.nar, .ud, .line) li:hover::after, .tab-s:not(.nar, .ud, .line) li.on::before, .tab-s:not(.nar, .ud, .line) li.on::after {
   height: 100%;
   opacity: 1;
 }
 
-.tab-s.det {
+.tab-s.nar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
-.tab-s.det li {
+.tab-s.nar li {
   font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
   color: #9590a2;
   position: relative;
@@ -23002,10 +23221,10 @@ body:has(#modalArea.open) {
   justify-content: center;
   cursor: pointer;
 }
-.tab-s.det li:has(a, button) {
+.tab-s.nar li:has(a, button) {
   padding: 0;
 }
-.tab-s.det li:has(a, button) a, .tab-s.det li:has(a, button) button {
+.tab-s.nar li:has(a, button) a, .tab-s.nar li:has(a, button) button {
   padding: 0 1.7rem;
   display: flex;
   flex-grow: 1;
@@ -23013,10 +23232,10 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-s.det li:not(:first-child) {
+.tab-s.nar li:not(:first-child) {
   margin-left: -0.1rem;
 }
-.tab-s.det li::before {
+.tab-s.nar li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23028,11 +23247,12 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-s.det li:hover, .tab-s.det li.on {
+.tab-s.nar li:hover, .tab-s.nar li.on {
   border-color: #7226ff;
   color: #ffffff;
+  background: #7226ff;
 }
-.tab-s.det li:hover::before, .tab-s.det li:hover::after, .tab-s.det li.on::before, .tab-s.det li.on::after {
+.tab-s.nar li:hover::before, .tab-s.nar li:hover::after, .tab-s.nar li.on::before, .tab-s.nar li.on::after {
   height: 100%;
   opacity: 1;
 }
@@ -23106,6 +23326,7 @@ body:has(#modalArea.open) {
   padding-bottom: 0.85rem;
   position: relative;
   transition: all 300ms ease-in-out;
+  list-style: none;
   cursor: pointer;
 }
 .tab-s.ud li::before {
@@ -23126,14 +23347,14 @@ body:has(#modalArea.open) {
   width: 100%;
 }
 
-.tab-m:not(.det, .ud, .line) {
+.tab-m:not(.nar, .ud, .line) {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex-grow: 1;
   flex-wrap: wrap;
 }
-.tab-m:not(.det, .ud, .line) li {
+.tab-m:not(.nar, .ud, .line) li {
   font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
   color: #9590a2;
   position: relative;
@@ -23150,10 +23371,10 @@ body:has(#modalArea.open) {
   overflow: hidden;
   cursor: pointer;
 }
-.tab-m:not(.det, .ud, .line) li:has(a, button) {
+.tab-m:not(.nar, .ud, .line) li:has(a, button) {
   padding: 0;
 }
-.tab-m:not(.det, .ud, .line) li:has(a, button) a, .tab-m:not(.det, .ud, .line) li:has(a, button) button {
+.tab-m:not(.nar, .ud, .line) li:has(a, button) a, .tab-m:not(.nar, .ud, .line) li:has(a, button) button {
   padding: 0 2rem;
   display: flex;
   flex-grow: 1;
@@ -23161,7 +23382,7 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-m:not(.det, .ud, .line) li::before {
+.tab-m:not(.nar, .ud, .line) li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23173,21 +23394,21 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-m:not(.det, .ud, .line) li:hover, .tab-m:not(.det, .ud, .line) li.on {
+.tab-m:not(.nar, .ud, .line) li:hover, .tab-m:not(.nar, .ud, .line) li.on {
   border-color: #7226ff;
   color: #ffffff;
 }
-.tab-m:not(.det, .ud, .line) li:hover::before, .tab-m:not(.det, .ud, .line) li:hover::after, .tab-m:not(.det, .ud, .line) li.on::before, .tab-m:not(.det, .ud, .line) li.on::after {
+.tab-m:not(.nar, .ud, .line) li:hover::before, .tab-m:not(.nar, .ud, .line) li:hover::after, .tab-m:not(.nar, .ud, .line) li.on::before, .tab-m:not(.nar, .ud, .line) li.on::after {
   height: 100%;
   opacity: 1;
 }
 
-.tab-m.det {
+.tab-m.nar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
-.tab-m.det li {
+.tab-m.nar li {
   font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
   color: #9590a2;
   position: relative;
@@ -23201,10 +23422,10 @@ body:has(#modalArea.open) {
   justify-content: center;
   cursor: pointer;
 }
-.tab-m.det li:has(a, button) {
+.tab-m.nar li:has(a, button) {
   padding: 0;
 }
-.tab-m.det li:has(a, button) a, .tab-m.det li:has(a, button) button {
+.tab-m.nar li:has(a, button) a, .tab-m.nar li:has(a, button) button {
   padding: 0 2rem;
   display: flex;
   flex-grow: 1;
@@ -23212,10 +23433,10 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-m.det li:not(:first-child) {
+.tab-m.nar li:not(:first-child) {
   margin-left: -0.1rem;
 }
-.tab-m.det li::before {
+.tab-m.nar li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23227,11 +23448,12 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-m.det li:hover, .tab-m.det li.on {
+.tab-m.nar li:hover, .tab-m.nar li.on {
   border-color: #7226ff;
   color: #ffffff;
+  background: #7226ff;
 }
-.tab-m.det li:hover::before, .tab-m.det li:hover::after, .tab-m.det li.on::before, .tab-m.det li.on::after {
+.tab-m.nar li:hover::before, .tab-m.nar li:hover::after, .tab-m.nar li.on::before, .tab-m.nar li.on::after {
   height: 100%;
   opacity: 1;
 }
@@ -23305,6 +23527,7 @@ body:has(#modalArea.open) {
   padding-bottom: 1rem;
   position: relative;
   transition: all 300ms ease-in-out;
+  list-style: none;
   cursor: pointer;
 }
 .tab-m.ud li::before {
@@ -23325,14 +23548,14 @@ body:has(#modalArea.open) {
   width: 100%;
 }
 
-.tab-l:not(.det, .ud, .line) {
+.tab-l:not(.nar, .ud, .line) {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex-grow: 1;
   flex-wrap: wrap;
 }
-.tab-l:not(.det, .ud, .line) li {
+.tab-l:not(.nar, .ud, .line) li {
   font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
   color: #9590a2;
   position: relative;
@@ -23349,10 +23572,10 @@ body:has(#modalArea.open) {
   overflow: hidden;
   cursor: pointer;
 }
-.tab-l:not(.det, .ud, .line) li:has(a, button) {
+.tab-l:not(.nar, .ud, .line) li:has(a, button) {
   padding: 0;
 }
-.tab-l:not(.det, .ud, .line) li:has(a, button) a, .tab-l:not(.det, .ud, .line) li:has(a, button) button {
+.tab-l:not(.nar, .ud, .line) li:has(a, button) a, .tab-l:not(.nar, .ud, .line) li:has(a, button) button {
   padding: 0 2.4rem;
   display: flex;
   flex-grow: 1;
@@ -23360,7 +23583,7 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-l:not(.det, .ud, .line) li::before {
+.tab-l:not(.nar, .ud, .line) li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23372,21 +23595,21 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-l:not(.det, .ud, .line) li:hover, .tab-l:not(.det, .ud, .line) li.on {
+.tab-l:not(.nar, .ud, .line) li:hover, .tab-l:not(.nar, .ud, .line) li.on {
   border-color: #7226ff;
   color: #ffffff;
 }
-.tab-l:not(.det, .ud, .line) li:hover::before, .tab-l:not(.det, .ud, .line) li:hover::after, .tab-l:not(.det, .ud, .line) li.on::before, .tab-l:not(.det, .ud, .line) li.on::after {
+.tab-l:not(.nar, .ud, .line) li:hover::before, .tab-l:not(.nar, .ud, .line) li:hover::after, .tab-l:not(.nar, .ud, .line) li.on::before, .tab-l:not(.nar, .ud, .line) li.on::after {
   height: 100%;
   opacity: 1;
 }
 
-.tab-l.det {
+.tab-l.nar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
-.tab-l.det li {
+.tab-l.nar li {
   font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
   color: #9590a2;
   position: relative;
@@ -23400,10 +23623,10 @@ body:has(#modalArea.open) {
   justify-content: center;
   cursor: pointer;
 }
-.tab-l.det li:has(a, button) {
+.tab-l.nar li:has(a, button) {
   padding: 0;
 }
-.tab-l.det li:has(a, button) a, .tab-l.det li:has(a, button) button {
+.tab-l.nar li:has(a, button) a, .tab-l.nar li:has(a, button) button {
   padding: 0 2.4rem;
   display: flex;
   flex-grow: 1;
@@ -23411,10 +23634,10 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-l.det li:not(:first-child) {
+.tab-l.nar li:not(:first-child) {
   margin-left: -0.1rem;
 }
-.tab-l.det li::before {
+.tab-l.nar li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23426,11 +23649,12 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-l.det li:hover, .tab-l.det li.on {
+.tab-l.nar li:hover, .tab-l.nar li.on {
   border-color: #7226ff;
   color: #ffffff;
+  background: #7226ff;
 }
-.tab-l.det li:hover::before, .tab-l.det li:hover::after, .tab-l.det li.on::before, .tab-l.det li.on::after {
+.tab-l.nar li:hover::before, .tab-l.nar li:hover::after, .tab-l.nar li.on::before, .tab-l.nar li.on::after {
   height: 100%;
   opacity: 1;
 }
@@ -23504,6 +23728,7 @@ body:has(#modalArea.open) {
   padding-bottom: 1.2rem;
   position: relative;
   transition: all 300ms ease-in-out;
+  list-style: none;
   cursor: pointer;
 }
 .tab-l.ud li::before {
@@ -23524,14 +23749,14 @@ body:has(#modalArea.open) {
   width: 100%;
 }
 
-.tab-xl:not(.det, .ud, .line) {
+.tab-xl:not(.nar, .ud, .line) {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex-grow: 1;
   flex-wrap: wrap;
 }
-.tab-xl:not(.det, .ud, .line) li {
+.tab-xl:not(.nar, .ud, .line) li {
   font-size: clamp(1.8rem, 1.9531vw, 2rem);
   color: #9590a2;
   position: relative;
@@ -23548,10 +23773,10 @@ body:has(#modalArea.open) {
   overflow: hidden;
   cursor: pointer;
 }
-.tab-xl:not(.det, .ud, .line) li:has(a, button) {
+.tab-xl:not(.nar, .ud, .line) li:has(a, button) {
   padding: 0;
 }
-.tab-xl:not(.det, .ud, .line) li:has(a, button) a, .tab-xl:not(.det, .ud, .line) li:has(a, button) button {
+.tab-xl:not(.nar, .ud, .line) li:has(a, button) a, .tab-xl:not(.nar, .ud, .line) li:has(a, button) button {
   padding: 0 3.2rem;
   display: flex;
   flex-grow: 1;
@@ -23559,7 +23784,7 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-xl:not(.det, .ud, .line) li::before {
+.tab-xl:not(.nar, .ud, .line) li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23571,21 +23796,21 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-xl:not(.det, .ud, .line) li:hover, .tab-xl:not(.det, .ud, .line) li.on {
+.tab-xl:not(.nar, .ud, .line) li:hover, .tab-xl:not(.nar, .ud, .line) li.on {
   border-color: #7226ff;
   color: #ffffff;
 }
-.tab-xl:not(.det, .ud, .line) li:hover::before, .tab-xl:not(.det, .ud, .line) li:hover::after, .tab-xl:not(.det, .ud, .line) li.on::before, .tab-xl:not(.det, .ud, .line) li.on::after {
+.tab-xl:not(.nar, .ud, .line) li:hover::before, .tab-xl:not(.nar, .ud, .line) li:hover::after, .tab-xl:not(.nar, .ud, .line) li.on::before, .tab-xl:not(.nar, .ud, .line) li.on::after {
   height: 100%;
   opacity: 1;
 }
 
-.tab-xl.det {
+.tab-xl.nar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
-.tab-xl.det li {
+.tab-xl.nar li {
   font-size: clamp(1.8rem, 1.9531vw, 2rem);
   color: #9590a2;
   position: relative;
@@ -23599,10 +23824,10 @@ body:has(#modalArea.open) {
   justify-content: center;
   cursor: pointer;
 }
-.tab-xl.det li:has(a, button) {
+.tab-xl.nar li:has(a, button) {
   padding: 0;
 }
-.tab-xl.det li:has(a, button) a, .tab-xl.det li:has(a, button) button {
+.tab-xl.nar li:has(a, button) a, .tab-xl.nar li:has(a, button) button {
   padding: 0 3.2rem;
   display: flex;
   flex-grow: 1;
@@ -23610,10 +23835,10 @@ body:has(#modalArea.open) {
   align-items: center;
   justify-content: center;
 }
-.tab-xl.det li:not(:first-child) {
+.tab-xl.nar li:not(:first-child) {
   margin-left: -0.1rem;
 }
-.tab-xl.det li::before {
+.tab-xl.nar li::before {
   content: "";
   z-index: -1;
   background: #7226ff;
@@ -23625,11 +23850,12 @@ body:has(#modalArea.open) {
   opacity: 0.1;
   height: 0;
 }
-.tab-xl.det li:hover, .tab-xl.det li.on {
+.tab-xl.nar li:hover, .tab-xl.nar li.on {
   border-color: #7226ff;
   color: #ffffff;
+  background: #7226ff;
 }
-.tab-xl.det li:hover::before, .tab-xl.det li:hover::after, .tab-xl.det li.on::before, .tab-xl.det li.on::after {
+.tab-xl.nar li:hover::before, .tab-xl.nar li:hover::after, .tab-xl.nar li.on::before, .tab-xl.nar li.on::after {
   height: 100%;
   opacity: 1;
 }
@@ -23703,6 +23929,7 @@ body:has(#modalArea.open) {
   padding-bottom: 1.6rem;
   position: relative;
   transition: all 300ms ease-in-out;
+  list-style: none;
   cursor: pointer;
 }
 .tab-xl.ud li::before {

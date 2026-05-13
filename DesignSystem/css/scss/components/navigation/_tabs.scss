@@ -12,7 +12,7 @@ $tabSize: (
 
 @each $name, $prop in $tabSize {
 
-.tab-#{$name}:not(.det, .ud, .line) {
+.tab-#{$name}:not(.nar, .ud, .line) {
     display: flex; align-items: center; gap: map.get($prop, g); flex-grow: 1; flex-wrap: wrap;
     li {
         font-size: map.get($prop, fs);
@@ -59,7 +59,7 @@ $tabSize: (
     }
 }
 
-.tab-#{$name}.det {
+.tab-#{$name}.nar {
     display: flex; align-items: center; flex-wrap: wrap;
     li {
         font-size: map.get($prop, fs);
@@ -96,6 +96,7 @@ $tabSize: (
         &:hover, &.on {
             border-color: set.$mCol-60;
             color: set.$gray-0;
+            background: set.$mCol-60;
             &::before, &::after {
                 height: 100%;
                 opacity: 1;
@@ -160,6 +161,7 @@ $tabSize: (
         padding-bottom: calc(map.get($prop, h) / 4);
         position: relative;
         transition: all set.$aniSet;
+        list-style: none;
         cursor: pointer;
         &::before {
             content: "";
