@@ -14,7 +14,7 @@ $acdSize:(
     .acd-#{$name} {
         display: flex; flex-direction: column; gap: map.get($prop, gap);
         details {
-            padding: map.get($prop, pd); border-radius: 1rem; border: .1rem solid set.$gray-20;
+            border-radius: 1rem; border: .1rem solid set.$gray-20;
             font-size: map.get($prop, fs);
             &:hover {
                 summary:hover {
@@ -30,12 +30,14 @@ $acdSize:(
                 color: set.$gray-100;
                 outline: none;
                 font-weight: 600;
+                padding: map.get($prop, pd);
+                cursor: pointer;
                 em { font-size: map.get($prop, lb-fs); line-height: 1; text-box: set.$tbSet; display: block; background: set.$gray-100; color: set.$gray-0; font-weight: 300; padding: .9rem 1.2rem 1rem; border-radius: 100rem; }
                 &::marker { content: ""; }
                 &::after {
                     content: "";
                     width: map.get($prop, arr); aspect-ratio: 1/1;
-                    position: absolute; right: 0; top: calc(50% - .2rem); transform: translateY(-50%);
+                    position: absolute; right: calc(map.get($prop, pd) / 1.5); top: calc(50% - .2rem); transform: translateY(-50%);
                     background: set.icon(che-top, set.$gray-40) no-repeat center center / 40%;
                     transition: transform .3s ease;
                 }
@@ -44,22 +46,17 @@ $acdSize:(
     
             &::details-content {
                 block-size: 0; overflow: clip;
-                transition: all set.$aniSet;
+                transition: block-size set.$aniSet, margin-top set.$aniSet, opacity set.$aniSet, content-visibility set.$aniSet allow-discrete;
                 opacity: 0;
             }
             &[open]::details-content {
                 block-size: auto;
-                margin-top: map.get($prop, pd);
                 opacity: 1;
             }
     
             summary + div {
                 border-top: .1rem solid set.$gray-20; line-height: 1.4; 
-                padding: {
-                    top: map.get($prop, pd);
-                    left: calc(map.get($prop, pd) / 2);
-                    right: calc(map.get($prop, pd) / 2);
-                }
+                padding: map.get($prop, pd);
             }
         }
     }

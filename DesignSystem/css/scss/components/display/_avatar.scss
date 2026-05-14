@@ -5,11 +5,12 @@
 
 // 아바타
 $avaSizes: (
-  xs: (w:2.4rem, fs: set.$ft-bd-xs),
-  s:  (w:3.2rem, fs: set.$ft-bd-s ),
-  m:  (w:4.0rem, fs: set.$ft-bd-m ),
-  l:  (w:4.8rem, fs: set.$ft-tt-s ),
-  xl: (w:6.4rem, fs: set.$ft-hd-s ),
+  xs:  (w:2.4rem,  fs: set.$ft-bd-xs, fw:set.$fw-m),
+  s:   (w:3.2rem,  fs: set.$ft-bd-s , fw:set.$fw-b),
+  m:   (w:4.0rem,  fs: set.$ft-bd-m , fw:set.$fw-b),
+  l:   (w:4.8rem,  fs: set.$ft-tt-s , fw:set.$fw-b),
+  xl:  (w:6.4rem,  fs: set.$ft-tt-m , fw:set.$fw-b),
+  xxl: (w:12.8rem, fs: set.$ft-hd-l , fw:set.$fw-b),
 );
 
 
@@ -23,11 +24,12 @@ $avaSizes: (
   border-radius: 100rem;
   align-items: center; justify-content: center;
   overflow: hidden;
+  img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
   &:not(:empty) {
     background-image: none;
-    font-size: set.$ft-tt-s;
     color: set.$mCol-60;
-    font-weight: 700;
     white-space: nowrap;
   }
 }
@@ -45,6 +47,7 @@ $avaSizes: (
     width: map.get($prop, w);
     &:not(:empty) {
       font-size: map.get($prop, fs);
+      font-weight: map.get($prop, fw);
     }
   }
 }
