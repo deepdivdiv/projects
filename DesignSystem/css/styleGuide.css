@@ -70,11 +70,11 @@
 }
 .styleGuide .sg_box > dl > dd, .styleGuide .sg_box .flexBox > dl > dd {
   color: #3b3844;
-  line-height: 1;
   font-weight: 600;
 }
-.styleGuide .sg_box > dl > dd p, .styleGuide .sg_box > dl > dd span, .styleGuide .sg_box .flexBox > dl > dd p, .styleGuide .sg_box .flexBox > dl > dd span {
+.styleGuide .sg_box > dl > dd > p, .styleGuide .sg_box > dl > dd > span, .styleGuide .sg_box .flexBox > dl > dd > p, .styleGuide .sg_box .flexBox > dl > dd > span {
   text-box: trim-both cap alphabetic;
+  line-height: 1;
 }
 .styleGuide .sg_box .ft-po {
   font-family: "Paperlogy", sans-serif;

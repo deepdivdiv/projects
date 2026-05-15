@@ -54,9 +54,9 @@ $typoSize: (
             display: flex; flex-direction: column; gap: 1rem;
             > dt { font-weight: 200; color: set.$gray-50; font-size: set.$ft-tt-s; }
             > dd { 
-                color: set.$gray-100; line-height: 1;
+                color: set.$gray-100; 
                 font-weight: set.$fw-b;
-                p, span { text-box: set.$tbSet; }
+                > p, > span { text-box: set.$tbSet; line-height: 1; }
             }
         }
         .ft-po {

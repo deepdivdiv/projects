@@ -56,7 +56,9 @@ $acdSize:(
     
             summary + div {
                 border-top: .1rem solid set.$gray-20; line-height: 1.4; 
-                padding: map.get($prop, pd);
+                padding: map.get($prop, pd) 0;
+                width: calc(100% - map.get($prop, pd) * 2);
+                margin: 0 auto;
             }
         }
     }

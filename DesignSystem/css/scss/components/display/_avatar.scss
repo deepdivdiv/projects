@@ -26,6 +26,15 @@ $avaSizes: (
   overflow: hidden;
   img {
     width: 100%; height: 100%; object-fit: cover;
+    position: relative;
+    scale: 1.01;
+    &::after {
+      content: "";
+      width: 100%; height: 100%;
+      position: absolute;
+      left: 0; top: 0;
+      background: set.$mCol-10 set.icon(ico-user, set.$mCol-60) no-repeat center center / 58%;
+    }
   }
   &:not(:empty) {
     background-image: none;
