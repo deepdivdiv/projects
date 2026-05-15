@@ -148,6 +148,7 @@
   font-family: "Pretendard", sans-serif;
   margin-block: 0;
   text-box: trim-both cap alphabetic;
+  overflow: hidden;
 }
 .styleGuide .sg_box .source xmp {
   margin-block: -2ex;

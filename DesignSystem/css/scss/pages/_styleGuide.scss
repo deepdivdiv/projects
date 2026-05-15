@@ -91,6 +91,7 @@ $typoSize: (
                 font-family: set.$ft-basic;
                 margin-block: 0;
                 text-box: set.$tbSet;
+                overflow: hidden;
             }
             xmp {
                 margin-block: -2ex;

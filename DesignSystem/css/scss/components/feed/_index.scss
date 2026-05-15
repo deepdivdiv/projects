@@ -2,7 +2,7 @@
 
 
 @forward 'progress';       // 프로그레스바
-@forward 'loader';         // 스피너, 스켈레톤 로더 등 
-@forward 'tooltip';         // 스피너, 스켈레톤 로더 등 
-@forward 'alert';         // 경고/정보 박스
+@forward 'loader';         // 스피너 
+@forward 'tooltip';         // 툴팁, 팝오버
+@forward 'alert';         // 인라인 경고 / 정보 박스
 @forward 'toast';         // 토스트알림

@@ -22492,7 +22492,6 @@ i[class^=ico-] {
 .card-list .card-item .rank, .card-grid .card-item .rank, .card-visual .card-item .rank, .card-prize .card-item .rank, .card-prize--mini .card-item .rank, .card-review .card-item .rank {
   --score: 0;
   --star-size: 2rem;
-  margin-top: 1.6rem;
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
@@ -22510,6 +22509,9 @@ i[class^=ico-] {
   font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
   color: #9590a2;
   line-height: 1;
+}
+.card-list .card-item .rank, .card-grid .card-item .rank, .card-visual .card-item .rank, .card-prize .card-item .rank, .card-prize--mini .card-item .rank, .card-review .card-item .rank {
+  margin-top: 1rem;
 }
 .card-list .card-item .btArea, .card-grid .card-item .btArea, .card-visual .card-item .btArea, .card-prize .card-item .btArea, .card-prize--mini .card-item .btArea, .card-review .card-item .btArea {
   padding-top: 2rem;
