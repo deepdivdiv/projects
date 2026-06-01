@@ -15,6 +15,25 @@
         }
     }
 }
+button[command="toggle-popover"] {
+    anchor-name: --popover-anchor;
+    anchor-scope: --popover-anchor;   
+    [class^="pov-"]:popover-open {
+        opacity: 1;
+        z-index: 99;
+        transform: translateY(0);
+    } 
+}
+// *:has(> [class^="pov-"]) {
+//     anchor-name: --popover-anchor;
+//     anchor-scope: --popover-anchor;
+//     cursor: pointer;
+//     [class^="pov-"]:popover-open {
+//         opacity: 1;
+//         z-index: 99;
+//         transform: translateY(0);
+//     }
+// }
 
 
 $tipColors:(
@@ -32,8 +51,8 @@ $tipColors:(
     position: fixed;
     z-index: 10;
     position-anchor: --tooltip-anchor;
-    top: calc(anchor(bottom) + 1rem);
-    left: calc(anchor(left) - 1rem);
+    top: anchor(bottom);
+    left: anchor(left);
     padding: 1rem 1rem;
     border-radius: .4rem;
     line-height: 1.4;
@@ -41,6 +60,33 @@ $tipColors:(
     opacity: 0;
     transform: translateY(.5rem);
     pointer-events: none;
+    transition: all set.$aniSet;
+    &::before {
+        content: "";
+        width: 1rem;
+        aspect-ratio: 1/1;
+        border-top: 1px solid transparent;
+        border-left: 1px solid transparent;
+        position: absolute;
+        rotate: 45deg;
+        top: 0;
+        border-radius: .2rem 0 .2rem 0;
+        transform: translateY(calc(-100% + 2px));
+    }
+}
+.pov {
+    position: fixed;
+    z-index: 10;
+    position-anchor: --popover-anchor;
+    top: calc(anchor(bottom) + 1rem);
+    left: calc(anchor(left) + 1rem);
+    padding: 1rem 1rem;
+    border-radius: .4rem;
+    line-height: 1.4;
+    z-index: -1;
+    opacity: 0;
+    transform: translateY(.5rem);
+    // pointer-events: none;
     transition: all set.$aniSet;
     &::before {
         content: "";
@@ -65,6 +111,42 @@ $tipColors:(
         text-box: set.$tbSet;
         word-break: break-all;
         text-wrap-style: pretty;
+        &:has(i) { display: flex; gap: 0.4rem; align-items: flex-start; }
+        &::before {
+            content: "";
+            background: map.get($prop, bg);
+            border-color: map.get($prop, bd)
+        }
+        i {
+            width: 1.8rem;
+            aspect-ratio: 1/1;
+            display: block;
+            margin-top: calc((1lh - 1.8rem) / 2);
+            flex-shrink: 0;
+            background: set.icon(ico-info, map.get($prop, fCol)) no-repeat center center / contain;
+        }
+        @if #{$name} == er {
+            i {
+                background: set.icon(ico-fail, map.get($prop, fCol)) no-repeat center center / contain;
+            }
+        }
+
+
+    }
+    .pov-#{$name} {
+        @extend .pov;
+        color: map.get($prop, fCol);
+        background: map.get($prop, bg);
+        font-size: set.$ft-bd-m;
+        border: 1px solid map.get($prop, bd);
+        text-box: set.$tbSet;
+        word-break: break-all;
+        text-wrap-style: pretty;
+        &:popover-open {
+            opacity: 1;
+            z-index: 99;
+            transform: translateY(0);
+        }
         &:has(i) { display: flex; gap: 0.4rem; align-items: flex-start; }
         &::before {
             content: "";

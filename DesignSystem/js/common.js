@@ -501,6 +501,21 @@ window.sstToastClose = sstToastClose;
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    document.querySelectorAll('dialog').forEach((vnDialog) => {
+        vnDialog.addEventListener('click', (event) => {
+            // 다이얼로그 박스 바깥(백드롭) 클릭 시에만 닫기 (padding 영역 클릭은 제외)
+            const rect = vnDialog.getBoundingClientRect();
+            const inDialog =
+                event.clientX >= rect.left && event.clientX <= rect.right &&
+                event.clientY >= rect.top && event.clientY <= rect.bottom;
+            if (!inDialog) {
+                vnDialog.close();
+            }
+        });
+    });
+
+
+
     // 바형 탭 영역
     document.querySelectorAll('.barTab').forEach(bar => {
         const items = bar.querySelectorAll(':scope > li');
