@@ -1,3 +1,85 @@
 @charset "UTF-8";
 @use '../../utils' as set;
 @use "sass:map";
+
+$cauSizes: (
+     s: (fs:set.$ft-bd-s,  is: 1.6rem,),
+     m: (fs:set.$ft-bd-m,  is: 2.0rem,),
+     l: (fs:set.$ft-bd-l,  is: 2.4rem,),
+);
+$cauColors: (
+    nm: (c:set.$gray-40, ),
+    imp:(c:set.$gray-100, ),
+    po: (c:set.$mCol-60, ),
+    de: (c:set.$sst-dCol-60, ),
+    ca: (c:set.$sst-wCol-60, ),
+    su: (c:set.$sst-sCol-60, ),
+    er: (c:set.$sst-dCol-60, ),
+    if: (c:set.$sst-iCol-60, ),
+);
+
+// 캡션
+.cau {
+    display: flex; 
+    align-items: center;
+    gap: 0.4rem;
+
+    line-height: 1.4;
+    i {
+        aspect-ratio: 1/1;
+        display: inline-block; flex-shrink: 0;
+        align-self: flex-start;
+        position: relative;
+        top: 0.1rem;
+    }
+    span { font-size: inherit; }
+    b, strong {
+        font-weight: 600;
+        &.imp { color: set.$sst-dCol-60; }
+        &.po { color: set.$mCol-60; }
+        &.suc { color: set.$sst-sCol-60; }
+        &.fail { color: set.$sst-dCol-60; }
+        &.info { color: set.$sst-iCol-60; }
+    }
+    ul {
+        display: flex; flex-direction: column; gap: 0.4rem;
+        li {
+            font-size: set.$ft-bd-m; text-indent: -.8rem; padding-left: 1.6rem; line-height: 1.4;
+            &::before { content: "※"; display: inline-block; margin-right: 0.2rem; font-family: sans-serif; line-height: 1; flex-shrink: 0 }
+        }
+    }
+
+}
+
+// 캡션 반복문
+@each $size, $prop in $cauSizes {
+    @each $name, $color in $cauColors {
+        .cau-#{$size} {
+            @extend .cau;
+            color: set.$gray-40;
+            font-size: map.get($prop, fs);
+            i {
+                width: map.get($prop, is);
+                background: set.icon(ico-warning, set.$gray-40) no-repeat center center / contain;
+            }
+
+            &.#{$name} {
+            color: map.get($color, c);
+            @if $name == su {
+                i { background: set.icon(ico-success, map.get($color, c)) no-repeat center center / contain; }
+            }
+            @else if $name == er {
+                i { background: set.icon(ico-fail, map.get($color, c)) no-repeat center center / contain; }
+            }
+            @else if $name == if {
+                i { background: set.icon(ico-info, map.get($color, c)) no-repeat center center / contain; }
+            }
+            @else {
+                i { background: set.icon(ico-warning, map.get($color, c)) no-repeat center center / contain; }
+            }
+            }
+        }
+    }
+}
+
+
