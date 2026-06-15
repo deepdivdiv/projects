@@ -1,0 +1,236 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use '../form/forms' as form;
+@use "sass:map";
+
+
+
+$listSize: (
+    l: (fs:set.$ft-bd-l, dotW: .7rem, g: .8rem, l:2.4ex),
+    m: (fs:set.$ft-bd-m, dotW: .6rem, g: .5rem, l:2.1ex),
+    s: (fs:set.$ft-bd-s, dotW: .5rem, g: .4rem, l:2ex),
+);
+$listMaxDepth: 10;
+@each $name, $prop in $listSize {
+    .dot-list-#{$name} {
+        li {
+            font-size: map.get($prop, fs);
+            line-height: 1.4; text-box: trim-both ex alphabetic;
+            > p {
+                display: flex;
+                align-items: flex-start;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+                &::before {
+                    content: "";
+                    display: block;
+                    flex-shrink: 0;
+                    border-radius: 100rem;
+                    aspect-ratio: 1/1;
+                    margin-right: map.get($prop, g);
+                    width: map.get($prop, dotW);
+                    margin-top: calc((map.get($prop, l) - map.get($prop, dotW)) / 2);
+                }
+            }
+        }
+        @for $i from 1 through $listMaxDepth {
+            $sel: "& > li";
+            @if $i >= 2 {
+                @for $j from 2 through $i { $sel: "#{$sel} > ul > li"; }
+            }
+
+            #{$sel} > p::before {
+                @if $i % 2 == 1 {
+                    background: set.$gray-100;
+                } @else {
+                    border: .1rem solid set.$gray-100;
+                }
+            }
+            #{$sel} > ul { padding-left: map.get($prop, fs); display: flex; flex-direction: column; gap: map.get($prop, g); margin-top: map.get($prop, g); }
+        }
+    }
+    .box-list-#{$name} {
+        li {
+            font-size: map.get($prop, fs);
+            line-height: 1.4; text-box: trim-both ex alphabetic;
+            > p {
+                display: flex;
+                align-items: flex-start;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+                &::before {
+                    content: "";
+                    display: block;
+                    flex-shrink: 0;
+                    aspect-ratio: 1/1;
+                    margin-right: map.get($prop, g);
+                    width: map.get($prop, dotW);
+                    margin-top: calc((map.get($prop, l) - map.get($prop, dotW)) / 2);
+                }
+            }
+        }
+        @for $i from 1 through $listMaxDepth {
+            $sel: "& > li";
+            @if $i >= 2 {
+                @for $j from 2 through $i { $sel: "#{$sel} > ul > li"; }
+            }
+
+            #{$sel} > p::before {
+                @if $i % 2 == 1 {
+                    background: set.$gray-100;
+                } @else {
+                    border: .1rem solid set.$gray-100;
+                }
+            }
+            #{$sel} > ul { padding-left: map.get($prop, fs); display: flex; flex-direction: column; gap: map.get($prop, g); margin-top: map.get($prop, g); }
+        }
+    }
+    .cau-list-#{$name} {
+        display: flex;
+        flex-direction: column;
+        gap: map.get($prop, g);
+        li {
+            color: set.$gray-60;
+            font-size: map.get($prop, fs);
+            line-height: 1.4; text-box: trim-both ex alphabetic;
+            > p {
+                display: flex;
+                align-items: flex-start;
+                font-weight: 300;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+                &::before {
+                    content: "※";
+                    font-family: sans-serif;
+                    color: set.$gray-40;
+                    display: block;
+                    margin-right: calc(map.get($prop, g) / 2);
+                    margin-top: -1px;
+                }
+            }
+        }
+    }
+    .dash-list-#{$name} {
+        display: flex;
+        flex-direction: column;
+        gap: map.get($prop, g);
+        li {
+            font-size: map.get($prop, fs);
+            line-height: 1.4; text-box: trim-both ex alphabetic;
+            > p {
+                display: flex;
+                align-items: flex-start;
+                font-weight: 300;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+                &::before {
+                    content: "-";
+                    display: block;
+                    line-height: 1.1;
+                    margin-right: map.get($prop, g);
+                }
+            }
+        }
+    }
+    .num-list-#{$name} {
+        & > li {
+            list-style-type: decimal;
+            & > ul > li {
+                list-style-type: lower-latin;
+                & > ul > li {
+                    list-style-type: lower-roman;
+                }
+            }
+        }
+        li {
+            font-size: map.get($prop, fs);
+            line-height: 1.4; 
+            list-style-position: inside;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+        }
+        @for $i from 1 through $listMaxDepth {
+            $sel: "& > li";
+            @if $i >= 2 {
+                @for $j from 2 through $i { $sel: "#{$sel} > ul > li"; }
+            }
+
+            #{$sel} > p::before {
+                @if $i % 2 == 1 {
+                    background: set.$gray-100;
+                } @else {
+                    border: .1rem solid set.$gray-100;
+                }
+            }
+            #{$sel} > ul { padding-left: map.get($prop, fs); display: flex; flex-direction: column; gap: map.get($prop, g);}
+        }
+    }
+    .latin-list-#{$name} {
+        & > li {
+            list-style-type: lower-latin;
+            & > ul > li {
+                list-style-type: lower-roman;
+                & > ul > li {
+                    list-style-type: decimal;
+                }
+            }
+        }
+        li {
+            font-size: map.get($prop, fs);
+            line-height: 1.4; 
+            list-style-position: inside;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+        }
+        @for $i from 1 through $listMaxDepth {
+            $sel: "& > li";
+            @if $i >= 2 {
+                @for $j from 2 through $i { $sel: "#{$sel} > ul > li"; }
+            }
+
+            #{$sel} > p::before {
+                @if $i % 2 == 1 {
+                    background: set.$gray-100;
+                } @else {
+                    border: .1rem solid set.$gray-100;
+                }
+            }
+            #{$sel} > ul { padding-left: map.get($prop, fs); display: flex; flex-direction: column; gap: map.get($prop, g);}
+        }
+    }
+    .roman-list-#{$name} {
+        & > li {
+            list-style-type: lower-roman;
+            & > ul > li {
+                list-style-type: decimal;
+                & > ul > li {
+                    list-style-type: lower-latin;
+                }
+            }
+        }
+        li {
+            font-size: map.get($prop, fs);
+            line-height: 1.4; 
+            list-style-position: inside;
+                > span { color: set.$gray-50; }
+                > b, > strong { font-weight: 600; }
+        }
+        @for $i from 1 through $listMaxDepth {
+            $sel: "& > li";
+            @if $i >= 2 {
+                @for $j from 2 through $i { $sel: "#{$sel} > ul > li"; }
+            }
+
+            #{$sel} > p::before {
+                @if $i % 2 == 1 {
+                    background: set.$gray-100;
+                } @else {
+                    border: .1rem solid set.$gray-100;
+                }
+            }
+            #{$sel} > ul { padding-left: map.get($prop, fs); display: flex; flex-direction: column; gap: map.get($prop, g);}
+        }
+    }
+}
+
+

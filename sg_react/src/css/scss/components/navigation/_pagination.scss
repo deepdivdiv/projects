@@ -1,0 +1,95 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+
+
+.paginArea {
+    display: flex; align-items: center; gap: 1rem;
+    [class^="pg-"] {
+        width: 4rem; aspect-ratio: 1/1; font-size: set.$ft-bd-s;
+        color: set.$gray-50;
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+        font-weight: 300;
+        border-radius: .4rem;
+    }
+    .pg-first, .pg-last, .pg-prev, .pg-next {
+        background: url() no-repeat center center / .5rem;
+    }
+    .pg-first, .pg-last { background-size: .8rem; }
+    .pg-first { 
+        background-image: set.icon(che-first, set.$gray-40); 
+        &:hover {
+            background-color: set.$mCol-5;
+            background-image: set.icon(che-first, set.$mCol-40); 
+            &:active {
+                background-color: set.$mCol-10;
+                background-image: set.icon(che-first, set.$mCol-60); 
+            }
+        }
+        &.active {
+            background-color: set.$mCol-60;
+            background-image: set.icon(che-first, set.$gray-0); 
+        }
+    }
+    .pg-last  { 
+        background-image: set.icon(che-last, set.$gray-40);
+        &:hover {
+            background-color: set.$mCol-5;
+            background-image: set.icon(che-last, set.$mCol-40); 
+            &:active {
+                background-color: set.$mCol-10;
+                background-image: set.icon(che-last, set.$mCol-60); 
+            }
+        }
+        &.active {
+            background-color: set.$mCol-60;
+            background-image: set.icon(che-last, set.$gray-0); 
+        }
+    }
+    .pg-prev  { 
+        background-image: set.icon(che-left, set.$gray-40); 
+        &:hover {
+            background-color: set.$mCol-5;
+            background-image: set.icon(che-left, set.$mCol-40); 
+            &:active {
+                background-color: set.$mCol-10;
+                background-image: set.icon(che-left, set.$mCol-60); 
+            }
+        }
+        &.active {
+            background-color: set.$mCol-60;
+            background-image: set.icon(che-left, set.$gray-0); 
+        }
+    }
+    .pg-next  { 
+        background-image: set.icon(che-right, set.$gray-40);
+        &:hover {
+            background-color: set.$mCol-5;
+            background-image: set.icon(che-right, set.$mCol-40); 
+            &:active {
+                background-color: set.$mCol-10;
+                background-image: set.icon(che-right, set.$mCol-60); 
+            }
+        }
+        &.active {
+            background-color: set.$mCol-60;
+            background-image: set.icon(che-right, set.$gray-0); 
+        } 
+    }
+    .pg-num {
+        &:hover {
+            background-color: set.$mCol-5;
+            color: set.$mCol-40;
+            &:active {
+                background-color: set.$mCol-10;
+                color: set.$mCol-60;
+            }
+        }
+        &.active {
+            background-color: set.$mCol-60;
+            color: set.$gray-0;
+            font-weight: set.$fw-b;
+        }
+    }
+}

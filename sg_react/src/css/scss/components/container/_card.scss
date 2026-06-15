@@ -1,0 +1,568 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+.card-list, .card-grid, .card-visual, .card-prize, .card-prize--mini, .card-review {
+    .card-item {
+        .thumb { @include set.notImg(); }
+        .info {
+            .data {
+                [class^="data--"] {
+                    display: flex; align-items: center; gap: .4rem;
+                    &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+                }
+                &-- {
+                    &write { &::before { background: set.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                    &view  { &::before { background: set.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                    &like  { &::before { background: set.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+                }
+            }
+        }
+        .rank {
+            @include set.rating(2rem, .8rem);
+            margin-top: 1rem;
+        }
+        .btArea {
+            padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+            display: flex; align-items: center; gap: 1rem;
+            button, a { flex-grow: 1; flex: 1 1 0; }
+        }
+    }
+}
+.card- {
+    // 리스트형 카드
+    &list {
+        @include set.card-list();
+    }
+    // 그리드형 카드
+    &grid {
+        @include set.card-grid();
+    }
+    // 비주얼 카드
+    &visual {
+        container-type: inline-size;
+        container-name: cardList;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(36rem, 1fr)); gap: 2rem;
+        * { transition: all set.$aniSet; }
+        .card-item {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: .1rem solid set.$gray-20;
+            display: flex; align-items: center; 
+            flex-direction: column;
+            anchor-scope: --card-thumb;
+
+            .thumb {
+                aspect-ratio: 4/3;
+                width: 100%;
+                overflow: hidden;
+                anchor-name: --card-thumb;
+                img { width: 100%; height: 100%; object-fit: cover; }
+
+            }        
+            .info {
+                width: 100%;
+                padding: 1.5rem;
+                em {
+                    position: absolute;
+                    position-anchor: --card-thumb;
+                    top: calc(anchor(top) + 2rem);
+                    left: calc(anchor(left) + 2rem);
+                    transition: none;
+                }
+                > dl {
+                    display: flex; flex-direction: column; gap: .4rem;
+                    a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+                    dt, dd { @include set.lineCut($line:1); }
+                    dt { font-size: set.$ft-tt-s; font-weight: 600; font-family: set.$ft-point; color: set.$gray-100; }
+                    dd { font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;  }
+                }
+                .data {
+                    font-size: set.$ft-bd-m; color: set.$gray-50; 
+                    display: flex; align-items: center; gap: 1rem;
+                    p { font-weight: 300; }
+                    strong { flex-grow: 1; font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; }
+                    > div { display: flex; align-items: center; gap: 1rem; }
+                    [class^="data--"] {
+                        display: flex; align-items: center; gap: .4rem;
+                        &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+                    }
+                    &-- {
+                        &write { &::before { background: set.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                        &view  { &::before { background: set.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                        &like  { &::before { background: set.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+                    }
+                }
+            }
+        &:hover {
+            .thumb img { scale: 1.12;}
+            .info {
+                dl dt { color: set.$mCol-60; }
+            }
+        }
+        }
+        @container cardList (max-width: 800px) {
+            .card-item {
+                .info {
+                    em { 
+                        margin-bottom: 1rem; 
+                        font-size: set.$ft-bd-s;
+                        top: calc(anchor(top) + 1.4rem);
+                        left: calc(anchor(left) + 1.4rem);
+                    }
+                    dl {
+                        dt { font-size: set.$ft-tt-s; }
+                        dd { font-size: set.$ft-bd-m; }
+                    }
+                    .data { 
+                        padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s; 
+                        [class^="data--"] {
+                            &::before { width: 1.4rem;}
+                        }
+                    }
+
+                }
+            }
+        }
+        @container cardList (max-width: 520px) {
+            .card-item {
+                flex-direction: column;
+                align-items: stretch;
+                .thumb { max-width: 100%; aspect-ratio: 16/9; }
+            }
+        }
+        
+    }
+    // 상품형 카드
+    &prize {
+        container-type: inline-size;
+        container-name: cardList;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(36rem, 1fr)); gap: 2rem;
+        * { transition: all set.$aniSet; }
+        .card-item {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: .1rem solid set.$gray-20;
+            display: flex; align-items: center; 
+            flex-direction: column;
+            anchor-scope: --card-thumb;
+            .thumb {
+                aspect-ratio: 16/9;
+                width: 100%;
+                overflow: hidden;
+                anchor-name: --card-thumb;
+                img { width: 100%; height: 100%; object-fit: cover; }
+
+            }        
+            .info {
+                width: 100%;
+                padding: 2rem;
+                em {
+                    position: absolute;
+                    position-anchor: --card-thumb;
+                    top: calc(anchor(top) + 2rem);
+                    left: calc(anchor(left) + 2rem);
+                    transition: none;
+                }
+                > dl {
+                    display: flex; flex-direction: column; gap: .8rem;
+                    a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+                    dt { font-size: set.$ft-tt-s; font-weight: 600; font-family: set.$ft-point; color: set.$gray-100; @include set.lineCut($line:1); line-height: 1.4;}
+                    dd { 
+                        display: flex; align-items: center; gap: 1rem;
+                        strong, span { line-height: 1; &::before { content: "￦"; font-weight: 200; } }
+                        strong {
+                            color: set.$gray-100;
+                            font-size: set.$ft-tt-m; font-weight: 700; color: set.$gray-100; 
+                        }
+                        .sale {
+                            font-size: set.$ft-bd-s; font-weight: 300; color: set.$gray-50; text-decoration: line-through;
+                        }
+                    }
+                }
+                .util {
+                    display: flex; flex-direction: column; gap: 1rem;
+                    position: absolute;
+                    position-anchor: --card-thumb;
+                    right: calc(anchor(right) + 1rem);
+                    // top: calc(anchor(bottom) + 1rem);
+                    bottom: calc(anchor(bottom) + 1rem);
+                    transition: none;
+                    a, button {
+                        display: block;
+                        width: 5rem; aspect-ratio: 1/1;
+                        border-radius: 100rem;
+                        backdrop-filter: blur(2px);
+                        &.bt- {
+                            &like { background: rgba(set.$gray-0, 0.6) set.icon(ico-heart-line, set.$gray-100) no-repeat center center / 44%; }
+                            &cart { background: rgba(set.$gray-0, 0.6) set.icon(ico-cart-line, set.$gray-100) no-repeat center center / 44%; }
+                        }
+                        &:hover {
+                            &.bt- {
+                                &like { background-color: set.$gray-0; background-image: set.icon(ico-heart-line, set.$mCol-60); }
+                                &cart { background-color: set.$gray-0; background-image: set.icon(ico-cart-line,  set.$mCol-60); }
+                            }
+                        }
+                        &.on {
+                            &.bt- {
+                                &like { background-image: set.icon(ico-heart-fill, set.$mCol-60); }
+                                &cart { background-image: set.icon(ico-cart-fill,  set.$mCol-60); }
+                            }
+                        }
+                    }
+                }
+                .data {
+                    padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+                    font-size: set.$ft-bd-m; color: set.$gray-50;
+                    display: flex; align-items: center; gap: 2rem;
+                    p { font-weight: 300; }
+                    > strong { flex-grow: 1; font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; }
+                    > p { flex-grow: 1; }
+                    > div { display: flex; align-items: center; gap: 2rem; }
+                    [class^="data--"] {
+                        display: flex; align-items: center; gap: .4rem;
+                        &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+                    }
+                    &-- {
+                        &write { &::before { background: set.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                        &view  { &::before { background: set.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                        &like  { &::before { background: set.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+                    }
+                }
+            }
+        &:hover {
+            .thumb img { scale: 1.12;}
+            .info {
+                dl dt { color: set.$mCol-60; }
+            }
+        }
+        }
+        @container cardList (max-width: 800px) {
+            .card-item {
+                .rank { --star-size: 1.6rem; em { font-size: set.$ft-bd-s; } }
+                .info {
+                    em {
+                        margin-bottom: 1rem;
+                        font-size: set.$ft-bd-s;
+                        top: calc(anchor(top) + 1.4rem);
+                        left: calc(anchor(left) + 1.4rem);
+                    }
+                    dl {
+                        dt { font-size: set.$ft-tt-s; }
+                        dd { font-size: set.$ft-bd-m; }
+                    }
+                    .data {
+                        padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s;
+                        [class^="data--"] {
+                            &::before { width: 1.4rem;}
+                        }
+                    }
+
+                }
+            }
+        }
+        @container cardList (max-width: 520px) {
+            .card-item {
+                flex-direction: column;
+                align-items: stretch;
+                .thumb { max-width: 100%; aspect-ratio: 16/9; }
+            }
+        }
+
+
+
+    }
+    // 상품형 카드 미니
+    &prize--mini {
+        container-type: inline-size;
+        container-name: cardList;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(56rem, 1fr)); gap: 2rem;
+        * { transition: all set.$aniSet; }
+        .card-item {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: .1rem solid set.$gray-20;
+            display: flex; align-items: center;
+            anchor-scope: --card-thumb;
+            .thumb {
+                aspect-ratio: 1/1;
+                width: 100%; max-width: 20rem;
+                overflow: hidden;
+            }         
+            .info {
+                flex-grow: 1;
+                padding: 2rem;
+                position: relative;
+                em {
+                    width: fit-content;
+                    margin-bottom: 2rem;
+                }
+                > dl {
+                    display: flex; flex-direction: column; gap: .8rem;
+                    a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+                    dt { font-size: set.$ft-tt-s; font-weight: 600; font-family: set.$ft-point; color: set.$gray-100; @include set.lineCut($line:1); line-height: 1.4;}
+                    dd { 
+                        display: flex; align-items: center; gap: 1rem;
+                        strong, span { line-height: 1; &::before { content: "￦"; font-weight: 200; } }
+                        strong {
+                            color: set.$gray-100;
+                            font-size: set.$ft-tt-m; font-weight: 700; color: set.$gray-100; 
+                        }
+                        .sale {
+                            font-size: set.$ft-bd-s; font-weight: 300; color: set.$gray-50; text-decoration: line-through;
+                        }
+                    }
+                }
+                .util {
+                    display: flex; flex-direction: column; gap: 1rem;
+                    position: absolute;
+                    right: 2rem; top: 2rem;
+                    // bottom: calc(anchor(bottom) + 1rem);
+                    a, button {
+                        display: block;
+                        width: 4rem; aspect-ratio: 1/1;
+                        border-radius: 100rem;
+                        backdrop-filter: blur(2px);
+                        &.bt- {
+                            &like { background: rgba(set.$gray-0, 0.6) set.icon(ico-heart-line, set.$gray-100) no-repeat center center / 44%; }
+                            &cart { background: rgba(set.$gray-0, 0.6) set.icon(ico-cart-line, set.$gray-100) no-repeat center center / 44%; }
+                        }
+                        &:hover {
+                            &.bt- {
+                                &like { background-color: set.$gray-0; background-image: set.icon(ico-heart-line, set.$mCol-60); }
+                                &cart { background-color: set.$gray-0; background-image: set.icon(ico-cart-line,  set.$mCol-60); }
+                            }
+                        }
+                        &.on {
+                            &.bt- {
+                                &like { background-image: set.icon(ico-heart-fill, set.$mCol-60); }
+                                &cart { background-image: set.icon(ico-cart-fill,  set.$mCol-60); }
+                            }
+                        }
+                    }
+                }
+                .data {
+                    padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+                    font-size: set.$ft-bd-m; color: set.$gray-50;
+                    display: flex; align-items: center; gap: 2rem;
+                    p { font-weight: 300; }
+                    > strong { flex-grow: 1; font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; }
+                    > p { flex-grow: 1; }
+                    > div { display: flex; align-items: center; gap: 2rem; }
+                    [class^="data--"] {
+                        display: flex; align-items: center; gap: .4rem;
+                        &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+                    }
+                    &-- {
+                        &write { &::before { background: set.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                        &view  { &::before { background: set.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                        &like  { &::before { background: set.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+                    }
+                }
+            }
+        &:hover {
+            .thumb img { scale: 1.12;}
+            .info {
+                dl dt { color: set.$mCol-60; }
+            }
+        }
+        }
+        @container cardList (max-width: 800px) {
+            .card-item {
+                .info {
+                    .rank { --star-size: 1.6rem; em { font-size: set.$ft-bd-s; } }
+                    em {
+                        margin-bottom: 1rem;
+                        font-size: set.$ft-bd-s;
+                        top: calc(anchor(top) + 1.4rem);
+                        left: calc(anchor(left) + 1.4rem);
+                    }
+                    dl {
+                        dt { font-size: set.$ft-tt-s; }
+                        dd { font-size: set.$ft-bd-m; }
+                    }
+                    
+                    .data {
+                        padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s;
+                        [class^="data--"] {
+                            &::before { width: 1.4rem;}
+                        }
+                    }
+                }
+
+            }
+        }
+        @container cardList (max-width: 520px) {
+            .card-item {
+                flex-direction: column;
+                align-items: stretch;
+                .thumb { max-width: 100%; aspect-ratio: 16/9; anchor-name: --card-thumb; }
+                .info {
+                    position: unset;
+                    .util {
+                        position: absolute;
+                        position-anchor: --card-thumb;
+                        top: calc(anchor(top) + 2rem);
+                        right: calc(anchor(right) + 2rem);
+                        transform: translateY(0);
+                        transition: none;
+                    }
+                }
+            }
+        }
+
+
+
+    }
+    // 상품 리뷰형
+    &review {
+        container-type: inline-size;
+        container-name: cardList;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(56rem, 1fr)); gap: 2rem;
+        * { transition: all set.$aniSet; }
+        .card-item {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: .1rem solid set.$gray-20;
+            display: flex; align-items: flex-start;
+            flex-direction: column;
+            padding: 2rem;
+            .head {
+                display: flex; align-items: center; gap: 1rem;
+                strong { font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100; rotate: -0.04deg; }
+            }
+            .body {
+                margin-top: 1rem;
+                p {
+                    font-size: set.$ft-bd-s;
+                    line-height: 1.4;
+                    color: set.$gray-50;
+                    word-break: break-all;
+                    text-wrap-style: pretty;
+                    @include set.lineCut($line:3);
+                }
+            }
+            &:hover {
+                .thumb img { scale: 1.12;}
+                .info {
+                    dl dt { color: set.$mCol-60; }
+                }
+            }
+        }
+        @container cardList (max-width: 800px) {
+            .card-item {
+                .info {
+                    .rank { --star-size: 1.6rem; em { font-size: set.$ft-bd-s; } }
+                    em {
+                        margin-bottom: 1rem;
+                        font-size: set.$ft-bd-s;
+                        top: calc(anchor(top) + 1.4rem);
+                        left: calc(anchor(left) + 1.4rem);
+                    }
+                }
+            }
+        }
+        @container cardList (max-width: 520px) {
+            .card-item {
+                flex-direction: column;
+                align-items: stretch;
+                .thumb { max-width: 100%; aspect-ratio: 16/9; anchor-name: --card-thumb; }
+                .info {
+                    position: unset;
+                    .util {
+                        position: absolute;
+                        position-anchor: --card-thumb;
+                        top: calc(anchor(top) + 2rem);
+                        right: calc(anchor(right) + 2rem);
+                        transform: translateY(0);
+                        transition: none;
+                    }
+                }
+            }
+        }
+
+
+
+    }
+    &profile {
+        container-type: inline-size;
+        container-name: cardList;
+        .card-item {
+            position: relative;
+            padding: 3rem 4rem;
+            display: flex; align-items: center;
+            border: .1rem solid set.$gray-20;
+            gap: 3rem;
+            [class^="ava-"] {
+                min-width: 5.6rem;
+            }
+            &::before {
+                content: "";
+                width: 1rem;
+                height: calc(100% + .2rem);
+                position: absolute;
+                background: linear-gradient(180deg, #7226FF 0%, #BEE4FF 100%);
+                left: -.1rem; top: -.1rem;
+            }
+            .info {
+                flex-grow: 1;
+                strong { font-size: set.$ft-bd-l; font-weight: set.$fw-b; line-height: 1; margin-bottom: .8rem; display: block; }
+                p { font-size: set.$ft-bd-m; color: set.$gray-70; }
+                span { font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: 300; @include set.lineCut($line:2); }
+            }
+            .data { 
+                // position: absolute; right: 2rem;
+                li {
+                    position: relative;
+                    padding: .6rem;
+                    i {
+                        width: 2rem;
+                        aspect-ratio: 1/1;
+                        display: block;
+                        background: set.$gray-0 url() no-repeat center center / 100% 100%;
+                        &.pf- {
+                            &email { background-image: set.icon(ico-email, set.$mCol-60); }
+                            &call  { background-image: set.icon(ico-call,  set.$mCol-60); }
+                            &here  { background-image: set.icon(ico-here,  set.$mCol-60); }
+                        }
+                    }
+                    span {
+                        position: absolute;
+                        width: max-content;
+                        opacity: 0; top: 50%; left: 2rem; font-size: set.$ft-bd-m;
+                        transform: translate(-100%, -50%);
+                        color: set.$gray-50;
+                        border-radius: 100rem;
+                        padding: 1rem; background: set.$gray-0; transition: all set.$aniSet;
+                        line-height: 1.4;
+                    }
+                    &:hover {
+                        span { opacity: 1; left: 0%; }
+                    }
+                }
+            }
+        }
+        @container cardList (max-width: 500px) {
+            .card-item {
+                flex-direction: column;
+                align-items: flex-start;
+                [class^="ava-"] { width: 30vw; }
+                .data {
+                    li {
+                        display: flex; align-items: center; gap: 0.8rem;
+                        i { flex-shrink: 0; }
+                        span { opacity: 1; transform: unset; position: unset; padding: 0; line-height: 1.4; text-box: set.$tbSet; width: auto; flex-grow: 1; word-break: break-all; transition: none;}
+                    }
+                }
+            }
+        }
+
+    }
+
+
+}
+
+@include set.res-tablet() {
+    .card-list, .card-grid, .card-visual, .card-prize, .card-prize--mini, .card-review { grid-template-columns: repeat(1, 1fr); }
+
+}

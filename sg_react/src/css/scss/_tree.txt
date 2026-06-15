@@ -1,0 +1,40 @@
+scss/
+|
+|-- utils/
+|   |-- _vari.scss    # 변수 (색상, 폰트 등)
+|   |-- _func.scss    # 함수
+|   |-- _mixins.scss       # 믹스인 (반응형 미디어쿼리, 공통 스타일 등)
+|   `-- _index.scss        # 외부 전달
+|
+|-- base/
+|   |-- _reset.scss        # 브라우저 기본 스타일 초기화 (Reset.css 또는 Normalize.css)
+|   |-- _typography.scss   # h1, p, a 등 기본 타이포그래피 설정
+|   `-- _base.scss         # body, box-sizing 등 프로젝트 전반의 기본 스타일
+|
+|-- components/
+|   |-- _buttons.scss      # 버튼
+|   |-- board /
+|   |--  |-- _board.core.scss      # 보드 공통
+|   |--  |-- _board.detail.scss      # 보드 뷰
+|   |--  |-- _board.grid.scss      # 보드 썸네일
+|   |--  |-- _board.list.scss      # 보드 리스트
+|   `--  |-- _board.pagination.scss      # 보드 페이징
+|   |-- _forms.scss        # 폼 요소 (input, select, textarea)
+|   `-- _tables.scss       # 테이블
+|
+|-- layout/
+|   |-- _header.scss       # 헤더
+|   |-- _footer.scss       # 푸터
+|   |-- _nav.scss   # 내비게이션
+|   `-- _total.scss         # 그리드 시스템이나 공통 레이아웃
+|
+|-- pages/
+|   |-- _main.scss         # 메인 페이지 전용 스타일
+|   |-- _sub.scss        # 서브 페이지 전용 스타일
+|   |-- _join.scss        # 회원가입 페이지 전용 스타일
+|   |-- _login.scss        # 로그인 페이지 전용 스타일
+|   `-- _about.scss        # 회사소개 페이지 전용 스타일
+|
+|-- vendors/ * 외부 라이브러리 scss버전 추가시 사용예정* 
+|
+`-- main.scss

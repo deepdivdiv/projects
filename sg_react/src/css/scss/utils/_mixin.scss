@@ -1,0 +1,369 @@
+@charset "UTF-8";
+@use 'vari' as set;
+@use 'func' as fun;
+
+// 키프레임 믹스인
+@mixin ani-rotate($dur: 1000ms) { animation: ani-spinner 1000ms infinite linear reverse backwards; }
+
+// 말줄임
+@mixin lineCut($line:2) {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line;
+    overflow: hidden;  
+}
+
+// 스크롤색상변경
+@mixin scrollBar($color) {
+    scrollbar-width: thin;
+    scrollbar-color: $color set.$gray-5;
+}
+
+// 그림자 라인
+@mixin box-border() {
+  box-shadow: 0 0 0 1px set.$gray-30 inset;  
+}
+
+// 반응형 
+@mixin res-mobile {
+  @media screen and (max-width:335px) {
+    @content;
+  }
+}
+@mixin res-mo-tab {
+  @media screen and (max-width:535px) {
+    @content;
+  }
+}
+@mixin res-tablet {
+  @media screen and (max-width:720px) {
+    @content;
+  }
+}
+@mixin res-tab-lap {
+  @media screen and (max-width:960px) {
+    @content;
+  }
+}
+
+@mixin only-pc {
+  @media screen and (min-width:1025px) {
+    @content;
+  }
+}
+
+@mixin res-laptop {
+  @media screen and (max-width:1024px) {
+    @content;
+  }
+}
+
+
+@mixin res-lap-pc {
+  @media screen and (max-width:1500px) {
+    @content;
+  }
+}
+
+@mixin res-1200 {
+  @media screen and (max-width:1200px) {
+    @content;
+  }
+}
+
+
+@mixin base-width {
+    width: calc(100% - min(6rem, 6vw)); max-width: 1400px; margin: 0 auto;
+    box-sizing: border-box; 
+}
+
+
+@mixin ico-close($color) {
+    display: block;
+    height: 100%;
+    aspect-ratio: 1/1;
+    position: relative;
+    border-radius: 100rem;
+    &::before, &::after {
+        content: "";
+        width: calc(100% - .6rem);
+        height: .1rem;
+        background: $color;
+        position: absolute;
+        transform-origin: 0 0;
+        left: 50%; top: 50%; transform: translate(-50%, -50%);
+    }
+    &::before { rotate: -45deg; }
+    &::after  { rotate: 45deg; }
+}
+
+// 스피너
+
+
+@mixin spinner($color) {
+    display: block;
+    aspect-ratio: 1/1;
+    height: 100%;
+    max-height: 8rem;
+    background: fun.icon(ico-spinner, $color) no-repeat center center / contain;
+    @include ani-rotate(1000ms);
+}
+
+
+// 아이콘 믹스인
+@mixin getIcon($value, $color: #555555) {
+    background: fun.icon($value, $color) no-repeat center center / contain;
+}
+
+// 팝업 레이어 배경세팅
+@mixin popupSet() {
+    width: 100%; height: 100%; position: fixed; isolation: isolate;
+    background: rgba(0,0,0,0.8);
+    left: 0; top: 0;
+    backdrop-filter: blur(.3rem);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999;
+    transition: opacity set.$aniSet, visibility 0s set.$aniSet;
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity set.$aniSet, visibility 0s 0s;
+    }
+
+
+  i.error   { background: fun.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
+  i.comple  { background: fun.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
+  i.warning { background: fun.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }
+  i.info    { background: fun.icon(ico-info,    set.$sst-iCol-60) no-repeat center center / contain; }
+  i.quest   { background: fun.icon(ico-quest,   set.$sst-wCol-60) no-repeat center center / contain; }
+
+}
+
+
+@mixin notImg() {
+      &:not(img), img::after {
+          width: 100%; height: 100%;
+          background: set.$gray-10 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='106' height='83' viewBox='0 0 106 83' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M23.4033 66.2002C24.9144 66.2002 26.2774 66.5488 27.4922 67.2451C28.7218 67.9414 29.6846 68.8966 30.3809 70.1113C31.0772 71.3261 31.4258 72.6967 31.4258 74.2227C31.4257 75.7485 31.0771 77.1192 30.3809 78.334C29.6846 79.5485 28.7216 80.504 27.4922 81.2002C26.2774 81.8964 24.9144 82.2451 23.4033 82.2451C21.8923 82.2451 20.5292 81.8965 19.3145 81.2002C18.0999 80.504 17.1445 79.5485 16.4482 78.334C15.752 77.1044 15.4034 75.7337 15.4033 74.2227C15.4033 72.7116 15.752 71.3486 16.4482 70.1338C17.1445 68.9043 18.0998 67.9414 19.3145 67.2451C20.5292 66.5489 21.8923 66.2002 23.4033 66.2002ZM23.4033 68.8887C22.4701 68.8887 21.618 69.1189 20.8477 69.5781C20.0923 70.0226 19.4922 70.6521 19.0479 71.4668C18.6182 72.2816 18.4033 73.2004 18.4033 74.2227C18.4034 75.2446 18.6184 76.1629 19.0479 76.9775C19.4922 77.7922 20.0923 78.4294 20.8477 78.8887C21.618 79.3331 22.4701 79.5556 23.4033 79.5557C24.3515 79.5557 25.2034 79.3331 25.959 78.8887C26.7293 78.4294 27.3292 77.7923 27.7588 76.9775C28.2031 76.1628 28.4257 75.2447 28.4258 74.2227C28.4258 73.2004 28.2032 72.2816 27.7588 71.4668C27.3292 70.6521 26.7293 70.0225 25.959 69.5781C25.2034 69.1189 24.3515 68.8887 23.4033 68.8887Z' fill='%23D8D8D8'/%3E%3Cpath d='M85.4434 66.2002C86.7024 66.2002 87.8431 66.4228 88.8652 66.8672C89.8872 67.2968 90.7538 67.9408 91.4648 68.7998L89.5537 70.667C88.4722 69.4818 87.1465 68.8887 85.5762 68.8887C84.5688 68.8887 83.6652 69.1189 82.8652 69.5781C82.08 70.0226 81.465 70.652 81.0205 71.4668C80.5909 72.2668 80.376 73.1856 80.376 74.2227C80.376 75.2446 80.591 76.1629 81.0205 76.9775C81.465 77.7775 82.08 78.4079 82.8652 78.8672C83.6503 79.3263 84.5465 79.5556 85.5537 79.5557C86.6796 79.5557 87.6577 79.2815 88.4873 78.7334V74.0225H91.2207V80.2451C90.4504 80.882 89.5466 81.3779 88.5098 81.7334C87.4875 82.0741 86.4426 82.2451 85.376 82.2451C83.865 82.2451 82.4942 81.9041 81.2646 81.2227C80.0499 80.5264 79.0947 79.5702 78.3984 78.3555C77.7171 77.126 77.376 75.7484 77.376 74.2227C77.376 72.6819 77.7246 71.3037 78.4209 70.0889C79.1171 68.8743 80.0726 67.9265 81.2871 67.2451C82.5167 66.5488 83.9026 66.2002 85.4434 66.2002Z' fill='%23D8D8D8'/%3E%3Cpath d='M10.333 76.667V66.4443H13.2666V82H10.8223L2.93359 71.7783V82H0V66.4443H2.44434L10.333 76.667Z' fill='%23D8D8D8'/%3E%3Cpath d='M40.9268 82H37.9492V66.4443H40.9268V82Z' fill='%23D8D8D8'/%3E%3Cpath d='M52.2822 76.5557L57.9482 66.4443H60.3936L60.415 82H57.6377L57.6152 71.9111L52.9043 80.2666H51.5713L46.8818 72.0889V82H44.082V66.4443H46.5264L52.2822 76.5557Z' fill='%23D8D8D8'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M77.752 82H74.6191L73.1963 78.4668H65.9961L64.5742 82H61.5078L68.1523 66.4443H71.085L77.752 82ZM66.9521 76.0664H72.2412L69.6191 69.5557L66.9521 76.0664Z' fill='%23D8D8D8'/%3E%3Cpath d='M104.846 68.9775H96.8896V72.8672H103.935V75.334H96.8896V79.4668H105.135V82H93.9346V66.4443H104.846V68.9775Z' fill='%23D8D8D8'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M42.1143 6.56152C46.0113 6.56152 49.1621 9.72257 49.1621 13.6094C49.162 17.4961 46.001 20.6562 42.1143 20.6562C38.2174 20.6562 35.0489 17.4961 35.0488 13.6094C35.0488 9.72263 38.2173 6.56162 42.1143 6.56152ZM42.1143 10.8115C40.5618 10.8116 39.2988 12.0671 39.2988 13.6094C39.2989 15.1516 40.5618 16.4071 42.1143 16.4072C43.6668 16.4072 44.912 15.1517 44.9121 13.6094C44.9121 12.067 43.6566 10.8115 42.1143 10.8115Z' fill='%23D8D8D8'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M68.9453 0C73.4566 0.000215209 77.126 3.67124 77.126 8.18262V42.8203C77.1258 47.1907 73.682 50.7699 69.3652 50.9893L68.9453 51H34.3057C29.7943 51 26.1252 47.3316 26.125 42.8203V8.18262C26.125 3.67112 29.7942 3.31112e-05 34.3057 0H68.9453ZM30.4561 43.6182C30.826 45.4035 32.4126 46.75 34.3057 46.75H63.6787L49.5918 33.1807C49.5851 33.1743 49.5788 33.1676 49.5723 33.1611L45.1631 28.9141L30.4561 43.6182ZM53.7803 31.3154L69.7188 46.6719C71.5159 46.3112 72.8748 44.7217 72.875 42.8203V33.4316L61.0254 19.8682L53.7803 31.3154ZM34.3057 4.25C32.1393 4.25003 30.376 6.01367 30.376 8.18262V37.6895L43.6338 24.4326C44.4557 23.6128 45.7799 23.601 46.6094 24.4062L50.6553 28.3047L58.9561 15.1895C59.3153 14.6228 59.9198 14.2597 60.5879 14.208C61.2724 14.1584 61.912 14.4256 62.3516 14.9277L72.875 26.9727V8.18262C72.875 6.01442 71.1115 4.25022 68.9453 4.25H34.3057Z' fill='%23D8D8D8'/%3E%3C/svg%3E") no-repeat center center / 35%;
+      }
+      a { display: block; width: 100%; height: 100%; }
+      img { width: 100%; height: 100%; object-fit: cover; }
+      img {
+          content: "";
+          display: inline-block;
+          position: relative;
+          scale: 1.01;
+          &::after {
+              content: "";
+              position: absolute;
+              left: 0; top: 0;
+          }
+      }
+}
+
+// 별점
+@mixin rating($size:2rem, $gap:.8rem) {
+    --score: 0;
+    --star-size: #{$size};
+    display: inline-flex; align-items: center; gap: $gap;
+    &::before {
+        content: "";
+        width: calc(var(--star-size) * 5); height: var(--star-size);
+        background:
+            linear-gradient(
+                to right,
+                set.$sst-wCol-50 0,
+                set.$sst-wCol-50 calc(var(--score) * 20%),
+                #{set.$gray-20} calc(var(--score) * 20%),
+                #{set.$gray-20} 100%
+            );
+        -webkit-mask: fun.icon(ico-star, '#000') repeat-x left center / var(--star-size) var(--star-size);
+        mask: fun.icon(ico-star, '#000') repeat-x left center / var(--star-size) var(--star-size);
+    }
+    span {
+        font-weight: 300;
+        font-size: set.$ft-bd-s; color: set.$gray-50;
+        line-height: 1;
+    }
+}
+
+
+
+// 카드 리스트형
+@mixin card-list() {
+    container-type: inline-size;
+    container-name: cardList;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(56rem, 1fr)); gap: 2rem;
+    * { transition: all set.$aniSet; }
+    .card-item {
+    padding: 2rem; border-radius: 1rem;
+    border: .1rem solid set.$gray-20;
+    display: flex; align-items: center; gap: 2rem; flex-grow: 1; 
+    overflow: hidden;
+    .thumb {
+        aspect-ratio: 1/1;
+        width: 100%; max-width: 18rem;
+        border-radius: .4rem;
+        overflow: hidden;
+    }       
+    .info {
+        flex-grow: 1;
+        em {
+            font-size: set.$ft-bd-m;
+            font-weight: set.$fw-b;
+            text-box: set.$tbSet;
+            line-height: 1;
+            color: set.$mCol-60;
+            display: block; margin-bottom: 2rem;
+        }
+        dl {
+            display: flex; flex-direction: column; gap: 1rem;
+            dt, dd { @include lineCut($line:1); }
+            a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+            dt { font-size: set.$ft-tt-m; font-weight: 600; font-family: set.$ft-point; color: set.$gray-100; }
+            dd { font-size: set.$ft-bd-l; color: set.$gray-50; font-weight: set.$fw-m;  }
+        }
+        .data {
+            padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+            font-size: set.$ft-bd-m; color: set.$gray-50; 
+            display: flex; align-items: center; gap: 2rem;
+            p { font-weight: 300; }
+            > p { flex-grow: 1; }
+            > div { display: flex; align-items: center; gap: 2rem; }
+            [class^="data--"] {
+                display: flex; align-items: center; gap: .4rem;
+                &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+            }
+            &-- {
+                &write { &::before { background: fun.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                &view  { &::before { background: fun.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                &like  { &::before { background: fun.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+            }
+        }
+    }
+    }
+    @container cardList (max-width: 800px) {
+        .card-item {
+            padding: 1rem;
+            .thumb { max-width: 12rem; }
+            .info {
+                em { margin-bottom: 1rem; font-size: set.$ft-bd-s;}
+                dl {
+                    dt { font-size: set.$ft-tt-s; }
+                    dd { font-size: set.$ft-bd-m; }
+                }
+                .data { 
+                    padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s; 
+                    [class^="data--"] {
+                        &::before { width: 1.4rem;}
+                    }
+                }
+            }
+        }
+    }
+    @container cardList (max-width: 520px) {
+        .card-item {
+            flex-direction: column;
+            align-items: stretch;
+            .thumb { max-width: 100%; aspect-ratio: 16/9; }
+        }
+    }
+    
+}
+@mixin card-grid() {
+        container-type: inline-size;
+        container-name: cardList;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr)); gap: 2rem;
+        * { transition: all set.$aniSet; }
+        .card-item {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: .1rem solid set.$gray-20;
+            display: flex; align-items: center; 
+            flex-direction: column;
+            anchor-scope: --card-thumb;
+            
+            .thumb {
+                aspect-ratio: 16/9;
+                width: 100%;
+                overflow: hidden;
+                anchor-name: --card-thumb;
+                img { width: 100%; height: 100%; object-fit: cover; }
+
+            }        
+            .info {
+                width: 100%;
+                padding: 2rem;
+                em {
+                    position: absolute;
+                    position-anchor: --card-thumb;
+                    top: calc(anchor(top) + 2rem);
+                    left: calc(anchor(left) + 2rem);
+                    transition: none;
+                }
+                > dl {
+                    display: flex; flex-direction: column; gap: .8rem;
+                    a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+                    dt, dd { @include lineCut($line:1); }
+                    dt { font-size: set.$ft-tt-s; font-weight: 600; font-family: set.$ft-point; color: set.$gray-100; }
+                    dd { font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;  }
+                }
+                .data {
+                    padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+                    font-size: set.$ft-bd-m; color: set.$gray-50; 
+                    display: flex; align-items: center; gap: 2rem;
+                    p { font-weight: 300; }
+                    > strong { flex-grow: 1; font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; }
+                    > p { flex-grow: 1; }
+                    > div { display: flex; align-items: center; gap: 2rem; }
+                    [class^="data--"] {
+                        display: flex; align-items: center; gap: .4rem;
+                        &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+                    }
+                    &-- {
+                        &write { &::before { background: fun.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                        &view  { &::before { background: fun.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                        &like  { &::before { background: fun.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+                    }
+                }
+            }
+        &:hover {
+            .thumb img { scale: 1.12;}
+            .info {
+                dl dt { color: set.$mCol-60; }
+            }
+        }
+        }
+        @container cardList (max-width: 800px) {
+            .card-item {
+                .info {
+                    em { 
+                        margin-bottom: 1rem; 
+                        font-size: set.$ft-bd-s;
+                        top: calc(anchor(top) + 1.4rem);
+                        left: calc(anchor(left) + 1.4rem);
+                    }
+                    dl {
+                        dt { font-size: set.$ft-tt-s; }
+                        dd { font-size: set.$ft-bd-m; }
+                    }
+                    .data { 
+                        padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s; 
+                        [class^="data--"] {
+                            &::before { width: 1.4rem;}
+                        }
+                    }
+
+                }
+            }
+        }
+        @container cardList (max-width: 520px) {
+            .card-item {
+                flex-direction: column;
+                align-items: stretch;
+                .thumb { max-width: 100%; aspect-ratio: 16/9; }
+            }
+        }
+}
