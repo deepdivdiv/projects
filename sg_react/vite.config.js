@@ -8,6 +8,7 @@ const __dirname = new URL('.', import.meta.url).pathname
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/projects/sg_react/dist/',
   plugins: [react()],
   resolve: {
     alias: {
