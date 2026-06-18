@@ -170,7 +170,7 @@ function SgTypo() {
                         </dd>
                     </dl>
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
 {`ㅁ
@@ -226,7 +226,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
 <xmp>
 {`
@@ -287,7 +287,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
 {`<Input size="l" placeholder="텍스트를 입력하세요"></Input>
@@ -339,7 +339,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
     {`
@@ -399,7 +399,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
     {`
@@ -452,7 +452,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                             <xmp>
 {`<Textarea size="l" placeholder="텍스트를 입력하세요"></Textarea>
@@ -512,7 +512,7 @@ function SgTypo() {
                     
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
 {`<Select size="l">
@@ -572,7 +572,7 @@ function SgTypo() {
                     </dl>
 
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`// 유효성 상태 status, 시연용 상태 state(hover/focus), open 으로 펼침
@@ -652,7 +652,7 @@ function SgTypo() {
                         </dd>
                     </dl>
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Check type="checkbox" size="xl" id="check-1" name="check"></Check>
@@ -718,7 +718,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Check size="xl" type="checkbox">Default</Check>
@@ -795,7 +795,7 @@ function SgTypo() {
                         </dd>
                     </dl>
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Check size="xl" state="" type="radio"></Check>
@@ -860,7 +860,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Check size="xl" state="" type="radio">Default</Check>
@@ -923,7 +923,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Toggle size="xl" type="a"></Toggle>
@@ -958,7 +958,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Toggle size="xl" type="a"></Toggle>
@@ -1014,7 +1014,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Range size="xl"></Range>
@@ -1059,7 +1059,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
                         <xmp>
 {`<Range size="xl"></Range>
@@ -1132,7 +1132,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
 {`<Cau size="l">텍스트</Cau>
@@ -1230,7 +1230,7 @@ function SgTypo() {
                     </dl>
                     
                     <div className="source">
-                        <em>HTML</em>
+                        <em>JSX</em>
                         <div>
     <xmp>
 {`<Cau size="l" state="">텍스트</Cau>
