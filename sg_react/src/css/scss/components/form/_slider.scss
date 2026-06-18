@@ -14,15 +14,13 @@ $rangeSize:(
             &::-webkit-slider-thumb {
                 width: map.get($prop, d-w); aspect-ratio: 1/1;
                 margin-top: calc((map.get($prop, h) - map.get($prop, d-w)) / 2);
-                outline: calc(map.get($prop, d-w) / 4) solid set.$gray-0;
-                background: set.$mCol-60;
+                background: set.$gray-20;
                 border-radius: 100rem;
                 cursor: pointer;
                 transition: all set.$aniSet;
                 &:hover {
                     width: calc(map.get($prop, d-w) * 1.2);
                     background: set.$mCol-80;
-                    outline: calc(map.get($prop, d-w) / 3) solid set.$gray-0;
                     margin-top: calc((map.get($prop, h) - calc(map.get($prop, d-w) * 1.2)) / 2);
                 }
             }
@@ -123,7 +121,7 @@ $rangeSize:(
                 }
             }
         }
-        &.fail {
+        &.er {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(
@@ -137,7 +135,7 @@ $rangeSize:(
                 }
             }
         }
-        &.warning {
+        &.ca {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(
@@ -151,7 +149,7 @@ $rangeSize:(
                 }
             }
         }
-        &.comple {
+        &.su {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(

@@ -31,7 +31,7 @@ $toggleSizes: (
         }
     }
     @each $size, $prop in $toggleSizes {
-        &-t-#{$size} {
+        &-a-#{$size} {
             @extend .tog;
             input[type=checkbox] {
                 transition: all set.$aniSet;
@@ -93,7 +93,7 @@ $toggleSizes: (
                 }
             }
         }
-        &-#{$size} {
+        &-b-#{$size} {
             @extend .tog;
             input[type=checkbox] {
                 transition: all set.$aniSet;

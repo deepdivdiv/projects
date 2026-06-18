@@ -1,4 +1,6 @@
 import SgTypo from '@/pages/styleGuide/sg_typo.jsx';
+import SgForm from '@/pages/styleGuide/sg_typo.jsx';
+import SgData from '@/pages/styleGuide/sg_data.jsx';
 import { NavLink } from "react-router-dom";
 
 
@@ -10,6 +12,8 @@ function SgIndex() {
       <div className="flexBox d-col a-left mt20">
         <p>General</p>
         <p><NavLink to="typo" element={<SgTypo />}> -&gt; Font System </NavLink></p>
+        <p><NavLink to="form" element={<SgForm />}> -&gt; Form System </NavLink></p>
+        <p><NavLink to="data" element={<SgData />}> -&gt; Data System </NavLink></p>
       </div>
     </div>
     </>

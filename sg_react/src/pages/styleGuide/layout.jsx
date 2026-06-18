@@ -4,9 +4,7 @@ function SgLayout() {
   return (
     <>
       <section className='styleGuide'>
-        <div className='sg_inner'>
-            <Outlet></Outlet>
-        </div>
+          <Outlet></Outlet>
       </section>
     </>
   )

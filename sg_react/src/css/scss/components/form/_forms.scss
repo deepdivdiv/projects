@@ -44,24 +44,25 @@ $cauColors: (
 );
 
 [class^="form-"] {
-    // 내부 안에 캡션있는경우
-    *:has([class^="cau-"]) {
-        display: flex; flex-direction: column; gap: 1rem;
-        flex-grow: 1;
-    }
-    // 비활성일경우 캡션 전체 숨김
+    display: flex; flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+    
     > *:has(:disabled) {
         [class^="cau-"] { display: none !important; }
-        
     }
     // 캡션 핸들링 일반상태에는 nm 캡션만 노출되게
     [class^="cau-"] { display: flex; } 
-    [class^="cau-"]:is(.er, .su, .ca, .de, .imp, .if) { display: none; } 
+    [class^="cau-"]:is(.er, .su, .ca, .de, .if) { display: none; } 
 }
 // 폼, 셀렉트, 인풋, 텍스트에리어
 .form { 
     background: set.$gray-0;
     position: relative;
+    textarea:has(+ [class^="cau-"]),
+    input:has(+ [class^="cau-"]) {
+        margin-bottom: 1rem;
+    }
     &.st2 {
         select {
             border: none;
@@ -314,7 +315,7 @@ $cauColors: (
             }
 
         }
-        .set__#{$value} {
+        &.set__#{$value} {
             @include set.scrollBar($color:map.get($prop, bd));
    
             input[type=text], input[type=password], input[type=time], input[type=url], input[type=date], input[type=week], input[type=email], input[type=month], input[type=file], input[type=number], input[type=submit], input[type=tel], input[type=search], input[type=datetime], textarea {

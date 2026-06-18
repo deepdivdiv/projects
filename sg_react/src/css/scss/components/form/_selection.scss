@@ -12,12 +12,14 @@ $selectSizes: (
 
 $selectState: (
     imp:     (d: set.$mCol-60,     d-h: set.$mCol-80),
-    comple:  (d: set.$sst-sCol-60, d-h: set.$sst-sCol-80),
-    fail:    (d: set.$sst-dCol-60, d-h: set.$sst-dCol-70),
+    su:  (d: set.$sst-sCol-60, d-h: set.$sst-sCol-80),
+    er:    (d: set.$sst-dCol-60, d-h: set.$sst-dCol-70),
 );
 
 // 라디오, 체크박스
 .sel {
+    position: relative; display: flex; align-items: center; gap: 2rem 1rem; flex-wrap: wrap;
+
     // 도트
     i {
         aspect-ratio: 1/1; display: block;
@@ -34,9 +36,9 @@ $selectState: (
         color: set.$gray-60;
     }
     // 하위자식에게 무조건 플렉스 처리 : 무조건 박스안에 태그로 하나 감싸주고 사용해야함
-    > * {
-        position: relative; display: flex; align-items: center; gap: 2rem 1rem; flex-wrap: wrap;
-    }
+    // > * {
+    //     position: relative; display: flex; align-items: center; gap: 2rem 1rem; flex-wrap: wrap;
+    // }
     input[type=checkbox],
     input[type=radio] {
         width: 0; height: 0; position: absolute;
@@ -70,7 +72,7 @@ $selectState: (
             }
         }
     }
-    input[type=checkbox]:disabled + label i {
+    input[type=checkbox]:disabled:not(:checked) + label i {
         background-image: none !important;
     }
     input[type=radio]:disabled + label i {
@@ -78,7 +80,7 @@ $selectState: (
     }
     @each $name, $prop in $selectState {
         @each $size, $value in $selectSizes {
-            .#{$name} {
+            &.#{$name} {
                 i {
                     box-shadow: 0 0 0 1px map.get($prop, d) inset;
                 }
