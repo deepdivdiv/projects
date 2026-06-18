@@ -3,7 +3,8 @@
 function Index() {
   return (
     <>
-      {/* <Input size="l"></Input> */}
+      <h1>메인</h1>
+
     </>
   )
 }
