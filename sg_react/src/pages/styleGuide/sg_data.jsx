@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from "react";
 import { Button, Input, Textarea, Select, Check, Toggle, Range, Cau } from "@/component/form";
-import { Table } from "@/component/data";
+import { Table, List } from "@/component/data";
 function SgData() {
     const sections = [
         { id: "table", label: "Table" },
@@ -123,7 +123,7 @@ function SgData() {
                                         <Check type="checkbox">쇼핑</Check>
                                         <Check type="checkbox">기타</Check>
                                     </div>
-                                    <Cau size="m">중복선택가능</Cau>
+                                    <Cau size="m" className="mt10">중복선택가능</Cau>
                                 </td>
                             </tr>
                         </tbody>
@@ -239,37 +239,37 @@ function SgData() {
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td><a href="#" class="reduce">192.412.132.12</a></td>
+                                <td>192.412.132.12</td>
                                 <td>홍길동</td>
                                 <td>2026.05.07</td>
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td><a href="#" class="reduce">192.412.132.12</a></td>
+                                <td>192.412.132.12</td>
                                 <td>홍길동</td>
                                 <td>2026.05.07</td>
                             </tr>
                             <tr>
                                 <td>3</td>
-                                <td><a href="#" class="reduce">192.412.132.12</a></td>
+                                <td>192.412.132.12</td>
                                 <td>홍길동</td>
                                 <td>2026.05.07</td>
                             </tr>
                             <tr>
                                 <td>4</td>
-                                <td><a href="#" class="reduce">192.412.132.12</a></td>
+                                <td>192.412.132.12</td>
                                 <td>홍길동</td>
                                 <td>2026.05.07</td>
                             </tr>
                             <tr>
                                 <td>5</td>
-                                <td><a href="#" class="reduce">192.412.132.12</a></td>
+                                <td>192.412.132.12</td>
                                 <td>홍길동</td>
                                 <td>2026.05.07</td>
                             </tr>
                             <tr>
                                 <td>6</td>
-                                <td><a href="#" class="reduce">192.412.132.12</a></td>
+                                <td>192.412.132.12</td>
                                 <td>홍길동</td>
                                 <td>2026.05.07</td>
                             </tr>
@@ -323,26 +323,26 @@ function SgData() {
                         <thead>
                             <tr>
                                 <th><Check size="s"></Check></th>
-                                <th class="ta-left">종목</th>
-                                <th class="ta-right">금액</th>
-                                <th class="ta-right">대금</th>
+                                <th className="ta-left">종목</th>
+                                <th className="ta-right">금액</th>
+                                <th className="ta-right">대금</th>
                                 <th>참여일</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><Check size="s"></Check></td>
-                                <td class="ta-left"><a href="#" class="reduce">이러닝 교육 사업</a></td>
-                                <td class="ta-right">50,323원</td>
-                                <td class="ta-right">50,323원</td>
+                                <td className="ta-left"><a href="http://naver.com/" className="reduce" target="_blank">이러닝 교육 사업</a></td>
+                                <td className="ta-right">50,323원</td>
+                                <td className="ta-right">50,323원</td>
                                 <td>
-                                    <div class="data-week">
-                                        <p class="on">월</p>
+                                    <div className="data-week">
+                                        <p className="on">월</p>
                                         <p>화</p>
                                         <p>수</p>
-                                        <p class="on">목</p>
+                                        <p className="on">목</p>
                                         <p>금</p>
-                                        <p class="on">토</p>
+                                        <p className="on">토</p>
                                         <p>일</p>
                                     </div>
                                 </td>
@@ -381,6 +381,288 @@ function SgData() {
                     </div>
                 </div>
             </div>
+
+        </div>
+        <div className="sg_inner" ref={(el) => (secRefs.current.list = el)}>
+            <div className="sg_tit">
+                <h1>List</h1>
+                <p>리스트 스타일 컴포넌트</p>
+            </div>
+            
+            <div className="sg_area">
+                <p>사이즈</p>
+                <div className="sg_box">
+                    <dl>
+                        <dt>L</dt>
+                        <dd>
+                            <List set="dot" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>M</dt>
+                        <dd>
+                            <List set="dot" size="m">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>S</dt>
+                        <dd>
+                            <List set="dot" size="s">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <div className="source">
+                        <em>JSX</em>
+                        <div>
+                        <xmp>
+{`<List set="dot" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="dot" size="m">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="dot" size="s">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+`}
+                        </xmp>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div className="sg_area">
+                <p>ul 스타일</p>
+                <div className="sg_box">
+                    <dl>
+                        <dt>Circle</dt>
+                        <dd>
+                            <List set="dot" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Square</dt>
+                        <dd>
+                            <List set="box" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Dash</dt>
+                        <dd>
+                            <List set="dash" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Caution</dt>
+                        <dd>
+                            <List set="cau" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <div className="source">
+                        <em>JSX</em>
+                        <div>
+                        <xmp>
+{`<List set="dot" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="box" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="dash" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="cau" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+`}
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="sg_area">
+                <p>ol 스타일</p>
+                <div className="sg_box">
+                    <dl>
+                        <dt>number</dt>
+                        <dd>
+                            <List set="num" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>latin</dt>
+                        <dd>
+                            <List set="latin" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>roman</dt>
+                        <dd>
+                            <List set="roman" size="l">
+                                <li>
+                                    <p>텍스트제목</p>
+                                    <ul>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                        <li><p>텍스트를 입력하세요</p></li>
+                                    </ul>
+                                </li>
+                            </List>
+                        </dd>
+                    </dl>
+                    <div className="source">
+                        <em>JSX</em>
+                        <div>
+                        <xmp>
+{`<List set="num" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="latin" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+<List set="roman" size="l">
+    <li>
+        <p>텍스트제목</p>
+        <ul>
+            <li><p>텍스트를 입력하세요</p></li>
+            <li><p>텍스트를 입력하세요</p></li>
+        </ul>
+    </li>
+</List>
+`}
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
 
         </div>
     </>

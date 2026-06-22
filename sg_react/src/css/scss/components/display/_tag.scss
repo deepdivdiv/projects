@@ -10,12 +10,17 @@ $tagSize: (
   s: (h:2rem,   fs: set.$ft-bd-xs, pd:.2rem .6rem),
 );
 $tagState: (
+  st: (bg: set.$sst-dCol-60, fc: set.$gray-0),
+  imp: (bg: set.$mCol-60,    fc: set.$gray-0),
+  ne: (bg: set.$gray-100,    fc: set.$gray-0),
   po: (bg: set.$mCol-10,     fc: set.$mCol-60),
-  de: (bg: set.$sst-dCol-10, fc: set.$sst-dCol-60),
+  er: (bg: set.$sst-dCol-10, fc: set.$sst-dCol-60),
   su: (bg: set.$sst-sCol-10, fc: set.$sst-sCol-60),
-  wa: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
+  ca: (bg: set.$sst-wCol-10, fc: set.$sst-wCol-60),
   if: (bg: set.$sst-iCol-10, fc: set.$sst-iCol-60),
 );
+
+
 .tag {
   gap: .3rem;
   border-radius: .2rem;
