@@ -10,9 +10,9 @@ $pgSize: (
     xl: ( h:2.2rem, p: 0.3rem, fs: set.$ft-tt-s,  ),
 );
 $pgState: (
-    fail:   ( c:set.$sst-dCol-60 ),
-    comple: ( c:set.$sst-sCol-60 ),
-    warning:     ( c:set.$sst-wCol-60 ),
+    er:   ( c:set.$sst-dCol-60 ),
+    su: ( c:set.$sst-sCol-60 ),
+    ca:     ( c:set.$sst-wCol-60 ),
     ne:     ( c:set.$gray-100 ),
 );
 [class^="pg-"] {

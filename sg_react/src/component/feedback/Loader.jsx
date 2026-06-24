@@ -7,24 +7,24 @@
 **/
 
 
-function Progress({
+function Loader({
+    set = "spinner",
     size = "m",
     state = "",
     className = "",
-    children,
+    // children,
     ...rest
 }) {
-    const classes = [`pg-${size}`, state, className]
+    const classes = [`${set}`, size, state, className]
         .filter(Boolean)
         .join(" ");
 
-    return (
-        <div className={classes}>
-            {children}
-            <progress id="" {...rest}></progress>
-        </div>
-    )
+    if(set == "spinner") {
+        return (
+            <i className={classes} {...rest}></i>
+        )
+    }
 
 }
 
-export default Progress;
+export default Loader;

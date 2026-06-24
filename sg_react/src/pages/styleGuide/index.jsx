@@ -2,6 +2,7 @@ import SgTypo from '@/pages/styleGuide/sg_typo.jsx';
 import SgForm from '@/pages/styleGuide/sg_typo.jsx';
 import SgData from '@/pages/styleGuide/sg_data.jsx';
 import SgDisplay from '@/pages/styleGuide/sg_display.jsx';
+import SgFeed from '@/pages/styleGuide/sg_feedback.jsx';
 import { NavLink } from "react-router-dom";
 
 
@@ -16,6 +17,7 @@ function SgIndex() {
         <p><NavLink to="form" element={<SgForm />}> -&gt; Form System </NavLink></p>
         <p><NavLink to="data" element={<SgData />}> -&gt; Data System </NavLink></p>
         <p><NavLink to="display" element={<SgDisplay />}> -&gt; Display System </NavLink></p>
+        <p><NavLink to="feedback" element={<SgFeed />}> -&gt; Feedback System </NavLink></p>
       </div>
     </div>
     </>

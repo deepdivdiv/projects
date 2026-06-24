@@ -14,7 +14,7 @@ $spinSize: (
 
 
 // 스피너
-.ico-spinner {
+.spinner, .ico-spinner {
     @include set.spinner(set.$gray-100);
     flex-grow: 1;
     @each $height, $prop in $spinSize {
