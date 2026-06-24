@@ -10,6 +10,7 @@ function Badge({
     set = "lb",
     size = "m",
     state = "",
+    id="",
     className = "",
     children,
     ...rest
@@ -34,8 +35,8 @@ function Badge({
     }
     else if(set == "chip"){
         return (
-            <label className={classes}>
-                <input type="checkbox" name="" id="" class="chip-kill" {...rest} />
+            <label className={classes} for={id}>
+                <input type="checkbox" id={id} class="chip-kill" {...rest} />
                 <span>{children}</span>
                 <i className="ico-close"></i>
             </label>
