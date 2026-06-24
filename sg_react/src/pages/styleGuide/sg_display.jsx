@@ -332,7 +332,11 @@ function SgDisplay() {
         <div className="sg_inner" ref={(el) => (secRefs.current.chip = el)}>
             <div className="sg_tit">
                 <h1>Chip</h1>
+<<<<<<< HEAD
                 <p>삭제가 가능한 라벨 컴포넌트</p>
+=======
+                <p>제거 가능한 라벨 컴포넌트</p>
+>>>>>>> backup/main
             </div>
             {/* 사이즈 */}
             <div className="sg_area">
@@ -369,12 +373,21 @@ function SgDisplay() {
                         </dd>
                     </dl>
                     <div className="source">
+<<<<<<< HEAD
                         <em>JSX</em>
                         <div>
                         <xmp>
 {`<Badge set="chip" state="imp" size="l">컴포넌트</Badge>
 <Badge set="chip" state="imp" size="m">컴포넌트</Badge>
 <Badge set="chip" state="imp" size="s">컴포넌트</Badge>
+=======
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+{`<Badge set="chip" state="imp" size="l" id="chip-l-1">컴포넌트</Badge>
+<Badge set="chip" state="imp" size="m" id="chip-m-1">컴포넌트</Badge>
+<Badge set="chip" state="imp" size="s" id="chip-s-1">컴포넌트</Badge>
+>>>>>>> backup/main
 `}
                         </xmp>
                         </div>
