@@ -4,6 +4,7 @@ function SgDisplay() {
     const sections = [
         { id: "label", label: "Label" },
         { id: "tag", label: "Tag" },
+        { id: "chip", label: "Chip" },
     ];
 
     const secRefs = useRef({});
@@ -319,6 +320,157 @@ function SgDisplay() {
 <Badge set="tag" state="ca" size="l">컴포넌트</Badge>
 <Badge set="tag" state="su" size="l">컴포넌트</Badge>
 <Badge set="tag" state="if" size="l">컴포넌트</Badge>
+`}
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div className="sg_inner" ref={(el) => (secRefs.current.chip = el)}>
+            <div className="sg_tit">
+                <h1>Chip</h1>
+                <p>제거 가능한 라벨 컴포넌트</p>
+            </div>
+            {/* 사이즈 */}
+            <div className="sg_area">
+                <p>사이즈</p>
+                <div className="sg_box">
+                    <dl>
+                        <dt>L</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="imp" size="l" id="chip-l-1">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="l" id="chip-l-2">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="l" id="chip-l-3">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="l" id="chip-l-4">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="l" id="chip-l-5">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>M</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="imp" size="m" id="chip-m-1">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="m" id="chip-m-2">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="m" id="chip-m-3">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="m" id="chip-m-4">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="m" id="chip-m-5">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>S</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="imp" size="s" id="chip-s-1">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="s" id="chip-s-2">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="s" id="chip-s-3">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="s" id="chip-s-4">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="s" id="chip-s-5">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <div className="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+{`<Badge set="chip" state="imp" size="l" id="chip-l-1">컴포넌트</Badge>
+<Badge set="chip" state="imp" size="m" id="chip-m-1">컴포넌트</Badge>
+<Badge set="chip" state="imp" size="s" id="chip-s-1">컴포넌트</Badge>
+`}
+                        </xmp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* 스타일 */}
+            <div className="sg_area">
+                <p>스타일</p>
+                <div className="sg_box">
+                    <dl>
+                        <dt>Default</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Strong</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="st" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="st" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="st" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Important</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="imp" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="imp" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Negative</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="ne" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="ne" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="ne" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Point</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="po" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="po" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="po" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Error</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="er" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="er" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="er" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Caution</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="ca" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="ca" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="ca" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Success</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="su" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="su" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="su" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Information</dt>
+                        <dd className="flexBox">
+                            <Badge set="chip" state="if" size="l">컴포넌트</Badge>
+                            <Badge set="chip" state="if" size="m">컴포넌트</Badge>
+                            <Badge set="chip" state="if" size="s">컴포넌트</Badge>
+                        </dd>
+                    </dl>
+                    
+                    <div className="source">
+                        <em>HTML</em>
+                        <div>
+                        <xmp>
+{`<Badge set="chip" state="" size="l">컴포넌트</Badge>
+<Badge set="chip" state="st" size="l">컴포넌트</Badge>
+<Badge set="chip" state="imp" size="l">컴포넌트</Badge>
+<Badge set="chip" state="ne" size="l">컴포넌트</Badge>
+<Badge set="chip" state="po" size="l">컴포넌트</Badge>
+<Badge set="chip" state="er" size="l">컴포넌트</Badge>
+<Badge set="chip" state="ca" size="l">컴포넌트</Badge>
+<Badge set="chip" state="su" size="l">컴포넌트</Badge>
+<Badge set="chip" state="if" size="l">컴포넌트</Badge>
 `}
                         </xmp>
                         </div>

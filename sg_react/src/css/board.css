@@ -20002,6 +20002,186 @@
 .chip-l i::after {
   rotate: 45deg;
 }
+.chip-l.st {
+  background: #e61e21;
+  color: #ffffff;
+}
+.chip-l.st i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-l.st i::before, .chip-l.st i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-l.st i::before {
+  rotate: -45deg;
+}
+.chip-l.st i::after {
+  rotate: 45deg;
+}
+
+.chip-l {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 3rem;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  padding: 0.6rem 1.2rem;
+}
+.chip-l i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-l i::before, .chip-l i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-l i::before {
+  rotate: -45deg;
+}
+.chip-l i::after {
+  rotate: 45deg;
+}
+.chip-l.imp {
+  background: #7226ff;
+  color: #ffffff;
+}
+.chip-l.imp i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-l.imp i::before, .chip-l.imp i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-l.imp i::before {
+  rotate: -45deg;
+}
+.chip-l.imp i::after {
+  rotate: 45deg;
+}
+
+.chip-l {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 3rem;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  padding: 0.6rem 1.2rem;
+}
+.chip-l i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-l i::before, .chip-l i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-l i::before {
+  rotate: -45deg;
+}
+.chip-l i::after {
+  rotate: 45deg;
+}
+.chip-l.ne {
+  background: #3b3844;
+  color: #ffffff;
+}
+.chip-l.ne i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-l.ne i::before, .chip-l.ne i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-l.ne i::before {
+  rotate: -45deg;
+}
+.chip-l.ne i::after {
+  rotate: 45deg;
+}
+
+.chip-l {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 3rem;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  padding: 0.6rem 1.2rem;
+}
+.chip-l i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-l i::before, .chip-l i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-l i::before {
+  rotate: -45deg;
+}
+.chip-l i::after {
+  rotate: 45deg;
+}
 .chip-l.po {
   background: #eee5ff;
   color: #7226ff;
@@ -20062,18 +20242,18 @@
 .chip-l i::after {
   rotate: 45deg;
 }
-.chip-l.de {
+.chip-l.er {
   background: #fde0e0;
   color: #e61e21;
 }
-.chip-l.de i {
+.chip-l.er i {
   display: block;
   height: 100%;
   aspect-ratio: 1/1;
   position: relative;
   border-radius: 100rem;
 }
-.chip-l.de i::before, .chip-l.de i::after {
+.chip-l.er i::before, .chip-l.er i::after {
   content: "";
   width: calc(100% - 0.6rem);
   height: 0.1rem;
@@ -20084,10 +20264,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.chip-l.de i::before {
+.chip-l.er i::before {
   rotate: -45deg;
 }
-.chip-l.de i::after {
+.chip-l.er i::after {
   rotate: 45deg;
 }
 
@@ -20182,18 +20362,18 @@
 .chip-l i::after {
   rotate: 45deg;
 }
-.chip-l.wa {
+.chip-l.ca {
   background: #fdf5e2;
   color: #eaa810;
 }
-.chip-l.wa i {
+.chip-l.ca i {
   display: block;
   height: 100%;
   aspect-ratio: 1/1;
   position: relative;
   border-radius: 100rem;
 }
-.chip-l.wa i::before, .chip-l.wa i::after {
+.chip-l.ca i::before, .chip-l.ca i::after {
   content: "";
   width: calc(100% - 0.6rem);
   height: 0.1rem;
@@ -20204,10 +20384,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.chip-l.wa i::before {
+.chip-l.ca i::before {
   rotate: -45deg;
 }
-.chip-l.wa i::after {
+.chip-l.ca i::after {
   rotate: 45deg;
 }
 
@@ -20302,6 +20482,186 @@
 .chip-m i::after {
   rotate: 45deg;
 }
+.chip-m.st {
+  background: #e61e21;
+  color: #ffffff;
+}
+.chip-m.st i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-m.st i::before, .chip-m.st i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-m.st i::before {
+  rotate: -45deg;
+}
+.chip-m.st i::after {
+  rotate: 45deg;
+}
+
+.chip-m {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 2.4rem;
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  padding: 0.4rem 0.8rem;
+}
+.chip-m i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-m i::before, .chip-m i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-m i::before {
+  rotate: -45deg;
+}
+.chip-m i::after {
+  rotate: 45deg;
+}
+.chip-m.imp {
+  background: #7226ff;
+  color: #ffffff;
+}
+.chip-m.imp i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-m.imp i::before, .chip-m.imp i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-m.imp i::before {
+  rotate: -45deg;
+}
+.chip-m.imp i::after {
+  rotate: 45deg;
+}
+
+.chip-m {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 2.4rem;
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  padding: 0.4rem 0.8rem;
+}
+.chip-m i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-m i::before, .chip-m i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-m i::before {
+  rotate: -45deg;
+}
+.chip-m i::after {
+  rotate: 45deg;
+}
+.chip-m.ne {
+  background: #3b3844;
+  color: #ffffff;
+}
+.chip-m.ne i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-m.ne i::before, .chip-m.ne i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-m.ne i::before {
+  rotate: -45deg;
+}
+.chip-m.ne i::after {
+  rotate: 45deg;
+}
+
+.chip-m {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 2.4rem;
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  padding: 0.4rem 0.8rem;
+}
+.chip-m i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-m i::before, .chip-m i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-m i::before {
+  rotate: -45deg;
+}
+.chip-m i::after {
+  rotate: 45deg;
+}
 .chip-m.po {
   background: #eee5ff;
   color: #7226ff;
@@ -20362,18 +20722,18 @@
 .chip-m i::after {
   rotate: 45deg;
 }
-.chip-m.de {
+.chip-m.er {
   background: #fde0e0;
   color: #e61e21;
 }
-.chip-m.de i {
+.chip-m.er i {
   display: block;
   height: 100%;
   aspect-ratio: 1/1;
   position: relative;
   border-radius: 100rem;
 }
-.chip-m.de i::before, .chip-m.de i::after {
+.chip-m.er i::before, .chip-m.er i::after {
   content: "";
   width: calc(100% - 0.6rem);
   height: 0.1rem;
@@ -20384,10 +20744,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.chip-m.de i::before {
+.chip-m.er i::before {
   rotate: -45deg;
 }
-.chip-m.de i::after {
+.chip-m.er i::after {
   rotate: 45deg;
 }
 
@@ -20482,18 +20842,18 @@
 .chip-m i::after {
   rotate: 45deg;
 }
-.chip-m.wa {
+.chip-m.ca {
   background: #fdf5e2;
   color: #eaa810;
 }
-.chip-m.wa i {
+.chip-m.ca i {
   display: block;
   height: 100%;
   aspect-ratio: 1/1;
   position: relative;
   border-radius: 100rem;
 }
-.chip-m.wa i::before, .chip-m.wa i::after {
+.chip-m.ca i::before, .chip-m.ca i::after {
   content: "";
   width: calc(100% - 0.6rem);
   height: 0.1rem;
@@ -20504,10 +20864,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.chip-m.wa i::before {
+.chip-m.ca i::before {
   rotate: -45deg;
 }
-.chip-m.wa i::after {
+.chip-m.ca i::after {
   rotate: 45deg;
 }
 
@@ -20602,6 +20962,186 @@
 .chip-s i::after {
   rotate: 45deg;
 }
+.chip-s.st {
+  background: #e61e21;
+  color: #ffffff;
+}
+.chip-s.st i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-s.st i::before, .chip-s.st i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-s.st i::before {
+  rotate: -45deg;
+}
+.chip-s.st i::after {
+  rotate: 45deg;
+}
+
+.chip-s {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 2rem;
+  font-size: 1.2rem;
+  padding: 0.2rem 0.6rem;
+}
+.chip-s i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-s i::before, .chip-s i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-s i::before {
+  rotate: -45deg;
+}
+.chip-s i::after {
+  rotate: 45deg;
+}
+.chip-s.imp {
+  background: #7226ff;
+  color: #ffffff;
+}
+.chip-s.imp i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-s.imp i::before, .chip-s.imp i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-s.imp i::before {
+  rotate: -45deg;
+}
+.chip-s.imp i::after {
+  rotate: 45deg;
+}
+
+.chip-s {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 2rem;
+  font-size: 1.2rem;
+  padding: 0.2rem 0.6rem;
+}
+.chip-s i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-s i::before, .chip-s i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-s i::before {
+  rotate: -45deg;
+}
+.chip-s i::after {
+  rotate: 45deg;
+}
+.chip-s.ne {
+  background: #3b3844;
+  color: #ffffff;
+}
+.chip-s.ne i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-s.ne i::before, .chip-s.ne i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #ffffff;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-s.ne i::before {
+  rotate: -45deg;
+}
+.chip-s.ne i::after {
+  rotate: 45deg;
+}
+
+.chip-s {
+  background: #f3f3f8;
+  color: #aea9ba;
+  height: 2rem;
+  font-size: 1.2rem;
+  padding: 0.2rem 0.6rem;
+}
+.chip-s i {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 100rem;
+}
+.chip-s i::before, .chip-s i::after {
+  content: "";
+  width: calc(100% - 0.6rem);
+  height: 0.1rem;
+  background: #aea9ba;
+  position: absolute;
+  transform-origin: 0 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.chip-s i::before {
+  rotate: -45deg;
+}
+.chip-s i::after {
+  rotate: 45deg;
+}
 .chip-s.po {
   background: #eee5ff;
   color: #7226ff;
@@ -20662,18 +21202,18 @@
 .chip-s i::after {
   rotate: 45deg;
 }
-.chip-s.de {
+.chip-s.er {
   background: #fde0e0;
   color: #e61e21;
 }
-.chip-s.de i {
+.chip-s.er i {
   display: block;
   height: 100%;
   aspect-ratio: 1/1;
   position: relative;
   border-radius: 100rem;
 }
-.chip-s.de i::before, .chip-s.de i::after {
+.chip-s.er i::before, .chip-s.er i::after {
   content: "";
   width: calc(100% - 0.6rem);
   height: 0.1rem;
@@ -20684,10 +21224,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.chip-s.de i::before {
+.chip-s.er i::before {
   rotate: -45deg;
 }
-.chip-s.de i::after {
+.chip-s.er i::after {
   rotate: 45deg;
 }
 
@@ -20782,18 +21322,18 @@
 .chip-s i::after {
   rotate: 45deg;
 }
-.chip-s.wa {
+.chip-s.ca {
   background: #fdf5e2;
   color: #eaa810;
 }
-.chip-s.wa i {
+.chip-s.ca i {
   display: block;
   height: 100%;
   aspect-ratio: 1/1;
   position: relative;
   border-radius: 100rem;
 }
-.chip-s.wa i::before, .chip-s.wa i::after {
+.chip-s.ca i::before, .chip-s.ca i::after {
   content: "";
   width: calc(100% - 0.6rem);
   height: 0.1rem;
@@ -20804,10 +21344,10 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.chip-s.wa i::before {
+.chip-s.ca i::before {
   rotate: -45deg;
 }
-.chip-s.wa i::after {
+.chip-s.ca i::after {
   rotate: 45deg;
 }
 
