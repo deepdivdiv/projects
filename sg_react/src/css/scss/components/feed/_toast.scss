@@ -13,6 +13,7 @@
     display: flex; gap: 1rem; align-items: center;
     width: calc(100% - 3rem);
     max-width: 52rem;
+    z-index: 999;
     &:has(dl) {
         align-items: flex-start;
     }
@@ -22,9 +23,10 @@
         width: 2rem;
         aspect-ratio: 1/1;
         flex-shrink: 0;
-        &:not([class]) { 
-            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
-        }
+        background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        // &:not([class]) { 
+        //     background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        // }
         &.error   { background: set.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
         &.comple  { background: set.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
         &.warning { background: set.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }

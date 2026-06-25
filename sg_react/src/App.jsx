@@ -3,6 +3,7 @@ import './css/reset.css'
 import './css/common.css'
 import './css/styleGuide.css'
 import Layout from '@/component/layout.jsx'
+import { Toaster } from '@/component/feedback'
 import Index from '@/pages/index.jsx'
 import SgLayout from '@/pages/styleGuide/layout.jsx'
 import SgIndex from '@/pages/styleGuide/index.jsx'
@@ -19,18 +20,21 @@ const sgRoutes = Object.entries(modules).map(([filePath, mod]) => {
 
 function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route index element={<Index />} />
-        <Route path="/guides" element={<SgLayout />}>
-          <Route index element={<SgIndex />} />
-          {/* 🔹 자동 생성된 라우트들 */}
-          {sgRoutes.map(({ path, Component }) => (
-            <Route key={path} path={path} element={<Component />} />
-          ))}
+    <>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Index />} />
+          <Route path="/guides" element={<SgLayout />}>
+            <Route index element={<SgIndex />} />
+            {/* 🔹 자동 생성된 라우트들 */}
+            {sgRoutes.map(({ path, Component }) => (
+              <Route key={path} path={path} element={<Component />} />
+            ))}
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+      <Toaster />
+    </>
   )
 }
 

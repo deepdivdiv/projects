@@ -32,9 +32,27 @@ function Button({
 
     return (
         <button type={type} className={classes} {...rest}>
-            {iconL && <i className={iconL} />}
+            {iconL &&
+                (iconL === "loading" ? (
+                    <i className={`${iconL} ${size}`}>
+                        <span />
+                        <span />
+                        <span />
+                    </i>
+                ) : (
+                    <i className={iconL} />
+                ))}
             {children}
-            {iconR && <i className={iconR} />}
+            {iconR &&
+                (iconR === "loading " ? (
+                    <i className={`${iconR} ${size}`}>
+                        <span />
+                        <span />
+                        <span />
+                    </i>
+                ) : (
+                    <i className={iconR} />
+                ))}
         </button>
     );
 }
