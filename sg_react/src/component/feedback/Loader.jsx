@@ -23,6 +23,16 @@ function Loader({
         return (
             <i className={classes} {...rest}></i>
         )
+    } 
+    else if(set == "loading") {
+        return (
+            <i className={classes} {...rest}><span></span><span></span><span></span></i>
+        )
+    }
+    else if(set == "ico-loading") {
+        return (
+            <div className={classes} {...rest}><span></span><span></span><span></span></div>
+        )
     }
 
 }

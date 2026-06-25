@@ -23407,6 +23407,7 @@ i[class^=ico-] {
   align-items: center;
   width: calc(100% - 3rem);
   max-width: 52rem;
+  z-index: 999;
 }
 .tstArea:has(dl) {
   align-items: flex-start;
@@ -23419,8 +23420,6 @@ i[class^=ico-] {
   width: 2rem;
   aspect-ratio: 1/1;
   flex-shrink: 0;
-}
-.tstArea i:not([class]) {
   background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cg clip-path='url(%23clip0_55_9679)'%3E%3Cpath d='M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM8 12C7.52 12 7.2 11.68 7.2 11.2C7.2 10.72 7.52 10.4 8 10.4C8.48 10.4 8.8 10.72 8.8 11.2C8.8 11.68 8.48 12 8 12ZM8.8 8C8.8 8.48 8.48 8.8 8 8.8C7.52 8.8 7.2 8.48 7.2 8V4.8C7.2 4.32 7.52 4 8 4C8.48 4 8.8 4.32 8.8 4.8V8Z' fill='%233b3844'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_55_9679'%3E%3Crect width='16' height='16' fill='%233b3844'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E") no-repeat center center/contain;
 }
 .tstArea i.error {
