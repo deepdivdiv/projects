@@ -1,0 +1,195 @@
+{
+  "list": [
+    {
+      "id": 1,
+      "group": "개발",
+      "head": "첫번째 제목",
+      "body": "내용입니다",
+      "writeData": "2026.05.12",
+      "view": "230",
+      "like": "99",
+      "href": "",
+      "thumb": ""
+    },
+    {
+      "id": 2,
+      "group": "디자인",
+      "head": "두번째 제목",
+      "body": "두번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 3,
+      "group": "디자인",
+      "head": "두번째 제목",
+      "body": "두번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 4,
+      "group": "디자인",
+      "head": "두번째 제목",
+      "body": "두번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 5,
+      "group": "디자인",
+      "head": "두번째 제목",
+      "body": "두번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 6,
+      "group": "디자인",
+      "head": "두번째 제목",
+      "body": "두번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    }
+  ],
+  "grid": [
+    {
+      "id": 1,
+      "group": "카드",
+      "head": "첫번째 제목",
+      "body": "내용입니다",
+      "writeData": "2026.03.04",
+      "view": "260",
+      "like": "99",
+      "href": ""
+    },
+    {
+      "id": 2,
+      "group": "디자인",
+      "head": "두번째 제목",
+      "body": "두번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 3,
+      "group": "디자인",
+      "head": "세번째 제목",
+      "body": "세번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 4,
+      "group": "디자인",
+      "head": "네번째 제목",
+      "body": "네번째 내용",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    }
+  ],
+  "visual": [
+    {
+      "id": 1,
+      "group": "카드",
+      "name": "홍길동",
+      "writeData": "2026.03.04",
+      "view": "260",
+      "like": "99",
+      "href": ""
+    },
+    {
+      "id": 2,
+      "group": "디자인",
+      "name": "홍길동",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 3,
+      "group": "디자인",
+      "name": "홍길동",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    },
+    {
+      "id": 4,
+      "group": "디자인",
+      "name": "홍길동",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "href": ""
+    }
+  ],
+  "price": [
+    {
+      "id": 1,
+      "group": "카드",
+      "price": "1,344,333",
+      "salePrice": "1,999,999",
+      "writeData": "2026.03.04",
+      "view": "260",
+      "like": "99",
+      "score": "2.5",
+      "reviewCount": "3432",
+      "href": ""
+    },
+    {
+      "id": 2,
+      "group": "디자인",
+      "price": "1,344,333",
+      "salePrice": "1,999,999",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "score": "2.5",
+      "reviewCount": "3432",
+      "href": ""
+    },
+    {
+      "id": 3,
+      "group": "디자인",
+      "price": "1,344,333",
+      "salePrice": "1,999,999",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "score": "2.5",
+      "reviewCount": "3432",
+      "href": ""
+    },
+    {
+      "id": 4,
+      "group": "디자인",
+      "price": "1,344,333",
+      "salePrice": "1,999,999",
+      "writeData": "2026.03.05",
+      "view": "13",
+      "like": "4",
+      "score": "2.5",
+      "reviewCount": "3432",
+      "href": ""
+    }
+  ]
+}
