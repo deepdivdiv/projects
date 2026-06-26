@@ -4,6 +4,7 @@ import './css/common.css'
 import './css/styleGuide.css'
 import Layout from '@/component/layout.jsx'
 import { Toaster } from '@/component/feedback'
+import { Modal, Dialog } from '@/component/container'
 import Index from '@/pages/index.jsx'
 import SgLayout from '@/pages/styleGuide/layout.jsx'
 import SgIndex from '@/pages/styleGuide/index.jsx'
@@ -34,6 +35,8 @@ function App() {
         </Route>
       </Routes>
       <Toaster />
+      <Modal />
+      <Dialog />
     </>
   )
 }
