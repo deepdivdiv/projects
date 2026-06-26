@@ -1,14 +1,15 @@
 import React, {useRef, useState, useEffect} from "react";
 import { Button } from "@/component/form";
 import { Card } from "@/component/container";
+import ThumbIMG from "@/assets/thumb.png";
 function SgDisplay() {
     const sections = [
         { id: "card", label: "Card" },
     ];
 
-    // API 연동 전 더미 데이터 (나중에 fetch 결과로 교체)
-    // list / grid 형
-    const cards = [
+    
+    // 리스트 형
+    const cardList = [
       {
         id: 1,
         group: "카드",
@@ -17,7 +18,8 @@ function SgDisplay() {
         writeData: "2026.03.04",
         view: "260",
         like: "99",
-        href: "#",
+        href: "",
+        thumb: ThumbIMG,
       },
       {
         id: 2,
@@ -27,48 +29,161 @@ function SgDisplay() {
         writeData: "2026.03.05",
         view: "13",
         like: "4",
-        href: "#",
+        href: "",
+        thumb: ThumbIMG,
+      },
+    ];
+    
+    // 리스트 형
+    const cardGrid = [
+      {
+        id: 1,
+        group: "카드",
+        head: "첫번째 제목",
+        body: "내용입니다",
+        writeData: "2026.03.04",
+        view: "260",
+        like: "99",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 2,
+        group: "디자인",
+        head: "두번째 제목",
+        body: "두번째 내용",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        href: "",
+        thumb: ThumbIMG,
       },
       {
         id: 3,
-        group: "개발",
+        group: "디자인",
         head: "세번째 제목",
         body: "세번째 내용",
-        writeData: "2026.03.06",
-        view: "512",
-        like: "37",
-        href: "#",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        href: "",
+        thumb: ThumbIMG,
       },
       {
         id: 4,
-        group: "개발",
+        group: "디자인",
         head: "네번째 제목",
         body: "네번째 내용",
-        writeData: "2026.03.06",
-        view: "512",
-        like: "37",
-        href: "#",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        href: "",
+        thumb: ThumbIMG,
       },
     ];
-    // // visual 형
-    // const visualCards = [
-    //     { id: 1, group: "디자인", name: "홍길동", view: "235", like: "92", thumb: "", href: "#" },
-    //     { id: 2, group: "개발", name: "김철수", view: "120", like: "15", thumb: "", href: "#" },
-    // ];
-    // // prize / prizeMini 형
-    // const prizeCards = [
-    //     { id: 1, label: "30% 할인", title: "스마트 워크 데스크", price: "1,890,900", salePrice: "1,800,800", score: 1.5, reviewCount: 366, thumb: "", href: "#" },
-    //     { id: 2, label: "20% 할인", title: "인체공학 의자", price: "450,000", salePrice: "360,000", score: 4.5, reviewCount: 88, thumb: "", href: "#" },
-    // ];
-    // // review 형
-    // const reviewCards = [
-    //     { id: 1, name: "홍길동", text: "리뷰영역제품 리뷰영역제품 리뷰영역제품 리뷰영역제품 리뷰영역제품", score: 1.5, reviewCount: 366, avatar: "" },
-    //     { id: 2, name: "김철수", text: "정말 만족스러운 제품입니다. 추천합니다.", score: 5, reviewCount: 12, avatar: "" },
-    // ];
-    // // profile 형
-    // const profileCards = [
-    //     { id: 1, name: "홍길동", role: "시니어 개발자", desc: "10년 경력의 웹 개발자로, React와 TypeScript에 열정을 가지고 있습니다.", email: "kd.hong@example.com", phone: "010-1234-5678", location: "대한민국, 서울", avatar: "" },
-    // ];
+    
+    
+    // 비주얼
+    const cardVisual = [
+      {
+        id: 1,
+        group: "카드",
+        name: "홍길동",
+        writeData: "2026.03.04",
+        view: "260",
+        like: "99",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 2,
+        group: "디자인",
+        name: "홍길동",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 3,
+        group: "디자인",
+        name: "홍길동",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 4,
+        group: "디자인",
+        name: "홍길동",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        href: "",
+        thumb: ThumbIMG,
+      },
+    ];
+
+    // Price
+    const cardPrice = [
+      {
+        id: 1,
+        group: "카드",
+        price: "1,344,333",
+        salePrice: "1,999,999",
+        writeData: "2026.03.04",
+        view: "260",
+        like: "99",
+        score: "2.5",
+        reviewCount: "3432",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 2,
+        group: "디자인",
+        price: "1,344,333",
+        salePrice: "1,999,999",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        score: "2.5",
+        reviewCount: "3432",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 3,
+        group: "디자인",
+        price: "1,344,333",
+        salePrice: "1,999,999",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        score: "2.5",
+        reviewCount: "3432",
+        href: "",
+        thumb: ThumbIMG,
+      },
+      {
+        id: 4,
+        group: "디자인",
+        price: "1,344,333",
+        salePrice: "1,999,999",
+        writeData: "2026.03.05",
+        view: "13",
+        like: "4",
+        score: "2.5",
+        reviewCount: "3432",
+        href: "",
+        thumb: ThumbIMG,
+      },
+    ];
+    
+    
 
     const secRefs = useRef({});
     const [activeSec, setActiveSec] = useState(sections[0].id);
@@ -122,7 +237,25 @@ function SgDisplay() {
                     <dl>
                         <dt>List</dt>
                         <dd>
-                            <Card set="list" items={cards} />
+                            <Card set="list" items={cardList} />
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Grid</dt>
+                        <dd>
+                            <Card set="grid" items={cardGrid} />
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Visual</dt>
+                        <dd>
+                            <Card set="visual" items={cardVisual} />
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Prize</dt>
+                        <dd>
+                            <Card set="prize" items={cardPrice} />
                         </dd>
                     </dl>
                     <div className="source">
