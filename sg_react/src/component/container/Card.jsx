@@ -13,6 +13,8 @@
  *  review    : avatar, name, text, score, reviewCount
  *  profile   : avatar, name, role, desc, email, phone, location
 **/
+import { Link } from "react-router-dom";
+import { Button } from "../form";
 
 
 // 별점 (prize / prizeMini / review 공용)
@@ -25,15 +27,15 @@ function Rank({ score = 0, reviewCount = 0 }) {
 }
 
 // list 형
-function CardItemList({ href = "#", group = "", head = "", body = "", writeData = "", view = 0, like = 0 }) {
+function CardItemList({ href = "#", group = "", head = "", body = "", writeData = "", view = 0, like = 0, thumb }) {
     return (
         <div className="card-item">
-            <div className="thumb"><a href={href}></a></div>
+            <div className="thumb"><Link to={href}><img src={thumb} alt="" /></Link></div>
             <div className="info">
                 <em>{group}</em>
                 <dl>
-                    <dt><a href={href}>{head}</a></dt>
-                    <dd><a href={href}>{body}</a></dd>
+                    <dt><Link to={href}>{head}</Link></dt>
+                    <dd><Link to={href}>{body}</Link></dd>
                 </dl>
                 <div className="data">
                     <p className="data--write">{writeData}</p>
@@ -48,15 +50,15 @@ function CardItemList({ href = "#", group = "", head = "", body = "", writeData 
 }
 
 // grid 형 (list 와 동일, em 라벨 스타일만 다름)
-function CardItemGrid({ href = "#", group = "", head = "", body = "", writeData = "", view = 0, like = 0 }) {
+function CardItemGrid({ href = "#", group = "", head = "", body = "", writeData = "", view = 0, like = 0, thumb}) {
     return (
         <div className="card-item">
-            <div className="thumb"><a href={href}></a></div>
+            <div className="thumb"><Link to={href}><img src={thumb} alt="" /></Link></div>
             <div className="info">
                 <em className="lb-l imp">{group}</em>
                 <dl>
-                    <dt><a href={href}>{head}</a></dt>
-                    <dd><a href={href}>{body}</a></dd>
+                    <dt><Link to={href}>{head}</Link></dt>
+                    <dd><Link to={href}>{body}</Link></dd>
                 </dl>
                 <div className="data">
                     <p className="data--write">{writeData}</p>
@@ -74,7 +76,7 @@ function CardItemGrid({ href = "#", group = "", head = "", body = "", writeData 
 function CardItemVisual({ href = "#", thumb = "", group = "", name = "", view = 0, like = 0 }) {
     return (
         <div className="card-item">
-            <div className="thumb"><a href={href}><img src={thumb} alt="" /></a></div>
+            <div className="thumb"><Link to={href}><img src={thumb} alt="" /></Link></div>
             <div className="info">
                 <em className="lb-l imp">{group}</em>
                 <div className="data">
@@ -91,17 +93,17 @@ function CardItemVisual({ href = "#", thumb = "", group = "", name = "", view = 
 }
 
 // prize 형 (상품)
-function CardItemPrize({ id, href = "#", thumb = "", label = "", title = "", price = "", salePrice = "", score = 0, reviewCount = 0, liked = false, onLike, onCart }) {
+function CardItemPrize({ id, href = "#", thumb = "", group = "", title = "", price = "", salePrice = "", score = 0, reviewCount = 0, liked = false, onLike, onCart }) {
     return (
         <div className="card-item">
-            <div className="thumb"><a href={href}><img src={thumb} alt="" /></a></div>
+            <div className="thumb"><Link to={href}><img src={thumb} alt="" /></Link></div>
             <div className="info">
-                <em className="lb-l st">{label}</em>
+                <em className="lb-l st">{group}</em>
                 <dl>
-                    <dt>{title}</dt>
+                    <dt><Link to={href}>{title}</Link></dt>
                     <dd>
-                        <strong>{price}</strong>
-                        <span className="sale">{salePrice}</span>
+                        <strong><Link to={href}>{price}</Link></strong>
+                        <span className="sale"><Link to={href}>{salePrice}</Link></span>
                     </dd>
                 </dl>
                 <menu className="util">
@@ -115,7 +117,7 @@ function CardItemPrize({ id, href = "#", thumb = "", label = "", title = "", pri
                 </menu>
                 <Rank score={score} reviewCount={reviewCount} />
                 <div className="btArea">
-                    <button type="button" className="bt-a-m po" onClick={() => onCart?.(id)}>상품담기 <i className="arr-right"></i></button>
+                    <Button type="button" set="po" size="m" rank="a" iconR="arr-right" onClick={() => onCart?.(id)}>상품 담기</Button>
                 </div>
             </div>
         </div>
