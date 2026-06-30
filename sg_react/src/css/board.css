@@ -24107,6 +24107,8 @@ i[class^=ico-] {
 }
 .card-prize .card-item .info > dl dd strong, .card-prize .card-item .info > dl dd span {
   line-height: 1;
+  display: flex;
+  align-items: center;
 }
 .card-prize .card-item .info > dl dd strong::before, .card-prize .card-item .info > dl dd span::before {
   content: "￦";

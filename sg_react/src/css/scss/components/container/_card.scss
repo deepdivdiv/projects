@@ -170,7 +170,7 @@
                     dt { font-size: set.$ft-tt-s; font-weight: 600; font-family: set.$ft-point; color: set.$gray-100; @include set.lineCut($line:1); line-height: 1.4;}
                     dd { 
                         display: flex; align-items: center; gap: 1rem;
-                        strong, span { line-height: 1; &::before { content: "￦"; font-weight: 200; } }
+                        strong, span { line-height: 1; display: flex; align-items: center; &::before { content: "￦"; font-weight: 200; } }
                         strong {
                             color: set.$gray-100;
                             font-size: set.$ft-tt-m; font-weight: 700; color: set.$gray-100; 
