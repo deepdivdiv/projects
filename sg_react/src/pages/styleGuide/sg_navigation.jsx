@@ -1,18 +1,11 @@
 import React, {useRef, useState, useEffect} from "react";
-import { Button } from "@/component/form";
 import { Tab } from "@/component/navigation";
-// import ThumbIMG from "@/assets/thumb.png";
 
 function SgNavigation() {
     const sections = [
         { id: "tab", label: "Tab" },
         { id: "bar", label: "Bar" },
     ];
-
-    
-    
-
-
     const secRefs = useRef({});
     const [activeSec, setActiveSec] = useState(sections[0].id);
 

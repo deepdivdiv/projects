@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 function StLayout() {
   return (
     <>
-      <section className='studyWrap'>
+      <section className='styleGuide'>
           <Outlet></Outlet>
       </section>
     </>

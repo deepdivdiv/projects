@@ -13,7 +13,7 @@ import StIndex from '@/pages/study/index.jsx'
 
 // 🔹 sg_*.jsx 파일을 전부 자동으로 불러옴
 const sgModules = import.meta.glob('@/pages/styleGuide/sg_*.jsx', { eager: true })
-const stModules = import.meta.glob('@/pages/styleGuide/st_*.jsx', { eager: true })
+const stModules = import.meta.glob('@/pages/study/st_*.jsx', { eager: true })
 
 // 🔹 { path, Component } 배열로 가공
 const sgRoutes = Object.entries(sgModules).map(([filePath, mod]) => {
