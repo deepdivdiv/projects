@@ -9,13 +9,20 @@ function StGround() {
     {title: '제목', content: '내용'}
   ])
 
+  let [likes, setLikes] = useState([0, 0, 0, 0])
+
   return (
     <>
       {post.map((item, index) => (
         <div key={index}>
-          <p>{item.title}{index+1}</p>
-          <span>{item.content}{index+1}</span>
+          <p>{item.title}</p>
+          <span>{item.content}</span>
           <em>넘버{index + 1}</em>
+          <button type="button" onClick={() => {
+            let copy = [...likes]
+            copy[index] += 1
+            setLikes(copy)
+          }}>좋아요 {likes[index]}</button>
         </div>
       ))}
     </>

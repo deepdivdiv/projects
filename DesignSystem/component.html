@@ -15,26 +15,107 @@
 <body>
     <style>
         body { padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
-
     </style>
 </div>
 
-<div class="paginArea">
-    <button type="button" class="pg-first"></button>
-    <button type="button" class="pg-prev"></button>
-    <a href="#" class="pg-num">1</a>
-    <a href="#" class="pg-num">2</a>
-    <a href="#" class="pg-num">3</a>
-    <a href="#" class="pg-num">4</a>
-    <a href="#" class="pg-num">5</a>
-    <a href="#" class="pg-num">6</a>
-    <a href="#" class="pg-num">7</a>
-    <a href="#" class="pg-num">8</a>
-    <a href="#" class="pg-num">9</a>
-    <a href="#" class="pg-num">10</a>
-    <button type="button" class="pg-next"></button>
-    <button type="button" class="pg-last"></button>
-</div>
+<script>
+function 학생(이름, 점수){
+  this.이름 = 이름
+  this.점수 = 점수
+  this.합격여부 = function(){
+    return this.점수 >= 60 ? '합격' : '불합격'
+  }
+}
+// function profileInfo(name, ago, like, sex){
+//     this.name = name
+//     this.ago = ago
+//     this.like = like
+//     this.sex = sex
+// }
+
+let 학생1 = new 학생('Kim', 80)
+let 학생2 = new 학생('Lee', 45)
+let 학생3 = new 학생('Park', 90)
+
+let man1 = new profileInfo('시몬', 20, '혼자가기싫어하기', 'male')
+let woman1 = new profileInfo('김불삶', 20, '제롬', 'female')
+
+function profileInfo(name, age, like, sex) {
+  this.name = name
+  this.age = age
+  this.like = like
+  this.sex = sex
+  this.보여주기 = function() {
+    alert(`이름: ${this.name}\n나이: ${this.age}\n취미: ${this.like}\n성별: ${this.sex}
+
+위 정보가 맞습니까?
+    `)
+  }
+}
+
+function 내정보보여줄랭() {
+    let 내정보 = new profileInfo(
+        document.getElementById('forName').value,
+        document.getElementById('forAgo').value,
+        document.getElementById('forLike').value,
+        document.getElementById('forSex').value,
+    )
+    내정보.보여주기()
+}
+// function 여기(name) {
+//   this.name = name
+//   this.봐라 = function() {
+//     console.log(`안녕 나는 ${this.name}`)
+//   }
+// }
+
+// let 사람 = new 여기("제롬");
+
+let 사람 = {
+  name: '제롬',
+  멋지다 : function() {
+    alert(`멋지다 ${this.name}아!`)
+  },
+  왜그러니 : function() {
+    alert(`왜그러니 ${this.name}아..`)
+  }
+}
+
+
+function 기능을넣어볼게(이얍) {
+  this.name = 이얍
+  this.눌러봐 = function() {
+    alert(`멋지다 ${this.name}아 ㅋㅋ`)
+  }
+}
+
+let 이놈봐라 = new 기능을넣어볼게("제롬");
+
+</script>
+<form action="">
+    <input type="text" id="forName" placeholder="이름이 뭐야?">
+    <input type="text" id="forAgo" placeholder="나이는 어떻게 돼">
+    <input type="text" id="forLike" placeholder="좋아하는 취미를 입력하세요">
+    <input type="text" id="forSex" placeholder="마지막으로. 성별은?">
+    <button type="button" onclick="내정보보여줄랭()">정보고기</button>
+    
+</form>
+<!-- <button id="buttonFor" type="button">33</button> -->
+ <button type="button" onclick="사람.멋지다()">멋지다</button>
+ <button type="button" onclick="사람.왜그러니()">왜그러니</button>
+ <button type="button" onclick="이놈봐라.눌러봐()">왜그러니</button>
+<script>
+
+document.getElementById('buttonFor').addEventListener('click', function(e){
+  var arr = [1,2,3];
+  arr.forEach(function(item){
+    console.log(item)
+  });
+});
+
+
+
+</script>
 
 </body>
 </html>
