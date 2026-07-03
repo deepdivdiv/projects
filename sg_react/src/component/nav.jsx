@@ -11,7 +11,7 @@ function Nav() {
                 <ul>
                     <li><NavLink to="/">HOME</NavLink></li>
                     <li><NavLink to="/guides">STYLE GUIDE</NavLink></li>
-                    <li><NavLink to="/study">STUDY</NavLink></li>
+                    {/* <li><NavLink to="/study">STUDY</NavLink></li> */}
                 </ul>
             </div>
         </header>

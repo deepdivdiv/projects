@@ -12,7 +12,7 @@ function StGround() {
   let [likes, setLikes] = useState([0, 0, 0, 0])
 
   return (
-    <>
+    <> 
       {post.map((item, index) => (
         <div key={index}>
           <p>{item.title}</p>
