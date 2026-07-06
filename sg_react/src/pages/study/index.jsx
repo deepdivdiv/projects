@@ -13,6 +13,7 @@ function StIndex() {
           <p><NavLink to="ground" element={<StGround />}> -&gt; 정리 </NavLink></p>
         </div>
       </div>
+      
     </>
   )
 }

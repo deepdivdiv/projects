@@ -189,9 +189,9 @@ function CardItemProfile({ img = "", alt="", name = "", role = "", desc = "", em
             </div>
             <div className="data">
                 <ul>
-                    <li><i className="pf-email"></i><span>{email}</span></li>
-                    <li><i className="pf-call"></i><span>{phone}</span></li>
-                    <li><i className="pf-here"></i><span>{location}</span></li>
+                    { email && <li><i className="pf-email"></i><span>{email}</span></li> }
+                    { phone && <li><i className="pf-call"></i><span>{phone}</span></li> }
+                    { location && <li><i className="pf-here"></i><span>{location}</span></li> }
                 </ul>
             </div>
         </div>

@@ -12,7 +12,7 @@ function SgDisplay() {
     ];
 
     
-    const [cardData, setCardData] = useState({ list: [], grid: [], visual: [], price: [] });
+    const [cardData, setCardData] = useState({ list: [], grid: [], visual: [], price: [], profile: [] });
 
     useEffect(() => {
         fetch(`${import.meta.env.BASE_URL}cardData.json`)   // 1. 서버에 데이터 요청 (base 경로 자동 반영)
@@ -26,6 +26,7 @@ function SgDisplay() {
     const cardGrid = cardData.grid.map((item) => ({ ...item }));
     const cardVisual = cardData.visual.map((item) => ({ ...item }));
     const cardPrice = cardData.price.map((item) => ({ ...item }));
+    const cardProfile = cardData.profile.map((item) => ({ ...item }));
 
 
     const secRefs = useRef({});
@@ -99,6 +100,12 @@ function SgDisplay() {
                         <dt>Prize</dt>
                         <dd>
                             <Card set="prize" items={cardPrice} />
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Profile</dt>
+                        <dd>
+                            <Card set="profile" items={cardProfile} />
                         </dd>
                     </dl>
                     <div className="source">
