@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @use '../../utils' as set;
-@use '../form/forms' as form;
+@use '@/component/form/forms' as form;
 @use "sass:map";
 
 .tb-form, .tb-grid, .tb-line, .tb-min, .tb-data, .tb-log {

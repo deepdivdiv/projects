@@ -191,5 +191,13 @@
       "reviewCount": "3432",
       "href": ""
     }
+  ],
+  "profile": [
+    {
+      "name" : "홍준표",
+      "role" : "으음",
+      "email": "email@naver.com",
+      "location" : "어쩌구저쩌구"
+    }
   ]
 }

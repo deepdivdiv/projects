@@ -14,6 +14,8 @@
  */
 
 
+import s from "./Range.module.scss";
+
 function Range({
     size = "m",
     set,
@@ -22,7 +24,8 @@ function Range({
     onInput,
     ...rest
 }) {
-    const classes = [`range-${size}`, set]
+    // range-*(정체성)만 모듈 스코프. set(imp/er/ca/su)은 공용 전역 어휘라 plain 유지(:global)
+    const classes = [s[`range-${size}`], set]
         .filter(Boolean)
         .join(" ");
 

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@use '../../utils' as set;
+@use '../../css/scss/utils' as set;
 @use "sass:map";
 $rangeSize:(
     xs: (d-w: 1.0rem, h: 0.2rem ),
@@ -107,7 +107,7 @@ $rangeSize:(
             }
 
         }
-        &.imp {
+        &:global(.imp) {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(
@@ -121,7 +121,7 @@ $rangeSize:(
                 }
             }
         }
-        &.er {
+        &:global(.er) {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(
@@ -135,7 +135,7 @@ $rangeSize:(
                 }
             }
         }
-        &.ca {
+        &:global(.ca) {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(
@@ -149,7 +149,7 @@ $rangeSize:(
                 }
             }
         }
-        &.su {
+        &:global(.su) {
             input[type="range"] {
                 &::-webkit-slider-runnable-track {
                     background: linear-gradient(

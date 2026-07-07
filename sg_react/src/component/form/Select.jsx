@@ -24,6 +24,7 @@
  * ref 도 실제 <select> 요소로 forward 됩니다.
  */
 import { forwardRef } from "react";
+import "./forms.scss"; // 공용 폼 스타일(전역). [class^=] 선택자 유지 위해 co-location만 적용
 
 const Select = forwardRef(function Select({
     children,

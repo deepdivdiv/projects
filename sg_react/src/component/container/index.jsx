@@ -1,3 +1,4 @@
+import "./container.scss"; // 그룹 공용 스타일(전역, co-location)
 /* eslint-disable react-refresh/only-export-components */
 export { default as Card } from "./Card.jsx";
 export { default as Modal, sstModal, sstModalClose } from "./Modal.jsx";

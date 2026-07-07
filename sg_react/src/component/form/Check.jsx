@@ -14,6 +14,8 @@
  */
 
 
+import s from "./Check.module.scss";
+
 function Check({
     size = "m",
     set = "",
@@ -25,14 +27,15 @@ function Check({
     children,
     ...rest
 }) {
-    const classes = [`sel-${size}`, state, className]
+    // sel-*(정체성)만 모듈 스코프. state/set(imp/su/er)은 공용 전역 어휘라 plain 유지(:global)
+    const classes = [s[`sel-${size}`], state, className]
         .filter(Boolean)
         .join(" ");
 
     return (
         <span className={classes}>
             <input type={type} name={name} id={id} {...rest} />
-            <label for={id} className={set}><i></i>{children}</label>
+            <label htmlFor={id} className={set}><i></i>{children}</label>
         </span>
     );
 }

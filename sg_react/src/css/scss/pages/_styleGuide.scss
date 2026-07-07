@@ -187,3 +187,16 @@ footer {
         }
     }
 }
+
+#wrap {
+    &:has(.studyGuide) {
+        min-height: 100vh;
+        width: 100%;
+        display: flex; flex-direction: column;
+        justify-content: space-between;
+    }
+    .studyGuide {
+        flex-grow: 1;
+        padding: 3vw;
+    }
+}

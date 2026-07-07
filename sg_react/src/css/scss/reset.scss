@@ -2,4 +2,4 @@
 @use 'utils';
 @use 'base/reset';
 @use 'base/base';
-@import url(../font/font.css);
+@import url(../../font/font.css); // css/scss/ 기준 상대경로 (Vite 직접 컴파일)

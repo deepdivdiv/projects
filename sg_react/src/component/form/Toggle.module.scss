@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@use '../../utils' as set;
+@use '../../css/scss/utils/vari' as set;   // 변수만 필요 → func(아이콘) 배럴을 피해 Vite 호환 확보
 @use "sass:map";
 
 $toggleSizes: (
@@ -134,4 +134,3 @@ $toggleSizes: (
         }
     }
 }
-

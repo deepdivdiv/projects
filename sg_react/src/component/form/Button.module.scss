@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@use '../../utils' as set;
+@use '../../css/scss/utils' as set;
 @use "sass:map";
 
 // 버튼
@@ -8,30 +8,30 @@ $colors-a: (
   nm: (d: set.$gray-5, h: set.$gray-10, a: set.$gray-20, o: set.$gray-100),
   po: (d: set.$mCol-60, h: set.$mCol-70, a: set.$mCol-80, o: set.$mCol-60),
   ne: (d: set.$gray-100, h: set.$gray-110, a: set.$gray-120, o: set.$gray-100),
-  de: (d: set.$sst-dCol-60, h: set.$sst-dCol-70, a: set.$sst-dCol-80, o: set.$sst-dCol-60),
-  ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-70, a: set.$sst-wCol-80, o: set.$sst-wCol-60),
-  su: (d: set.$sst-sCol-60, h: set.$sst-sCol-70, a: set.$sst-sCol-80, o: set.$sst-sCol-60),
-  if: (d: set.$sst-iCol-60, h: set.$sst-iCol-70, a: set.$sst-iCol-80, o: set.$sst-iCol-60),
+  // de: (d: set.$sst-dCol-60, h: set.$sst-dCol-70, a: set.$sst-dCol-80, o: set.$sst-dCol-60),
+  // ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-70, a: set.$sst-wCol-80, o: set.$sst-wCol-60),
+  // su: (d: set.$sst-sCol-60, h: set.$sst-sCol-70, a: set.$sst-sCol-80, o: set.$sst-sCol-60),
+  // if: (d: set.$sst-iCol-60, h: set.$sst-iCol-70, a: set.$sst-iCol-80, o: set.$sst-iCol-60),
 );
 
 $colors-b: (
   nm: (d: set.$gray-20, h: set.$gray-30, a: set.$gray-40, o: set.$gray-50),
   po: (d: set.$mCol-60, h: set.$mCol-70, a: set.$mCol-80, o: set.$mCol-60),
   ne: (d: set.$gray-100, h: set.$gray-110, a: set.$gray-120, o: set.$gray-100),
-  de: (d: set.$sst-dCol-60, h: set.$sst-dCol-70, a: set.$sst-dCol-80, o: set.$sst-dCol-60),
-  ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-70, a: set.$sst-wCol-80, o: set.$sst-wCol-60),
-  su: (d: set.$sst-sCol-60, h: set.$sst-sCol-70, a: set.$sst-sCol-80, o: set.$sst-sCol-60),
-  if: (d: set.$sst-iCol-60, h: set.$sst-iCol-70, a: set.$sst-iCol-80, o: set.$sst-iCol-60),
+  // de: (d: set.$sst-dCol-60, h: set.$sst-dCol-70, a: set.$sst-dCol-80, o: set.$sst-dCol-60),
+  // ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-70, a: set.$sst-wCol-80, o: set.$sst-wCol-60),
+  // su: (d: set.$sst-sCol-60, h: set.$sst-sCol-70, a: set.$sst-sCol-80, o: set.$sst-sCol-60),
+  // if: (d: set.$sst-iCol-60, h: set.$sst-iCol-70, a: set.$sst-iCol-80, o: set.$sst-iCol-60),
 );
 
 $colors-c: (
   nm: (d: set.$gray-50,     h: set.$gray-5,     a: set.$gray-10,     o: set.$gray-100),
   po: (d: set.$mCol-60,     h: set.$mCol-5,     a: set.$mCol-10,     o: set.$mCol-60),
   ne: (d: set.$gray-100,    h: set.$gray-5,     a: set.$gray-10,     o: set.$gray-100),
-  de: (d: set.$sst-dCol-60, h: set.$sst-dCol-5, a: set.$sst-dCol-10, o: set.$sst-dCol-60),
-  ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-5, a: set.$sst-wCol-10, o: set.$sst-wCol-60),
-  su: (d: set.$sst-sCol-60, h: set.$sst-sCol-5, a: set.$sst-sCol-10, o: set.$sst-sCol-60),
-  if: (d: set.$sst-iCol-60, h: set.$sst-iCol-5, a: set.$sst-iCol-10, o: set.$sst-iCol-60),
+  // de: (d: set.$sst-dCol-60, h: set.$sst-dCol-5, a: set.$sst-dCol-10, o: set.$sst-dCol-60),
+  // ca: (d: set.$sst-wCol-60, h: set.$sst-wCol-5, a: set.$sst-wCol-10, o: set.$sst-wCol-60),
+  // su: (d: set.$sst-sCol-60, h: set.$sst-sCol-5, a: set.$sst-sCol-10, o: set.$sst-sCol-60),
+  // if: (d: set.$sst-iCol-60, h: set.$sst-iCol-5, a: set.$sst-iCol-10, o: set.$sst-iCol-60),
 );
 
 // 통합 테마 맵
@@ -93,27 +93,27 @@ $sizes: (
 
   i {
     display: flex; height: 1lh; aspect-ratio: 1/1; flex-shrink: 0; align-items: center; justify-content: center;
-    &.ico-success { background: set.icon(ico-success, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-info    { background: set.icon(ico-info, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-warning { background: set.icon(ico-warning, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-lang { background: set.icon(ico-lang, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-qr { background: set.icon(ico-qr, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-reply { background: set.icon(ico-reply, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-search { background: set.icon(ico-search, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-share { background: set.icon(ico-share, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-lock-y { background: set.icon(ico-lock-y, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-lock-n { background: set.icon(ico-lock-n, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-not { background: set.icon(ico-not, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.arr-left {   height: .7lh; background: set.icon(arr-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.arr-right {  height: .7lh; background: set.icon(arr-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.che-left { background: set.icon(che-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
-    &.che-right { background: set.icon(che-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
-    &.che-top { background: set.icon(che-top, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.che-bot { background: set.icon(che-bot, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
-    &.ico-spinner {
+    &:global(.ico-success) { background: set.icon(ico-success, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-info) { background: set.icon(ico-info, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-warning) { background: set.icon(ico-warning, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-lang) { background: set.icon(ico-lang, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-qr) { background: set.icon(ico-qr, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-reply) { background: set.icon(ico-reply, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-search) { background: set.icon(ico-search, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-share) { background: set.icon(ico-share, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-lock-y) { background: set.icon(ico-lock-y, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-lock-n) { background: set.icon(ico-lock-n, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-not) { background: set.icon(ico-not, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.arr-left) {   height: .7lh; background: set.icon(arr-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.arr-right) {  height: .7lh; background: set.icon(arr-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.che-left) { background: set.icon(che-left, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
+    &:global(.che-right) { background: set.icon(che-right, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; scale: 0.7; }
+    &:global(.che-top) { background: set.icon(che-top, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.che-bot) { background: set.icon(che-bot, if($t-key == 'nm', set.$gray-70, $default)) no-repeat center / contain; }
+    &:global(.ico-spinner) {
       @include set.spinner(if($t-key == 'nm', set.$gray-70, $default));
     }
-    &.loading { * > { background: if($t-key == 'nm', set.$gray-70, $default) } }
+    &:global(.loading) { * > { background: if($t-key == 'nm', set.$gray-70, $default) } }
   }
   
   // 솔리드 : 중요도 높음
@@ -126,26 +126,26 @@ $sizes: (
     @if $t-key == "nm" {
       color: set.$gray-60;
       i { filter: brightness(0.9); }
-      &.on, &.active {
+      &:global(.on), &:global(.active) {
         color: $on;
         i { filter: brightness(0.6); }
       }
     } @else {
-      &.on, &.active {
+      &:global(.on), &:global(.active) {
         color: $on;
         i { filter: brightness(1); }
       }
-      &:not(.on, .active) {
+      &:not(:global(.on), :global(.active)) {
         i { filter: brightness(100); }
       }
     }
-    &:hover, &.hover { background-color: $hover; border-color: $hover; }
-    &:focus-visible, &:active, &.press { background-color: $active; border-color: $active; }
+    &:hover, &:global(.hover) { background-color: $hover; border-color: $hover; }
+    &:focus-visible, &:active, &:global(.press) { background-color: $active; border-color: $active; }
     &:focus-visible {
       outline: 2px dotted set.$gray-100;
       outline-offset: 4px;
     }
-    &.on, &.active { 
+    &:global(.on), &:global(.active) { 
       color: $on;
       background-color: set.$gray-0; border-color: $on;
     }
@@ -160,31 +160,31 @@ $sizes: (
     @if $t-key == "nm" {
       color: set.$gray-40;
       border-color: $default;
-      &:hover, &.hover {
+      &:hover, &:global(.hover) {
         border-color: $hover;
       }
-      &:active, &.press {
+      &:active, &:global(.press) {
         background-color: set.$gray-5;
         border-color:$active;
         color: set.$gray-60;
         i { filter: brightness(0.9); }
       }
-      &.on, &.active {
+      &:global(.on), &:global(.active) {
         background-color: $on;
         color: set.$gray-0;
         i { filter: brightness(100); }
       }
     } @else {
-    &:hover, &.hover {
+    &:hover, &:global(.hover) {
       border-color: $hover;
     }
-    &:active, &.press {
+    &:active, &:global(.press) {
       background-color: rgba($active, 0.05);
       border-color: $active;
       color: $active;
       i { filter: brightness(0.9); }
     }
-    &.on, &.active {
+    &:global(.on), &:global(.active) {
       background-color: $on;
       color: set.$gray-0;
       i { filter: brightness(100); }
@@ -200,13 +200,13 @@ $sizes: (
     // Outline / Ghost 스타일
     background-color: set.$gray-0;
     color: $default;
-    &:hover, &.hover {
+    &:hover, &:global(.hover) {
       background: $hover;
     }
-    &:active, &.press {
+    &:active, &:global(.press) {
       background: $active;
     }
-    &.on, &.active {
+    &:global(.on), &:global(.active) {
       background: $on;
       color: set.$gray-0;
       i { filter: brightness(100); }
@@ -236,7 +236,7 @@ $sizes: (
       // 타입별 override (nm은 기본값이므로 제외)
       @each $t-key, $color-values in $type-map {
         @if $t-key != nm {
-          &.#{$t-key} {
+          &:global(.#{$t-key}) {
             @include set-bt-variant($theme-key, $t-key, $color-values);
           }
         }

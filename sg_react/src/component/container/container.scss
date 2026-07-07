@@ -1,0 +1,3 @@
+@charset "UTF-8";
+// 컨테이너 그룹 공용 스타일(전역, co-location). board.css에서 분리되어 이 그룹 사용 시 로드됨
+@use '../../css/scss/components/container';

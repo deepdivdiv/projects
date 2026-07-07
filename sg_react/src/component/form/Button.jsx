@@ -14,6 +14,8 @@
  */
 
 
+import s from "./Button.module.scss";
+
 function Button({
     rank = "a",
     size = "m",
@@ -26,7 +28,8 @@ function Button({
     children,
     ...rest
 }) {
-    const classes = [`bt-${rank}-${size}`, set, state, className]
+    // bt-*(정체성)만 모듈 스코프. set/state/아이콘 클래스는 공용 전역 어휘라 plain 문자열 유지(:global)
+    const classes = [s[`bt-${rank}-${size}`], set, state, className]
         .filter(Boolean)
         .join(" ");
 

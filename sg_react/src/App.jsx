@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
-import './css/reset.css'
-import './css/common.css'
-import './css/styleGuide.css'
+import './css/scss/reset.scss'
+import './css/scss/common.scss'
+import './css/scss/styleGuide.scss'
 import Layout from '@/component/layout.jsx'
 import { Toaster } from '@/component/feedback'
 import { Modal, Dialog } from '@/component/container'

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-// 1. 설계
-@use 'utils';
-@use 'components';
+// 전역 진입점: 공용 키프레임 등 앱 전체에 필요한 전역 스타일만 담당.
+// 컴포넌트 CSS는 각 component/<group> 에서 co-location/모듈로 개별 로드됨.
+@use 'utils'; // @keyframes ani-spinner 등 전역 출력
 

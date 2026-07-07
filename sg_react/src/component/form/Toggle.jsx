@@ -14,6 +14,8 @@
  */
 
 
+import s from "./Toggle.module.scss";
+
 function Toggle({
     size = "m",
     type = "a",
@@ -21,14 +23,14 @@ function Toggle({
     name = "",
     ...rest
 }) {
-    const classes = [`tog-${type}-${size}`]
+    const classes = [s[`tog-${type}-${size}`]]
         .filter(Boolean)
         .join(" ");
 
     return (
         <div className={classes}>
             <input type="checkbox" name={name} id={id} {...rest} />
-            <label for={id}></label>
+            <label htmlFor={id}></label>
         </div>
     );
 }
