@@ -1,0 +1,493 @@
+.tog, .tog-b-xl, .tog-a-xl, .tog-b-l, .tog-a-l, .tog-b-m, .tog-a-m, .tog-b-s, .tog-a-s, .tog-b-xs, .tog-a-xs {
+  position: relative;
+}
+.tog input[type=checkbox], .tog-b-xl input[type=checkbox], .tog-a-xl input[type=checkbox], .tog-b-l input[type=checkbox], .tog-a-l input[type=checkbox], .tog-b-m input[type=checkbox], .tog-a-m input[type=checkbox], .tog-b-s input[type=checkbox], .tog-a-s input[type=checkbox], .tog-b-xs input[type=checkbox], .tog-a-xs input[type=checkbox] {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  clip-path: inset(0 100% 100% 0);
+}
+.tog input[type=checkbox] + label, .tog-b-xl input[type=checkbox] + label, .tog-a-xl input[type=checkbox] + label, .tog-b-l input[type=checkbox] + label, .tog-a-l input[type=checkbox] + label, .tog-b-m input[type=checkbox] + label, .tog-a-m input[type=checkbox] + label, .tog-b-s input[type=checkbox] + label, .tog-a-s input[type=checkbox] + label, .tog-b-xs input[type=checkbox] + label, .tog-a-xs input[type=checkbox] + label {
+  border-radius: 100rem;
+  position: relative;
+  display: block;
+}
+.tog input[type=checkbox] + label::after, .tog-b-xl input[type=checkbox] + label::after, .tog-a-xl input[type=checkbox] + label::after, .tog-b-l input[type=checkbox] + label::after, .tog-a-l input[type=checkbox] + label::after, .tog-b-m input[type=checkbox] + label::after, .tog-a-m input[type=checkbox] + label::after, .tog-b-s input[type=checkbox] + label::after, .tog-a-s input[type=checkbox] + label::after, .tog-b-xs input[type=checkbox] + label::after, .tog-a-xs input[type=checkbox] + label::after {
+  content: "";
+  aspect-ratio: 1/1;
+  position: absolute;
+  border-radius: 100rem;
+  top: 50%;
+  left: 0;
+  transition: all 300ms ease-in-out;
+}
+.tog-a-xs input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-a-xs input[type=checkbox] + label {
+  background: #ffffff;
+  width: 3.4rem;
+  height: 1.6rem;
+  border: 0.1rem solid #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-a-xs input[type=checkbox] + label::before {
+  content: "OFF";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 700;
+  color: #aea9ba;
+  text-box: trim-both cap alphabetic;
+  line-height: 1;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in-out;
+  font-size: 0.8rem;
+  padding-left: 1.4rem;
+}
+.tog-a-xs input[type=checkbox] + label::after {
+  background: #ccc9d5;
+  transform: translate(0.3rem, -50%);
+  width: 1rem;
+}
+.tog-a-xs input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+}
+.tog-a-xs input[type=checkbox] + label:hover::before {
+  color: #a371ff;
+}
+.tog-a-xs input[type=checkbox] + label:hover::after {
+  background: #c5a6ff;
+}
+.tog-a-xs input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+}
+.tog-a-xs input[type=checkbox]:checked + label::before {
+  content: "ON";
+  color: #7226ff;
+  padding-left: 0.42rem;
+}
+.tog-a-xs input[type=checkbox]:checked + label::after {
+  background: #7226ff;
+  left: calc(100% - 0.6rem - 1rem);
+}
+.tog-a-xs input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+}
+.tog-a-xs input[type=checkbox]:checked + label:hover::before {
+  color: #6521e1;
+}
+.tog-a-xs input[type=checkbox]:checked + label:hover::after {
+  background: #6521e1;
+}
+.tog-a-xs input[type=checkbox] + label::before {
+  font-weight: 600;
+}
+.tog-b-xs input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-b-xs input[type=checkbox] + label {
+  width: 3rem;
+  height: 1.6rem;
+  border: 0.1rem solid #ccc9d5;
+  background: #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-b-xs input[type=checkbox] + label::after {
+  background: #ffffff;
+  transform: translate(0.3rem, -50%);
+  width: 1rem;
+}
+.tog-b-xs input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+  background: #c5a6ff;
+}
+.tog-b-xs input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+  background: #7226ff;
+}
+.tog-b-xs input[type=checkbox]:checked + label::after {
+  background: #ffffff;
+  left: calc(100% - 0.6rem - 1rem);
+}
+.tog-b-xs input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+  background: #6521e1;
+}
+.tog-b-xs input[type=checkbox] + label::before {
+  font-weight: 600;
+}
+.tog-a-s input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-a-s input[type=checkbox] + label {
+  background: #ffffff;
+  width: 4rem;
+  height: 2rem;
+  border: 0.1rem solid #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-a-s input[type=checkbox] + label::before {
+  content: "OFF";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 700;
+  color: #aea9ba;
+  text-box: trim-both cap alphabetic;
+  line-height: 1;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in-out;
+  font-size: 0.8rem;
+  padding-left: 1.96rem;
+}
+.tog-a-s input[type=checkbox] + label::after {
+  background: #ccc9d5;
+  transform: translate(0.3rem, -50%);
+  width: 1.4rem;
+}
+.tog-a-s input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+}
+.tog-a-s input[type=checkbox] + label:hover::before {
+  color: #a371ff;
+}
+.tog-a-s input[type=checkbox] + label:hover::after {
+  background: #c5a6ff;
+}
+.tog-a-s input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+}
+.tog-a-s input[type=checkbox]:checked + label::before {
+  content: "ON";
+  color: #7226ff;
+  padding-left: 0.42rem;
+}
+.tog-a-s input[type=checkbox]:checked + label::after {
+  background: #7226ff;
+  left: calc(100% - 0.6rem - 1.4rem);
+}
+.tog-a-s input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+}
+.tog-a-s input[type=checkbox]:checked + label:hover::before {
+  color: #6521e1;
+}
+.tog-a-s input[type=checkbox]:checked + label:hover::after {
+  background: #6521e1;
+}
+.tog-a-s input[type=checkbox] + label::before {
+  font-weight: 600;
+}
+.tog-b-s input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-b-s input[type=checkbox] + label {
+  width: 3.6rem;
+  height: 2rem;
+  border: 0.1rem solid #ccc9d5;
+  background: #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-b-s input[type=checkbox] + label::after {
+  background: #ffffff;
+  transform: translate(0.3rem, -50%);
+  width: 1.4rem;
+}
+.tog-b-s input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+  background: #c5a6ff;
+}
+.tog-b-s input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+  background: #7226ff;
+}
+.tog-b-s input[type=checkbox]:checked + label::after {
+  background: #ffffff;
+  left: calc(100% - 0.6rem - 1.4rem);
+}
+.tog-b-s input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+  background: #6521e1;
+}
+.tog-b-s input[type=checkbox] + label::before {
+  font-weight: 600;
+}
+.tog-a-m input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-a-m input[type=checkbox] + label {
+  background: #ffffff;
+  width: 5rem;
+  height: 2.4rem;
+  border: 0.1rem solid #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-a-m input[type=checkbox] + label::before {
+  content: "OFF";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 700;
+  color: #aea9ba;
+  text-box: trim-both cap alphabetic;
+  line-height: 1;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in-out;
+  font-size: 1rem;
+  padding-left: 2.52rem;
+}
+.tog-a-m input[type=checkbox] + label::after {
+  background: #ccc9d5;
+  transform: translate(0.3rem, -50%);
+  width: 1.8rem;
+}
+.tog-a-m input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+}
+.tog-a-m input[type=checkbox] + label:hover::before {
+  color: #a371ff;
+}
+.tog-a-m input[type=checkbox] + label:hover::after {
+  background: #c5a6ff;
+}
+.tog-a-m input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+}
+.tog-a-m input[type=checkbox]:checked + label::before {
+  content: "ON";
+  color: #7226ff;
+  padding-left: 0.42rem;
+}
+.tog-a-m input[type=checkbox]:checked + label::after {
+  background: #7226ff;
+  left: calc(100% - 0.6rem - 1.8rem);
+}
+.tog-a-m input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+}
+.tog-a-m input[type=checkbox]:checked + label:hover::before {
+  color: #6521e1;
+}
+.tog-a-m input[type=checkbox]:checked + label:hover::after {
+  background: #6521e1;
+}
+.tog-b-m input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-b-m input[type=checkbox] + label {
+  width: 4.4rem;
+  height: 2.4rem;
+  border: 0.1rem solid #ccc9d5;
+  background: #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-b-m input[type=checkbox] + label::after {
+  background: #ffffff;
+  transform: translate(0.3rem, -50%);
+  width: 1.8rem;
+}
+.tog-b-m input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+  background: #c5a6ff;
+}
+.tog-b-m input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+  background: #7226ff;
+}
+.tog-b-m input[type=checkbox]:checked + label::after {
+  background: #ffffff;
+  left: calc(100% - 0.6rem - 1.8rem);
+}
+.tog-b-m input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+  background: #6521e1;
+}
+.tog-a-l input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-a-l input[type=checkbox] + label {
+  background: #ffffff;
+  width: 6rem;
+  height: 2.8rem;
+  border: 0.1rem solid #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-a-l input[type=checkbox] + label::before {
+  content: "OFF";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 700;
+  color: #aea9ba;
+  text-box: trim-both cap alphabetic;
+  line-height: 1;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in-out;
+  font-size: 1.2rem;
+  padding-left: 2.8rem;
+}
+.tog-a-l input[type=checkbox] + label::after {
+  background: #ccc9d5;
+  transform: translate(0.4rem, -50%);
+  width: 2rem;
+}
+.tog-a-l input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+}
+.tog-a-l input[type=checkbox] + label:hover::before {
+  color: #a371ff;
+}
+.tog-a-l input[type=checkbox] + label:hover::after {
+  background: #c5a6ff;
+}
+.tog-a-l input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+}
+.tog-a-l input[type=checkbox]:checked + label::before {
+  content: "ON";
+  color: #7226ff;
+  padding-left: 0.56rem;
+}
+.tog-a-l input[type=checkbox]:checked + label::after {
+  background: #7226ff;
+  left: calc(100% - 0.8rem - 2rem);
+}
+.tog-a-l input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+}
+.tog-a-l input[type=checkbox]:checked + label:hover::before {
+  color: #6521e1;
+}
+.tog-a-l input[type=checkbox]:checked + label:hover::after {
+  background: #6521e1;
+}
+.tog-b-l input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-b-l input[type=checkbox] + label {
+  width: 5.3rem;
+  height: 2.8rem;
+  border: 0.1rem solid #ccc9d5;
+  background: #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-b-l input[type=checkbox] + label::after {
+  background: #ffffff;
+  transform: translate(0.4rem, -50%);
+  width: 2rem;
+}
+.tog-b-l input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+  background: #c5a6ff;
+}
+.tog-b-l input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+  background: #7226ff;
+}
+.tog-b-l input[type=checkbox]:checked + label::after {
+  background: #ffffff;
+  left: calc(100% - 0.8rem - 2rem);
+}
+.tog-b-l input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+  background: #6521e1;
+}
+.tog-a-xl input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-a-xl input[type=checkbox] + label {
+  background: #ffffff;
+  width: 7rem;
+  height: 3.2rem;
+  border: 0.2rem solid #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-a-xl input[type=checkbox] + label::before {
+  content: "OFF";
+  font-family: "Pretendard", sans-serif;
+  font-weight: 700;
+  color: #aea9ba;
+  text-box: trim-both cap alphabetic;
+  line-height: 1;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in-out;
+  font-size: 1.4rem;
+  padding-left: 3.08rem;
+}
+.tog-a-xl input[type=checkbox] + label::after {
+  background: #ccc9d5;
+  transform: translate(0.4rem, -50%);
+  width: 2.2rem;
+}
+.tog-a-xl input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+}
+.tog-a-xl input[type=checkbox] + label:hover::before {
+  color: #a371ff;
+}
+.tog-a-xl input[type=checkbox] + label:hover::after {
+  background: #c5a6ff;
+}
+.tog-a-xl input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+}
+.tog-a-xl input[type=checkbox]:checked + label::before {
+  content: "ON";
+  color: #7226ff;
+  padding-left: 0.56rem;
+}
+.tog-a-xl input[type=checkbox]:checked + label::after {
+  background: #7226ff;
+  left: calc(100% - 0.8rem - 2.2rem);
+}
+.tog-a-xl input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+}
+.tog-a-xl input[type=checkbox]:checked + label:hover::before {
+  color: #6521e1;
+}
+.tog-a-xl input[type=checkbox]:checked + label:hover::after {
+  background: #6521e1;
+}
+.tog-b-xl input[type=checkbox] {
+  transition: all 300ms ease-in-out;
+}
+.tog-b-xl input[type=checkbox] + label {
+  width: 6rem;
+  height: 3.2rem;
+  border: 0.2rem solid #ccc9d5;
+  background: #ccc9d5;
+  transition: all 300ms ease-in-out;
+}
+.tog-b-xl input[type=checkbox] + label::after {
+  background: #ffffff;
+  transform: translate(0.4rem, -50%);
+  width: 2.2rem;
+}
+.tog-b-xl input[type=checkbox] + label:hover {
+  border-color: #c5a6ff;
+  background: #c5a6ff;
+}
+.tog-b-xl input[type=checkbox]:checked + label {
+  border-color: #7226ff;
+  background: #7226ff;
+}
+.tog-b-xl input[type=checkbox]:checked + label::after {
+  background: #ffffff;
+  left: calc(100% - 0.8rem - 2.2rem);
+}
+.tog-b-xl input[type=checkbox]:checked + label:hover {
+  border-color: #6521e1;
+  background: #6521e1;
+}

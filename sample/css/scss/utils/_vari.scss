@@ -1,0 +1,162 @@
+@charset "UTF-8";
+@use "sass:color";
+$img-url: "../img/";
+$bgSet: no-repeat center center / contain;
+// 메인 컬러
+$mCol-5: #f7f3ff;
+$mCol-10:#eee5ff;
+$mCol-20:#ddcaff;
+$mCol-30:#c5a6ff;
+$mCol-40:#a371ff;
+$mCol-50:#8847ff;
+$mCol-60:#7226ff;
+$mCol-70:#6521e1;
+$mCol-80:#591dc9;
+$mCol-90:#4d19af;
+$mCol-100:#421497;
+$mCol-110:#35107c;
+$mCol-120:#280a5f;
+
+
+// 포인트 컬러
+$pCol-5: #fff5f9;
+$pCol-10:#ffe7f0;
+$pCol-20:#ffdaea;
+$pCol-30:#ffcbe1;
+$pCol-40:#ffb5d4;
+$pCol-50:#ffa2ca;
+$pCol-60:#fe79b1;
+$pCol-70:#f56aa5;
+$pCol-80:#ed5b99;
+$pCol-90:#e44b8c;
+$pCol-100:#dc3c80;
+$pCol-110:#d22b72;
+$pCol-120:#c81964;
+
+
+
+// 회색조컬러
+  $gray-0: #ffffff;
+  $gray-5: #f7f7fc; 
+ $gray-10: #f3f3f8; 
+ $gray-20: #e0dfe8; 
+ $gray-30: #ccc9d5; 
+ $gray-40: #aea9ba; 
+ $gray-50: #9590a2; 
+ $gray-60: #8d869b; 
+ $gray-70: #7a7588; 
+ $gray-80: #656171; 
+ $gray-90: #524f5d;
+$gray-100: #3b3844;
+$gray-110: #25242d;
+$gray-120: #111017;
+
+// 시스템컬러
+// 실패 
+
+// 실패
+$sst-dCol-5:   #fff2f2; 
+$sst-dCol-10:  #fde0e0; 
+$sst-dCol-20:  #fccecf; 
+$sst-dCol-30:  #f8a9aa; 
+$sst-dCol-40:  #f3787a; 
+$sst-dCol-50:  #ee4749; 
+$sst-dCol-60:  #e61e21; 
+$sst-dCol-70:  #cf0d11; 
+$sst-dCol-80:  #ac0a0c; 
+$sst-dCol-90:  #92080a;
+$sst-dCol-100: #760506;
+$sst-dCol-110: #600304;
+$sst-dCol-120: #420001;
+
+
+// 주의
+$sst-wCol-5:   #fffaf0; 
+$sst-wCol-10:  #fdf5e2; 
+$sst-wCol-20:  #fceecf; 
+$sst-wCol-30:  #f8e1aa; 
+$sst-wCol-40:  #f3ce77; 
+$sst-wCol-50:  #eebd49; 
+$sst-wCol-60:  #eaa810; 
+$sst-wCol-70:  #ce940d; 
+$sst-wCol-80:  #ae7c0a; 
+$sst-wCol-90:  #916808;
+$sst-wCol-100: #765405;
+$sst-wCol-110: #5e4303;
+$sst-wCol-120: #422e00;
+
+// 성공
+$sst-sCol-5:   #f0ffed; 
+$sst-sCol-10:  #e0fadb; 
+$sst-sCol-20:  #c3efba; 
+$sst-sCol-30:  #a6e59a; 
+$sst-sCol-40:  #93de84; 
+$sst-sCol-50:  #63cd4f; 
+$sst-sCol-60:  #41c028; 
+$sst-sCol-70:  #20bf00; 
+$sst-sCol-80:  #1dad00; 
+$sst-sCol-90:  #199800;
+$sst-sCol-100: #168300;
+$sst-sCol-110: #116700;
+$sst-sCol-120: #0e5301;
+
+// 인포
+$sst-iCol-5:   #f8fdff; 
+$sst-iCol-10:  #ddf4fd; 
+$sst-iCol-20:  #cdeefc; 
+$sst-iCol-30:  #a9e2fa; 
+$sst-iCol-40:  #82d4f7; 
+$sst-iCol-50:  #5ac6f4; 
+$sst-iCol-60:  #0eabef; 
+$sst-iCol-70:  #0d98d4; 
+$sst-iCol-80:  #0d87bb; 
+$sst-iCol-90:  #0d77a4;
+$sst-iCol-100: #0d678e;
+$sst-iCol-110: #0d5878;
+$sst-iCol-120: #0c465e;
+
+
+
+
+
+
+
+$ft-basic: "Pretendard", sans-serif;
+$ft-point: "Paperlogy", sans-serif;
+
+
+// Display 사이즈
+$ft-dp-l: clamp(5rem, 7.6172vw, 7.8rem);
+$ft-dp-m: clamp(4.6rem, 6.25vw, 6.4rem); 
+$ft-dp-s: clamp(4.2rem, 5.2734vw, 5.4rem); 
+
+// Heading 사이즈
+$ft-hd-l: clamp(3.6rem, 4.6875vw, 4.8rem);
+$ft-hd-m: clamp(3.2rem, 3.9063vw, 4rem);
+$ft-hd-s: clamp(3rem, 3.5156vw, 3.6rem);
+
+// Title 사이즈
+$ft-tt-l: clamp(2.6rem, 2.9297vw, 3rem);
+$ft-tt-m: clamp(2.2rem, 2.5391vw, 2.6rem);
+$ft-tt-s: clamp(1.8rem, 1.9531vw, 2rem);
+
+// Body 사이즈
+$ft-bd-l: clamp(1.6rem, 1.7578vw, 1.8rem);
+$ft-bd-m: clamp(1.4rem, 1.5625vw, 1.6rem);
+$ft-bd-s: clamp(1.2rem, 1.3672vw, 1.4rem);
+$ft-bd-xs: 1.2rem;
+
+
+// 폰트 굵기
+$fw-l: 200;
+$fw-m: 400;
+$fw-b: 600;
+$fw-eb: 800;
+
+
+// 글씨 간격 폰트에 맞게
+$tbSet: trim-both cap alphabetic;
+
+// 트랜지션 기본 공통
+$aniSet: 300ms ease-in-out;
+

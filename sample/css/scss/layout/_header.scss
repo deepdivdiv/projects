@@ -1,0 +1,29 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+header {
+    height: 10rem;
+    .h_inner {
+        @include set.base-width();
+        height: 100%;
+        display: flex; align-items: center; justify-content: space-between;
+        .logo {
+            display: block; text-indent: -99999px;
+        }
+        nav {
+            > ul {
+                display: flex; align-items: center; gap:5rem;
+                .depth1 {
+                    > a { display: block; font-family: set.$ft-point; font-size: set.$ft-bd-l; color: set.$gray-100; font-weight: 500; }
+                }
+                .depth2 { display: none; }
+            }
+        }
+        .h_side {
+            .btn-login {
+                font-size: set.$ft-bd-l;
+                font-weight: 600;
+            }
+        }
+    }
+}

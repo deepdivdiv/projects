@@ -1,0 +1,15 @@
+@charset "UTF-8";
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
+/* ------------------------
+           공통
+----------------------- */
+h1 {
+  font-size: clamp(5rem, 7.6172vw, 7.8rem);
+}

@@ -1,0 +1,9 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+i[class^="ico-"] {
+    aspect-ratio: 1/1;
+    display: block;
+    // @include set.getIcon(ico-info, set.$mCol-60);
+}
