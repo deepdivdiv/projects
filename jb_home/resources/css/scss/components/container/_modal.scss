@@ -1,0 +1,212 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+body:has(#modalArea.open) {
+    overflow-y: hidden;
+}
+
+dialog {
+    border: none;
+    padding: 4.5rem; border-radius: 1rem;
+    background: set.$gray-0;
+    width: calc(100% - 3rem);
+    max-width: 64rem;
+    box-shadow: 0 0 0 .3rem rgba(255,255,255,0.2);
+    .mdBtn {
+        width: 70%;
+        gap: 1rem;
+        display: flex;
+        margin: 2rem auto 0;
+        align-items: center;
+        justify-content: center;
+        a, button { flex-grow: 1; }
+    }
+    .modalClose { 
+        position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+        box-sizing: border-box;
+        &:hover {
+            &::before, &::after {
+                background: set.$gray-100;
+            }
+        }
+        &::before, &::after {
+            content: "";
+            width:70%; height: 0.1rem; background: set.$gray-50;
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+        }
+        &::before { rotate: 45deg; }
+        &::after { rotate: -45deg; }
+    }
+    > i {
+        width: 5rem; aspect-ratio: 1/1; display: block; margin: 0 auto 1rem;
+        border-radius: 100rem;
+    }
+    > p { font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; }
+    > span { font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; display: block; margin-top: 0.4rem; }
+    
+    > i:not([class]) { 
+        background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+    }
+    &::backdrop {
+        background: rgba($color: #000000, $alpha: .7);
+        backdrop-filter: blur(5px);
+    }
+}
+
+
+#modalArea {
+    @include set.popupSet();
+    .modalItem {
+        padding: 4.5rem; border-radius: 1rem;
+        background: set.$gray-0;
+        width: calc(100% - 3rem);
+        max-width: 44rem;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 .3rem rgba(255,255,255,0.2);
+        .mdBtn {
+            width: 70%;
+            gap: 1rem;
+            display: flex;
+            margin: 2rem auto 0;
+            align-items: center;
+            justify-content: center;
+            a, button { flex:1 1 0; }
+        }
+        .modalClose { 
+            position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+            box-sizing: border-box;
+            &:hover {
+                &::before, &::after {
+                    background: set.$gray-100;
+                }
+            }
+            &::before, &::after {
+                content: "";
+                width:70%; height: 0.1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+        }
+        > i {
+            width: 5rem; aspect-ratio: 1/1; display: block; margin: 0 auto 1rem;
+            border-radius: 100rem;
+        }
+        > p { font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; }
+        > span { font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; display: block; margin-top: 0.4rem; }
+        
+        > i:not([class]) { 
+            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        }
+        
+    }
+}
+#dialogArea {
+    @include set.popupSet();
+    .dialogItem {
+        padding: 4.5rem; border-radius: 1rem;
+        background: set.$gray-0;
+        width: calc(100% - 3rem);
+        max-width: 64rem;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 .3rem rgba(255,255,255,0.2);
+        .dlBtn {
+            width: 100%;
+            gap: 1rem;
+            display: flex;
+            margin: 2rem auto 0;
+            align-items: center;
+            justify-content: center;
+            a, button { flex-grow: 1; flex: 1 1 0; }
+        }
+        .dialogClose { 
+            position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem; 
+            box-sizing: border-box;
+            &:hover {
+                &::before, &::after {
+                    background: set.$gray-100;
+                }
+            }
+            &::before, &::after {
+                content: "";
+                width:70%; height: 0.1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+        }
+        > i {
+            width: 5rem; aspect-ratio: 1/1; display: block; margin: 0 auto 1rem;
+            border-radius: 100rem;
+        }
+        > p { 
+            font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; line-height: 1.2; 
+            &:has(+ *:not(span)) { margin-bottom: 1.4rem; }
+        }
+        > span { 
+            font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; display: block; margin-top: 0.4rem; 
+            &:has(+ *) { margin-bottom: 1rem; }
+        }
+        
+        
+        > i:not([class]) { 
+            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+        }
+    }
+}
+// 레이어팝업 — 마크업을 미리 써 두고 data-layer-open/close 태그로 여닫는 팝업(ui.components.js "레이어팝업" 절).
+// #dialogArea 와 같은 열기/닫기(.open) 구조. 한 화면에 여러 개 둘 수 있어 id 가 아니라 클래스로 잡는다.
+.layerPop {
+    @include set.popupSet();
+    text-align: left;
+    .layerItem {
+        padding: 4.5rem; border-radius: 1rem;
+        background: set.$gray-0;
+        width: calc(100% - 3rem);
+        max-width: 64rem;
+        max-height: calc(100% - 3rem);
+        overflow-y: auto;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 .3rem rgba(255,255,255,0.2);
+        .dlBtn {
+            width: 100%;
+            gap: 1rem;
+            display: flex;
+            margin: 2rem auto 0;
+            align-items: center;
+            justify-content: center;
+            a, button { flex: 1 1 0; }
+        }
+        .layerClose {
+            position: absolute; width: 3rem; aspect-ratio: 1/1; right: 1.5rem; top: 1.5rem;
+            box-sizing: border-box;
+            &:hover {
+                &::before, &::after {
+                    background: set.$gray-100;
+                }
+            }
+            &::before, &::after {
+                content: "";
+                width:70%; height: 0.1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+        }
+        > p {
+            font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; line-height: 1.2;
+            &:has(+ *:not(span)) { margin-bottom: 1.4rem; }
+        }
+        > span {
+            font-size: set.$ft-bd-m; font-weight: 300; color: set.$gray-50; display: block; margin-top: 0.4rem;
+            &:has(+ *) { margin-bottom: 1rem; }
+        }
+    }
+}

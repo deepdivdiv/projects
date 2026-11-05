@@ -1,0 +1,518 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+
+.emptyBox {
+  padding: 3rem;
+  border: .1rem solid set.$mCol-30;
+  background: set.$mCol-5;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 30vh;
+  justify-content: center; align-items: center; gap: 1rem;
+  p {
+    font-size: set.$ft-hd-m;
+    font-weight: 700;
+    font-family: set.$ft-point;
+    color: set.$mCol-60;
+    line-height: 1;
+  }
+  span {
+    font-size: set.$ft-tt-s;
+    font-weight: 500;
+    color: set.$gray-100;
+  }
+  // 문구가 한 줄에 못 들어가면 어절 단위로 접히게(글자 중간에서 끊지 않는다).
+  p, span { text-align: center; word-break: keep-all; }
+  // 화면이 좁아질수록 여백·모서리·글자를 단계적으로 줄인다(폰트 토큰의 clamp 하한이 태블릿 이하에서는 커서).
+  @include set.res-tablet() {
+    padding: 2.4rem 2rem;
+    border-radius: 1.6rem;
+    min-height: 22vh;
+    gap: .8rem;
+    p { font-size: set.$ft-tt-m; line-height: 1.2; }
+    span { font-size: set.$ft-bd-l; }
+  }
+  @include set.res-mo-tab() {
+    padding: 2rem 1.6rem;
+    border-radius: 1.2rem;
+    min-height: 16rem;
+    gap: .6rem;
+    p { font-size: set.$ft-tt-s; }
+    span { font-size: set.$ft-bd-m; }
+  }
+}
+
+.box_tit {
+  border-radius: 1rem;
+  padding: 3rem;
+  background: set.$gray-5;
+  border: .1rem solid set.$gray-20;
+  margin-bottom: 4rem;
+  p:not([class^="cau-"]) {
+    font-size: set.$ft-bd-m;
+    color: set.$gray-50;
+    
+    &:has(button, a) {
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      // 모바일에서는 문장 옆에 버튼을 둘 폭이 없어 글자가 세로로 길게 접힌다 — 문장 아래로 내린다.
+      @include set.res-tablet() {
+        flex-direction: column; align-items: flex-start; gap: 1.2rem;
+      }
+    }
+    &.po {
+      color: set.$mCol-60;
+    }
+    &.ca {
+      color: set.$sst-wCol-60;
+    }
+    &.if {
+      color: set.$sst-iCol-60;
+    }
+    &.de {
+      color: set.$sst-dCol-60;
+    }
+    &.su {
+      color: set.$sst-sCol-60;
+    }
+  }
+
+  &:has(.po) {
+    background: set.$mCol-5;
+    border: .1rem solid set.$mCol-30;
+  }
+  &:has(.ca) {
+    background: set.$sst-wCol-5;
+    border: .1rem solid set.$sst-wCol-30;
+  }
+  &:has(.if) {
+    background: set.$sst-iCol-5;
+    border: .1rem solid set.$sst-iCol-30;
+  }
+  &:has(.de) {
+    background: set.$sst-dCol-5;
+    border: .1rem solid set.$sst-dCol-30;
+  }
+  &:has(.su) {
+    background: set.$sst-sCol-5;
+    border: .1rem solid set.$sst-sCol-30;
+  }
+  // 캡션(.cau-*)이 앞에 오면 아이콘만 왼쪽으로 내어 쓰고, 그 아래 내용은 캡션 '글자'에 맞춰 들여 쓴다.
+  // 아이콘 줄과 뒤따르는 내용이 한 덩어리로 읽히게 하려는 것이다.
+  // 들여쓰는 폭은 [아이콘 폭 + .cau 의 gap(.4rem)]이라 캡션 크기마다 다르다
+  // (아이콘 폭은 components/form/_forms.scss 의 $cauSizes — s 1.6 / m 2.0 / l 2.4rem).
+  &:has(.cau-s) { --cauIndent: 2rem; }
+  &:has(.cau-m) { --cauIndent: 2.4rem; }
+  &:has(.cau-l) { --cauIndent: 2.8rem; }
+  &:has([class^="cau-"]) > *:not([class^="cau-"]) { padding-left: var(--cauIndent); }
+}
+
+.flexBox {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; flex-grow: 1;
+  input[type="tel"],
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] { width: auto; }
+}
+
+
+
+.scrollBox {
+    display: flex; flex-direction: column; gap: 2rem;
+    div {
+      width: 30rem;
+      aspect-ratio: 1/1;
+      display: block;
+      border-radius: 1rem;
+      background: set.$gray-20;
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: 0% 50%;
+    }
+}
+
+.surveyArea {
+  // 문항이 적어도 배경이 화면 끝까지 차게 한다. height:100% 로 잡으면 wrap 이 뷰포트 높이에
+  // 고정돼, 문항이 많아 내용이 길어지면 넘친 부분에는 배경이 안 깔린다(main 의 flex-grow 는
+  // 부모가 고정 높이면 늘려줄 남는 공간이 없다). min-height 라야 짧으면 채우고 길면 늘어난다.
+  display: flex; flex-direction: column; min-height: 100dvh;
+  background: set.$mCol-10;
+  > main {
+    flex-grow: 1;
+    @include set.base-width();
+    padding-top: 9rem;
+    padding-bottom: 9rem;
+    .svTit {
+      text-align: center;
+      margin-bottom: 4rem;
+      h1 {
+        font-family: set.$ft-point;
+        font-weight: 600;
+        font-size: set.$ft-hd-l;
+        color: set.$mCol-60;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        word-break: keep-all;
+        text-wrap: balance;
+      }
+      p {
+        color: set.$gray-70;
+        font-weight: 200; font-size: set.$ft-tt-s;
+        rotate: -0.04deg;
+        word-break: keep-all;
+        text-wrap-style: pretty;
+        b { color: set.$sst-dCol-60; font-weight: 500; font-size: inherit;}
+      }
+    }
+    // 제출 실패 등 상단 업무규칙 메시지
+    .svCau {
+      margin: 0 0 2rem;
+    }
+    .svBox {
+      display: flex; flex-direction: column; gap: 2rem;
+      li {
+        // 문항 머리 + 보기 목록. ol 에 .form-m 이 붙어 있어 안쪽에 .cau-* 가 있으면
+        // 디자인 시스템의 *:has([class^="cau-"]) 가 flex 를 얹으므로 여기서 먼저 못박아 둔다.
+        display: flex; flex-direction: column; gap: 1.2rem;
+        padding: 3rem; 
+        border: .1rem solid set.$mCol-20;
+        background: set.$gray-0;
+        border-radius: 1rem;
+        transition: all 300ms ease;
+        &:hover {
+          border: .1rem solid set.$mCol-40;
+          .ctTit {
+            color: set.$mCol-60;
+          }
+        }
+        .ctTit {
+          font-size: set.$ft-tt-s;
+          font-family: set.$ft-point;
+          font-weight: 600;
+          color: set.$gray-100;
+          transition: all 300ms ease;
+          .ctNum {
+            &::after {
+              content: ". ";
+            }
+          }
+          span { font-weight: 600; }
+          b { font-weight: 600; color: set.$sst-dCol-60; }
+        }
+        // 안내문(LABEL) 문항 — 입력 없이 문구만
+        .ctLabel {
+          font-size: set.$ft-bd-m; font-weight: 200; color: set.$gray-70; line-height: 1.6;
+        }
+        // 보기 목록(.sel-m 라디오·체크박스)
+        .ansList {
+          display: flex; gap: 1rem 4rem;
+          &.ansCol {
+            display: flex; flex-direction: column; gap: 1rem;
+          }
+        }
+      }
+    }
+    .svList {
+      display: flex; flex-direction: column; gap: 2rem;
+      li {
+        // 문항 머리 + 보기 목록. ol 에 .form-m 이 붙어 있어 안쪽에 .cau-* 가 있으면
+        // 디자인 시스템의 *:has([class^="cau-"]) 가 flex 를 얹으므로 여기서 먼저 못박아 둔다.
+        display: flex; gap: 1.2rem; align-items: center;
+        padding: 3rem; 
+        border: .1rem solid set.$mCol-20;
+        background: set.$gray-0;
+        border-radius: 1rem;
+        transition: all 300ms ease;
+
+        .svl_info {
+          flex-grow: 1; display: flex; align-items: center; gap: 1rem;
+          // .svl_name 은 링크가 없는 설문(응답 완료 등)에서 제목을 그대로 노출하는 비링크 요소다.
+          // 생김새는 a 와 같게 두되, 밑줄 호버는 실제로 이동하는 a 에만 건다.
+          a, .svl_name {
+            font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100;
+            display: block; transition: all 300ms ease; flex-grow: 1;
+          }
+          a {
+            &:hover {
+              text-decoration: underline;
+              text-underline-offset: .4rem;
+            }
+          }
+
+          
+          & + button, & + a { min-width: 12rem; }
+        }
+        &:hover {
+          border: .1rem solid set.$mCol-40;
+          .ctTit {
+            color: set.$mCol-60;
+          }
+          .svl_info {
+            a, .svl_name { color: set.$mCol-60; font-weight: 700; }
+          }
+        }
+        .ctTit {
+          font-size: set.$ft-tt-s;
+          font-family: set.$ft-point;
+          font-weight: 600;
+          color: set.$gray-100;
+          transition: all 300ms ease;
+          .ctNum {
+            &::after {
+              content: ". ";
+            }
+          }
+          span { font-weight: 600; }
+          b { font-weight: 600; color: set.$sst-dCol-60; }
+        }
+        // 안내문(LABEL) 문항 — 입력 없이 문구만
+        .ctLabel {
+          font-size: set.$ft-bd-m; font-weight: 200; color: set.$gray-70; line-height: 1.6;
+        }
+        // 보기 목록(.sel-m 라디오·체크박스)
+        .ansList {
+          display: flex; flex-direction: column; gap: 1rem;
+        }
+      }
+    }
+    .btnArea {
+      display: flex; align-items: center; gap: 1rem; margin-top: 3rem;
+      &.f_center { justify-content: center; }
+      a, button { min-width: 12rem; }
+    }
+  }
+
+  // 아래 보기(.sel-m)·안내문 규칙은 > main 을 타지 않는다. 폼이 main 밖(모달 등)에 놓여도
+  // 같게 보여야 해서 .surveyArea 바로 아래에 건다 — 셀렉터를 바꾸면 특정도가 달라지니 유지한다.
+  .sel-m {
+    // 사용자 설문 응답의 현재 선택(checked) 표시 — 파랑. 이 테마는 .imp/.comple 수식자 없이는
+    // 기본 checked 스타일이 없어 여기서 명시한다(board.css 뒤 로드 + !important 로 확정).
+    // 라디오는 점을 채우고, 체크박스는 박스를 채운다.
+    input[type=radio]:checked + label i {
+      box-shadow: 0 0 0 .5rem set.$mCol-60 inset !important;
+      border-color: set.$mCol-60 !important;
+    }
+    input[type=checkbox]:checked + label i {
+      border-color: set.$mCol-60 !important;
+      background-color: set.$mCol-60 !important;
+    }
+    input[type=radio]:checked + label,
+    input[type=checkbox]:checked + label {
+      color: set.$mCol-60;
+    }
+    // 사후(POST) 진단 — 사전(PRE) 응답 표시(초록). '지금 선택하지 않은' 경우(:not(:checked))에만 건다.
+    // 같은 답을 지금 고르면 초록이 사라지고 위의 현재-선택(파랑)이 이겨 '이전 답'과 '현재 선택'이 헷갈리지 않는다.
+    &.prev {
+      input[type=radio]:not(:checked) + label i,
+      input[type=checkbox]:not(:checked) + label i {
+        box-shadow: 0 0 0 .5rem set.$sst-sCol-80 inset !important;
+        border-color: set.$sst-sCol-80 !important;
+      }
+      input[type=radio]:not(:checked) + label,
+      input[type=checkbox]:not(:checked) + label {
+        color: set.$sst-sCol-80;
+      }
+    }
+  }
+
+  // 필수 문항 미응답 표시 — 제출 시 JS 가 해당 문항 li 에 .invalid 를 켜고 .svRequiredMsg 의 hidden 을 푼다.
+  .svRequiredMsg {
+    margin-top: .8rem;
+    font-size: clamp(1.3rem, 1.4648vw, 1.5rem);
+    font-weight: 600;
+    color: set.$sst-dCol-60;
+    &::before {
+      content: "!";
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.6rem; height: 1.6rem;
+      margin-right: .6rem;
+      border-radius: 50%;
+      background: set.$sst-dCol-60;
+      color: set.$gray-0;
+      font-size: 1.1rem; font-weight: 700;
+      vertical-align: middle;
+    }
+  }
+  .svBox li.invalid .ctTit { color: set.$sst-dCol-60; }
+
+  // 사전 응답 안내 문구(사후 화면에서만 노출)
+  .svPrevNote {
+    margin-top: .8rem;
+    font-size: clamp(1.3rem, 1.4648vw, 1.5rem);
+    color: set.$sst-sCol-80;
+    font-weight: 600;
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 1rem; height: 1rem;
+      margin-right: .6rem;
+      border-radius: 50%;
+      background: set.$sst-sCol-80;
+      vertical-align: middle;
+    }
+  }
+}
+
+article {
+  section {
+    .sec_inner {
+      @include set.base-width();
+      // 섹션 상하 여백. BannerZone 과 같은 단계로 화면이 좁아질수록 줄인다.
+      padding: {
+        top: 8rem;
+        bottom: 8rem;
+      }
+      @include set.res-laptop() {
+        padding: { top: 4rem; bottom: 4rem; }
+      }
+      @include set.res-tablet() {
+        padding: { top: 3rem; bottom: 3rem; }
+      }
+      @include set.res-mo-tab() {
+        padding: { top: 2.4rem; bottom: 2.4rem; }
+      }
+      .sec_tit {
+        margin-bottom: 2rem;
+        h1 {
+          font-size: set.$ft-hd-s; font-weight: 600; color: set.$gray-100;
+
+          strong { font-weight: set.$fw-b; color: set.$mCol-60; }
+        }
+      }
+    }
+  }
+}
+
+.bd-util {
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 2rem;
+  flex-wrap: wrap;
+  // 한쪽(검색만 / 건수만)만 둘 때. 두 줄로 나눠 쓰는 목록에서 검색 줄에 붙인다.
+  &.end { justify-content: flex-end; }
+  .bt-total {
+    display: flex; align-items: center; flex-shrink: 0;
+    p { font-size: set.$ft-bd-m; color: set.$gray-100; strong { font-weight: set.$fw-eb; color: set.$mCol-60; } }
+  }
+  .bt-search {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 30rem) max-content;
+    align-items: center;
+    gap: 1rem;
+    width: max-content;
+    max-width: 100%;
+    min-width: 0;
+    > select, > input { width: 100%; min-width: 0; }
+    > button { white-space: nowrap; }
+    @include set.res-tablet() {
+      width: 100%;
+      grid-template-columns: 12rem minmax(0, 1fr) max-content;
+    }
+    @include set.res-mo-tab() {
+      grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+      > button { grid-column: 1 / -1; width: 100%; }
+    }
+  }
+}
+
+
+.form_sec {
+  > p {
+    font-size: set.$ft-tt-s;
+    font-weight: 700;
+    color: set.$gray-100;
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem;
+    &::before {
+      content: "";
+      width: 0.4rem; aspect-ratio: 1/1; flex-shrink: 0; border-radius: 100rem;
+      background: set.$mCol-60;
+    }
+  }
+  .form_area {
+    padding-bottom: 3rem; margin-bottom: 3rem; border-bottom: .1rem solid set.$gray-20;
+    dl {
+      display: flex; flex-direction: column; gap: 1rem;
+      dt {
+        font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100;
+        &.imp {
+          &::after {
+            content: "*";
+            color: set.$sst-dCol-60;
+          }
+        }
+      }
+      dd {
+
+      }
+    }
+  }
+}
+
+
+
+#popupZone {
+  position: fixed;
+  z-index: 999999;
+  .popupArea {
+    position: absolute;
+    width: auto;
+    border: .1rem solid set.$gray-20;
+    border-radius: 2rem;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    .popupClose {
+      position: absolute; right: 2rem; top: 2rem;
+      width: 4rem; aspect-ratio: 1/1; border-radius: 4rem;
+      background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M0.244078 0.244078C0.569515 -0.0813593 1.09715 -0.0813593 1.42259 0.244078L5.83333 4.65482L10.2441 0.244078C10.5695 -0.0813593 11.0972 -0.0813593 11.4226 0.244078C11.748 0.569515 11.748 1.09715 11.4226 1.42259L7.01185 5.83333L11.4226 10.2441C11.748 10.5695 11.748 11.0972 11.4226 11.4226C11.0972 11.748 10.5695 11.748 10.2441 11.4226L5.83333 7.01185L1.42259 11.4226C1.09715 11.748 0.569515 11.748 0.244078 11.4226C-0.0813593 11.0972 -0.0813593 10.5695 0.244078 10.2441L4.65482 5.83333L0.244078 1.42259C-0.0813593 1.09715 -0.0813593 0.569515 0.244078 0.244078Z' fill='%233B3844'/%3E%3C/svg%3E") no-repeat center center / 1.2rem;
+    }
+    .popupImg {
+      width: max-content;
+      img { width: 100%; height: 100%; display: block; max-height: 60rem; }
+    }
+    .popupUtil {
+      padding: 2rem;
+      background: set.$gray-0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+  }
+
+  // 모바일 — 팝업별 좌표(마크업의 인라인 top/left)를 무시하고 화면 가운데로 고정한다.
+  // 좌표가 인라인 style 로 들어오므로 top/left 를 auto 로 강제한다(!important 없이는 인라인이 이긴다).
+  // position 은 relative 로 남긴다 — static 으로 두면 .popupClose(absolute) 가 기준 박스를 잃는다.
+  @include set.res-tablet() {
+    inset: 0;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    overflow-y: auto;
+    pointer-events: none; // 빈 영역은 뒷화면 클릭을 막지 않는다
+    .popupArea {
+      position: relative;
+      top: auto !important; left: auto !important;
+      right: auto !important; bottom: auto !important;
+      flex: 0 0 auto;
+      max-width: 100%;
+      pointer-events: auto;
+      // justify-content:center 는 팝업이 화면보다 길 때 위쪽이 잘려 안 보이므로 auto 마진으로 가운데를 잡는다.
+      &:first-child { margin-top: auto; }
+      &:last-child { margin-bottom: auto; }
+      .popupImg {
+        width: auto;
+        img { width: auto; height: auto; max-width: 100%; }
+      }
+    }
+  }
+}

@@ -1,0 +1,253 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use 'forms' as fm;
+@use "sass:map";
+
+// 검색형 셀렉트
+// 원본 <select data-search> 는 값 전달용으로 남겨두고(display:none),
+// common.js 의 sstSelectSearch 가 아래 구조를 만들어 씌운다.
+//
+// .sel_search
+//   ├ select            (hidden / 실제 폼 값)
+//   ├ button            (닫힌 상태 = 기존 select 모양)
+//   └ .sel_search_panel [popover]
+//        ├ .fld > input[type=search]
+//        ├ ul[role=listbox] > li[role=option]
+//        └ p.no_data
+//
+// 사이즈는 forms 의 $inputSize 를 그대로 쓴다. (기본 m / .form-s, .form-l 문맥 또는 .s, .l 모디파이어)
+
+@mixin sel-search-size($size) {
+    $prop: map.get(fm.$inputSize, $size);
+    $h:   map.get($prop, h);
+    $hs:  map.get($prop, hs);
+    $ft:  map.get($prop, ft);
+    $fts: map.get($prop, fts);
+    $ico: map.get($prop, ico);
+    $po:  map.get($prop, po);
+    $pos: map.get($prop, pos);
+    $pd:  map.get($prop, pd);
+    $pds: map.get($prop, pds);
+
+    > button {
+        height: $h;
+        font-size: $ft;
+        padding: $pd;
+        padding-right: $po;
+        gap: $po;
+        i { width: $ico; }
+    }
+    .sel_search_panel {
+        padding: $po 0;
+        .fld {
+            padding: 0 $po $po;
+            input[type="search"] {
+                height: $h;
+                font-size: $ft;
+                padding: $pd;
+                padding-left: calc($po * 3.8);
+                background-position: left $po center;
+                background-size: 1.6rem auto;
+            }
+        }
+        li, .no_data {
+            font-size: $ft;
+            padding: calc(#{$po} / 2.4) calc(#{$po} * 2);
+        }
+    }
+
+    @include set.res-tab-lap() {
+        > button {
+            height: $hs;
+            font-size: $fts;
+            padding: $pds;
+            padding-right: $pos;
+            gap: $pos;
+        }
+        .sel_search_panel {
+            padding: $pos 0;
+            .fld {
+                padding: 0 $pos $pos;
+                input[type="search"] {
+                    height: $hs;
+                    font-size: $fts;
+                    padding: $pds;
+                    padding-left: $pos;
+                    background-position: right $pos center;
+                }
+            }
+            li, .no_data { font-size: $fts; }
+        }
+    }
+}
+
+.sel_search {
+    position: relative;
+    display: inline-flex;
+    flex-grow: 1;
+    min-width: 8rem;
+
+    // 원본 셀렉트 - 화면에서만 감춘다(값은 그대로 submit 된다)
+    > select { display: none; }
+
+    // 닫힌 상태 (기존 .form select 와 동일한 외형)
+    > button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        border: 1px solid set.$gray-30;
+        border-radius: .2rem;
+        background: set.$gray-0;
+        color: set.$gray-50;
+        font-weight: set.$fw-m;
+        transition: border-color set.$aniSet, color set.$aniSet;
+        cursor: pointer;
+        span {
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        i {
+            display: block;
+            aspect-ratio: 1/1;
+            flex-shrink: 0;
+            background: set.icon(che-bot, set.$gray-30) no-repeat center center / contain;
+            transform-origin: 50% 50%;
+            rotate: 0deg;
+            transition: rotate set.$aniSet;
+            pointer-events: none;
+        }
+        &:hover, &.hover {
+            border-color: set.$mCol-30;
+            color: set.$mCol-40;
+            i { background-image: set.icon(che-bot, set.$mCol-30); }
+        }
+        &:focus-visible, &.focus {
+            border-color: set.$mCol-60;
+            color: set.$mCol-60;
+            outline: none;
+            i { background-image: set.icon(che-bot, set.$mCol-60); }
+        }
+        &[aria-expanded="true"] {
+            border-radius: .2rem .2rem 0 0;
+            border-color: set.$mCol-60;
+            border-bottom-color: transparent;
+            color: set.$mCol-60;
+            font-weight: set.$fw-b;
+            i {
+                rotate: -180deg;
+                background-image: set.icon(che-bot, set.$mCol-60);
+            }
+        }
+        &:is(:disabled, [readonly]) {
+            border-color: set.$gray-30 !important;
+            color: set.$gray-30 !important;
+            background: set.$gray-10 !important;
+            pointer-events: none;
+            i { background-image: set.icon(che-bot, set.$gray-30); }
+        }
+    }
+
+    // 펼친 상태 - popover(top layer). 자리는 스크립트(ui.components.js sstSelectSearch 의 place())가
+    // 버튼의 getBoundingClientRect 로 top/left/width 를 인라인으로 넣는다 — anchor()/anchor-size() 는
+    // iOS Safari 가 파싱 오류를 내서 쓰지 않는다. 아래 공간이 모자라 위로 뒤집히면 .flip 이 붙는다.
+    .sel_search_panel {
+        position: fixed;
+        inset: auto;
+        margin: 0;
+        border: 1px solid set.$mCol-60;
+        border-top-color: transparent;
+        border-radius: 0 0 .2rem .2rem;
+        &.flip {
+            border-top-color: set.$mCol-60;
+            border-bottom-color: transparent;
+            border-radius: .2rem .2rem 0 0;
+        }
+        background: set.$gray-0;
+        overflow: visible;
+        display: none;
+        &:popover-open {
+            display: flex;
+            flex-direction: column;
+        }
+
+        // 검색 인풋
+        .fld {
+            display: block;
+            flex-shrink: 0;
+            input[type="search"] {
+                width: 100%;
+                border: 1px solid set.$gray-30;
+                border-radius: .2rem;
+                background: set.$gray-0 set.icon(ico-search, set.$gray-40) no-repeat;
+                color: set.$gray-100;
+                font-weight: set.$fw-m;
+                transition: border-color set.$aniSet;
+                &::placeholder { color: set.$gray-40; }
+                &::-webkit-search-cancel-button { cursor: pointer; }
+                &:hover { border-color: set.$mCol-30; }
+                &:focus {
+                    border-color: set.$mCol-60;
+                    outline: none;
+                    background-image: set.icon(ico-search, set.$mCol-60);
+                }
+            }
+        }
+
+        // 옵션 목록
+        ul {
+            @include set.scrollBar($color: set.$mCol-60);
+            max-height: 24rem;
+            overflow-y: auto;
+        }
+        li {
+            display: block;
+            &[hidden] { display: none; }
+            line-height: 1.6;
+            color: set.$gray-50;
+            font-weight: set.$fw-m;
+            cursor: pointer;
+            transition: background set.$aniSet, color set.$aniSet;
+            &.hov,
+            &:hover {
+                background: set.$mCol-5;
+                color: set.$mCol-60;
+                font-weight: set.$fw-b;
+            }
+            &[aria-selected="true"] {
+                color: set.$mCol-60;
+                font-weight: set.$fw-b;
+            }
+            &.disabled {
+                color: set.$gray-30;
+                pointer-events: none;
+            }
+            // 검색어 하이라이트
+            mark {
+                background: transparent;
+                color: set.$mCol-60;
+                font-weight: set.$fw-b;
+            }
+        }
+        .no_data {
+            display: none;
+            color: set.$gray-40;
+            line-height: 1.6;
+            text-align: center;
+        }
+        &.empty {
+            ul { display: none; }
+            .no_data { display: block; }
+        }
+    }
+
+    @include sel-search-size(m);
+    &.s { @include sel-search-size(s); }
+    &.l { @include sel-search-size(l); }
+}
+
+.form-s .sel_search:not(.s):not(.l) { @include sel-search-size(s); }
+.form-l .sel_search:not(.s):not(.m) { @include sel-search-size(l); }

@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+// sample 전용 utils 는 없습니다. 공통 utils 를 그대로 재노출만 합니다.
+// 이 파일 덕분에 로드 패스 설정이 없는 도구(Live Sass Compiler 등)에서도
+// sample 하위에서 `@use 'utils' as set;` 이 상대경로로 해석됩니다.
+@forward '../../../../css/scss/utils';

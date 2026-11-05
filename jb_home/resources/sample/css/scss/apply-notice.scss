@@ -1,0 +1,4 @@
+@charset "UTF-8";
+// 학습자 "신청 권한 없음" 진입 안내 모달 전용 추가 스타일(개발 작성). 퍼블 시안(sub.scss → sub.css)·dev-override.css 뒤에 읽어 그 위에 얹는다.
+// 산출물 apply-notice.css 는 node 가 없는 환경에서 손으로 컴파일했다(join-extra.css 와 같다) — 규칙을 고치면 두 파일을 함께 고친다.
+@use 'pages/apply_notice';

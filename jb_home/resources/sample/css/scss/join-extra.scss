@@ -1,0 +1,3 @@
+@charset "UTF-8";
+// 회원가입 전용 추가 스타일(개발 작성). 퍼블 시안(join.scss → join.css) 뒤에 읽어 그 위에 얹는다.
+@use 'pages/join_extra';

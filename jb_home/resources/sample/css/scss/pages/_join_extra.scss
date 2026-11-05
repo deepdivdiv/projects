@@ -1,0 +1,134 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+// [개발 작성] 회원가입(views/user/join.html) 전용 추가 규칙 — 퍼블 산출물이 아니다.
+//
+// 퍼블 시안(pages/_join.scss → join.css)의 .joinWrap 골격을 그대로 쓰고, 실동작에서만 필요해진 것을 여기에 얹는다.
+// <b>시안 파일(_join.scss)을 고치지 않는다</b> — 고치면 퍼블이 그 파일을 다시 넘길 때 우리 추가분이 조용히 사라지고,
+// 한 파일에 퍼블·개발 작업이 섞여 커밋 이력으로 어디까지가 받은 것인지 가릴 수 없다(학습방 pages/_study.scss 와 같은 방침).
+//
+// 퍼블 컴포넌트에 빠진 속성을 덮는 규칙은 여기가 아니라 dev/_override.scss 에 둔다 — 이 파일은 '회원가입 화면 전용'이다.
+//
+//   1) .qualification-groups  신청자격 한 칸(dd) 안에 소묶음(.qualification-group — 기본자격 / 경력인정 분야)을 세로로 쌓고
+//                             소제목(.qualification-group-title)을 dt 보다 한 단계 작게 둔다. 소묶음은 공고의 소제목을 따른
+//                             표시용 구분이라 dl 을 둘로 쪼개지 않는다(규칙은 전체 중 1개 이상 하나뿐).
+//   2) .qualification-list    체크박스 목록 — 사업 공고 문구를 그대로 쓰는 긴 라벨이라 한 줄에 하나씩 세로로 쌓고,
+//                             두 줄로 접히는 라벨에서 체크 상자가 찌그러지거나 가운데로 내려앉지 않게 한다.
+//                             공고의 ①②③ 번호는 붙이지 않는다(체크박스가 항목 표시라 중복이다).
+//   3) .learner-type-radios   학습자 구분 라디오(26년 신규 신청자/24~25년 기존 자격자) 묶음 — 두 보기를 '고르는 카드'로 그린다.
+//                             dd 안의 div 에 거는 이유는, dd 자체를 가로 flex 로 만들면 오류 문구(p.ip-cau)가 카드 옆에 끼기 때문이고,
+//                             .cut-flex 를 쓰지 않는 이유는 그 안의 span 규칙이 라벨을 흐리게 만들기 때문이다.
+//   4) .sel-* input:focus     커스텀 라디오·체크박스의 포커스 표시(아래 주석 참고).
+//
+// join.css 뒤에 읽히므로 같은 구체도면 이 파일이 이긴다.
+
+.joinWrap .qualification-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .qualification-group-title {
+        display: block;
+        margin-bottom: 1rem;
+        color: set.$gray-100;
+        font-size: set.$ft-bd-m;
+        font-weight: 700;
+    }
+}
+
+.joinWrap .qualification-list {
+    // .sel-l 이 자식(> *)마다 flex 를 주므로 목록 자체는 세로로 쌓는다.
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    // 항목 하나(input + label).
+    > div label {
+        // 두 줄로 접히는 라벨: 상자는 첫 줄에 붙이고(flex-start) 줄어들지 않게(flex-shrink) 한다.
+        align-items: flex-start;
+        i {
+            flex-shrink: 0;
+            margin-top: .2rem;
+        }
+        span { line-height: 1.5; }
+    }
+}
+
+// 학습자 구분 보기 — '고르는 카드'.
+// 점 하나짜리 기본 라디오로 뒀더니 신청서의 첫 칸인데도 눈에 띄지 않아 고르지 않고 지나친다는 문의가 있었다.
+// 이 값이 아래 칸(교육희망장소·전문분야·서류)을 가르므로, 안 고르면 신청서가 거의 비어 보여 다음에 뭘 할지도 알 수 없다.
+// 그래서 테두리 있는 카드로 키우고, 고른 쪽은 테두리·바탕·글자를 함께 바꿔 멀리서도 어느 쪽인지 보이게 한다.
+.joinWrap .learner-type-radios {
+    display: flex;
+    flex-wrap: wrap;
+    // 두 카드 높이를 맞춘다 — 보기 문구 길이가 달라 한쪽만 두 줄이 돼도 아래가 들쭉날쭉해지지 않는다.
+    align-items: stretch;
+    gap: 1.2rem;
+
+    > .sel-m {
+        // 한 줄에 둘, 좁아지면 한 줄에 하나씩 내려간다(기준폭보다 좁으면 wrap).
+        flex: 1 1 26rem;
+        display: flex;
+    }
+
+    // 카드 모양은 .sel-m 이 아니라 label 에 건다 — .sel-m 에 걸면 안쪽 여백이 라벨 바깥이라
+    // 테두리 안을 눌러도 선택되지 않는 자리가 생긴다. label 이 칸을 꽉 채우면 카드 전체가 누를 수 있는 곳이 된다.
+    > .sel-m label {
+        flex: 1;
+        gap: 1rem;
+        // 디자인시스템이 보기 안쪽에 flex-wrap:wrap 을 주는데(.sel > *), 문구가 길어지면 점과 글자가 서로 다른 줄로 갈린다.
+        // 한 줄에 묶어 두고 넘치는 글자만 그 자리에서 접히게 한다.
+        flex-wrap: nowrap;
+        padding: 1.8rem 2rem;
+        border: .1rem solid set.$gray-30;
+        border-radius: 1rem;
+        background: set.$gray-0;
+        color: set.$gray-90;
+        font-size: set.$ft-bd-l;
+        // 보기 문구가 길어 좁은 화면에서는 두 줄로 접힌다(신청자격 목록과 같은 이유로 줄간격을 넓혀 둔다).
+        line-height: 1.4;
+        cursor: pointer;
+        transition: all set.$aniSet;
+
+        // 문구가 두 줄로 접혀도 라디오 점이 찌그러지지 않게 한다.
+        i { flex-shrink: 0; }
+    }
+
+    > .sel-m label:hover {
+        border-color: set.$mCol-50;
+        background: set.$mCol-5;
+    }
+    // 아직 안 고른 보기에 마우스를 얹었을 때의 미리보기 점도 메인 컬러로 맞춘다(기본값은 회색이라 카드 색과 따로 논다).
+    > .sel-m input:not(:checked) + label:hover i::before {
+        background-color: set.$mCol-50;
+    }
+
+    // 고른 카드. 선은 border-width 를 키우지 않고 inset box-shadow 로 굵게 그린다 — 테두리 두께가 바뀌면
+    // 고를 때마다 카드 크기가 1px 씩 흔들린다.
+    > .sel-m input:checked + label {
+        border-color: set.$mCol-60;
+        box-shadow: 0 0 0 .1rem set.$mCol-60 inset;
+        background: set.$mCol-10;
+        color: set.$mCol-80;
+        font-weight: set.$fw-b;
+    }
+    // 고른 표시(점)도 메인 컬러로 — 기본값은 $gray-100 이라 파란 카드 안에서 혼자 검게 남는다.
+    > .sel-m input:checked + label i {
+        box-shadow: 0 0 0 .6rem set.$mCol-60 inset;
+    }
+}
+
+// 커스텀 라디오·체크박스의 포커스 표시.
+// 디자인시스템(components/form/_selection.scss)은 실제 input 을 clip-path 로 감추고 짝 라벨의 i 를 대신 그리므로,
+// 포커스가 가도 화면에는 아무 표시가 나지 않는다. 제출 검증은 첫 오류 칸으로 포커스를 옮기는데(join.js revealError)
+// 학습자 구분·성별처럼 라디오인 칸은 그래서 '아무 일도 안 일어난 것'처럼 보였다 — 라벨의 동그라미(i)에 링을 둘러
+// 포커스가 어디로 갔는지 보이게 한다.
+// :focus-visible 이 아니라 :focus 로 거는 이유 — [가입하기]를 마우스로 누른 뒤 스크립트가 옮긴 포커스는 마지막 조작이
+// 마우스라 :focus-visible 에 걸리지 않아 링이 그려지지 않는다. 퍼블 원본(.sel)에 들어가면 여기서 지운다.
+.joinWrap {
+    .sel-m input:focus + label i,
+    .sel-l input:focus + label i {
+        outline: .2rem solid set.$mCol-60;
+        outline-offset: .3rem;
+    }
+}

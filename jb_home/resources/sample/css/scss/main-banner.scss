@@ -1,0 +1,5 @@
+@charset "UTF-8";
+// 메인 비주얼 배너 전용 추가 스타일(개발 작성). 퍼블 시안(main.scss → main.css) 뒤에 읽어 그 위에 얹는다 —
+// 링크는 fragments/user/layout/resource 가 page == 'main' 일 때 main.css 다음에 건다.
+@use 'utils';
+@use 'pages/main_banner';

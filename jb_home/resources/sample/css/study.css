@@ -1,0 +1,104 @@
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
+#videoWrap .videoArea .video-js {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+#videoWrap .videoContent {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#videoWrap .videoArea {
+  position: relative;
+}
+#videoWrap .videoArea .study_cover {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.6rem;
+  background: rgba(0, 0, 0, 0.72);
+  border-radius: 1rem;
+}
+#videoWrap .videoArea .study_cover[hidden] {
+  display: none;
+}
+#videoWrap .videoArea .study_cover .cau-m {
+  color: #ffffff;
+  text-align: center;
+}
+#videoWrap .videoContent .videoInfo .infoTip {
+  align-items: flex-start;
+}
+#videoWrap .videoContent .videoInfo .infoTip i {
+  flex-shrink: 0;
+  margin-top: 0.3rem;
+}
+#videoWrap .videoContent .videoInfo .infoTip .tip_lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+#videoWrap .videoContent .videoInfo .infoTip.is-collapsible {
+  cursor: pointer;
+}
+#videoWrap .videoContent .videoInfo .infoTip.is-collapsible .tip_lines {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+#videoWrap .videoContent .videoInfo .infoTip.is-collapsible.is-collapsed .tip_lines > *:not(:first-child) {
+  display: none;
+}
+#videoWrap .videoContent .videoInfo .infoTip .tip_toggle {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 0 0.4rem;
+  border: 0;
+  background: none;
+  line-height: 1.4;
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  color: #0a60a9;
+  cursor: pointer;
+  white-space: nowrap;
+}
+#videoWrap .videoContent .videoArea .videoControlBar .set-seekBar.is-locked {
+  cursor: not-allowed;
+}
+#videoWrap .videoContent .videoArea .videoControlBar .set-seekBar.is-locked .mov-gauge {
+  opacity: 0.55;
+}
+#videoWrap .videoContent .videoArea .videoControlBar .set-speed .ctr-speed {
+  font-size: 1.2rem;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  min-width: 4.4rem;
+}
+#videoWrap .videoAside .as_conList ul li.is-locked {
+  cursor: not-allowed;
+}
+#videoWrap .videoAside .as_conList ul li.is-locked dl dt {
+  color: #9590a2;
+}
+#videoWrap .videoAside .as_conList ul li.is-locked:hover dl dt {
+  color: #9590a2;
+}
+#videoWrap .videoAside .as_panel[data-panel=lear] .as_conList li.is-static {
+  cursor: default;
+}
+#videoWrap .videoAside .as_panel[data-panel=lear] .as_conList li.is-static:hover {
+  background: none;
+}

@@ -1,0 +1,761 @@
+@charset "UTF-8";
+@use 'vari' as set;
+@use 'func' as fun;
+
+// 키프레임 믹스인
+@mixin ani-rotate($dur: 1000ms) { animation: ani-spinner $dur infinite linear reverse backwards; }
+
+// 말줄임
+@mixin lineCut($line:2) {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line;
+    overflow: hidden;  
+}
+
+// 스크롤색상변경
+@mixin scrollBar($color) {
+    scrollbar-width: thin;
+    scrollbar-color: $color set.$gray-5;
+}
+
+// 그림자 라인
+@mixin box-border() {
+  box-shadow: 0 0 0 1px set.$gray-30 inset;  
+}
+
+// 반응형 
+@mixin res-mobile {
+  @media screen and (max-width:335px) {
+    @content;
+  }
+}
+@mixin res-mo-tab {
+  @media screen and (max-width:535px) {
+    @content;
+  }
+}
+@mixin res-tablet {
+  @media screen and (max-width:720px) {
+    @content;
+  }
+}
+@mixin res-tab-lap {
+  @media screen and (max-width:960px) {
+    @content;
+  }
+}
+
+@mixin only-pc {
+  @media screen and (min-width:1025px) {
+    @content;
+  }
+}
+
+@mixin res-laptop {
+  @media screen and (max-width:1024px) {
+    @content;
+  }
+}
+
+
+@mixin res-lap-pc {
+  @media screen and (max-width:1500px) {
+    @content;
+  }
+}
+
+@mixin res-1200 {
+  @media screen and (max-width:1200px) {
+    @content;
+  }
+}
+
+
+@mixin base-width {
+    // width: calc(100% - min(6rem, 6vw)); max-width: 174rem; margin: 0 auto;
+    width: calc(100% - min(6rem, 6vw)); max-width: 160rem; margin: 0 auto;
+    box-sizing: border-box; 
+}
+
+
+@mixin ico-close($color) {
+    display: block;
+    height: 100%;
+    aspect-ratio: 1/1;
+    position: relative;
+    border-radius: 100rem;
+    &::before, &::after {
+        content: "";
+        width: calc(100% - .6rem);
+        height: .1rem;
+        background: $color;
+        position: absolute;
+        transform-origin: 0 0;
+        left: 50%; top: 50%; transform: translate(-50%, -50%);
+    }
+    &::before { rotate: -45deg; }
+    &::after  { rotate: 45deg; }
+}
+
+// 스피너
+@mixin spinner($color) {
+    display: block;
+    aspect-ratio: 1/1;
+    height: 100%;
+    max-height: 8rem;
+    background: fun.icon(ico-spinner, $color) no-repeat center center / contain;
+    @include ani-rotate(1000ms);
+}
+
+
+// 아이콘 믹스인
+@mixin getIcon($value, $color: #555555) {
+    background: fun.icon($value, $color) no-repeat center center / contain;
+}
+
+// 팝업 레이어 배경세팅
+@mixin popupSet() {
+    width: 100%; height: 100%; position: fixed; isolation: isolate;
+    background: rgba(0,0,0,0.8);
+    left: 0; top: 0;
+    backdrop-filter: blur(.3rem);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999;
+    &.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+
+  i.error   { background: fun.icon(ico-fail,    set.$sst-dCol-60) no-repeat center center / contain; }
+  i.comple  { background: fun.icon(ico-comple,  set.$sst-sCol-60) no-repeat center center / contain; }
+  i.warning { background: fun.icon(ico-warning, set.$sst-wCol-60) no-repeat center center / contain; }
+  i.info    { background: fun.icon(ico-info,    set.$sst-iCol-60) no-repeat center center / contain; }
+  i.quest   { background: fun.icon(ico-quest,   set.$sst-wCol-60) no-repeat center center / contain; }
+
+}
+
+
+@mixin notImg() {
+      &:not(img), img::after {
+          width: 100%; aspect-ratio: 16/9;
+          background: set.$gray-10 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='106' height='83' viewBox='0 0 106 83' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M23.4033 66.2002C24.9144 66.2002 26.2774 66.5488 27.4922 67.2451C28.7218 67.9414 29.6846 68.8966 30.3809 70.1113C31.0772 71.3261 31.4258 72.6967 31.4258 74.2227C31.4257 75.7485 31.0771 77.1192 30.3809 78.334C29.6846 79.5485 28.7216 80.504 27.4922 81.2002C26.2774 81.8964 24.9144 82.2451 23.4033 82.2451C21.8923 82.2451 20.5292 81.8965 19.3145 81.2002C18.0999 80.504 17.1445 79.5485 16.4482 78.334C15.752 77.1044 15.4034 75.7337 15.4033 74.2227C15.4033 72.7116 15.752 71.3486 16.4482 70.1338C17.1445 68.9043 18.0998 67.9414 19.3145 67.2451C20.5292 66.5489 21.8923 66.2002 23.4033 66.2002ZM23.4033 68.8887C22.4701 68.8887 21.618 69.1189 20.8477 69.5781C20.0923 70.0226 19.4922 70.6521 19.0479 71.4668C18.6182 72.2816 18.4033 73.2004 18.4033 74.2227C18.4034 75.2446 18.6184 76.1629 19.0479 76.9775C19.4922 77.7922 20.0923 78.4294 20.8477 78.8887C21.618 79.3331 22.4701 79.5556 23.4033 79.5557C24.3515 79.5557 25.2034 79.3331 25.959 78.8887C26.7293 78.4294 27.3292 77.7923 27.7588 76.9775C28.2031 76.1628 28.4257 75.2447 28.4258 74.2227C28.4258 73.2004 28.2032 72.2816 27.7588 71.4668C27.3292 70.6521 26.7293 70.0225 25.959 69.5781C25.2034 69.1189 24.3515 68.8887 23.4033 68.8887Z' fill='%23D8D8D8'/%3E%3Cpath d='M85.4434 66.2002C86.7024 66.2002 87.8431 66.4228 88.8652 66.8672C89.8872 67.2968 90.7538 67.9408 91.4648 68.7998L89.5537 70.667C88.4722 69.4818 87.1465 68.8887 85.5762 68.8887C84.5688 68.8887 83.6652 69.1189 82.8652 69.5781C82.08 70.0226 81.465 70.652 81.0205 71.4668C80.5909 72.2668 80.376 73.1856 80.376 74.2227C80.376 75.2446 80.591 76.1629 81.0205 76.9775C81.465 77.7775 82.08 78.4079 82.8652 78.8672C83.6503 79.3263 84.5465 79.5556 85.5537 79.5557C86.6796 79.5557 87.6577 79.2815 88.4873 78.7334V74.0225H91.2207V80.2451C90.4504 80.882 89.5466 81.3779 88.5098 81.7334C87.4875 82.0741 86.4426 82.2451 85.376 82.2451C83.865 82.2451 82.4942 81.9041 81.2646 81.2227C80.0499 80.5264 79.0947 79.5702 78.3984 78.3555C77.7171 77.126 77.376 75.7484 77.376 74.2227C77.376 72.6819 77.7246 71.3037 78.4209 70.0889C79.1171 68.8743 80.0726 67.9265 81.2871 67.2451C82.5167 66.5488 83.9026 66.2002 85.4434 66.2002Z' fill='%23D8D8D8'/%3E%3Cpath d='M10.333 76.667V66.4443H13.2666V82H10.8223L2.93359 71.7783V82H0V66.4443H2.44434L10.333 76.667Z' fill='%23D8D8D8'/%3E%3Cpath d='M40.9268 82H37.9492V66.4443H40.9268V82Z' fill='%23D8D8D8'/%3E%3Cpath d='M52.2822 76.5557L57.9482 66.4443H60.3936L60.415 82H57.6377L57.6152 71.9111L52.9043 80.2666H51.5713L46.8818 72.0889V82H44.082V66.4443H46.5264L52.2822 76.5557Z' fill='%23D8D8D8'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M77.752 82H74.6191L73.1963 78.4668H65.9961L64.5742 82H61.5078L68.1523 66.4443H71.085L77.752 82ZM66.9521 76.0664H72.2412L69.6191 69.5557L66.9521 76.0664Z' fill='%23D8D8D8'/%3E%3Cpath d='M104.846 68.9775H96.8896V72.8672H103.935V75.334H96.8896V79.4668H105.135V82H93.9346V66.4443H104.846V68.9775Z' fill='%23D8D8D8'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M42.1143 6.56152C46.0113 6.56152 49.1621 9.72257 49.1621 13.6094C49.162 17.4961 46.001 20.6562 42.1143 20.6562C38.2174 20.6562 35.0489 17.4961 35.0488 13.6094C35.0488 9.72263 38.2173 6.56162 42.1143 6.56152ZM42.1143 10.8115C40.5618 10.8116 39.2988 12.0671 39.2988 13.6094C39.2989 15.1516 40.5618 16.4071 42.1143 16.4072C43.6668 16.4072 44.912 15.1517 44.9121 13.6094C44.9121 12.067 43.6566 10.8115 42.1143 10.8115Z' fill='%23D8D8D8'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M68.9453 0C73.4566 0.000215209 77.126 3.67124 77.126 8.18262V42.8203C77.1258 47.1907 73.682 50.7699 69.3652 50.9893L68.9453 51H34.3057C29.7943 51 26.1252 47.3316 26.125 42.8203V8.18262C26.125 3.67112 29.7942 3.31112e-05 34.3057 0H68.9453ZM30.4561 43.6182C30.826 45.4035 32.4126 46.75 34.3057 46.75H63.6787L49.5918 33.1807C49.5851 33.1743 49.5788 33.1676 49.5723 33.1611L45.1631 28.9141L30.4561 43.6182ZM53.7803 31.3154L69.7188 46.6719C71.5159 46.3112 72.8748 44.7217 72.875 42.8203V33.4316L61.0254 19.8682L53.7803 31.3154ZM34.3057 4.25C32.1393 4.25003 30.376 6.01367 30.376 8.18262V37.6895L43.6338 24.4326C44.4557 23.6128 45.7799 23.601 46.6094 24.4062L50.6553 28.3047L58.9561 15.1895C59.3153 14.6228 59.9198 14.2597 60.5879 14.208C61.2724 14.1584 61.912 14.4256 62.3516 14.9277L72.875 26.9727V8.18262C72.875 6.01442 71.1115 4.25022 68.9453 4.25H34.3057Z' fill='%23D8D8D8'/%3E%3C/svg%3E") no-repeat center center / 35%;
+      }
+      a { display: block; width: 100%; height: 100%; }
+      img { width: 100%; height: 100%; object-fit: cover; }
+      // 이미지가 있으면 그 이미지가 최우선이다. 부모(.thumb)의 no-image 배경은 자식보다 항상 아래에 칠해지므로
+      // 배경이 img 를 가리는 일은 없고, 대체 그림은 img::after 만으로 동작한다 — Chrome/Firefox 는 깨진 img 에만
+      // 가상요소를 그리고 Safari(iOS) 는 img 에 가상요소를 아예 그리지 않아 어느 쪽도 로드된 이미지를 덮지 않는다.
+      // img 자체에는 content 를 주지 않는다. CSS Content 규격에서 요소의 content 는 "요소 내용을 그 값으로 바꾼다"라
+      // <img> 에 빈 문자열을 주면 규격대로 구현하는 엔진에서 이미지가 빈 상자로 바뀐다(지금 Blink/WebKit 은 url() 하나만
+      // 받고 문자열은 무시하지만, 엔진 갱신을 통제할 수 없는 iOS 에 남겨 둘 이유가 없다). 아바타(ava) 믹스인도 같은 방식이다.
+      img {
+          display: inline-block;
+          position: relative;
+          scale: 1.01;
+          &::after {
+              content: "";
+              position: absolute;
+              left: 0; top: 0;
+          }
+      }
+}
+
+// 별점
+@mixin rating($size:2rem, $gap:.8rem) {
+    --score: 0;
+    --star-size: #{$size};
+    display: inline-flex; align-items: center; gap: $gap;
+    &::before {
+        content: "";
+        width: calc(var(--star-size) * 5); height: var(--star-size);
+        background:
+            linear-gradient(
+                to right,
+                set.$sst-wCol-50 0,
+                set.$sst-wCol-50 calc(var(--score) * 20%),
+                #{set.$gray-20} calc(var(--score) * 20%),
+                #{set.$gray-20} 100%
+            );
+        -webkit-mask: fun.icon(ico-star, '#000') repeat-x left center / var(--star-size) var(--star-size);
+        mask: fun.icon(ico-star, '#000') repeat-x left center / var(--star-size) var(--star-size);
+    }
+    span {
+        font-weight: 300;
+        font-size: set.$ft-bd-s; color: set.$gray-50;
+        line-height: 1;
+    }
+}
+
+
+// 카드 로우형
+@mixin card-row() {
+    // 반응형은 뷰포트가 아니라 카드가 놓인 폭(container query) 기준이다 —
+    // 같은 카드가 좁은 단(마이페이지 aside 옆)에도 들어가므로 그쪽 폭에 반응해야 한다.
+    // 컨테이너 이름·중단점(800/520)은 .card-list·.card-grid 와 맞춘다.
+    container-type: inline-size;
+    container-name: cardList;
+    // 로우형은 카드가 세로로 쌓인다 — 목록 간격은 감싸는 쪽에서 준다.
+    display: flex; flex-direction: column; gap: 2rem;
+    // 카드 안쪽 여백(.info·.btnArea 공통). 좁아지면 아래 container query 에서 줄인다.
+    $roundPd: 3rem;
+    .card-item {
+        border-radius: 1rem;
+        position: relative;
+        overflow: hidden;
+        border: .1rem solid set.$gray-20;
+        display: flex;
+        transition: all set.$aniSet;
+        * { transition: all set.$aniSet; }
+        &:hover {
+            box-shadow: 0 1rem 1rem -1rem rgba(set.$mCol-100, 0.2);
+        }
+        .thumb {
+            width: 100%; max-width: 32rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            // 썸네일 안쪽도 flex 로 둬서 a 가 남는 높이를 그대로 받게 한다(퍼센트 높이 의존 제거).
+            display: flex;
+            // notImg() 가 .thumb:not(img) 에 height:100% 를 박아 stretch 를 무력화한다.
+            // 로우형 썸네일은 카드(=.info) 높이를 그대로 채워야 하므로 auto 로 되돌린다.
+            // notImg() 와 특정도(0,3,1)를 맞춰야 뒤에 오는 이 규칙이 이긴다.
+            &:not(img) { height: auto; align-self: stretch; }
+            a { flex: 1 1 auto; }
+            // notImg() 의 img 는 inline-block 이라 아래에 베이스라인 여백이 생기고
+            // .thumb 의 overflow:hidden 에 그만큼 잘린다 — block 으로 바꿔 높이를 꽉 채운다.
+            img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        }
+        .info {
+            flex-grow: 1;
+            padding: $roundPd;
+            background: set.$gray-0;
+            box-sizing: border-box;
+            // 배지는 .info 안에 있지만 썸네일 위에 올라간다 — 컨테이닝 블록은 .card-item(position:relative).
+            // anchor()/position-anchor 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다. 로우형은 썸네일이
+            // 카드 왼쪽 위에 붙어 있으므로 "카드 기준 2rem" 이 곧 "썸네일 기준 2rem" 이다.
+            > em {
+                position: absolute;
+                top: 2rem; left: 2rem;
+                transition: none;
+            }
+            .data--state {
+                position: absolute;
+                // 폭은 썸네일 폭(max-width 32rem)에서 좌우 2rem 을 뺀 값으로 고정해 썸네일 안에 가둔다.
+                // right 로 잡으면 .card-item 기준이라 카드 전체 폭으로 벌어져 오른쪽 배지가 썸네일 밖으로 나간다.
+                // 썸네일 폭을 바꾸면(아래 container query 포함) 이 값도 같이 맞춘다.
+                top: 2rem; left: 2rem;
+                width: calc(32rem - 4rem);
+                transition: none;
+                display: flex; align-items: center; justify-content: space-between;
+                em {
+                    border-radius: 100rem;
+                    width: 6rem; aspect-ratio: 1/1;
+                    display: flex; align-items: center; justify-content: center;
+                    background: set.$gray-100;
+                    color: set.$gray-0;
+                    font-size: set.$ft-bd-s;
+                    &.state-on { background: set.$mCol-60; }
+                    &.state-off { background: set.$gray-100; }
+                    &.state-com { background: set.$sst-sCol-60; }
+                    &.state-fail { background: set.$sst-dCol-60; }
+                }
+            }
+            .data--value {
+                display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+                em { border-radius: .2rem; }
+                ul {
+                    display: flex; align-items: center;
+                    li {
+                        font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: 300;
+                    }
+                    li:not(:last-child) {
+                        display: flex; align-items: center;
+                        &::after {
+                            content: "";
+                            display: block;
+                            width: 1px; height: 11px; background: set.$gray-10; margin: 0 0.9rem;
+                        }
+                    }
+                }
+            }
+            > dl {
+                display: flex; flex-direction: column; gap: .8rem;
+                a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+                dt, dd { @include lineCut($line:1); }
+                dt { font-size: set.$ft-tt-s; font-family: set.$ft-point; color: set.$gray-100; font-weight: 600; }
+                dd { font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;  }
+            }
+            > .data--inst {
+                display: flex; flex-direction: column; gap: 1rem;
+                a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+                p { @include lineCut($line:1); min-width: 0; }
+                p { font-size: set.$ft-tt-s; font-family: set.$ft-point; color: set.$gray-100; font-weight: 600; }
+                .inst-list {
+                    display: grid; grid-template-columns: max-content 1fr; gap: .2rem 1rem;
+                    align-items: center;
+                    // span 은 박스를 만들지 않고 b(1열) 와 값 텍스트(2열) 를 이 그리드에 직접 올린다.
+                    // 그래야 행이 달라도 라벨 칸 폭이 하나로 묶여 값 시작 위치가 맞는다.
+                    > span {
+                        display: contents;
+                        font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;
+                        b, strong {
+                            font-weight: set.$fw-eb; color: set.$gray-100;
+                            text-align: justify; text-align-last: justify;
+                        }
+                    }
+                }
+                // 값 칸에 막대와 수치를 같이 놓을 때(진도율). 값 전체를 .rate 한 덩어리로 감싸야
+                // 2열에 그리드 아이템 하나로 들어간다 — 풀어놓으면 막대가 다음 행 1열로 떨어진다.
+                .rate {
+                    display: flex; align-items: center; gap: .8rem;
+                    // 공용 프로그레스바([class^="pg-"])는 width:100% 라 값 칸을 다 먹는다.
+                    // 여기서는 수치 옆 보조 표시라 폭을 고정한다.
+                    [class^="pg-"] { width: 8rem; flex-shrink: 0; }
+                }
+            }
+            > .data--hash {
+                display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 2rem;
+                em { border-radius: 100rem; }
+            }
+            .data {
+                padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+                font-size: set.$ft-bd-m; color: set.$gray-50;
+                display: flex; align-items: center; gap: 2rem;
+                p { font-weight: 300; }
+                > strong { flex-grow: 1; font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; }
+                > p { flex-grow: 1; }
+                > div { display: flex; align-items: center; gap: 2rem; }
+                [class^="data--"] {
+                    display: flex; align-items: center; gap: .4rem;
+                    &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+                }
+                &-- {
+                    &write { &::before { background: fun.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                    &view  { &::before { background: fun.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                    &like  { &::before { background: fun.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+                }
+            }
+        }
+        .btnArea {
+            // 왼쪽 여백은 본문(.info)의 오른쪽 여백과 겹쳐 두 배가 되므로 뺀다.
+            padding: $roundPd $roundPd $roundPd 0;
+            flex-shrink: 0;
+            // 본문이 길어져도 버튼 묶음은 카드 높이 가운데에 둔다(위로 붙어 뜨지 않게).
+            display: flex; flex-direction: column; justify-content: center; gap: 1rem;
+            a, button {
+                min-width: 16rem;
+            }
+        }
+        &:hover {
+            .thumb img { scale: 1.12;}
+            .info {
+                dl dt { color: set.$mCol-60; }
+            }
+        }
+
+    }
+
+    // 썸네일(32rem) + 본문 + 버튼칸(16rem) 이 한 줄에 다 서기엔 좁아지는 지점.
+    // 버튼칸을 먼저 아래로 접어 본문 폭을 되돌린다(썸네일은 아직 옆에 둔다).
+    @container cardList (max-width: 960px) {
+        .card-item {
+            flex-wrap: wrap;
+            .thumb { max-width: 28rem; }
+            .info { padding: 2rem; }
+            .btnArea {
+                // width:100% 라 앞의 썸네일·본문 줄에서 밀려 다음 줄로 내려간다.
+                width: 100%; box-sizing: border-box;
+                // 카드 아래 붙는 액션 푸터 — 본문과 맞닿으므로 경계선을 긋는다.
+                border-top: .1rem solid set.$gray-20;
+                padding: 1.6rem 2rem;
+                // 액션은 오른쪽 끝 정렬이 표준이다. 폭이 모자라면 다음 줄로 접힌다.
+                flex-direction: row; flex-wrap: wrap; justify-content: flex-end;
+                a, button { flex: 0 1 auto; min-width: 14rem; }
+            }
+        }
+    }
+    // 본문 요소 간 여백·배지 크기를 한 단계 줄인다(.card-list·.card-grid 와 같은 800 중단점).
+    @container cardList (max-width: 800px) {
+        .card-item {
+            .thumb { max-width: 22rem; }
+            // 버튼 폭을 줄여 두 개까지는 한 줄에 서게 둔다.
+            .btnArea a, .btnArea button { min-width: 12rem; }
+            .info {
+                // 배지 폭은 썸네일 폭(22rem)에 묶여 있어 썸네일이 작아지면 안쪽 여백·폭도 같이 줄인다.
+                .data--state {
+                    top: 1.4rem; left: 1.4rem;
+                    width: calc(22rem - 2.8rem);
+                    em { width: 4.4rem; }
+                }
+                .data--value { margin-bottom: .6rem; }
+                > .data--inst { gap: .6rem; }
+                > .data--hash { margin-top: 1.2rem; }
+            }
+        }
+    }
+    // 썸네일을 옆에 두기 어려운 폭 — 위아래로 세운다(카드 로우형이 그리드형 모양이 된다).
+    @container cardList (max-width: 520px) {
+        .card-item {
+            flex-direction: column; align-items: stretch;
+            // 세로로 서면 썸네일이 카드 폭을 다 쓰므로 높이는 비율로 잡는다.
+            .thumb { max-width: 100%; aspect-ratio: 16/9; }
+            .info {
+                padding: 1.6rem;
+                // 썸네일이 카드 폭을 다 쓰므로 배지도 고정 폭 대신 좌우 여백으로 편다.
+                .data--state { width: auto; right: 1.4rem; }
+            }
+            .btnArea {
+                padding: 1.6rem;
+                // 이 폭에서는 오른쪽 정렬이 의미가 없다 — gap(1rem)만 빼고 2열로 꽉 채운다.
+                justify-content: flex-start;
+                a, button { flex: 1 1 calc(50% - .5rem); min-width: 0; }
+            }
+        }
+    }
+}
+
+
+// 카드 문서형 — 로우형(card-row)의 변형.
+// 발급 문서(수료증 등) 목록에 쓴다. 썸네일이 문서 미리보기라 세로로 길고,
+// 본문은 제목 + [라벨/값] 발급정보, 오른쪽에 내려받기·출력 버튼이 선다.
+// 반응형은 로우형과 같은 방식(container query)이지만, 카드가 얕아 중단점은 더 낮다.
+@mixin card-doc() {
+    container-type: inline-size;
+    container-name: cardList;
+    // 카드가 세로로 쌓인다 — 목록 간격은 감싸는 쪽에서 준다.
+    display: flex; flex-direction: column; gap: 1.6rem;
+    $docPd: 2.4rem;
+    * { transition: all set.$aniSet; }
+    .card-item {
+        display: flex; align-items: center; gap: 2.4rem;
+        padding: $docPd;
+        border: .1rem solid set.$gray-20; border-radius: 1.2rem;
+        background: set.$gray-0;
+        &:hover {
+            border-color: set.$mCol-60;
+            box-shadow: 0 1rem 1rem -1rem rgba(set.$mCol-100, 0.2);
+        }
+        // 문서 미리보기. 이미지가 붙기 전에는 안쪽 글자가 자리표시자다.
+        .thumb {
+            width: 8rem; aspect-ratio: 3/4;
+            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            border: .1rem solid set.$gray-20; border-radius: .4rem;
+            background: set.$gray-5;
+            overflow: hidden;
+            span { font-size: set.$ft-bd-s; color: set.$mCol-60; font-weight: set.$fw-b; }
+            img { width: 100%; height: 100%; object-fit: cover; }
+        }
+        .info {
+            flex-grow: 1; min-width: 0;
+            > .tit {
+                @include lineCut($line:1);
+                margin-bottom: 1.2rem;
+                font-size: set.$ft-tt-s; font-weight: 700; color: set.$gray-100;
+                a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+            }
+            // 발급정보 — [라벨 + 값] 짝이 흐르듯 배치된다.
+            // 첫 항목(수강기간)만 한 줄을 다 쓰고 나머지가 다음 줄에 나란히 선다.
+            .doc_data {
+                display: flex; flex-wrap: wrap; column-gap: 2.4rem; row-gap: .6rem;
+                > div {
+                    display: flex; align-items: center; gap: .8rem; min-width: 0;
+                    &:first-child { flex-basis: 100%; }
+                }
+                dt { flex-shrink: 0; font-size: set.$ft-bd-s; color: set.$gray-100; font-weight: set.$fw-b; }
+                dd { font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m; }
+            }
+        }
+        .btnArea {
+            flex-shrink: 0;
+            display: flex; flex-direction: column; gap: .8rem;
+            a, button { min-width: 11rem; }
+        }
+    }
+
+    // 버튼칸까지 한 줄에 세우기 좁은 지점 — 버튼을 아래로 접어 가로로 편다.
+    @container cardList (max-width: 640px) {
+        .card-item {
+            flex-wrap: wrap;
+            .btnArea {
+                width: 100%;
+                flex-direction: row;
+                a, button { flex: 1 1 0; min-width: 0; }
+            }
+        }
+    }
+    @container cardList (max-width: 420px) {
+        .card-item {
+            gap: 1.6rem; padding: 1.6rem;
+            .thumb { width: 6rem; }
+            .info > .tit { margin-bottom: .8rem; }
+        }
+    }
+}
+
+
+// 카드 리스트형
+@mixin card-list() {
+    container-type: inline-size;
+    container-name: cardList;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(56rem, 1fr)); gap: 2rem;
+    * { transition: all set.$aniSet; }
+    .card-item {
+    padding: 2rem; border-radius: 1rem;
+    border: .1rem solid set.$gray-20;
+    display: flex; align-items: center; gap: 2rem; flex-grow: 1; 
+    overflow: hidden;
+    .thumb {
+        aspect-ratio: 1/1;
+        width: 100%; max-width: 18rem;
+        border-radius: .4rem;
+        overflow: hidden;
+    }       
+    .info {
+        flex-grow: 1;
+        > em {
+            font-size: set.$ft-bd-m;
+            font-weight: set.$fw-b;
+            text-box: set.$tbSet;
+            line-height: 1;
+            color: set.$mCol-60;
+            display: block; margin-bottom: 2rem;
+        }
+        dl {
+            display: flex; flex-direction: column; gap: 1rem;
+            dt, dd { @include lineCut($line:1); }
+            a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+            dt { font-size: set.$ft-tt-m; font-family: set.$ft-point; color: set.$gray-100; }
+            dd { font-size: set.$ft-bd-l; color: set.$gray-50; font-weight: set.$fw-m;  }
+        }
+        .data {
+            padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+            font-size: set.$ft-bd-m; color: set.$gray-50; 
+            display: flex; align-items: center; gap: 2rem;
+            p { font-weight: 300; }
+            > p { flex-grow: 1; }
+            > div { display: flex; align-items: center; gap: 2rem; }
+            [class^="data--"] {
+                display: flex; align-items: center; gap: .4rem;
+                &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+            }
+            &-- {
+                &write { &::before { background: fun.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                &view  { &::before { background: fun.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                &like  { &::before { background: fun.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+            }
+        }
+    }
+    }
+    @container cardList (max-width: 800px) {
+        .card-item {
+            padding: 1rem;
+            .thumb { max-width: 12rem; }
+            .info {
+                em { margin-bottom: 1rem; font-size: set.$ft-bd-s;}
+                dl {
+                    dt { font-size: set.$ft-tt-s; }
+                    dd { font-size: set.$ft-bd-m; }
+                }
+                .data { 
+                    padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s; 
+                    [class^="data--"] {
+                        &::before { width: 1.4rem;}
+                    }
+                }
+            }
+        }
+    }
+    @container cardList (max-width: 520px) {
+        .card-item {
+            flex-direction: column;
+            align-items: stretch;
+            .thumb { max-width: 100%; aspect-ratio: 16/9; }
+        }
+    }
+    
+}
+// 그리드형 카드 — 아이템 1개
+// 그리드 밖(슬라이드 등)에서도 카드 한 장을 그대로 쓰려고 `.card-item` 안쪽만 분리했다.
+// 반응형이 container query 라서, 감싸는 요소에 container-type/name 이 있어야 동작한다.
+//   .card-slide {
+//       container-type: inline-size; container-name: cardList;
+//       .swiper-slide { @include set.card-grid-item(); }
+//   }
+// 컨테이너 이름이 다르면 $container 로 맞추고, 반응형이 필요 없으면 $responsive: false 로 끈다.
+@mixin card-grid-item($container: cardList, $responsive: true) {
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+    border: .1rem solid set.$gray-20;
+    display: flex; align-items: center;
+    flex-direction: column;
+    transition: all set.$aniSet;
+    * { transition: all set.$aniSet; }
+    &:hover {
+        box-shadow: 0 1rem 1rem -1rem rgba(set.$mCol-100, 0.2);
+    }
+    .thumb {
+        aspect-ratio: 16/9;
+        width: 100%;
+        overflow: hidden;
+        // 상태 배지(.data--state)의 컨테이닝 블록 — 썸네일 오른쪽 위에 붙인다.
+        position: relative;
+        img { width: 100%; height: 100%; object-fit: cover; }
+        // 상태 배지는 .info 가 아니라 .thumb 안에 둔다(마크업 규격).
+        // anchor()/position-anchor 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다. 썸네일을 position:relative 로
+        // 두고 그 오른쪽 위(top:0, right:0)에 일반 absolute 로 붙인다 — 모든 브라우저에서 같은 자리다.
+        .data--state {
+            position: absolute;
+            top: 0; right: 0;
+            z-index: 1;
+            em {
+                border-radius: 0 0 0 0.9rem;
+                width: 7rem;
+                // aspect-ratio: 1/1;
+                padding: 0.5rem;
+                display: flex; align-items: center; justify-content: center;
+                background: set.$gray-100;
+                color: set.$gray-0;
+                font-size: set.$ft-bd-s;
+                &.state-on { background: set.$mCol-60; }
+                &.state-off { background: set.$gray-100; }
+                &.state-com { background: set.$sst-sCol-60; }
+                &.state-fail { background: set.$sst-dCol-60; }
+            }
+        }
+    }
+    .band {
+        font-size: set.$ft-bd-m;
+        color: set.$gray-0;
+        // background: set.$gray-100;
+        background: #ebae3e;
+        text-align: center;
+        padding: .5rem;
+        width: 100%;
+    }
+    .info {
+        width: 100%;
+        padding: 2rem;
+        min-height: 20rem;
+        background: set.$gray-0;
+        box-sizing: border-box;
+        flex-grow:1;
+        display: flex; flex-direction: column; gap: 1rem;
+        > em {
+            position: absolute;
+            // 컨테이닝 블록은 .card-item(position:relative). 그리드형은 .thumb 가 카드 맨 위에
+            // 꽉 차게 놓여 "썸네일 기준 2rem" 과 "카드 기준 2rem" 이 같은 자리다.
+            top: 2rem; left: 2rem;
+            transition: none;
+        }
+        .data--value {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+            em { border-radius: .2rem; }
+            ul {
+                display: flex; align-items: center;
+                li {
+                    font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: 300;
+                }
+                li:not(:last-child) {
+                    display: flex; align-items: center;
+                    &::after {
+                        content: "";
+                        display: block;
+                        width: 1px; height: 11px; background: set.$gray-10; margin: 0 0.9rem;
+                    }
+                }
+            }
+        }
+        > dl {
+            display: flex; flex-direction: column; gap: .8rem;
+            a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+            dt, dd { @include lineCut($line:1); }
+            dt { font-size: set.$ft-tt-s; font-family: set.$ft-point; color: set.$gray-100; font-weight: 600; }
+            dd { font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;  }
+        }
+        > .data--inst {
+            display: flex; flex-direction: column; gap: .8rem; flex-grow: 1; justify-content: space-between;
+            a { font-weight: inherit; color: inherit; font-size: inherit; display: block; }
+            p { @include lineCut($line:2); min-height: clamp(5.4rem, 1.9531vw, 6rem);  }
+            p { font-size: set.$ft-tt-s; font-family: set.$ft-point; color: set.$gray-100; font-weight: 600; }
+            span {
+                display: flex; flex-wrap: wrap;
+                font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;
+                b, strong { font-weight: set.$fw-eb; color: set.$gray-100; display: inline-block; margin-right: 1rem; }
+            }
+        }
+        > .data--hash {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            em { border-radius: 100rem; }
+        }
+        > .data--btn {
+            display: flex; align-items: center; gap: 1rem; margin-top: auto;
+            flex-wrap: wrap;
+            button, a {
+                flex: 1 1 0;
+            }
+        }
+        .data {
+            padding-top: 2rem; margin-top: 2rem; border-top: .1rem solid set.$gray-20;
+            font-size: set.$ft-bd-m; color: set.$gray-50;
+            display: flex; align-items: center; gap: 2rem;
+            p { font-weight: 300; }
+            > strong { flex-grow: 1; font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-100; }
+            > p { flex-grow: 1; }
+            > div { display: flex; align-items: center; gap: 2rem; }
+            [class^="data--"] {
+                display: flex; align-items: center; gap: .4rem;
+                &::before { content: ""; width: 2rem; aspect-ratio: 1/1; display: block; }
+            }
+            &-- {
+                &write { &::before { background: fun.icon(ico-write, set.$mCol-60) no-repeat center center / contain;  } }
+                &view  { &::before { background: fun.icon(ico-view, set.$mCol-60) no-repeat center center / contain;  } }
+                &like  { &::before { background: fun.icon(ico-like, set.$mCol-60) no-repeat center center / contain;  } }
+            }
+        }
+    }
+    &:hover {
+        .thumb img { scale: 1.12;}
+        .info {
+            dl dt { color: set.$mCol-60; }
+        }
+    }
+
+    @if $responsive {
+        @container #{$container} (max-width: 800px) {
+            .info {
+                em {
+                    font-size: set.$ft-bd-s;
+                }
+                dl {
+                    dt { font-size: set.$ft-tt-s; }
+                    dd { font-size: set.$ft-bd-m; }
+                }
+                .data {
+                    padding-top: 1rem; margin-top: 1rem; font-size: set.$ft-bd-s;
+                    [class^="data--"] {
+                        &::before { width: 1.4rem;}
+                    }
+                }
+            }
+        }
+        @container #{$container} (max-width: 520px) {
+            flex-direction: column;
+            align-items: stretch;
+            .thumb { max-width: 100%; aspect-ratio: 16/9; }
+        }
+    }
+}
+
+// 그리드형 카드 — 아이템을 감싸는 그리드
+@mixin card-grid($min: 28rem, $gap: 2rem, $container: cardList) {
+    container-type: inline-size;
+    container-name: #{$container};
+    display: grid; grid-template-columns: repeat(auto-fill, minmax($min, 1fr)); gap: $gap;
+    .card-item { @include card-grid-item($container); }
+}

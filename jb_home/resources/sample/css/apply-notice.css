@@ -1,0 +1,21 @@
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
+#modalArea .modalItem {
+  max-width: 51rem;
+}
+#modalArea .modalItem > span {
+  word-break: keep-all;
+  text-wrap-style: pretty;
+}
+#modalArea .modalItem > span .apply_notice_sub {
+  display: block;
+  margin-top: 1rem;
+  color: #e61e21;
+  font-weight: 400;
+}

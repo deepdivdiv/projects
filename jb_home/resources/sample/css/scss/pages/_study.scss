@@ -1,0 +1,184 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+// [개발 작성] 학습방(views/user/study/room.html) 전용 추가 규칙 — 퍼블 산출물이 아니다.
+//
+// 퍼블 시안(pages/_video.scss → video.css)의 #videoWrap 골격을 그대로 쓰고, 실동작에서만 필요해진
+// 일곱 가지를 여기에 얹는다. <b>시안 파일(_video.scss)을 고치지 않는다</b> — 고치면 퍼블이 그 파일을
+// 다시 넘길 때 우리 추가분이 조용히 사라지고, 한 파일에 퍼블·개발 작업이 섞여 커밋 이력으로
+// 어디까지가 받은 것인지 가릴 수 없다. 새 파일로 두면 그 문제가 없다(퍼블은 자기 파일만 넘긴다).
+//
+// 퍼블 컴포넌트에 빠진 속성을 덮는 규칙은 여기가 아니라 dev/_override.scss 에 둔다 —
+// 이 파일은 '학습방 화면 전용', 그쪽은 '컴포넌트 보정' 이라 수명이 다르다(그쪽은 퍼블에 반영되면 지운다).
+//   1) .video-js       video.js 가 바꿔치운 플레이어 상자의 크기 — 안 주면 영상이 안 보인다
+//   2) .videoContent    본문 세로 스크롤 — 안 주면 창이 낮을 때 [학습 종료] 가 잘린 채 닿지 않는다
+//   3) .study_cover     재생 시작 전 덮개([학습 시작] 버튼) — 자동 재생을 걸지 않으므로 눌러야 시작한다
+//   4) .infoTip .tip_lines    정책에 따라 1~5줄로 늘어나는 학습 규칙 안내를 세로로 쌓고 첫 줄만 남겨 접는다
+//   5) .set-seekBar.is-locked  건너뛰기 금지 차수의 싱크바 잠금 표시(앞·뒤 모두 막는다)
+//   6) .set-speed       배속 버튼(정책이 배속을 허용한 차수에서만 보인다)
+//   7) .as_conList li.is-locked  순차 수강에서 아직 열리지 않은 차시 줄
+//   8) 관련학습 목록           누를 수 없는 줄(학습 대상이 아니라 안내다)
+//
+// video.css 뒤에 읽히므로 같은 구체도면 이 파일이 이긴다.
+
+#videoWrap {
+
+  // ── 1) 플레이어 상자 크기 ─────────────────────────────────────────────
+  // <b>이 블록이 없으면 영상이 보이지 않는다.</b>
+  //
+  // video.js 는 초기화할 때 <video id="study_player"> 를 <div class="video-js"> 로 바꿔치우고
+  // 원래 video 를 그 안으로 넣는다(id·class 가 div 로 옮겨가고 video 는 .vjs-tech 가 된다).
+  // 그래서 퍼블 시안의 `.videoArea video { width:100%; height:100% }`(pages/_video.scss)는
+  // 그 div 에 걸리지 않고, video.js 기본 크기 300x150 이 그대로 남는다 —
+  // 16:8 로 잡힌 .videoArea 안에 1/4 크기로 박혀 배경만 크게 보인다(실측으로 확인했다).
+  //
+  // 스크립트도 `fill: true` 로 같은 크기를 주지만(study-room.js), 옵션 한 줄이 빠지면 바로
+  // 안 보이는 화면이 되므로 CSS 로도 못 박는다. display:block 은 video.js 기본 inline-block 이
+  // 남기는 baseline 여백(영상 아래 몇 px 틈)을 없앤다.
+  .videoArea .video-js {
+    display: block;
+    width: 100%; height: 100%;
+  }
+
+  // ── 2) 본문 세로 스크롤 ───────────────────────────────────────────────
+  // <b>이 블록이 없으면 창이 낮을 때 [학습 종료] 버튼이 잘린 채 닿지 않는다.</b>
+  //
+  // 퍼블 시안은 .videoContent 를 `height: calc(100vh - 8rem)` 고정 + `overflow: hidden` 으로 잡았다
+  // (앱처럼 한 화면에 들어가는 레이아웃). 시안의 안내는 한 줄이라 늘 들어갔는데, 우리는 화면에 걸린
+  // 학습 규칙을 정책대로 적어(최대 5줄 — CLAUDE.md 의 "화면에 기준을 적는다" 규약) 그만큼 키웠다.
+  // 그래서 <b>가로는 넓고 세로는 짧은 창</b>에서 넘친다 — 영상은 16:8 이라 폭에 따라 커지는데 높이는
+  // vh 고정이기 때문이다. 실측: 1920x900 에서 46px, 1280x650 에서 56px 잘렸고 <b>휠을 굴려도
+  // scrollTop 이 0 에서 움직이지 않아</b>(overflow:hidden) [학습 종료] 에 영구히 닿을 수 없었다.
+  //
+  // 넘치게 만든 쪽이 우리이므로 여기서 스크롤을 연다. 목차(.as_conList)는 퍼블이 이미 같은 이유로
+  // overflow-y:auto 를 열어 두었으니, 본문만 빠진 것을 맞추는 셈이다.
+  // overflow-x 는 hidden 으로 못 박는다 — y 만 auto 로 주면 브라우저가 x 도 auto 로 계산해
+  // 영상의 min-content 때문에 가로 스크롤이 생길 수 있다(퍼블이 overflow:hidden 을 둔 이유).
+  .videoContent {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  // ── 3) 재생 시작 전 덮개 ──────────────────────────────────────────────
+  // 플레이어 위에 덮어 [학습 시작]을 누르게 한다. 브라우저 자동재생 정책상 음소거 없이는 자동 재생이
+  // 막히고, 이어보기 안내를 띄울 자리도 필요해 시작을 명시적 동작으로 둔다.
+  .videoArea {
+    position: relative;
+
+    .study_cover {
+      position: absolute; inset: 0;
+      z-index: 5;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1.6rem;
+      background: rgba(0, 0, 0, .72);
+      border-radius: 1rem;
+
+      // <b>이 한 줄이 없으면 덮개가 절대 사라지지 않는다.</b>
+      //
+      // 스크립트는 재생이 시작되면 `el.cover.hidden = true` 로 덮개를 내린다(study-room.js). 그런데
+      // `hidden` 을 숨김으로 만드는 건 브라우저 기본 스타일 `[hidden] { display:none }` 이고, 그 구체도는
+      // (0,1,0) 이라 <b>바로 위의 `display:flex`(#videoWrap .videoArea .study_cover = (1,2,0))에 진다.</b>
+      // 그래서 attribute 는 붙는데 화면에서는 그대로 남아,
+      //   · 72% 검은 배경이 재생 중인 영상을 덮고([학습 시작] 버튼과 안내 문구까지 그대로 보인다)
+      //   · inset:0 · z-index:5 로 컨트롤바(z-index:2) 위에 깔려 재생·정지·음량·전체화면이 전부 안 눌린다
+      // 는 상태가 된다 — "영상이 안 나오고 아무것도 안 눌린다" 로 드러난다(실측으로 확인했다).
+      //
+      // display 를 선언한 요소에 `hidden` 을 쓰려면 이 짝을 반드시 함께 둔다(저장소 안에도
+      // components/form/_selectSearch.scss · components/board/_write.scss 등 같은 짝이 있다).
+      &[hidden] { display: none; }
+
+      // 안내 문구는 시안의 주의 문구 컴포넌트(.cau-m.if)를 쓰되 어두운 배경 위라 색만 되돌린다.
+      .cau-m {
+        color: set.$gray-0;
+        text-align: center;
+      }
+    }
+  }
+
+  // ── 4) 학습 규칙 안내(여러 줄) ────────────────────────────────────────
+  // 퍼블 .infoTip 은 `<i> + 한 줄 텍스트` 를 가로로 놓는 컴포넌트다(display:flex; align-items:center).
+  // 학습방의 안내는 차수 정책에 따라 1~5줄로 늘어나므로 화면이 줄들을 .tip_lines 한 자식으로 묶어 주고
+  // (room.html), 여기서 그 안을 세로로 쌓는다. 아이콘은 첫 줄 높이에 맞춘다 —
+  // 가운데 정렬로 두면 줄이 늘어날수록 아이콘이 문단 중간에 떠 어느 줄의 표시인지 알기 어렵다.
+  //
+  // <b>선택자 깊이를 퍼블과 똑같이 맞춘다</b>(.videoContent .videoInfo .infoTip). 퍼블 원본이
+  // `#videoWrap .videoContent .videoInfo .infoTip`(클래스 3개)이라, `.videoInfo .infoTip`(2개)로
+  // 짧게 쓰면 align-items 가 그쪽에 져서 조용히 안 먹는다(실측으로 확인했다 — 아이콘이 계속 가운데 떴다).
+  .videoContent .videoInfo .infoTip {
+    align-items: flex-start;
+    i { flex-shrink: 0; margin-top: .3rem; }
+    .tip_lines { display: flex; flex-direction: column; gap: .4rem; }
+
+    // 접기 — 스크립트가 .is-collapsible 을 붙였을 때만 걸린다. 스크립트가 없으면 전부 보인다(점진적 향상).
+    // 줄을 display:none 으로 지우지 않고 첫 줄 높이로 잘라 두면, 접힌 상태에서도 "더 있다" 가 드러난다.
+    &.is-collapsible {
+      cursor: pointer;
+      .tip_lines { flex: 1 1 auto; overflow: hidden; }
+    }
+    // 첫 줄만 남긴다. 줄 높이를 고정하지 않고 <b>둘째 줄부터를 감추는</b> 방식이라 한 줄이 길어져
+    // 두 행으로 접혀도 잘리지 않는다(max-height 로 자르면 그때 글자가 반쯤 보인다).
+    &.is-collapsible.is-collapsed .tip_lines > *:not(:first-child) { display: none; }
+
+    // 토글 버튼 — 퍼블에 대응 컴포넌트가 없어 개발이 만든다(그래서 클래스명도 tip_ 접두어로 구분한다).
+    // 표시가 화살표 하나뿐이라 밑줄을 걷고 누를 면적만 확보한다(글리프 자체는 작다).
+    .tip_toggle {
+      flex-shrink: 0; align-self: flex-start;
+      padding: 0 .4rem; border: 0; background: none; line-height: 1.4;
+      font-size: set.$ft-bd-s; color: set.$mCol-60;
+      cursor: pointer; white-space: nowrap;
+    }
+  }
+
+  // ── 5) 싱크바 잠금 ────────────────────────────────────────────────────
+  // 건너뛰기를 금지한 차수는 <b>뒤로 되돌리기까지 막는다</b>(운영 방침) — 스크립트가 pointer-events 를
+  // 끄고 드래그 처리를 아예 붙이지 않는다(study-room.js 의 applySeekControl). 눌러도 되는 것처럼
+  // 보이지 않게 커서와 투명도로도 상태를 드러낸다. 실제 방어는 서버가 인정 학습시간을 자르는 계산이다.
+  .videoContent .videoArea .videoControlBar .set-seekBar {
+    &.is-locked {
+      cursor: not-allowed;
+      .mov-gauge { opacity: .55; }
+    }
+  }
+
+  // ── 6) 배속 버튼 ──────────────────────────────────────────────────────
+  // 정책(course_class_policy.play_speed_cd)이 1.0 고정이면 스크립트가 이 영역을 hidden 으로 둔다 —
+  // 화면에 '배속 금지' 를 적지 않고 선택지가 없는 상태로 표현한다.
+  .videoContent .videoArea .videoControlBar .set-speed {
+    .ctr-speed {
+      font-size: set.$ft-bd-xs;
+      color: set.$gray-0;
+      background: rgba(255, 255, 255, .16);
+      border: none; border-radius: .4rem;
+      padding: .4rem .8rem;
+      cursor: pointer;
+      min-width: 4.4rem;
+    }
+  }
+
+  // ── 7) 잠긴 차시 줄 ───────────────────────────────────────────────────
+  // 순차 수강(sequential_yn='Y')에서 앞 차시를 완료하지 않은 줄. 서버가 진입 판정과 같은 규칙으로
+  // accessible=false 를 내려 주므로, 여기서 잠긴 줄은 눌러도 거부되는 줄과 정확히 같다.
+  //
+  // <b>줄 전체를 opacity 로 흐리게 하지 않는다.</b> 처음엔 `opacity: .45` 를 걸었는데, 순차 수강이
+  // 차수 정책 기본값이라 <b>첫 차시 외 전부 잠긴 상태</b>다 — 목록의 대부분이 45% 투명해져
+  // "목차 글자가 샘플보다 흐리다" 로 읽혔다(실측: 퍼블 규칙과 이 한 속성만 달랐다).
+  // 게다가 opacity 는 상태 문구("미완료")와 아이콘까지 같이 죽여 읽기를 방해한다.
+  // 그래서 <b>차시명 색만</b> 퍼블이 보조 텍스트에 쓰는 회색으로 낮춰 잠김을 드러낸다.
+  .videoAside .as_conList ul li {
+    &.is-locked {
+      cursor: not-allowed;
+      dl dt { color: set.$gray-50; }
+      // 퍼블은 li:hover 에 dt 를 파랗게 칠한다 — 잠긴 줄에서 그대로 두면 '누를 수 있다' 로 읽힌다.
+      &:hover dl dt { color: set.$gray-50; }
+    }
+  }
+
+  // ── 8) 관련학습 목록 ──────────────────────────────────────────────────
+  // 퍼블 .as_conList li 는 '누르는 줄' 이라 hover·cursor 가 걸려 있다(_video.scss).
+  // 관련학습은 학습 대상이 아니라 안내라서 누를 수 없다 — 누를 수 있어 보이면 눌러 보고 아무 일도
+  // 없는 것이 결함으로 읽힌다. 썸네일(.thumb)을 뺐으므로 그 자리 여백도 함께 거둔다.
+  .videoAside .as_panel[data-panel="lear"] .as_conList li.is-static {
+    cursor: default;
+    &:hover { background: none; }
+  }
+}

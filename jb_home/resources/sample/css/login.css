@@ -1,0 +1,692 @@
+@charset "UTF-8";
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
+body > form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginWrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  background: #eef4fb;
+}
+.loginWrap .logo {
+  margin: 0 auto;
+  width: 30rem;
+  height: 5.8rem;
+}
+.loginWrap .loginInner {
+  width: calc(100% - min(6rem, 6vw));
+  max-width: 160rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+  /* 카피(loginCopy)가 flex-grow 로 남는 폭을 먹어 PC 배치는 그대로고, 카피가 없는 화면은 카드가 가운데 선다 */
+  display: flex;
+  justify-content: center;
+}
+.loginWrap .loginInner .btn-file {
+  position: absolute;
+  width: fit-content;
+  right: 2rem;
+  bottom: 2rem;
+  background: #0a60a9;
+  border-radius: 100rem;
+  line-height: 0.9;
+  color: #ffffff;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 1rem 1rem;
+  padding-left: 2rem;
+  gap: 1rem;
+}
+.loginWrap .loginInner .btn-file i {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: block;
+  border-radius: 10rem;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10' fill='none'%3E%3Cg clip-path='url(%23clip0_1881_6662)'%3E%3Cpath d='M11.5957 6.07224C11.3724 6.07224 11.1913 6.24168 11.1913 6.4507V8.11116C11.1913 8.7353 10.6488 9.24308 9.98202 9.24308H2.01798C1.35118 9.24308 0.808672 8.7353 0.808672 8.11116V6.4507C0.808672 6.24168 0.627645 6.07224 0.404336 6.07224C0.181027 6.07224 0 6.24168 0 6.4507V8.11116C0 9.15269 0.905251 10 2.01798 10H9.98213C11.0949 10 12.0001 9.15269 12.0001 8.11116V6.4507C12.0001 6.24168 11.8191 6.07224 11.5958 6.07224H11.5957Z' fill='%23E35548'/%3E%3Cpath d='M5.66146 7.53774C5.66215 7.53839 5.66273 7.53893 5.66343 7.53947C5.66747 7.54325 5.67163 7.54693 5.6759 7.55061C5.67844 7.55277 5.68099 7.55482 5.68364 7.55688C5.68607 7.55882 5.68849 7.56077 5.69092 7.56272C5.69404 7.5652 5.69739 7.56747 5.70062 7.56985C5.70259 7.57126 5.70444 7.57266 5.7064 7.57407C5.70998 7.57656 5.71356 7.57883 5.71714 7.58121C5.71888 7.5824 5.72073 7.58359 5.72246 7.58467C5.72616 7.58694 5.72985 7.58921 5.73366 7.59137C5.73551 7.59245 5.73736 7.59353 5.73921 7.59461C5.74291 7.59667 5.7466 7.59862 5.7503 7.60056C5.75238 7.60164 5.75434 7.60272 5.75642 7.60381C5.75989 7.60554 5.76347 7.60727 5.76705 7.60889C5.76948 7.60997 5.7719 7.61116 5.77433 7.61224C5.77756 7.61365 5.7808 7.61505 5.78415 7.61635C5.78704 7.61754 5.78981 7.61873 5.7927 7.61981C5.79559 7.62089 5.79859 7.62197 5.80148 7.62305C5.80483 7.62424 5.80806 7.62543 5.81153 7.62662C5.81407 7.62749 5.81673 7.62824 5.81927 7.62911C5.82297 7.6303 5.82678 7.63149 5.83059 7.63257C5.8329 7.63322 5.83521 7.63376 5.83752 7.63441C5.84156 7.63549 5.84572 7.63657 5.84977 7.63754C5.85185 7.63808 5.85404 7.63852 5.85612 7.63895C5.8604 7.63992 5.86467 7.64079 5.86894 7.64154C5.87114 7.64198 5.87333 7.6423 5.87553 7.64263C5.8798 7.64338 5.88408 7.64403 5.88835 7.64468C5.89089 7.645 5.89344 7.64533 5.89598 7.64554C5.8999 7.64598 5.90383 7.64652 5.90788 7.64684C5.91134 7.64717 5.91469 7.64738 5.91816 7.6476C5.92128 7.64782 5.9244 7.64814 5.92751 7.64825C5.93422 7.64857 5.9408 7.64868 5.9475 7.64868C5.94981 7.64868 5.95201 7.64857 5.95432 7.64857C5.95663 7.64857 5.95882 7.64868 5.96113 7.64868C6.06464 7.64868 6.16804 7.6117 6.24706 7.53785L8.43093 5.49373C8.58885 5.34591 8.58885 5.10629 8.43093 4.95848C8.27301 4.81066 8.01701 4.81066 7.85909 4.95848L6.35195 6.36916V0.37846C6.35195 0.169442 6.17093 0 5.94762 0C5.72431 0 5.54328 0.169442 5.54328 0.37846V6.3564L4.04966 4.95837C3.89174 4.81055 3.63574 4.81055 3.47782 4.95837C3.31989 5.10618 3.31989 5.3458 3.47782 5.49362L5.66169 7.53774H5.66146Z' fill='%23E35548'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_1881_6662'%3E%3Crect width='12' height='10' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E") no-repeat center/60%;
+}
+.loginWrap .loginInner .loginCopy {
+  position: relative;
+  flex-grow: 1;
+  padding-top: 10rem;
+}
+.loginWrap .loginInner .loginCopy p {
+  font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 500;
+  color: #0a60a9;
+  letter-spacing: 0.18rem;
+}
+.loginWrap .loginInner .loginCopy dl {
+  margin-top: 1rem;
+}
+.loginWrap .loginInner .loginCopy dl dt {
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 700;
+  color: #3b3844;
+  font-size: clamp(4.6rem, 6.25vw, 6.4rem);
+  line-height: 1.2;
+}
+.loginWrap .loginInner .loginCopy dl dt strong {
+  font-weight: inherit;
+  color: #0a60a9;
+  display: block;
+}
+.loginWrap .loginInner .loginCopy dl dd {
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  font-weight: 300;
+  color: #7a7588;
+  margin-top: 1rem;
+}
+.loginWrap .loginInner .loginCopy img {
+  position: absolute;
+  right: -18vw;
+  bottom: 5rem;
+  pointer-events: none;
+}
+.loginWrap .loginInner .loginArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  width: calc(100% - 4rem);
+  max-width: 54rem;
+  padding: 6rem;
+  min-height: 50rem;
+  background: rgb(255, 255, 255);
+  position: relative;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.loginWrap i.symbol {
+  position: absolute;
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: url("../img/common/logo.svg") no-repeat center center/contain;
+  width: 6.2rem;
+  height: 6.2rem;
+}
+.loginWrap .loginTit {
+  text-align: center;
+  margin-bottom: 2.4rem;
+  width: 100%;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.loginWrap .loginTit em {
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  color: #3b3844;
+  font-weight: 500;
+}
+.loginWrap .loginTit h1 {
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 700;
+  font-size: clamp(4.6rem, 6.25vw, 6.4rem);
+  line-height: 1;
+  color: #0a60a9;
+  margin: 1rem 0 0.6rem;
+}
+.loginWrap .loginTit h1.findTit {
+  font-size: clamp(3.6rem, 4.6875vw, 4.8rem);
+}
+.loginWrap .loginTit p {
+  color: #7a7588;
+  text-align: center;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 300;
+  letter-spacing: -0.032rem;
+  text-wrap: pretty;
+  word-break: keep-all;
+}
+.loginWrap .loginForm {
+  width: 100%;
+}
+.loginWrap .loginForm .loginINFO {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.loginWrap .loginForm .loginINFO:has(.keyTooltip) {
+  position: relative;
+}
+.loginWrap .loginForm .loginINFO .keyTooltip {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(110%);
+  width: fit-content;
+  padding: 1rem;
+  border: 1px solid #0a60a9;
+  color: #0a60a9;
+  font-size: 1.6rem;
+  background: #ffffff;
+  right: 0;
+  display: none;
+}
+.loginWrap .loginForm .loginINFO .keyTooltip.on {
+  display: block;
+}
+.loginWrap .loginForm .loginINFO .keyTooltip::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0px 7px 10px 7px;
+  border-color: transparent transparent #0a60a9 transparent;
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
+  left: 2rem;
+}
+.loginWrap .loginForm .loginINFO .keyTooltip::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0px 7px 10px 7px;
+  border-color: transparent transparent #ffffff transparent;
+  position: absolute;
+  top: 2px;
+  left: 2rem;
+  transform: translateY(-100%);
+}
+.loginWrap .loginForm input.loginID, .loginWrap .loginForm input.loginPW {
+  transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  padding-left: 5.4rem;
+  border-radius: 1rem;
+  border-color: #96bfe7;
+  background: #eef4fb no-repeat 2rem center/2.4rem;
+}
+.loginWrap .loginForm input.loginID::placeholder, .loginWrap .loginForm input.loginPW::placeholder {
+  transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.loginWrap .loginForm input.loginID:focus-within, .loginWrap .loginForm input.loginID:hover, .loginWrap .loginForm input.loginPW:focus-within, .loginWrap .loginForm input.loginPW:hover {
+  box-shadow: 0 0 0 2px #0a60a9 inset;
+}
+.loginWrap .loginForm input.loginID:focus-within::placeholder, .loginWrap .loginForm input.loginID:hover::placeholder, .loginWrap .loginForm input.loginPW:focus-within::placeholder, .loginWrap .loginForm input.loginPW:hover::placeholder {
+  color: #0a60a9;
+}
+.loginWrap .loginForm input.loginID {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M10.4733 8.47338C11.1269 7.95915 11.604 7.25399 11.8382 6.456C12.0723 5.65802 12.0519 4.80689 11.7799 4.02102C11.5078 3.23516 10.9975 2.55364 10.32 2.07128C9.64259 1.58892 8.83163 1.32971 8 1.32971C7.16836 1.32971 6.35741 1.58892 5.67995 2.07128C5.00249 2.55364 4.49223 3.23516 4.22014 4.02102C3.94805 4.80689 3.92767 5.65802 4.16184 6.456C4.396 7.25399 4.87307 7.95915 5.52666 8.47338C4.40672 8.92207 3.42952 9.66628 2.69926 10.6267C1.969 11.587 1.51304 12.7276 1.38 13.9267C1.37037 14.0143 1.37808 14.1028 1.40268 14.1874C1.42729 14.272 1.46831 14.3509 1.52341 14.4196C1.63468 14.5584 1.79652 14.6473 1.97333 14.6667C2.15014 14.6862 2.32744 14.6346 2.46621 14.5233C2.60499 14.412 2.69388 14.2502 2.71333 14.0734C2.85972 12.7702 3.48112 11.5666 4.45881 10.6926C5.4365 9.81856 6.70193 9.3354 8.01333 9.3354C9.32473 9.3354 10.5902 9.81856 11.5679 10.6926C12.5455 11.5666 13.1669 12.7702 13.3133 14.0734C13.3315 14.2372 13.4096 14.3885 13.5327 14.4981C13.6559 14.6076 13.8152 14.6677 13.98 14.6667H14.0533C14.2281 14.6466 14.3878 14.5582 14.4977 14.4209C14.6076 14.2835 14.6587 14.1083 14.64 13.9334C14.5063 12.7308 14.0479 11.5874 13.3139 10.6255C12.5799 9.66366 11.5979 8.9197 10.4733 8.47338V8.47338ZM8 8.00004C7.47258 8.00004 6.95701 7.84365 6.51848 7.55063C6.07995 7.25761 5.73815 6.84114 5.53632 6.35387C5.33449 5.8666 5.28168 5.33042 5.38457 4.81314C5.48746 4.29585 5.74144 3.8207 6.11438 3.44776C6.48732 3.07482 6.96247 2.82084 7.47976 2.71795C7.99704 2.61505 8.53322 2.66786 9.02049 2.8697C9.50776 3.07153 9.92423 3.41332 10.2173 3.85186C10.5103 4.29039 10.6667 4.80596 10.6667 5.33338C10.6667 6.04062 10.3857 6.7189 9.88562 7.21899C9.38552 7.71909 8.70724 8.00004 8 8.00004Z' fill='%2396bfe7'/%3E%3C/svg%3E");
+  background-size: 2rem;
+}
+.loginWrap .loginForm input.loginID:focus-within, .loginWrap .loginForm input.loginID:hover {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M10.4733 8.47338C11.1269 7.95915 11.604 7.25399 11.8382 6.456C12.0723 5.65802 12.0519 4.80689 11.7799 4.02102C11.5078 3.23516 10.9975 2.55364 10.32 2.07128C9.64259 1.58892 8.83163 1.32971 8 1.32971C7.16836 1.32971 6.35741 1.58892 5.67995 2.07128C5.00249 2.55364 4.49223 3.23516 4.22014 4.02102C3.94805 4.80689 3.92767 5.65802 4.16184 6.456C4.396 7.25399 4.87307 7.95915 5.52666 8.47338C4.40672 8.92207 3.42952 9.66628 2.69926 10.6267C1.969 11.587 1.51304 12.7276 1.38 13.9267C1.37037 14.0143 1.37808 14.1028 1.40268 14.1874C1.42729 14.272 1.46831 14.3509 1.52341 14.4196C1.63468 14.5584 1.79652 14.6473 1.97333 14.6667C2.15014 14.6862 2.32744 14.6346 2.46621 14.5233C2.60499 14.412 2.69388 14.2502 2.71333 14.0734C2.85972 12.7702 3.48112 11.5666 4.45881 10.6926C5.4365 9.81856 6.70193 9.3354 8.01333 9.3354C9.32473 9.3354 10.5902 9.81856 11.5679 10.6926C12.5455 11.5666 13.1669 12.7702 13.3133 14.0734C13.3315 14.2372 13.4096 14.3885 13.5327 14.4981C13.6559 14.6076 13.8152 14.6677 13.98 14.6667H14.0533C14.2281 14.6466 14.3878 14.5582 14.4977 14.4209C14.6076 14.2835 14.6587 14.1083 14.64 13.9334C14.5063 12.7308 14.0479 11.5874 13.3139 10.6255C12.5799 9.66366 11.5979 8.9197 10.4733 8.47338V8.47338ZM8 8.00004C7.47258 8.00004 6.95701 7.84365 6.51848 7.55063C6.07995 7.25761 5.73815 6.84114 5.53632 6.35387C5.33449 5.8666 5.28168 5.33042 5.38457 4.81314C5.48746 4.29585 5.74144 3.8207 6.11438 3.44776C6.48732 3.07482 6.96247 2.82084 7.47976 2.71795C7.99704 2.61505 8.53322 2.66786 9.02049 2.8697C9.50776 3.07153 9.92423 3.41332 10.2173 3.85186C10.5103 4.29039 10.6667 4.80596 10.6667 5.33338C10.6667 6.04062 10.3857 6.7189 9.88562 7.21899C9.38552 7.71909 8.70724 8.00004 8 8.00004Z' fill='%230a60a9'/%3E%3C/svg%3E");
+}
+.loginWrap .loginForm input.loginPW {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='16' viewBox='0 0 13 16' fill='none'%3E%3Cg clip-path='url(%23clip0_55_9685)'%3E%3Cpath d='M10.5625 5.6H4.0625V4C4.0625 3.36 4.30625 2.8 4.79375 2.32C5.76875 1.36 7.3125 1.36 8.20625 2.32C8.53125 2.64 8.69375 3.04 8.85625 3.44C8.9375 3.84 9.425 4.08 9.83125 4C10.2375 3.92 10.5625 3.44 10.4 3.04C10.2375 2.32 9.83125 1.68 9.34375 1.2C8.6125 0.4 7.55625 0 6.5 0C4.225 0 2.4375 1.76 2.4375 4V5.6C1.05625 5.6 0 6.64 0 8V13.6C0 14.96 1.05625 16 2.4375 16H10.5625C11.9438 16 13 14.96 13 13.6V8C13 6.64 11.9438 5.6 10.5625 5.6ZM7.39375 10.8L7.3125 10.88V12C7.3125 12.48 6.9875 12.8 6.5 12.8C6.0125 12.8 5.6875 12.48 5.6875 12V10.88C5.2 10.4 5.11875 9.68 5.60625 9.2C6.09375 8.72 6.825 8.64 7.3125 9.12C7.8 9.52 7.88125 10.32 7.39375 10.8Z' fill='%2396bfe7'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_55_9685'%3E%3Crect width='13' height='16' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+  background-size: 1.6rem;
+}
+.loginWrap .loginForm input.loginPW:focus-within, .loginWrap .loginForm input.loginPW:hover {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='16' viewBox='0 0 13 16' fill='none'%3E%3Cg clip-path='url(%23clip0_55_9685)'%3E%3Cpath d='M10.5625 5.6H4.0625V4C4.0625 3.36 4.30625 2.8 4.79375 2.32C5.76875 1.36 7.3125 1.36 8.20625 2.32C8.53125 2.64 8.69375 3.04 8.85625 3.44C8.9375 3.84 9.425 4.08 9.83125 4C10.2375 3.92 10.5625 3.44 10.4 3.04C10.2375 2.32 9.83125 1.68 9.34375 1.2C8.6125 0.4 7.55625 0 6.5 0C4.225 0 2.4375 1.76 2.4375 4V5.6C1.05625 5.6 0 6.64 0 8V13.6C0 14.96 1.05625 16 2.4375 16H10.5625C11.9438 16 13 14.96 13 13.6V8C13 6.64 11.9438 5.6 10.5625 5.6ZM7.39375 10.8L7.3125 10.88V12C7.3125 12.48 6.9875 12.8 6.5 12.8C6.0125 12.8 5.6875 12.48 5.6875 12V10.88C5.2 10.4 5.11875 9.68 5.60625 9.2C6.09375 8.72 6.825 8.64 7.3125 9.12C7.8 9.52 7.88125 10.32 7.39375 10.8Z' fill='%230a60a9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_55_9685'%3E%3Crect width='13' height='16' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+}
+.loginWrap .loginForm button {
+  width: 100%;
+  margin-top: 3rem;
+  border-radius: 1rem;
+}
+.loginWrap .snsLogin {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.loginWrap .snsLogin .sl_tit {
+  width: 100%;
+  position: relative;
+}
+.loginWrap .snsLogin .sl_tit::before {
+  content: "";
+  width: 100%;
+  height: 0.1rem;
+  background: #e0dfe8;
+  position: absolute;
+  top: calc(50% - 0.1rem);
+  left: 0;
+}
+.loginWrap .snsLogin .sl_tit p {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  font-weight: 500;
+  color: #9590a2;
+  position: relative;
+  line-height: 1;
+}
+.loginWrap .snsLogin menu {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.loginWrap .snsLogin menu li {
+  position: relative;
+}
+.loginWrap .snsLogin menu a {
+  display: block;
+  overflow: hidden;
+  border-radius: 100rem;
+  border: 0.1rem solid #e0dfe8;
+}
+.loginWrap .snsLogin menu .sl_recent {
+  display: none;
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 0.4rem 0.8rem;
+  border-radius: 100rem;
+  border: 0.2rem solid #ffffff;
+  background: #0a60a9;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+.loginWrap .snsLogin menu li.recent .sl_recent {
+  display: block;
+}
+.loginWrap .snsLogin menu li.recent a {
+  border-color: #0a60a9;
+}
+.loginWrap .loginUtil {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.3;
+  margin-top: 2rem;
+}
+.loginWrap .loginUtil li {
+  color: #9590a2;
+  font-weight: 300;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+}
+.loginWrap .loginUtil li:hover {
+  font-weight: 600;
+  color: #0a60a9;
+}
+.loginWrap .loginUtil li:not(:last-child)::after {
+  content: "";
+  width: 1px;
+  height: 1.2rem;
+  background: #ccc9d5;
+  display: inline-block;
+  margin: 0 1rem;
+}
+
+/* 레이어팝업 영역 */
+.login_layer_pop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login_layer_pop .layer_close {
+  background: #0a60a9;
+  height: min(16vw, 6rem);
+  width: min(16vw, 6rem);
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  transform: translateX(-50%);
+  right: min(6vw, 4rem);
+  top: -3rem;
+  border-radius: 100rem;
+}
+.login_layer_pop .layer_close i {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50rem;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.login_layer_pop .layer_close i::after, .login_layer_pop .layer_close i::before {
+  content: "";
+  width: 60%;
+  height: 2px;
+  background: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 0;
+  transform: translate(-50%, -50%);
+}
+.login_layer_pop .layer_close i::after {
+  rotate: 45deg;
+}
+.login_layer_pop .layer_close i::before {
+  rotate: -45deg;
+}
+.login_layer_pop .layerWrap {
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  padding: 0 min(2vw, 1.6rem);
+}
+.login_layer_pop .login_layer_inner {
+  width: 90%;
+  max-width: 56rem;
+  max-height: 72rem;
+  background: #ffffff;
+  position: relative;
+  top: 2rem;
+  padding: min(6vw, 6rem) min(4vw, 3rem);
+  border-radius: 1rem;
+}
+
+/* 셋 */
+.find-Form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.find-Form button {
+  width: 100%;
+}
+.find-Form input[type=text], .find-Form input[type=password], .find-Form input[type=number], .find-Form input[type=date] {
+  transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  padding: 2rem;
+  height: 6rem;
+}
+
+.find-BTN {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.find-BTN button, .find-BTN a {
+  width: 100%;
+  text-align: center;
+}
+
+.layerTit {
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+.layerTit h2 {
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 600;
+  font-size: min(4rem, 10vw);
+  line-height: 1.2;
+  color: #0a60a9;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.layerTit h2 b {
+  color: #3b3844;
+}
+.layerTit p {
+  color: #7a7588;
+  text-align: center;
+  font-family: "Pretendard", sans-serif;
+  font-size: 2.4rem;
+  line-height: 1.3;
+  font-weight: 300;
+  letter-spacing: -0.032rem;
+  text-wrap: pretty;
+  word-break: keep-all;
+  rotate: -0.03deg;
+}
+.layerTit p b {
+  color: #3b3844;
+  font-weight: 600;
+}
+.layerTit span {
+  color: #7a7588;
+  text-align: center;
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  font-weight: 300;
+  letter-spacing: -0.032rem;
+  text-wrap: pretty;
+  word-break: keep-all;
+}
+
+.wd_inner {
+  width: 100%;
+  background: #ffffff;
+  box-sizing: border-box;
+  padding: 8rem 0;
+}
+.wd_inner > div {
+  width: calc(100% - min(6rem, 6vw));
+  margin: 0 auto;
+}
+.wd_inner .ip-title {
+  font-size: 2rem;
+  text-align: center;
+  display: block;
+  position: relative;
+  font-weight: 600;
+  color: #3b3844;
+  isolation: isolate;
+}
+.wd_inner .ip-title span {
+  background: #ffffff;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.wd_inner .ip-title::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: #e0dfe8;
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0;
+  z-index: -1;
+}
+.wd_inner .find-Form {
+  margin-bottom: 3vw;
+}
+.wd_inner .confirm-noti {
+  padding: 2rem 0;
+}
+.wd_inner .confirm-noti dt {
+  font-size: 1.8rem;
+}
+.wd_inner .confirm-noti dd {
+  padding: 1.6rem;
+  border-radius: 0.4rem;
+  background: #f3f3f8;
+  color: #7a7588;
+  margin-top: 0.8rem;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+.privacy-form .policyArea {
+  display: flex;
+  flex-direction: column;
+  gap: 6.5rem;
+  margin-top: min(6rem, 6vw);
+}
+.privacy-form .policy-define {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.privacy-form .policy-define dl {
+  font-size: 1.8rem;
+  line-height: 1.3;
+}
+.privacy-form .policy-define dl dt {
+  color: #3b3844;
+  font-weight: 500;
+}
+.privacy-form .policy-define dl dd {
+  color: #7a7588;
+  font-weight: 400;
+}
+.privacy-form .policySec > p {
+  font-size: 2.4rem;
+  color: #3b3844;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.privacy-form .policySec .tableArea {
+  padding: min(5rem, 6vw);
+  border-radius: 2rem;
+  border: 1px solid #e0dfe8;
+}
+.privacy-form .policySec .tableArea table tbody tr td::before {
+  display: block;
+}
+
+/* 반응형 — 320px 까지 지원한다.
+   1500 이하: 오브제(login_obj)가 카피 글자를 덮지 않게 절대배치를 풀어 글 아래로 내린다.
+   1024 이하: 카드를 48rem 으로 줄이고 여백을 좁힌다.
+   960 이하 = 모바일: 카피(loginCopy)를 감추고 카드 한 장만 가운데 세운다.
+   그 아래(720 / 535 / 335)는 카드 여백·글자·아이콘만 단계적으로 줄인다.
+   인풋·버튼 높이는 컴포넌트(form-xl / bt-a-xl)가 960px 이하에서 알아서 줄인다. */
+@media screen and (max-width: 1500px) {
+  .loginWrap .loginInner .loginCopy {
+    padding-top: 8rem;
+  }
+  .loginWrap .loginInner .loginCopy img {
+    position: static;
+    margin-top: 3rem;
+    width: min(100%, 42rem);
+  }
+}
+@media screen and (max-width: 1024px) {
+  .loginWrap {
+    padding: 4rem 0;
+  }
+  .loginWrap .loginInner .loginCopy {
+    padding-top: 6rem;
+  }
+  .loginWrap .loginInner .loginCopy img {
+    margin-top: 2rem;
+    width: min(100%, 30rem);
+  }
+  .loginWrap .loginInner .loginArea {
+    max-width: 48rem;
+    padding: 4rem;
+    height: auto;
+    min-height: 44rem;
+  }
+}
+@media screen and (max-width: 960px) {
+  .loginWrap {
+    padding: 4rem 0 5rem;
+  }
+  .loginWrap .loginInner {
+    width: 100%;
+    max-width: 100%;
+    border: unset;
+    border-radius: unset;
+    height: 100%;
+    min-height: auto;
+    /* 모바일에서는 카피 영역을 노출하지 않는다 */
+  }
+  .loginWrap .loginInner .loginCopy {
+    display: none;
+  }
+  .loginWrap .loginInner .loginArea {
+    width: calc(100% - min(4rem, 8vw));
+    max-width: 48rem;
+    padding: 4rem 3rem;
+    min-height: auto;
+    border-radius: 2rem;
+  }
+}
+@media screen and (max-width: 720px) {
+  .loginWrap i.symbol {
+    top: 0;
+    position: unset;
+    transform: unset;
+    margin-bottom: 4vw;
+    width: max(10rem, 20vw);
+    height: max(10rem, 20vw);
+    min-width: 6rem;
+    min-height: 6rem;
+  }
+}
+@media screen and (max-width: 535px) {
+  .loginWrap {
+    padding: 3rem 0 4rem;
+  }
+  .loginWrap .loginInner .loginArea {
+    padding: 3.2rem 2.4rem;
+    border-radius: 1.6rem;
+  }
+  .loginWrap .loginTit {
+    margin-bottom: 2rem;
+  }
+  .loginWrap .loginForm button {
+    margin-top: 2.4rem;
+  }
+  .loginWrap .loginUtil {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+@media screen and (max-width: 335px) {
+  .loginWrap {
+    padding: 2.4rem 0 3.2rem;
+  }
+  .loginWrap .loginInner .loginArea {
+    width: calc(100% - 2.4rem);
+    padding: 2.8rem 1.6rem;
+  }
+  .loginWrap .loginTit {
+    margin-bottom: 1.6rem;
+  }
+  .loginWrap .loginTit h1 {
+    font-size: 4rem;
+  }
+  .loginWrap .loginTit p {
+    font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  }
+  .loginWrap .loginForm {
+    /* 카드 폭이 좁아 아이콘 여백을 줄여 입력 문구가 잘리지 않게 한다 */
+  }
+  .loginWrap .loginForm input.loginID, .loginWrap .loginForm input.loginPW {
+    padding-left: 4.2rem;
+    background-position: 1.4rem center;
+  }
+  .loginWrap .loginForm button {
+    margin-top: 2rem;
+  }
+  .loginWrap .loginUtil {
+    margin-top: 1.6rem;
+  }
+  .loginWrap .loginUtil li {
+    font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  }
+  .loginWrap .loginUtil li:not(:last-child)::after {
+    margin: 0 0.6rem;
+  }
+}

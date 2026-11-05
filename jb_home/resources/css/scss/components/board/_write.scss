@@ -1,0 +1,67 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+
+// 보드 쓰기 — 상세(.board_view)와 짝을 이루는 등록/수정 폼 골격.
+// 입력 요소 자체(input·select·textarea·버튼)는 디자인시스템(.form-m/.sel-m/.bt-*) 규칙이고,
+// 여기서는 상세와 같은 상단 굵은 선 아래 [라벨 | 입력] 줄을 쌓는 배치만 잡는다.
+// 첨부는 공통 첨부 컴포넌트(.file-drop-s → .file-list)를 그대로 쓴다.
+.board_write {
+    border-top: .2rem solid set.$gray-100;
+    min-width: 0;
+    [hidden] { display: none; }
+
+    // 항목 줄 — 한 줄이 dl 하나. 라벨 칸 폭을 고정해야 입력 시작선이 줄마다 맞는다.
+    .write_list {
+        display: flex; flex-direction: column;
+        > dl {
+            display: flex; align-items: flex-start; gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: .1rem solid set.$gray-20;
+            > dt {
+                flex-shrink: 0; width: 16rem;
+                padding: .8rem 0 0 2rem;
+                font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100;
+                // 필수 표시 — dt 에 .imp 를 달면 라벨 뒤에 붉은 별을 붙인다.
+                &.imp::after { content: "*"; margin-left: .4rem; color: set.$sst-dCol-60; }
+            }
+            > dd {
+                flex-grow: 1; min-width: 0;
+                padding-right: 2rem;
+                // 셀렉트는 내용 폭이 기본이라 그대로 두면 칸 안에서 짧게 끝난다 — 입력칸과 폭을 맞춘다.
+                > select { width: 100%; }
+                // 본문 칸 — 에디터가 붙기 전엔 textarea 가 그 자리를 차지한다.
+                > textarea { min-height: 36rem; line-height: 1.6; }
+            }
+            // 체크·라디오가 든 칸은 가로로 나란히 둔다.
+            > dd.write_check { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem 2.4rem; min-height: 4rem; }
+        }
+        // 안내·오류 문구 — 입력칸 바로 아래에 붙는다.
+        [class^="cau-"] { margin-top: .8rem; }
+        // 공통 첨부 컴포넌트 안쪽 dl·dt 가 위 > dl 규칙에 잡히지 않도록 자식 결합자(>)로만 잡았다.
+        // 드롭존 다음에 오는 파일 목록은 간격만 띄운다.
+        .file-drop-s + .file-list { margin-top: 1rem; }
+    }
+
+    // 취소/등록 줄
+    .write_btns {
+        display: flex; justify-content: center; gap: 1rem; margin-top: 4rem;
+        a, button { min-width: 14rem; }
+    }
+
+    @include set.res-tab-lap() {
+        .write_list > dl {
+            flex-direction: column; align-items: stretch; gap: .8rem;
+            padding: 1.6rem 0;
+            > dt { width: auto; padding: 0 1.6rem; }
+            > dd { padding: 0 1.6rem; }
+            > dd.write_check { min-height: 0; }
+        }
+    }
+    @include set.res-mo-tab() {
+        .write_list > dl > dd > textarea { min-height: 28rem; }
+        .write_btns {
+            margin-top: 3rem;
+            a, button { flex: 1 1 0; min-width: 0; }
+        }
+    }
+}

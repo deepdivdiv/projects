@@ -1,0 +1,37 @@
+#unapplied_layer .layerItem {
+  max-width: 100rem;
+}
+
+#unapplied_layer .unapplied_actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+}
+#unapplied_layer .unapplied_actions .unapplied_apply {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+#unapplied_layer .unapplied_actions .unapplied_apply select {
+  flex: 1 1 auto;
+  width: auto;
+  white-space: nowrap;
+}
+#unapplied_layer .unapplied_actions .unapplied_apply button {
+  flex-shrink: 0;
+}
+#unapplied_layer .unapplied_actions .unapplied_blocked {
+  text-align: left;
+  line-height: 1.5;
+}
+#unapplied_layer .unapplied_actions > a {
+  justify-self: end;
+}
+
+@media (max-width: 768px) {
+  #unapplied_layer .unapplied_actions .unapplied_apply select {
+    min-width: 0;
+    white-space: normal;
+  }
+}

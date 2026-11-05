@@ -1,0 +1,4 @@
+@charset "UTF-8";
+// 학습방 전용 추가 스타일. 퍼블 시안(video.scss → video.css) 뒤에 읽어 그 위에 얹는다.
+@use 'utils';
+@use 'pages/study';

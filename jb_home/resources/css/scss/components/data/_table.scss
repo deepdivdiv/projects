@@ -1,0 +1,612 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use '../form/forms' as form;
+@use '../form/selectSearch' as sel;
+@use "sass:map";
+
+// 표 폭 — 컨테이너를 채우고, 내용이 못 들어갈 때만 그만큼 늘어나 감싸는 요소의 overflow-x:auto 로 스크롤한다.
+// 예전엔 table 에 min-width:max-content 를 걸었는데, max-content 는 % 컬럼을 역산한다 — 7% 칸에 100px 내용이
+// 있으면 표가 100÷0.07≈1,430px 을 요구하고, %가 55% 인 표의 auto 칸은 내용÷0.45 로 2.2배가 된다. 즉 % 가 있는
+// 표는 "내용만큼" 이 아니라 "내용÷비율만큼" 밑도 끝도 없이 늘어났다.
+// 표의 사용 폭은 max(width:100%(reset), min-content) 이고 min-content 는 % 를 역산하지 않으므로, 셀을 nowrap 으로
+// 두면 min-content = 내용 한 줄 폭이 돼 같은 의도(줄바꿈 없음 + 안 들어가면 스크롤)가 % 역산 없이 이뤄진다.
+// 말줄임 칸(.reduce)만 줄바꿈을 허용해 남는 폭을 먹고 … 처리한다(.cut/.cut-line 은 자체 max-width 로 이미 상한이 있다).
+// 줄바꿈이 허용된 칸은 컬럼이 많아 넘칠 때 다른 칸에 밀려 먼저 좁아진다(한글은 글자 단위로 꺾여 몇 글자 폭까지 줄 수 있다) —
+// 바닥(min-width)을 깔아 그 폭은 확보하고, 그 이상 넘칠 때만 표가 벌어지게 한다.
+@mixin tb-content-width {
+    th, td { white-space: nowrap; }
+    .reduce { white-space: normal; min-width: 20rem; }
+}
+
+.tb-form, .tb-grid, .tb-line, .tb-min, .tb-data, .tb-log {
+    &-m, &-s, &-l {
+        // input[type="text"], input[type="password"], select, textarea { width: 100%; }
+        scrollbar-width: thin;
+        scrollbar-color: set.$gray-30 set.$gray-5;
+        // 열 폭 상한 + 말줄임
+        // 테이블은 셀 nowrap(tb-content-width)으로 내용만큼 넓어지므로, 길어질 수 있는 셀에만 상한을 건다.
+        // td 에 직접 max-width 를 주면 auto 레이아웃에서 무시되므로 반드시 셀 안 래퍼에 준다.
+        // 폭 조절: <td><span class="cut" style="--cut:26rem">…</span></td>
+        .cut {
+            display: block;
+            max-width: var(--cut, 20rem);
+            margin-inline: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+        // 2줄 이상 노출형
+        .cut-line {
+            display: -webkit-box;
+            max-width: var(--cut, 20rem);
+            margin-inline: auto;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: var(--line, 2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+        }
+        // 썸네일 칸
+        // 이미지가 없거나 못 불러오면 공통 no-image 자리표시자(utils 의 notImg)가 대신 보인다.
+        // 표는 min-width:max-content 라, img 를 이 상자에 가두지 않으면 불러오기에 실패했을 때
+        // 브라우저가 그리는 alt 문구 길이만큼 칸이 벌어져 표 전체가 옆으로 늘어난다.
+        // 크기 조절: <td><span class="thumb" style="--thumb:8rem">…</span></td>
+        .thumb {
+            display: block;
+            margin-inline: auto;
+            border-radius: .4rem;
+            overflow: hidden;
+            @include set.notImg();
+            // notImg() 가 .thumb:not(img) 에 width/height:100% 를 박아 칸을 다 채운다 —
+            // 특정도(0,3,0)를 맞춰 고정 크기로 되돌린다.
+            &:not(img) { width: var(--thumb, 6rem); height: auto; aspect-ratio: 3 / 2; }
+            // 자리표시자 그림(기본 35%)은 이만한 칸에서 너무 작다 — 빈 상자(:not(img))와
+            // 불러오기 실패(img::after) 둘 다 같은 크기로 키운다.
+            &:not(img), img::after { background-size: 70%; }
+            // notImg() 의 img 는 inline-block 이라 baseline 여백만큼 아래가 잘린다.
+            img { display: block; width: 100%; height: 100%; object-fit: cover; }
+            img[data-image-zoom] { cursor: zoom-in; }
+        }
+        tr.fail {
+            background: set.$sst-dCol-10;
+        }
+        tr.comple {
+            background: set.$sst-sCol-10;
+        }
+        .no_data { 
+            color: set.$gray-50; font-weight: 400;
+            th { background: set.$gray-5; color: set.$gray-50; font-weight: 400; text-align: center; }
+            td { color: set.$gray-50; font-weight: 400; text-align: center; }
+        }
+        .data-up { color: set.$sst-iCol-60; }
+        .data-down { color: set.$sst-dCol-60; }
+        .data-week {
+            display: flex; align-items: center; gap: 0.4rem; justify-content: center;
+            & > * {
+                line-height: 1; width: 2.4rem; aspect-ratio: 1/1;
+                background: set.$gray-10; border-radius: 100rem;
+                color: set.$gray-70;
+                display: flex; align-items: center; justify-content: center;
+                font-size: set.$ft-bd-s;
+                flex-shrink: 0;
+                &.on {
+                    color: set.$sst-sCol-60;
+                    background: set.$sst-sCol-5;
+                }
+            }
+        }
+    }
+    &-m {
+        @include form.form-size(m);
+    }
+    &-s {
+        @include form.form-size(s);
+        .sel_search {
+            @include sel.sel-search-size(s);
+        }
+    }
+    &-l {
+        @include form.form-size(l);
+        .sel_search {
+            @include sel.sel-search-size(l);
+        }
+    }
+
+}
+
+$tb-set: (
+    s: (h: 5rem, p: .8rem, fs: set.$ft-bd-s ),
+    m: (h: 6rem, p: 1rem, fs: set.$ft-bd-m ),
+    l: (h: 7rem, p: 2rem, fs: set.$ft-bd-l )
+);
+
+// 폼형
+.tb-form {
+    border-top: .1rem solid set.$gray-20;
+    & + .tb-form {
+        border-top: none;
+    }
+    tr {
+        border-bottom: .1rem solid set.$gray-20;
+        text-align: left;
+    }
+    th {
+        font-weight: set.$fw-b;
+        line-height: 1;
+        vertical-align: middle;
+        background: set.$gray-5;
+        color: set.$gray-100;
+        border: 1px solid set.$gray-20;
+        border-top: none;
+        border-bottom: none;
+        border-left: none;
+        &.imp {
+            &::after {
+                content: "*";
+                line-height: 0;
+                text-box: set.$tbSet;
+                display: inline-flex;
+                align-self: flex-start;
+                font-size: set.$ft-tt-s;
+                font-weight: 400;
+                color: set.$sst-dCol-70;
+                padding-left: .2rem;
+            }
+        }
+    }
+    td {
+        padding: 1rem;
+        text-align: left;
+        vertical-align: middle;
+        color: set.$gray-70;
+        .flexBox {
+            & > select, & > .sel_search, input {
+                flex: 1 1 0;
+                min-width: 0;
+            }
+            & > .zip_cord { flex: unset; width: 12rem; }
+        }
+    }
+    @include set.res-laptop {
+        & + .tb-form {
+            margin-top: 1rem;
+        }
+        table + table { margin-top: 1rem; }
+        table {
+            border: none;
+            col { width: 100%; }
+            thead, tbody {
+                display: flex; flex-direction: column; gap: 1rem;
+            }
+            th:first-child + td { margin-bottom: 1rem; }
+            tr {
+                display: flex;
+                flex-direction: column;
+                border: none;
+                th, td { width: 100%; height: auto; padding: 1.4rem; border: none; }
+                th { border: 1px solid set.$gray-20; border-bottom: none; }
+                td { border: 1px solid set.$gray-20; border-top: none; }
+            }
+        }
+
+    }
+}
+
+
+// 그리드형 - 테이블
+.tb-grid {
+    overflow-x: auto;
+    table {
+        @include tb-content-width;
+        thead {
+            border-top: .2rem solid set.$gray-100;
+            th, td {
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                vertical-align: middle;
+                background: set.$gray-5;
+                color: set.$gray-100;
+                border: 1px solid set.$gray-20;
+                border-bottom: none;
+                &:first-of-type { border-left: none; }
+                &:last-of-type { border-right: none; }
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-20;
+            td {
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-70;
+                border: 1px solid set.$gray-20;
+                &[rowspan] {
+                    &:first-child { border-left: none; }
+                    &:last-child { border-right: none; }
+                }
+                &:first-child { border-left: none; }
+                &:last-child { border-right: none; }
+                a { color: set.$gray-100; font-weight: set.$fw-b; }
+            }
+            th {
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-70;
+                border: 1px solid set.$gray-20;
+                background: set.$gray-5;
+                border-right: 1px solid set.$gray-20;
+                font-weight: set.$fw-b;
+                color: set.$gray-100;
+                &[rowspan] {
+                    &:first-child { border-left: none; }
+                    &:last-child { border-right: none; }
+                }
+                &:first-child { border-left: none; }
+                &:last-child { border-right: none; }
+            }
+            &:hover {
+                td {
+                    a {
+                        text-decoration: underline;
+                        text-underline-offset: .1rem;
+                        font-weight: set.$fw-b;
+                        color: set.$mCol-60;
+                    }
+                }
+            }
+        }
+        // 말줄임
+        .reduce {
+            @include set.lineCut($line:3);
+        }
+        a.reduce {
+            @include set.lineCut($line:1);
+        }
+    }
+}
+
+
+// 라인형 테이블 - 게시판
+.tb-line {
+    overflow-x: auto;
+    cursor: grab;
+    table {
+        @include tb-content-width;
+        thead {
+            border-bottom: .2rem solid set.$gray-100;
+            th, td {
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                background: set.$gray-5;
+                color: set.$gray-100;
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            tr {
+                &:hover {
+                    background: set.$gray-5;
+                }
+            }
+            th, td {
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-70;
+                a {
+                    color: set.$gray-100;
+                    font-weight: set.$fw-b;
+                    &:hover {
+                        text-decoration: underline;
+                        text-underline-offset: .1rem;
+                        font-weight: set.$fw-b;
+                        color: set.$mCol-60;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 라인형 테이블 - 내용 길이에 폭을 맡기지 않는 목록
+// .tb-line 은 셀을 nowrap 으로 두어(tb-content-width) 내용이 못 들어가면 표를 넓힌다. 컬럼이 잘리지 않게
+// 하려는 규칙이지만, 제목처럼 길이 제한이 느슨한 칸이 있으면(1:1문의 내용은 500자) 그 한 줄만큼 표가
+// 늘어나 목록에 가로 스크롤이 생긴다. 그런 목록에 .tb-line-* 과 함께 달아 폭을 컨테이너에 맞추고
+// (colgroup 의 % 가 그대로 먹는다) 제목 칸은 한 줄 말줄임으로 흘린다.
+// 셀에 말줄임만 걸어서는 소용이 없다 — overflow:hidden 은 고유 폭(min-content)을 줄이지 못한다.
+.tb-fit {
+    table {
+        min-width: 0;
+        width: 100%;
+        table-layout: fixed;
+        // 고정 레이아웃은 셀 폭이 colgroup 으로 정해져 nowrap 이면 글자가 셀 밖으로 넘친다 — 줄바꿈을 되살린다
+        th, td { white-space: normal; }
+    }
+    .tb_name {
+        > a, > span {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+
+
+// 미니멀
+.tb-min {
+    overflow-x: auto;
+    table {
+        @include tb-content-width;
+        thead {
+            th, td {
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-100;
+                background: set.$gray-5;
+                &:first-child { border-radius: .4rem 0 0 .4rem; }
+                &:last-child  { border-radius: 0 .4rem .4rem 0; }
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            th, td {
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-70;
+                a {
+                    color: set.$gray-100;
+                    font-weight: set.$fw-b;
+                    &:hover {
+                        text-decoration: underline;
+                        text-underline-offset: .1rem;
+                        font-weight: set.$fw-b;
+                        color: set.$mCol-60;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 데이터
+.tb-data {
+    overflow-x: auto;
+    table {
+        @include tb-content-width;
+        thead {
+            border-bottom: .2rem solid set.$gray-100;
+            th, td {
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-100;
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            th, td {
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-70;
+                a {
+                    color: set.$gray-100;
+                    font-weight: set.$fw-b;
+                    &:hover {
+                        text-decoration: underline;
+                        text-underline-offset: .1rem;
+                        font-weight: set.$fw-b;
+                        color: set.$mCol-60;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 로그
+.tb-log {
+    overflow-x: auto;
+    table {
+        @include tb-content-width;
+        thead {
+            th, td {
+                font-weight: set.$fw-eb;
+                line-height: 1;
+                vertical-align: middle;
+                color: set.$gray-0;
+                background: set.$gray-100;
+                padding: 1rem;
+                &:first-child { border-radius: .4rem 0 0 .4rem; }
+                &:last-child  { border-radius: 0 .4rem .4rem 0; }
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-10;
+            tr:nth-of-type(even) { background: set.$mCol-5; }
+            th, td {
+                padding: 1rem;
+                text-align: center;
+                vertical-align: middle;
+                color: set.$gray-70;
+                a {
+                    color: set.$gray-100;
+                    font-weight: set.$fw-b;
+                    &:hover {
+                        text-decoration: underline;
+                        text-underline-offset: .1rem;
+                        font-weight: set.$fw-b;
+                        color: set.$mCol-60;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@each $tb-size, $tb-map in $tb-set {
+    .tb-form-#{$tb-size} {
+        @extend .tb-form;
+        th, td {
+            height: map.get($tb-map, h);
+            font-size: map.get($tb-map, fs);
+        }
+        td { padding: map.get($tb-map, p); }
+        th { padding: 0 calc(map.get($tb-map, p) * 2); }
+    }
+
+    .tb-grid-#{$tb-size} {
+        @extend .tb-grid;
+        thead {
+            th, td {
+                font-size: map.get($tb-map, fs);
+                height: map.get($tb-map, h);
+            }
+        }
+        tbody {
+            border-bottom: .1rem solid set.$gray-20;
+            td {
+                height: map.get($tb-map, h);
+                font-size: map.get($tb-map, fs);
+                padding: 0 map.get($tb-map, p);
+                border: 1px solid set.$gray-20;
+            }
+            th {
+                padding: 0 map.get($tb-map, p);
+                height: map.get($tb-map, h);
+                font-size: map.get($tb-map, fs);
+            }
+            
+        }
+    }
+    
+    .tb-line-#{$tb-size} {
+        @extend .tb-line;
+        table {
+            thead {
+                th, td {
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                    padding: 0 map.get($tb-map, p);
+                }
+            }
+            tbody {
+                th, td {
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                    padding: 0 map.get($tb-map, p);
+                }
+                i {
+                    &.ico-file {
+                        width: 1.8rem; background: set.icon(ico-clip, set.$mCol-60) no-repeat center center / contain;
+                        margin: 0 auto;
+                    }
+                }
+            }
+        }
+    }
+    
+    .tb-min-#{$tb-size} {
+        @extend .tb-min;
+        table {
+            thead {
+                th, td {
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                    padding: 0 map.get($tb-map, p);
+                }
+            }
+            tbody {
+                th, td {
+                    height: map.get($tb-map, h);
+                    padding: 0 map.get($tb-map, p);
+                    font-size: map.get($tb-map, fs);
+                }
+            }
+        }
+    }
+    
+    .tb-data-#{$tb-size} {
+        @extend .tb-data;
+        table {
+            thead {
+                th, td {
+                    padding: 0 map.get($tb-map, p);
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                }
+            }
+            tbody {
+                th, td {
+                    padding: 0 map.get($tb-map, p);
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                }
+            }
+        }
+    }
+    
+    .tb-log-#{$tb-size} {
+        @extend .tb-log;
+        table {
+            thead {
+                th, td {
+                    padding: 0 map.get($tb-map, p);
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                }
+            }
+            tbody {
+                th, td {
+                    padding: 0 map.get($tb-map, p);
+                    height: map.get($tb-map, h);
+                    font-size: map.get($tb-map, fs);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+// ===== 에디터(SunEditor) 표 =====
+// 에디터는 표를 <figure> 로 감싸 만든다. ui.components.js(sstEditor)가 그 figure 에 스킨 클래스(기본 tb-grid-s)를
+// 붙여 주므로 결과 마크업이 화면의 표와 같은 구조(.tb-grid-s > table > thead/tbody)가 된다.
+// 다만 라이브러리 css(.sun-editor-editable table td = 0,2,1)가 스킨(.tb-grid table tbody td = 0,1,3)보다 세서
+// 그대로 두면 편집 중·출력 시 라이브러리 모양이 이긴다. 그래서 같은 스킨을 .sun-editor-editable figure 아래로
+// 한 번 더 뽑아(0,2,4) 스킨이 이기게 한다. 스킨을 늘리면 $editor-tb-skins 에만 추가한다.
+// 전제: 라이브러리 css(suneditor.min.css / suneditor-contents.min.css)는 이 파일(board.css)보다 먼저 읽는다.
+$editor-tb-skins: (grid, line, min);
+
+.sun-editor-editable {
+    @each $skin in $editor-tb-skins {
+        @each $tb-size, $tb-map in $tb-set {
+            figure.tb-#{$skin}-#{$tb-size} {
+                @extend .tb-#{$skin}-#{$tb-size};
+                width: 100%;    // 라이브러리는 figure 를 내용 폭(max-content)으로 둔다. 화면의 표처럼 꽉 채운다
+                // 라이브러리가 표·캡션에 그리는 바깥 테두리와 상자 배경은 스킨에 없으므로 걷어낸다
+                > table {
+                    border: 0;
+                    > caption {
+                        padding: 0 0 .8rem;
+                        border: 0;
+                        background: none;
+                        text-align: left;
+                        font-weight: set.$fw-b;
+                        color: set.$gray-100;
+                    }
+                }
+            }
+        }
+    }
+}

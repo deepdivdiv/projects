@@ -1,0 +1,216 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+$tabSize: (
+    xs: (fs: set.$ft-bd-xs, ulh: .2rem, lh: .1rem, h:2.4rem, g:.4rem),
+     s: (fs: set.$ft-bd-s,  ulh: .2rem, lh: .1rem, h:3.4rem, g:.6rem),
+     m: (fs: set.$ft-bd-m,  ulh: .3rem, lh: .2rem, h:4.0rem, g:1rem),
+     l: (fs: set.$ft-bd-l,  ulh: .3rem, lh: .3rem, h:4.8rem, g:1rem),
+    xl: (fs: set.$ft-tt-s,  ulh: .4rem, lh: .4rem, h:6.4rem, g:1rem),
+);
+
+@each $name, $prop in $tabSize {
+
+.tab-#{$name}:not(.nar, .ud, .line) {
+    display: flex; align-items: center; gap: map.get($prop, g); flex-grow: 1; flex-wrap: wrap;
+    li {
+        font-size: map.get($prop, fs);
+        color: set.$gray-50;
+        position: relative;
+        transition: all set.$aniSet;
+        height: map.get($prop, h);
+        display: flex; align-items: center; justify-content: center;
+        border: .1rem solid set.$gray-30;
+        padding: 0 calc(map.get($prop, h) / 2);
+        flex-grow: 1;
+        isolation: isolate;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        &:has(a, button) {
+            padding: 0;
+            a, button {
+                padding: 0 calc(map.get($prop, h) / 2);
+                display: flex; flex-grow: 1; height: 100%;
+                align-items: center; justify-content: center;
+            }
+        }
+        &::before {
+            content: "";
+            z-index: -1;
+            background: set.$mCol-60;
+            transition: all set.$aniSet;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            opacity: 0.1;
+            height: 0;
+        }
+        &:hover, &.on {
+            border-color: set.$mCol-60;
+            color: set.$gray-0;
+            &::before, &::after {
+                height: 100%;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.tab-#{$name}.nar {
+    display: flex; align-items: center; flex-wrap: wrap;
+    li {
+        font-size: map.get($prop, fs);
+        color: set.$gray-50;
+        position: relative;
+        transition: all set.$aniSet;
+        height: map.get($prop, h);
+        border: .1rem solid set.$gray-30;
+        padding: 0 calc(map.get($prop, h) / 2);
+        flex-grow: 1;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        &:has(a, button) {
+            padding: 0;
+            a, button {
+                padding: 0 calc(map.get($prop, h) / 2);
+                display: flex; flex-grow: 1; height: 100%;
+                align-items: center; justify-content: center;
+            }
+        }
+        &:not(:first-child) { margin-left: -0.1rem;  }
+        &::before {
+            content: "";
+            z-index: -1;
+            background: set.$mCol-60;
+            transition: all set.$aniSet;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            opacity: 0.1;
+            height: 0;
+        }
+        &:hover, &.on {
+            border-color: set.$mCol-60;
+            color: set.$gray-0;
+            background: set.$mCol-60;
+            &::before, &::after {
+                height: 100%;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.tab-#{$name}.line {
+    display: flex; align-items: center;
+    border: 1px solid set.$gray-30;
+    border-top:    none;
+    border-bottom: none;
+    width: 100%;
+    li {
+        font-size: map.get($prop, fs);
+        color: set.$gray-50;
+        height: map.get($prop, h);
+        display: flex; align-items: center; justify-content: center;
+        position: relative;
+        transition: all set.$aniSet;
+        position: relative;
+        padding: 0 map.get($prop, g);
+        line-height: 1;
+        flex-grow: 1;
+        text-align: center;
+        border-bottom: .1rem solid set.$gray-30;
+        cursor: pointer;
+        flex: 1 1 0;
+        &:has(a, button) {
+            padding: 0;
+            a, button {
+                padding: 0 calc(map.get($prop, h) / 2);
+                display: flex; flex-grow: 1; height: 100%;
+                align-items: center; justify-content: center;
+            }
+        }
+        &::before {
+            content: "";
+            width: calc(100% + .2rem);
+            position: absolute;
+            left: -.1rem; bottom: 0;
+            transition: all set.$aniSet;
+            background: set.$mCol-60;
+            height: 0;
+        }
+        &:not(:last-child) {
+            border-right: .1rem solid set.$gray-30;
+        }
+        &:hover, &.on {
+            color: set.$mCol-60;
+            &::before { height: map.get($prop, lh); }
+        }
+    }
+}
+
+.tab-#{$name}.ud {
+    display: flex; align-items: center; gap: calc(map.get($prop, h) / 2); flex-wrap: wrap;
+    li {
+        font-size: map.get($prop, fs);
+        color: set.$gray-50;
+        padding-bottom: calc(map.get($prop, h) / 4);
+        position: relative;
+        transition: all set.$aniSet;
+        list-style: none;
+        cursor: pointer;
+        &::before {
+            content: "";
+            position: absolute;
+            height: map.get($prop, ulh);
+            bottom: 0;
+            width: 0;
+            background: set.$mCol-60;
+            transition: all set.$aniSet;
+            left: 50%; transform: translateX(-50%);
+        }
+        &:hover, &.on {
+            color: set.$mCol-60;
+            &::before { width: 100%; }
+        }
+    }
+}
+}
+
+
+
+.barTab {
+    padding: 1rem; background: set.$gray-0;
+    border-radius: .4rem;
+    display: flex; align-items: center; gap: 1rem;
+    border: 1px solid set.$gray-10;
+    position: relative;
+    isolation: isolate;
+    max-width: 64rem;
+    box-shadow: 0 10px 23px 3px rgba(set.$gray-100, 0.04);
+    &.rou {
+        border-radius: 100rem;
+        li { border-radius: 100rem; }
+    }
+    // 인디케이터는 li 자신이 그린다 — .on 은 솔리드 필, .hov 는 .3rem 밖으로 나가는 링(box-shadow).
+    // 예전에는 ::before/::after 를 anchor() 로 li 에 붙여 미끄러지게 했으나, anchor()/position-anchor 가
+    // iOS Safari 에서 파싱 오류를 내서 걷어냈다(미끄러지는 모션은 없어지고 색만 전환된다).
+    li {
+        flex-grow: 1;
+        height: 4rem;
+        display: flex; align-items: center; justify-content: center;
+        font-size: set.$ft-bd-m;
+        border-radius: .4rem;
+        color: set.$gray-50;
+        position: relative;
+        z-index: 1;
+        cursor: pointer;
+        transition: color set.$aniSet, background set.$aniSet, box-shadow .15s ease;
+        &.on  { color: set.$gray-0; background: set.$mCol-60; }
+        &.hov:not(.on) { color: set.$gray-100; background: set.$gray-10; box-shadow: 0 0 0 .3rem set.$gray-10; }
+    }
+}

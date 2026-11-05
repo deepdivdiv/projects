@@ -1,0 +1,57 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+// [개발 작성] 회원정보수정(views/user/mypage_modify.html) 전용 추가 규칙 — 퍼블 산출물이 아니다.
+//
+// 퍼블 시안(pages/_sub.scss 의 .sub_mypage .mod_list) 골격을 그대로 쓰고, 실동작에서만 필요해진 것을 여기에 얹는다.
+// <b>시안 파일(_sub.scss)을 고치지 않는다</b> — 고치면 퍼블이 그 파일을 다시 넘길 때 우리 추가분이 조용히 사라진다
+// (회원가입 pages/_join_extra.scss · 학습방 pages/_study.scss 와 같은 방침). 컴파일 산출물은 sample/css/mypage-extra.css 이며
+// npm 빌드가 무관한 .css 까지 다시 쓰므로 손으로 맞춰 둔다(join-extra.css 와 동일).
+//
+//   1) .qualification-groups  신청자격 한 칸(dd) 안에 소묶음(.qualification-group — 기본자격 / 경력인정 분야)을 세로로 쌓고
+//                             소제목(.qualification-group-title)을 dt 보다 한 단계 작게 둔다 — 회원가입 화면(_join_extra.scss)과 같은 모양.
+//                             소묶음은 공고의 소제목을 따른 표시용 구분이라 dl 을 둘로 쪼개지 않는다(규칙은 전체 중 1개 이상 하나뿐).
+//   2) .qualification-list    체크박스 목록 — 사업 공고 문구를 그대로 쓰는 긴 라벨이라 한 줄에 하나씩 세로로 쌓고(.mod_list 의 .modCheckBox 는
+//                             가로로 흘러 긴 문구가 뒤섞인다), 두 줄로 접히는 라벨에서 체크 상자가 가운데로 내려앉지 않게 한다.
+//   3) .learner-type-radios   학습자 구분 라디오 묶음 — .modCheckBox 의 space-between 대신 왼쪽부터 나란히 둔다(성별 라디오 dd.checkBox 와 같은 간격).
+//                             퍼블 규칙이 `.sub_mypage > section > .sec_cont .mod_form .mod_list .modCheckBox`(클래스 5개)라 같은 깊이로 적어야 덮인다 —
+//                             짧게 적으면(클래스 3개) 뒤에 읽혀도 밀린다(실제로 라디오 둘이 양 끝으로 벌어졌다).
+//
+// sub.css 뒤에 읽히므로 같은 구체도면 이 파일이 이긴다.
+
+.sub_mypage .qualification-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .qualification-group-title {
+        display: block;
+        margin-bottom: 1rem;
+        color: set.$gray-100;
+        font-size: set.$ft-bd-m;
+        font-weight: 700;
+    }
+}
+
+.sub_mypage .qualification-list {
+    // .sel-m 이 자식(> *)마다 flex 를 주므로 목록 자체는 세로로 쌓는다.
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    // 항목 하나(input + label).
+    > div label {
+        // 두 줄로 접히는 라벨: 상자는 첫 줄에 붙이고(flex-start) 줄어들지 않게(flex-shrink) 한다.
+        align-items: flex-start;
+        i {
+            flex-shrink: 0;
+            margin-top: .2rem;
+        }
+        span { line-height: 1.5; }
+    }
+}
+
+.sub_mypage > section > .sec_cont .mod_form .mod_list .learner-type-radios {
+    justify-content: flex-start;
+    gap: 1.2rem 2.4rem;
+}

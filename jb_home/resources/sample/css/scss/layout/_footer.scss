@@ -1,0 +1,265 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+footer {
+    background: set.$gray-110; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    .f_obj {
+        position: absolute;
+        right: -6rem;
+        top: 9rem;
+        opacity: 0.05;
+    }
+    .inner {
+        @include set.base-width;
+    }
+    .f_head {
+        display: flex; width: 100%;
+        .inner { display: flex; }
+        .f_logos {
+            padding-top: 5rem;
+            width: 100%; max-width: 33.9rem;
+            /* 로고 */
+            .logo {
+                width: 23rem; height: 7rem;
+                display: flex; gap: 1.3rem; align-items: center;
+                background: url(set.$img-url + "common/f_logo.png") no-repeat 0 0 / contain;
+            }
+        }
+        address { 
+            padding: 5rem;
+            flex-grow: 1;
+            border:  {
+                left: .1rem solid set.$gray-100;
+                right: .1rem solid set.$gray-100;
+            };
+            display: flex; flex-direction: column; gap: 2rem;
+            dl {
+                position: relative;
+                padding-left: 3rem;
+                &::before {
+                    content: "";
+                    width: 2rem; aspect-ratio: 1/1;
+                    position: absolute;
+                    left: 0;
+                    top: .1rem;
+                    background: url() no-repeat center center / 1.6rem;
+                }
+                &.val-add {
+                    &::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M8 1.00006C5.23969 1.00006 3 3.016 3 5.50006C3 9.50006 8 15.0001 8 15.0001C8 15.0001 13 9.50006 13 5.50006C13 3.016 10.7603 1.00006 8 1.00006ZM8 8.00006C7.60444 8.00006 7.21776 7.88276 6.88886 7.663C6.55996 7.44324 6.30362 7.13088 6.15224 6.76543C6.00087 6.39998 5.96126 5.99784 6.03843 5.60988C6.1156 5.22192 6.30608 4.86555 6.58579 4.58585C6.86549 4.30614 7.22186 4.11566 7.60982 4.03849C7.99778 3.96132 8.39991 4.00093 8.76537 4.1523C9.13082 4.30368 9.44318 4.56002 9.66294 4.88892C9.8827 5.21782 10 5.6045 10 6.00006C9.99942 6.53032 9.78852 7.03869 9.41357 7.41363C9.03863 7.78858 8.53025 7.99948 8 8.00006Z' fill='%23CCC9D5'/%3E%3C/svg%3E"); }
+                }
+                // 권역별 전문기관(val-zone)도 전화번호를 보여주므로 대표전화와 같은 아이콘을 쓴다
+                &.val-call, &.val-zone {
+                    &::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M12.2186 14.9999C11.6086 14.9999 10.7517 14.7793 9.46861 14.0624C7.9083 13.1874 6.70142 12.3796 5.14955 10.8318C3.6533 9.33644 2.92517 8.36831 1.90611 6.51394C0.754861 4.42019 0.951111 3.32269 1.17049 2.85363C1.43174 2.293 1.81736 1.95769 2.3158 1.62488C2.59891 1.43939 2.89851 1.28038 3.2108 1.14988C3.24205 1.13644 3.27111 1.12363 3.29705 1.11207C3.45174 1.04238 3.68611 0.937065 3.98299 1.04957C4.18111 1.12394 4.35799 1.27613 4.63486 1.54957C5.20267 2.10957 5.97861 3.35675 6.26486 3.96925C6.45705 4.38207 6.58424 4.65457 6.58455 4.96019C6.58455 5.318 6.40455 5.59394 6.18611 5.89175C6.14517 5.94769 6.10455 6.00113 6.06517 6.053C5.82736 6.3655 5.77517 6.45582 5.80955 6.61707C5.87924 6.94113 6.39892 7.90582 7.25299 8.758C8.10705 9.61019 9.04392 10.0971 9.36924 10.1664C9.53736 10.2024 9.62955 10.148 9.95205 9.90175C9.9983 9.86644 10.0458 9.82988 10.0955 9.79332C10.4286 9.5455 10.6917 9.37019 11.0411 9.37019H11.043C11.347 9.37019 11.6074 9.50206 12.0386 9.71956C12.6011 10.0033 13.8858 10.7693 14.4492 11.3377C14.7233 11.6139 14.8761 11.7902 14.9508 11.988C15.0633 12.2858 14.9574 12.5193 14.8883 12.6755C14.8767 12.7014 14.8639 12.7299 14.8505 12.7614C14.7189 13.0732 14.559 13.3721 14.3727 13.6546C14.0405 14.1514 13.7039 14.5361 13.142 14.7977C12.8535 14.9342 12.5378 15.0033 12.2186 14.9999Z' fill='%23CCC9D5'/%3E%3C/svg%3E"); }
+                }
+                &.val-email {
+                    &::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M14.5 2.50012H1.5C1.36739 2.50012 1.24021 2.5528 1.14645 2.64657C1.05268 2.74034 1 2.86751 1 3.00012V13.0001C1 13.1327 1.05268 13.2599 1.14645 13.3537C1.24021 13.4474 1.36739 13.5001 1.5 13.5001H14.5C14.6326 13.5001 14.7598 13.4474 14.8536 13.3537C14.9473 13.2599 15 13.1327 15 13.0001V3.00012C15 2.86751 14.9473 2.74034 14.8536 2.64657C14.7598 2.5528 14.6326 2.50012 14.5 2.50012ZM8.30687 8.89481C8.21912 8.96303 8.11115 9.00006 8 9.00006C7.88885 9.00006 7.78087 8.96303 7.69312 8.89481L2.79844 5.08793L3.41219 4.29856L8 7.86668L12.5878 4.29856L13.2016 5.08793L8.30687 8.89481Z' fill='%23CCC9D5'/%3E%3C/svg%3E"); }
+                }
+                dt, dd { font-size: set.$ft-bd-m; }
+                dt { font-weight: 600; color: set.$gray-30; }
+                dd { font-weight: 400; color: set.$gray-50; }
+                // 권역별 전문기관 — 권역 select + 전화번호 링크(layout.js 가 data-tel 로 번호를 바꾼다).
+                // select 는 디자인시스템 .form select(base-select + ::picker-icon/::picker) 의 뼈대를 따르되,
+                // 흰 배경·파란 강조 대신 푸터의 어두운 톤(gray-110 위, gray-90 테두리, gray-30 글자)으로 맞춘 전용 변형이다.
+                // base-select 를 모르는 브라우저는 appearance:none + 배경 화살표의 네이티브 select 로 떨어진다.
+                &.val-zone {
+                    dd {
+                        display: flex; align-items: center; flex-wrap: wrap; gap: .6rem 1.2rem;
+                        margin-top: .6rem;
+                    }
+                    select {
+                        appearance: none;
+                        height: 3.2rem; min-width: 16rem;
+                        padding: 0 3rem 0 1.2rem;
+                        border: .1rem solid set.$gray-90; border-radius: .2rem;
+                        background: rgba(set.$gray-100, .4) set.icon(che-bot, set.$gray-50) no-repeat right 1.2rem center / .9rem;
+                        color: set.$gray-30; font-size: set.$ft-bd-s; font-weight: 500;
+                        line-height: 1; cursor: pointer;
+                        transition: border-color set.$aniSet, color set.$aniSet, background-color set.$aniSet;
+                        &:hover { border-color: set.$gray-60; color: set.$gray-0; }
+                        &:focus-visible { outline: none; border-color: set.$gray-30; color: set.$gray-0; }
+                        option { background: set.$gray-100; color: set.$gray-30; }
+                    }
+                    a {
+                        color: set.$gray-0; font-weight: 600; letter-spacing: .02em;
+                        &:hover { text-decoration: underline; text-underline-offset: .3rem; }
+                    }
+                    // 커스텀 셀렉트(Chrome base-select) — 펼친 목록도 푸터 톤으로 그린다
+                    @supports (appearance: base-select) {
+                        select {
+                            appearance: base-select;
+                            display: flex; align-items: center; gap: 1rem;
+                            background-image: none;
+                            &::picker-icon {
+                                content: "";
+                                width: .9rem; aspect-ratio: 16/9;
+                                margin-left: auto; margin-right: -1.8rem;
+                                flex-shrink: 0;
+                                background: set.icon(che-bot, set.$gray-50) no-repeat center center / contain;
+                                rotate: 0deg; transform-origin: 50% 50%;
+                                transition: rotate set.$aniSet;
+                                pointer-events: none;
+                            }
+                            &:hover::picker-icon, &:open::picker-icon { background-image: set.icon(che-bot, set.$gray-30); }
+                            &:open {
+                                border-color: set.$gray-30; color: set.$gray-0;
+                                &::picker-icon { rotate: -180deg; }
+                            }
+                            // 펼친 목록의 자리(select 아래, 뷰포트 아래 공간이 모자라면 위로 뒤집힘)는 base-select 의
+                            // 브라우저 기본 배치에 맡긴다 — anchor()/@position-try 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다.
+                            // 푸터는 화면 맨 아래라 option 이 늘면 대개 뒤집히므로, 위·아래 어느 쪽에 붙어도 같은 모양이 되게
+                            // 테두리는 네 변 모두 그린다.
+                            &::picker(select) {
+                                appearance: base-select;
+                                padding: .4rem 0;
+                                border: .1rem solid set.$gray-30; border-radius: .2rem;
+                                background: set.$gray-100;
+                                max-height: 24rem; overflow-y: auto;
+                                scrollbar-width: thin; scrollbar-color: set.$gray-60 set.$gray-100;
+                                z-index: 1;
+                            }
+                            option {
+                                appearance: base-select;
+                                padding: .7rem 1.2rem;
+                                background: set.$gray-100; color: set.$gray-30;
+                                font-size: set.$ft-bd-s; font-weight: 500;
+                                cursor: pointer;
+                                &::checkmark { display: none; }
+                                &:hover, &:focus-visible { background: set.$gray-90; color: set.$gray-0; outline: none; }
+                                &:checked { color: set.$gray-0; font-weight: 600; }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .f_side {
+            padding: 5rem;
+            em {
+                font-size: set.$ft-bd-m;
+                color: set.$gray-50;
+            }
+            p {
+                font-size: set.$ft-tt-m;
+                font-weight: 600;
+                color: set.$gray-0;
+                margin-bottom: 2rem;
+            }
+        }
+    }
+    .f_body {
+        padding: 3rem;
+        border-top: .1rem solid set.$gray-100;
+        .inner {
+            display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+            & > p { font-size: set.$ft-bd-m; color: set.$gray-80; }
+        }
+
+        
+    }
+
+    .ft_info {
+        transition: all 500ms ease-in-out;
+        font-size: set.$ft-bd-s;
+        color: set.$gray-50;
+        display: flex; align-items: center; gap: 3rem;
+        ul {
+            display: flex; align-items: center;
+            li {
+                color: set.$gray-50; font-weight: 500; display: flex; align-items: center;
+                &:not(:last-child) {
+                    &::after {
+                        content: "";
+                        display: inline-block; width: 1px; height: 11px; background: set.$gray-50; margin: 0 1rem;
+                    }
+                }
+            }
+        }
+        .f_import { color: #fff; font-weight: 600; }
+        .topBtn {
+            width: 5rem; aspect-ratio: 1/1;
+            border-radius: 100rem; 
+            border: .1rem solid set.$gray-90;
+            transition: 300ms ease;
+            background: set.icon(che-top, set.$gray-0) no-repeat 50% 47% / 1.2rem;
+            &:hover {
+                background-color: rgba(set.$gray-100, 0.5);
+                border-color: set.$gray-60;
+            }
+        }
+    }
+
+    // 반응형 — 랩탑 이하 세로 배치, 모바일(720px 이하)은 f_side 미노출
+    @include set.res-laptop {
+        .f_obj { width: 24rem; right: -4rem; top: auto; bottom: 3rem; }
+        .f_head {
+            .inner { flex-direction: column; }
+            .f_logos {
+                padding-top: 4rem;
+                width: 100%; max-width: none;
+                .logo { width: 18rem; height: 4.6rem; }
+            }
+            address {
+                padding: 3rem 0;
+                margin-top: 3rem;
+                flex-grow: 0;
+                border: none;
+                border-top: .1rem solid set.$gray-100;
+            }
+            .f_side {
+                padding: 3rem 0;
+                border-top: .1rem solid set.$gray-100;
+            }
+        }
+        .f_body { padding: 2.4rem 0; }
+    }
+
+    @include set.res-tablet {
+        .f_obj { width: 18rem; right: -3rem; }
+        .f_head {
+            .f_logos {
+                padding-top: 3rem;
+                .logo { width: 15rem; height: 3.8rem; }
+            }
+            address {
+                padding: 2.4rem 0;
+                margin-top: 2.4rem;
+                gap: 1.6rem;
+                dd { word-break: keep-all; }
+            }
+            // 모바일에서는 수강신청 안내 영역을 감춘다
+            .f_side { display: none; }
+        }
+        .f_body {
+            padding: 2rem 0;
+            .inner { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+        }
+        .ft_info { width: 100%; justify-content: space-between; }
+    }
+
+    @include set.res-mo-tab {
+        .f_head address dl {
+            padding-left: 2.6rem;
+            &::before { width: 1.6rem; background-size: 1.4rem; }
+        }
+    }
+
+    @include set.res-mobile {
+        .f_head {
+            .f_logos {
+                .logo { width: 13rem; height: 3.3rem; }
+            }
+            address dl dd { font-size: set.$ft-bd-s; }
+            address dl.val-zone {
+                dd { gap: .6rem 1rem; }
+                select { height: 3rem; min-width: 14rem; font-size: 1.2rem; }
+            }
+        }
+        .f_body .inner > p { font-size: set.$ft-bd-s; }
+        .ft_info {
+            font-size: 1.2rem;
+            gap: .6rem;
+            ul li:not(:last-child)::after { margin: 0 .6rem; }
+        }
+    }
+}

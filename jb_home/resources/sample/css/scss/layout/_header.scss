@@ -1,0 +1,1516 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+
+// 헤더 검색줄 — 통합검색 화면(.subSearch .search-area, pages/_sub.scss)의 구성(분류 select + 검색어 input + 검색 버튼을
+// 알약 하나로 묶음)을 헤더 크기(높이 5rem · 테두리 .2rem · 글자 bd-s · 버튼 3.2rem)에 맞춰 옮긴 것.
+// skin02/03 의 cenBar 와 전체메뉴 패널(gnbTop)이 같은 조각(header :: searchBar)을 쓰므로 네 곳이 함께 부른다.
+// select 없이 input + 버튼만 둔 마크업도 그대로 맞는다(input 이 첫 요소면 왼쪽 여백을 알약 안쪽 2rem 으로 잡는다).
+@mixin search-bar($width, $border: .2rem solid set.$mCol-60, $bg: set.$gray-0) {
+    position: relative;
+    width: $width;
+    height: 5rem;
+    border-radius: 100rem;
+    border: $border;
+    background: $bg;
+    display: flex; align-items: center;
+    gap: 1rem;
+    input, select {
+        outline: none; border: none;
+        font-size: set.$ft-bd-s;
+        background: none;
+        padding: 0 .6rem;
+        color: set.$gray-50;
+        height: 100%;
+    }
+    select {
+        width: 11rem;
+        flex-shrink: 0;
+        padding-left: 2rem;
+        appearance: base-select;
+        display: flex; align-items: center;
+        &::picker-icon {
+            content: "";
+            background: set.icon(che-bot, set.$gray-30) no-repeat center center / contain;
+            width: 1rem;
+            aspect-ratio: 1/1;
+            flex-shrink: 0;
+            align-self: center;
+            transform-origin: 50% 50%;
+            rotate: 0deg;
+            transition: rotate set.$aniSet;
+            pointer-events: none;
+        }
+        &:not(:open) {
+            &:hover, &:focus {
+                color: set.$mCol-60;
+                &::picker-icon { background-image: set.icon(che-bot, set.$mCol-60); }
+            }
+        }
+        &:open {
+            color: set.$mCol-60; font-weight: set.$fw-b;
+            &::picker-icon {
+                rotate: -180deg;
+                background-image: set.icon(che-bot, set.$mCol-60);
+            }
+        }
+        &::picker(select) {
+            @include set.scrollBar($color:set.$mCol-60);
+            appearance: base-select;
+            color: set.$gray-100;
+            overflow-y: auto;
+            // 간격은 margin-block 으로 준다(목록이 위로 뒤집혀 열릴 때도 같은 간격이 남는다).
+            // 왼쪽은 margin + border + padding + option 여백 = 2rem 으로 닫힌 상태의 글자 시작점과 맞춘다.
+            margin-block: .8rem;
+            margin-inline-start: .1rem;
+            padding: .6rem;
+            border: .1rem solid set.$mCol-20;
+            border-radius: 1.4rem;
+            background: set.$gray-0;
+            box-shadow: 0 .6rem 2rem rgba(set.$mCol-60, .16);
+            // 펼친 목록 위치는 브라우저 기본(base-select 의 UA 스타일 — select 아래, 넘치면 위로)에 맡긴다.
+            // anchor()/position-try 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다.
+            max-height: 24rem;
+            height: auto;
+        }
+        option {
+            padding: .7rem 1.2rem;
+            border-radius: .8rem;
+            background: none;
+            font-size: set.$ft-bd-s;
+            font-weight: set.$fw-m;
+            line-height: 1.4;
+            color: set.$gray-50;
+            cursor: pointer;
+            transition: background set.$aniSet, color set.$aniSet;
+            & + option { margin-top: .2rem; }
+            &:hover,
+            &:focus,
+            &:focus-visible {
+                background: set.$mCol-5;
+                color: set.$mCol-60;
+                outline: none;
+            }
+            &:checked {
+                background: set.$mCol-5;
+                color: set.$mCol-60;
+                font-weight: set.$fw-b;
+            }
+            // 선택 표시는 색·굵기로 하므로 브라우저 기본 체크(✓)는 뺀다.
+            &::checkmark { content: none; }
+        }
+    }
+    input {
+        flex-grow: 1;
+        min-width: 0;
+        &:first-child { padding-left: 2rem; }
+        &::placeholder { color: set.$gray-50; }
+    }
+    .bt-search {
+        width: 3.2rem; aspect-ratio: 1/1;
+        flex-shrink: 0;
+        display: block;
+        background: set.icon(ico-search, set.$mCol-60) no-repeat center center / 2.4rem;
+        margin-right: 1.8rem;
+    }
+}
+
+.topStrip {
+    background: set.$mCol-5;
+    display: flex; align-items: center; justify-content: center;
+    gap: .4rem;
+    padding: 1rem;
+    pointer-events: none;
+    p {
+        font-size: set.$ft-bd-s;
+        color: set.$gray-100;
+        line-height: 1;
+        strong {
+            font-weight: 600;
+        }
+    }
+}
+
+// SKIN 01
+header.skin01 {
+    width: 100%;
+    height: 9rem;
+    border-bottom: .1rem solid set.$gray-20;
+    position: sticky;
+    top: 0;
+    background: set.$gray-0;
+    z-index: 9;
+    .h_inner {
+        @include set.base-width();
+        height: 100%;
+        display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+        // 로고
+        .logo {
+            display: block;
+            outline: none;
+            img {
+                width: auto;
+                height: 100%;
+                display: block;
+                object-fit: contain;
+                transition: all 300ms ease-in;
+            }
+        }
+        // 메뉴
+        nav {
+            flex-grow: 1;
+            height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            .depth1 {
+                height: 100%;
+                display: flex; align-items: center; justify-content: center;
+                > li {
+                    // 하위메뉴(.depth2)의 컨테이닝 블록. a 가 li 를 꽉 채우므로 li 기준 = a 기준이다
+                    // (anchor()/position-anchor 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다).
+                    position: relative;
+                    height: 100%;
+                    > a {
+                        display: flex; align-items: center; height: 100%;
+                        font-weight: set.$fw-b; color: set.$gray-100; font-size: set.$ft-tt-s; padding: 0 2vw;
+                    }
+
+                    // 하위메뉴가 있을경우
+                    &:has(.depth2) {
+                        > a {
+                            outline: none;
+                        }
+                        .depth2 {
+                            position: absolute;
+                            top: 100%;
+                            left: -1vw;
+                            width: calc(100% + 2vw);
+                            text-align: center;
+                            background: set.$mCol-60;
+                            padding: 2rem 1rem;
+                            border-radius: 1rem;
+                            transform: translateY(1rem);
+                            opacity: 0;
+                            pointer-events: none;
+                            visibility: hidden;
+                            transition: all 300ms ease;
+                            &::before {
+                                content: "";
+                                width: 1.2rem; aspect-ratio: 1/1;
+                                rotate: 45deg;
+                                position: absolute;
+                                left: 50%;
+                                background: set.$mCol-60;
+                                transform: translate(-0.6rem, -50%);
+                                top: 0;
+                                transform-origin: 0 0;
+                            }
+                            li {
+                                a {
+                                    font-size: set.$ft-bd-m;
+                                    font-weight: set.$fw-m;
+                                    outline: none;
+                                    line-height: 1.4;
+                                    padding: .3rem 0;
+                                    display: block;
+                                    transition: all 300ms ease;
+                                    color: set.$mCol-20;
+                                    &:hover, &:focus-within {
+                                        color: set.$gray-0;
+                                        font-weight: set.$fw-eb;
+                                        font-size: set.$ft-bd-l;
+                                    }
+                                }
+                            }
+                        }
+                        &:hover, &:focus-within {
+                            > a {
+                            color: set.$mCol-60;
+                            font-weight: set.$fw-b;
+                            }
+                            .depth2 {
+                                opacity: 1;
+                                transform: translateY(0);
+                                pointer-events: all;
+                                visibility: visible;
+                            }
+                        }
+                    }
+                    // 하위메뉴 없을경우
+                    &:not(:has(.depth2)) {
+                        &:hover, &:focus-within {
+                            > a  {
+                                color: set.$mCol-60;
+                                font-weight: set.$fw-b;
+                                &::before {
+                                    width: 100%;
+                                }
+                            }
+                        }
+                        > a {
+                            position: relative;
+                            transition: all 300ms ease;
+                            outline: none;
+                            &::before {
+                                content: "";
+                                height: 0.3rem;
+                                position: absolute;
+                                width: 0%;
+                                left: 50%;
+                                bottom: 0;
+                                transition: all 300ms ease;
+                                background: set.$mCol-60;
+                                transform: translateX(-50%);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        // 사이드 유틸
+        .h_side {
+            display: flex; align-items: center;
+            // 검색 버튼
+            .search-area {
+                padding-right: 2rem; margin-right: 2rem;
+                position: relative;
+                &::before {
+                    content: "";
+                    position: absolute;
+                    width: 0.1rem;
+                    height: 1.4rem;
+                    background: set.$gray-20;
+                    top: 50%; right: 0;
+                    transform: translateY(-50%);
+                }
+                input {
+                    position: absolute;
+                    right: 1rem;
+                    height: 5rem;
+                    top: 50%;
+                    border-radius: 100rem;
+                    width: min(36rem, 50vw);
+                    outline: none;
+                    padding: 0 2rem;
+                    border: .2rem solid set.$mCol-60;
+                    font-size: set.$ft-bd-s;
+                    color: set.$gray-100;
+                    visibility:hidden;
+                    transition: all 300ms ease;
+                    opacity: 0;
+                    transform: translate(1rem, -50%);
+                    &:placeholder {
+                        color: set.$gray-50;
+                    }
+                }
+                .bt-search {
+                    width: 3.2rem; aspect-ratio: 1/1;
+                    z-index: 2;
+                    position: relative;
+                    display: block; box-sizing: border-box; padding: 0.2rem;
+                    background: set.icon(ico-search, set.$mCol-60) no-repeat center center / 2.4rem;
+                }
+                &.active {
+                    input {
+                        opacity: 1; visibility: visible; transform: translate(0, -50%);
+                    }
+                }
+            }
+            // 로그인, 회원가입
+            .user-area {
+                display: flex; align-items: center; gap: 2rem;
+                .bt-login {
+                    &:focus-within, &:hover {
+                        font-weight: set.$fw-b;
+                        color: set.$mCol-60;
+                        outline: none;
+                    }
+                }
+                .bt-login, .user-name { font-size: set.$ft-bd-l; color: set.$gray-50; font-weight: set.$fw-m; }
+            }
+            // 전체메뉴
+            .allBtn {
+                width: 5rem; aspect-ratio: 1/1;
+                border-radius: 100rem;
+                background: set.$mCol-5;
+            }
+            .loginBtn {
+                flex-direction: column;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: .2rem;
+                &:hover { p { color: set.$mCol-60; } }
+                &:focus-visible {
+                    outline: .2rem dashed royalblue;
+                    p { color: set.$mCol-60; }
+                }
+                i {
+                    width: 2.2rem; aspect-ratio: 1/1;
+                    display: block;
+                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Crect x='4' y='9' width='16' height='12' rx='4' stroke='%230A60A9' stroke-width='1.5'/%3E%3Cpath d='M12 14L12 16' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' stroke='%230A60A9'/%3E%3Cpath d='M16 9V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V9' stroke-width='1.5' stroke='%230A60A9'/%3E%3C/svg%3E") no-repeat center center / contain;
+                }
+                p {
+                    font-size: set.$ft-bd-l;
+                    font-weight: 700;
+                    color: set.$gray-100;
+                    line-height: 1.4;
+                }
+            }
+        }
+        // 버튼 메뉴 :: 모바일에서 활성화
+        #bt-menu {
+            --line-w: 2.4rem;
+            --line-h: .2rem;
+            --line-gap: .7rem;
+            display: none;
+            width: 3.2rem; aspect-ratio: 1/1;
+            position: relative;
+            font-size: 0; /* 스크린리더용 '메뉴' 텍스트만 남기고 시각적으로 숨김 */
+            @include set.res-laptop { display: block; }
+
+            span, &::before, &::after {
+                position: absolute;
+                left: 50%; top: 50%;
+                width: var(--line-w); height: var(--line-h);
+                border-radius: var(--line-h);
+                background: set.$gray-100;
+                translate: -50% -50%;
+                transition: translate set.$aniSet, rotate set.$aniSet, scale set.$aniSet, opacity set.$aniSet;
+            }
+            &::before, &::after { content: ""; }
+            &::before { translate: -50% calc(-50% - var(--line-gap)); }
+            &::after  { translate: -50% calc(-50% + var(--line-gap)); }
+
+            &.active {
+                span { scale: 0 1; opacity: 0; }
+                &::before { translate: -50% -50%; rotate: 45deg; }
+                &::after  { translate: -50% -50%; rotate: -45deg; }
+            }
+        }
+    }
+}
+
+// 접히는 헤더(skin02/03)를 쓰는 문서는 스크롤 앵커링을 끈다.
+// 헤더가 접히면 topMenu(4rem)+cenBar(10rem)=14rem 이 뷰포트 위쪽에서 사라지는데,
+// 브라우저는 보이던 내용을 제자리에 두려고 scrollY 를 그만큼 되돌린다(scroll anchoring).
+// 그 보정이 스크립트에는 '위로 스크롤'로 잡혀서 펼침 → 다시 접힘이 무한 반복된다.
+// 앵커링을 꺼두면 문서가 헤더와 함께 그대로 따라 올라가고 scrollY 는 건드려지지 않는다.
+html:has(header.skin02),
+html:has(header.skin03) { overflow-anchor: none; }
+// SKIN 02
+header.skin02 {
+    width: 100%;
+    border-bottom: .1rem solid set.$gray-20;
+    position: sticky;
+    top: 0;
+    background: set.$gray-0;
+    z-index: 9;
+    &:hover {
+        box-shadow: -0.1rem -2.2rem 3rem 0rem set.$gray-120;
+    }
+    .h_inner {
+        display: flex; flex-direction: column;
+        .inner { 
+            @include set.base-width();
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 2rem;
+            height: 100%;
+        }
+        // 탑메뉴
+        .topMenu {
+            height: 4rem;
+            background: set.$gray-100;
+            color: set.$gray-0;
+            transition: all 300ms ease;
+            .inner {
+                ul {
+                    display: flex; align-items: center;
+                    li {
+                        display: flex; align-items: center;
+                        color: set.$gray-0; font-size: set.$ft-bd-s;
+                        &:not(:last-child) {
+                            &::after {
+                                content: "";
+                                width: .1rem;
+                                height: 1rem;
+                                background: set.$gray-20;
+                                margin: 0 0.8rem;
+                            }
+                        }
+                        a, button {
+                            color: set.$gray-0; font-size: set.$ft-bd-s;
+                        }
+                    }
+                }
+            }
+        }
+        // 가운데
+        .cenBar {
+            height: 10rem;
+            transition: all 300ms ease;
+            border-bottom: .1rem solid set.$gray-20;
+            .inner {
+                // 로고 묶음(업체 + 소상공). 높이 기준을 여기서 잡아야
+                // 안쪽 .logo / .sb_logo 의 height:100% 가 풀린다
+                // (flex 아이템이라 부모 높이가 auto 면 100% 가 intrinsic 으로 떨어진다).
+                .logoSet {
+                    display: flex; align-items: center;
+                    height: 100%; max-height: 6.4rem;
+                }
+                // 소상공 로고
+                .sb_logo {
+                    width: auto;
+                    height: 100%; max-height: 3rem;
+                    display: block;
+                    object-fit: contain;
+                }
+                // 로고
+                .logo {
+                    display: block;
+                    outline: none;
+                    height: 100%; max-height: 6.4rem;
+                    img {
+                        width: auto;
+                        height: 100%;
+                        display: block;
+                        object-fit: contain;
+                        transition: all 300ms ease-in;
+                    }
+                    // 소상공 로고가 뒤따를 때만 구분선을 낸다
+                    &:has(+ .sb_logo) {
+                        display: flex; align-items: center;
+                        &::after {
+                            content: "";
+                            width: .1rem; height: 2rem; background: set.$gray-20; display: block;
+                            margin: 0 2rem;
+                        }
+                    }
+                }
+                // 검색 버튼
+                .search-area {
+                    @include search-bar(min(42rem, 50vw));
+                }
+            }
+        }
+        // 메뉴영역
+        .menuBar {
+            height: 6rem;
+            .inner {
+            // 전체메뉴
+            #bt-menu {
+                font-size: set.$ft-bd-l;
+                height: 100%;
+                color: set.$gray-100;
+                display: flex; align-items: center; gap: 2rem;
+                span {
+                    display: block;
+                    width: .9rem;
+                    height: 0.2rem;
+                    background: set.$gray-30;
+                    top: 0.1rem;
+                    position: relative;
+                    &::before, &::after {
+                        content: "";
+                        width: calc(100% * 2);
+                        height: 100%;
+                        left: 0;
+                        position: absolute;
+                    }
+                    &::before {
+                        top: -.7rem;
+                        background: set.$mCol-60;
+                    }
+                    &::after {
+                        top: .7rem;
+                        background: set.$gray-30;
+                    }
+                }
+            }
+            // 메뉴
+            nav {
+                flex-grow: 1;
+                height: 100%;
+                display: flex; align-items: center; justify-content: end;
+                .depth1 {
+                    height: 100%;
+                    display: flex; align-items: center; justify-content: center;
+                    flex-basis: 12rem;
+                    > li {
+                        // 하위메뉴(.depth2)의 컨테이닝 블록. a 가 li 를 꽉 채우므로 li 기준 = a 기준이다
+                        // (anchor()/position-anchor 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다).
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        > a {
+                            width: 100%;
+                            display: flex; align-items: center; justify-content: center; height: 100%;
+                            font-weight: set.$fw-b; color: set.$gray-100; font-size: set.$ft-bd-l;
+                        }
+
+                        // 하위메뉴가 있을경우
+                        &:has(.depth2) {
+                            > a {
+                                outline: none;
+                            }
+                            .depth2 {
+                                position: absolute;
+                                top: 100%;
+                                left: -1vw;
+                                width: calc(100% + 2vw);
+                                text-align: center;
+                                background: set.$mCol-60;
+                                padding: 2rem 1rem;
+                                border-radius: 1rem;
+                                transform: translateY(1rem);
+                                opacity: 0;
+                                pointer-events: none;
+                                visibility: hidden;
+                                transition: all 300ms ease;
+                                &::before {
+                                    content: "";
+                                    width: 1.2rem; aspect-ratio: 1/1;
+                                    rotate: 45deg;
+                                    position: absolute;
+                                    left: 50%;
+                                    background: set.$mCol-60;
+                                    transform: translate(-0.6rem, -50%);
+                                    top: 0;
+                                    transform-origin: 0 0;
+                                }
+                                li {
+                                    a {
+                                        font-size: set.$ft-bd-m;
+                                        font-weight: set.$fw-m;
+                                        outline: none;
+                                        line-height: 1.4;
+                                        padding: .3rem 0;
+                                        display: block;
+                                        transition: all 300ms ease;
+                                        color: set.$mCol-20;
+                                        &:hover, &:focus-within {
+                                            color: set.$gray-0;
+                                            font-weight: set.$fw-eb;
+                                            font-size: set.$ft-bd-l;
+                                        }
+                                    }
+                                }
+                            }
+                            &:hover, &:focus-within {
+                                > a {
+                                color: set.$mCol-60;
+                                font-weight: set.$fw-b;
+                                }
+                                .depth2 {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                    pointer-events: all;
+                                    visibility: visible;
+                                }
+                            }
+                        }
+                        // 하위메뉴 없을경우
+                        &:not(:has(.depth2)) {
+                            &:hover, &:focus-within {
+                                > a  {
+                                    color: set.$mCol-60;
+                                    font-weight: set.$fw-b;
+                                    &::before {
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                            > a {
+                                position: relative;
+                                transition: all 300ms ease;
+                                outline: none;
+                                &::before {
+                                    content: "";
+                                    height: 0.3rem;
+                                    position: absolute;
+                                    width: 0%;
+                                    left: 50%;
+                                    bottom: 0;
+                                    transition: all 300ms ease;
+                                    background: set.$mCol-60;
+                                    transform: translateX(-50%);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            }
+        }
+    }
+    &.scrolled {
+        .h_inner {
+            .topMenu, .cenBar { visibility: hidden; height: 0; clip-path: inset(0 0% 100% 0%); }
+        }
+    }
+}
+// SKIN 03
+header.skin03 {
+    width: 100%;
+    box-shadow: -0.1rem -2.2rem 3rem 0rem set.$gray-120;
+    position: sticky;
+    top: 0;
+    background: set.$gray-0;
+    z-index: 9;
+    .h_inner {
+        display: flex; flex-direction: column;
+        .inner { 
+            @include set.base-width();
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 2rem;
+            height: 100%;
+        }
+        // 탑메뉴
+        .topMenu {
+            height: 4rem;
+            background: set.$mCol-60;
+            color: set.$gray-0;
+            transition: all 300ms ease;
+            .inner {
+                ul {
+                    display: flex; align-items: center;
+                    li {
+                        display: flex; align-items: center;
+                        color: set.$mCol-30; font-size: set.$ft-bd-s;
+                        &:not(:last-child) {
+                            &::after {
+                                content: "";
+                                width: .1rem;
+                                height: 1rem;
+                                background: set.$gray-20;
+                                margin: 0 0.8rem;
+                            }
+                        }
+                        a {
+                            color: set.$mCol-30; font-size: set.$ft-bd-s; outline: none;
+                            &:hover, &:focus-visible {
+                                color: set.$gray-0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // 가운데
+        .cenBar {
+            height: 10rem;
+            transition: all 300ms ease;
+            border-bottom: .1rem solid set.$gray-20;
+            .inner {
+                // 로고 묶음(업체 + 소상공). 높이 기준을 여기서 잡아야
+                // 안쪽 .logo / .sb_logo 의 height:100% 가 풀린다
+                // (flex 아이템이라 부모 높이가 auto 면 100% 가 intrinsic 으로 떨어진다).
+                .logoSet {
+                    display: flex; align-items: center;
+                    height: 100%; max-height: 6.4rem;
+                }
+                // 소상공 로고
+                .sb_logo {
+                    width: auto;
+                    height: 100%; max-height: 3rem;
+                    display: block;
+                    object-fit: contain;
+                }
+                // 로고
+                .logo {
+                    display: block;
+                    outline: none;
+                    height: 100%; max-height: 6.4rem;
+                    img {
+                        width: auto;
+                        height: 100%;
+                        display: block;
+                        object-fit: contain;
+                        transition: all 300ms ease-in;
+                    }
+                    &:focus-visible {
+                        outline: .2rem dotted set.$mCol-60;
+                        outline-offset: 1rem;
+                    }
+                    // 소상공 로고가 뒤따를 때만 구분선을 낸다
+                    &:has(+ .sb_logo) {
+                        display: flex; align-items: center;
+                        &::after {
+                            content: "";
+                            width: .1rem; height: 2rem; background: set.$gray-20; display: block;
+                            margin: 0 2rem;
+                        }
+                    }
+                }
+                // 검색 버튼
+                // skin03 은 테두리 없이 옅은 바탕(mCol-10)으로 채운다.
+                .search-area {
+                    @include search-bar(min(42rem, 50vw), $border: none, $bg: set.$mCol-10);
+                    .bt-search {
+                        outline: none;
+                        &:hover, &:focus-within { background-image: set.icon(ico-search, set.$mCol-80); }
+                    }
+                }
+            }
+        }
+        // 메뉴영역
+        .menuBar {
+            height: 6rem;
+            .inner {
+            // 전체메뉴
+            #bt-menu {
+                font-size: set.$ft-bd-l;
+                font-family: set.$ft-point;
+                height: 100%;
+                display: flex; align-items: center; gap: 2rem;
+                color: set.$gray-100;
+                font-weight: normal;
+                outline: none;
+                span {
+                    display: block;
+                    width: .9rem;
+                    height: 0.2rem;
+                    background: set.$gray-30;
+                    top: 0.1rem;
+                    position: relative;
+                    &::before, &::after {
+                        content: "";
+                        width: calc(100% * 2);
+                        height: 100%;
+                        left: 0;
+                        position: absolute;
+                    }
+                    &::before {
+                        top: -.7rem;
+                        background: set.$mCol-60;
+                    }
+                    &::after {
+                        top: .7rem;
+                        background: set.$gray-30;
+                    }
+                }
+                &:hover, &:focus-within {
+                    color: set.$mCol-60;
+                }
+            }
+            // 메뉴
+            nav {
+                flex-grow: 1;
+                height: 100%;
+                display: flex; align-items: center; justify-content: end;
+                .depth1 {
+                    height: 100%;
+                    display: flex; align-items: center; justify-content: center;
+                    flex-basis: 12rem;
+                    > li {
+                        // 하위메뉴(.depth2)의 컨테이닝 블록. a 가 li 를 꽉 채우므로 li 기준 = a 기준이다
+                        // (anchor()/position-anchor 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다).
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        > a {
+                            width: 100%;
+                            display: flex; align-items: center; justify-content: center; height: 100%;
+                            color: set.$gray-100; font-size: set.$ft-bd-l;
+                            font-family: set.$ft-point;
+                        }
+
+                        // 하위메뉴가 있을경우
+                        &:has(.depth2) {
+                            > a {
+                                outline: none;
+                            }
+                            .depth2 {
+                                position: absolute;
+                                top: 100%;
+                                left: -1vw;
+                                width: calc(100% + 2vw);
+                                text-align: center;
+                                background: set.$mCol-60;
+                                padding: 2rem 1rem;
+                                border-radius: 1rem;
+                                transform: translateY(1rem);
+                                opacity: 0;
+                                pointer-events: none;
+                                visibility: hidden;
+                                transition: all 300ms ease;
+                                &::before {
+                                    content: "";
+                                    width: 1.2rem; aspect-ratio: 1/1;
+                                    rotate: 45deg;
+                                    position: absolute;
+                                    left: 50%;
+                                    background: set.$mCol-60;
+                                    transform: translate(-0.6rem, -50%);
+                                    top: 0;
+                                    transform-origin: 0 0;
+                                }
+                                li {
+                                    a {
+                                        font-size: set.$ft-bd-m;
+                                        font-weight: set.$fw-m;
+                                        outline: none;
+                                        line-height: 1.4;
+                                        padding: .3rem 0;
+                                        display: block;
+                                        transition: all 300ms ease;
+                                        color: set.$mCol-20;
+                                        &:hover, &:focus-within {
+                                            color: set.$gray-0;
+                                            font-weight: set.$fw-eb;
+                                            font-size: set.$ft-bd-l;
+                                        }
+                                    }
+                                }
+                            }
+                            &:hover, &:focus-within {
+                                > a {
+                                color: set.$mCol-60;
+                                }
+                                .depth2 {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                    pointer-events: all;
+                                    visibility: visible;
+                                }
+                            }
+                        }
+                        // 하위메뉴 없을경우
+                        &:not(:has(.depth2)) {
+                            &:hover, &:focus-within {
+                                > a  {
+                                    color: set.$mCol-60;
+                                    &::before {
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                            > a {
+                                position: relative;
+                                transition: all 300ms ease;
+                                outline: none;
+                                &::before {
+                                    content: "";
+                                    height: 0.3rem;
+                                    position: absolute;
+                                    width: 0%;
+                                    left: 50%;
+                                    bottom: 0;
+                                    transition: all 300ms ease;
+                                    background: set.$mCol-60;
+                                    transform: translateX(-50%);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            }
+        }
+    }
+    &.scrolled {
+        .h_inner {
+            .topMenu, .cenBar { visibility: hidden; height: 0; clip-path: inset(0 0% 100% 0%); }
+        }
+    }
+}
+
+#wrap {
+    &:has(header.skin01) { .gnbArea, #bt-menu { display:none} }
+    &:has(header.skin02) {
+        $gnbPd: 3rem;
+        .gnbArea { 
+            visibility: hidden; 
+            opacity: 0;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            z-index: 999;
+            transition: all 700ms ease;
+            isolation: isolate;
+            width: 100%;
+            height: 100%;
+            &::before {
+                content: "";
+                width: 100%; height: 100%;
+                position: fixed;
+                left: 0; top: 0;
+                background: rgba(0,0,0,0.4);
+                backdrop-filter: blur(2px);
+                z-index: -1;
+            }
+            &.active {
+                visibility: visible;
+                right: 0;
+                opacity: 1;
+            }
+            .gnbInner {
+                max-width: 48rem;
+                width: 100%; height: 100%;
+                background: set.$gray-0;
+                position: absolute; right: 0; top: 0;
+                border-left: 1.5rem solid set.$mCol-60;
+                .gnbTop {
+                    display: flex; flex-direction: column;
+                    gap: 1rem;
+                    padding: $gnbPd;
+                    background: set.$mCol-5;
+                    .user-area {
+                        display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+                        a {
+                            font-size: set.$ft-tt-m; font-family: set.$ft-point; color: set.$gray-100;
+                            display: flex; align-items: center; gap: 1rem;
+                            &::after {
+                                content: "";
+                                width: 1.4rem;
+                                aspect-ratio: 1/1;
+                                background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+                                display: block;
+                            }
+                        }
+                        .gnbClose {
+                            width: 4rem; aspect-ratio: 1/1;
+                            position: relative;
+                            &::before, &::after {
+                                content: "";
+                                width: 50%; height: 0.2rem;
+                                background: set.$gray-100;
+                                transform-origin: 0 0;
+                                left: 50%; top: 50%;
+                                position: absolute;
+                                transform: translate(-50%, -50%);
+                            }
+                            &::before { rotate: 45deg; }
+                            &::after { rotate: -45deg; }
+                        }
+                    }
+                    // 검색 버튼
+                    .search-area {
+                        @include search-bar(100%);
+                    }
+                }
+                .gnbMenu {
+                    overflow-y: auto;
+                    height: calc(100vh - 17rem);
+                    padding-bottom: 10rem;
+                    .depth1 {
+                        &:not(:last-child) {
+                            > li > a { border-bottom: .1rem solid set.$gray-20; }
+                        }
+                        > li {
+                            > a {
+                                font-size: set.$ft-bd-l; color: set.$gray-50; font-weight: set.$fw-m; display: block; padding: 1.8rem 3rem;
+                                display: flex; align-items: center; justify-content: space-between;
+                                &:hover, :focus-within { background: set.$mCol-5; }
+                                &::after {
+                                    content: "";
+                                    display: block;
+                                    width: 1.2rem;
+                                    aspect-ratio: 1/1;
+                                    transition: all 300ms ease;
+                                    background: set.icon(che-bot, set.$gray-30) no-repeat center center / contain;
+                                }
+                            }
+                            &:not(:has(.depth2)) {
+                                > a {
+                                    &::after {
+                                        rotate: -90deg;
+                                    }
+                                }
+                            }
+                            &:has(.depth2) {
+                                &.open {
+                                    > a {
+                                        &::after {
+                                            rotate: 180deg;
+                                        }
+                                    }
+                                }
+                            }
+                            .depth2 {
+                                background: set.$mCol-5;
+                                clip-path: inset(0% 0% 100% 0%);
+                                padding: 0 $gnbPd;
+                                overflow: hidden;
+                                height: 0;
+                                transition: all 400ms ease;
+                                li {
+                                    display: flex; flex-direction: column; gap: 0.6rem;
+                                    a {
+                                        display: block;
+                                        padding: 0.5rem 0;
+                                        font-size: set.$ft-bd-m; color: set.$gray-50;
+                                        &::before {
+                                            content: "-";
+                                            display: inline-block; padding-right: 0.2rem;
+                                        }
+                                        &:hover {
+                                            color: set.$gray-100;
+                                            font-weight: set.$fw-b;
+                                        }
+                                    }
+                                }
+                            }
+                            &.open {
+                                > a {
+                                    color: set.$mCol-60; font-weight: set.$fw-b;
+                                    &::after {
+                                        background-image: set.icon(che-bot, set.$mCol-60);
+                                    }
+                                }
+                                .depth2 {
+                                    padding: 1rem $gnbPd;
+                                    clip-path: inset(0% 0% 0% 0%);
+                                    height: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .gnbUtil {
+                    position: absolute;
+                    bottom: 0; right: 0;
+                    width: 100%; 
+                    border-top: 1px solid set.$gray-20;
+                    a, button {
+                        font-size: set.$ft-tt-s;
+                        display: flex; align-items: center; justify-content: center; gap: 1rem;
+                        padding: 2rem;
+                        &:hover {
+                            background: set.$gray-5;
+                        }
+                        &::before {
+                            content: "";
+                            width: 2rem;
+                            aspect-ratio: 1/1;
+                            display: block;
+                            background: url() no-repeat center center / contain;
+                        }
+                        &.ut-join { 
+                            color: set.$mCol-60;
+                            &::before {
+                                background-image: set.icon(ico-join, set.$mCol-60);
+                            }
+                        }
+                        &.ut-logout { 
+                            color: set.$gray-50;
+                            &::before {
+                                background-image: set.icon(ico-logout, set.$gray-50);
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+    &:has(header.skin03) {
+        $gnbPd: 3rem;
+        .gnbArea { 
+            visibility: hidden; 
+            opacity: 0;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            z-index: 999;
+            transition: all 700ms ease;
+            isolation: isolate;
+            width: 100%;
+            height: 100%;
+            &::before {
+                content: "";
+                width: 100%; height: 100%;
+                position: fixed;
+                left: 0; top: 0;
+                background: rgba(0,0,0,0.4);
+                backdrop-filter: blur(2px);
+                z-index: -1;
+            }
+            &.active {
+                visibility: visible;
+                right: 0;
+                opacity: 1;
+            }
+            .gnbInner {
+                max-width: 48rem;
+                width: 100%; height: 100%;
+                background: set.$gray-0;
+                position: absolute; right: 0; top: 0;
+                border-left: 1.5rem solid set.$mCol-60;
+                .gnbTop {
+                    display: flex; flex-direction: column;
+                    gap: 1rem;
+                    padding: $gnbPd;
+                    background: set.$mCol-5;
+                    .user-area {
+                        display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+                        a {
+                            font-size: set.$ft-tt-m; font-family: set.$ft-point; color: set.$gray-100;
+                            display: flex; align-items: center; gap: 1rem; outline: none;
+                            &::after {
+                                content: "";
+                                width: 1.4rem;
+                                aspect-ratio: 1/1;
+                                background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+                                display: block;
+                            }
+                            &:hover, &:focus-visible { color: set.$mCol-60; }
+                        }
+                        .gnbClose {
+                            width: 4rem; aspect-ratio: 1/1;
+                            position: relative;
+                            &::before, &::after {
+                                content: "";
+                                width: 50%; height: 0.2rem;
+                                background: set.$gray-100;
+                                transform-origin: 0 0;
+                                left: 50%; top: 50%;
+                                position: absolute;
+                                transform: translate(-50%, -50%);
+                            }
+                            &::before { rotate: 45deg; }
+                            &::after { rotate: -45deg; }
+                            &:hover {
+                                &::before, &::after { background: set.$mCol-60; }
+                            }
+                            &:focus-visible {
+                                outline: .2rem dotted set.$mCol-60;
+                            }
+                        }
+                    }
+                    // 검색 버튼
+                    .search-area {
+                        @include search-bar(100%);
+                        .bt-search {
+                            &:hover, &:focus-within { background-image: set.icon(ico-search, set.$mCol-80);  }
+                        }
+                    }
+                }
+                .gnbMenu {
+                    overflow-y: auto;
+                    height: calc(100vh - 17rem);
+                    padding-bottom: 10rem;
+                    .depth1 {
+                        &:not(:last-child) {
+                            > li > a { border-bottom: .1rem solid set.$gray-20; }
+                        }
+                        > li {
+                            > a {
+                                font-size: set.$ft-bd-l; color: set.$gray-50; font-weight: set.$fw-m; display: block; padding: 1.8rem 3rem;
+                                display: flex; align-items: center; justify-content: space-between; outline: none;
+                                // 하위메뉴 유무·펼침 여부와 상관없이 모든 1depth 항목에 적용된다.
+                                // 펼친 항목만 아래 .open 규칙이 더 진한 색으로 덮어쓴다.
+                                &:hover, &:focus-within { background: set.$mCol-5; }
+                                &::after {
+                                    content: "";
+                                    display: block;
+                                    width: 1.2rem;
+                                    aspect-ratio: 1/1;
+                                    transition: all 300ms ease;
+                                    background: set.icon(che-bot, set.$gray-30) no-repeat center center / contain;
+                                }
+                            }
+                            &:not(:has(.depth2)) {
+                                > a {
+                                    &::after {
+                                        rotate: -90deg;
+                                    }
+                                }
+                            }
+                            &:has(.depth2) {
+                                &.open {
+                                    > a {
+                                        &:hover, &:focus-within { background: set.$mCol-10; }
+                                        &::after {
+                                            rotate: 180deg;
+                                        }
+                                    }
+                                }
+                            }
+                            .depth2 {
+                                background: set.$mCol-5;
+                                clip-path: inset(0% 0% 100% 0%);
+                                padding: 0 $gnbPd;
+                                overflow: hidden;
+                                height: 0;
+                                transition: all 400ms ease;
+                                li {
+                                    display: flex; flex-direction: column; gap: 0.6rem;
+                                    a {
+                                        display: block;
+                                        padding: 0.5rem 0;
+                                        font-size: set.$ft-bd-m; color: set.$gray-50; outline: none;
+                                        &::before {
+                                            content: "-";
+                                            display: inline-block; padding-right: 0.2rem;
+                                        }
+                                        &:hover, &:focus-within {
+                                            color: set.$gray-100;
+                                            font-weight: set.$fw-b;
+                                        }
+                                    }
+                                }
+                            }
+                            &.open {
+                                > a {
+                                    color: set.$mCol-60; font-weight: set.$fw-b;
+                                    &::after {
+                                        background-image: set.icon(che-bot, set.$mCol-60);
+                                    }
+                                }
+                                .depth2 {
+                                    padding: 1rem $gnbPd;
+                                    clip-path: inset(0% 0% 0% 0%);
+                                    height: auto;
+                                }
+                            }
+                        }
+                    }
+                }
+                .gnbUtil {
+                    position: absolute;
+                    bottom: 0; right: 0;
+                    width: 100%; 
+                    border-top: 1px solid set.$gray-20;
+                    a, button {
+                        font-size: set.$ft-tt-s;
+                        display: flex; align-items: center; justify-content: center; gap: 1rem;
+                        padding: 2rem;
+                        &:hover {
+                            background: set.$gray-5;
+                        }
+                        &::before {
+                            content: "";
+                            width: 2rem;
+                            aspect-ratio: 1/1;
+                            display: block;
+                            background: url() no-repeat center center / contain;
+                        }
+                        &.ut-join { 
+                            color: set.$mCol-60;
+                            &::before {
+                                background-image: set.icon(ico-join, set.$mCol-60);
+                            }
+                        }
+                        &.ut-logout { 
+                            color: set.$gray-50;
+                            &::before {
+                                background-image: set.icon(ico-logout, set.$gray-50);
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+
+// 1024
+@include set.res-laptop() {
+    
+    header.skin01 {
+        // 모바일 전체메뉴(.gnbArea)가 이 높이(5rem) 바로 아래에 붙는다 — 높이를 바꾸면 .gnbArea 의 top 도 같이 맞춘다.
+        height: 5rem;
+        border-bottom: 1px solid set.$gray-10;
+        .h_inner {
+            justify-content: normal;
+            gap: 0;
+            .logo {
+                margin-right: auto;
+                img { width: 80%; }
+            }
+            nav, .h_side .user-area {
+                display: none;
+            }
+            .h_side {
+                .search-area {
+                    input { height: 4rem; padding: 1rem;}
+                }
+            }
+        }
+    }
+    header.skin02 {
+        .h_inner {
+            flex-direction: row;
+            .topMenu, 
+            .cenBar .inner .search-area, 
+            .menuBar .inner nav { display: none; }
+            .menuBar, .cenBar { height: 6rem; }
+            .cenBar { flex-grow: 1; border-bottom: none; }
+            .cenBar .inner {
+                .logoSet { max-height: 4rem; }
+                .logo { max-height: 4rem; }
+                .sb_logo { max-height: 2.4rem; }
+                .logo:has(+ .sb_logo)::after { height: 1.6rem; margin: 0 1.2rem; }
+            }
+            .menuBar {
+                width: 6rem;
+                // 모바일에서는 햄버거(span)만 남기고 '전체메뉴' 글자를 감춘다.
+                // text-indent 는 iOS Safari 가 <button>(flex) 안의 텍스트에 적용하지 않아 글자가 그대로 보였다 → font-size: 0 으로 숨긴다
+                // (span 의 굵기·간격은 rem 이라 영향 없고, 스크린리더용 텍스트는 그대로 남는다).
+                .inner #bt-menu { font-size: 0; }
+            }
+        }
+    }
+    header.skin03 {
+        .h_inner {
+            flex-direction: row;
+            .topMenu, 
+            .cenBar .inner .search-area, 
+            .menuBar .inner nav { display: none; }
+            .menuBar, .cenBar { height: 6rem; }
+            .cenBar { flex-grow: 1; border-bottom: none; }
+            .cenBar .inner {
+                .logoSet { max-height: 4rem; }
+                .logo { max-height: 4rem; }
+                .sb_logo { max-height: 2.4rem; }
+                .logo:has(+ .sb_logo)::after { height: 1.6rem; margin: 0 1.2rem; }
+            }
+            .menuBar {
+                width: 6rem;
+                // 모바일에서는 햄버거(span)만 남기고 '전체메뉴' 글자를 감춘다.
+                // text-indent 는 iOS Safari 가 <button>(flex) 안의 텍스트에 적용하지 않아 글자가 그대로 보였다 → font-size: 0 으로 숨긴다
+                // (span 의 굵기·간격은 rem 이라 영향 없고, 스크린리더용 텍스트는 그대로 남는다).
+                .inner #bt-menu { font-size: 0; }
+            }
+        }
+    }
+    #wrap {
+        &:has(header.skin01) {
+            #bt-menu { display: block; }
+            .gnbArea {
+                opacity: 0;
+                z-index: -1;
+                position: fixed;
+                width: 100%; height: calc(100vh - 9rem);
+                background: set.$gray-0;
+                pointer-events: none;
+                visibility: hidden;
+                transition: all 300ms ease;
+                // sticky 헤더(skin01, 이 중단점에서 5rem) 바로 아래. anchor() 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다.
+                top: 5rem;
+                left: 0;
+                display: flex; flex-direction: column;
+                .gnbMenu {
+                    flex-grow: 1;
+                    .depth1 {
+                        display: flex; flex-direction: column;
+                        border-bottom: 1px solid set.$gray-20;
+                        > li {
+                            &:not(:last-child) {
+                                border-bottom: .1rem solid set.$gray-10;
+                            }
+                            > a {
+                                display: block;
+                                padding: 2vw 3vw;
+                                font-size: max(1.4rem, 2.2vw);
+                                color: set.$gray-50;
+                                position: relative;
+                                &::after {
+                                    content: "";
+                                    background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+                                    width: max(1rem, 1.6vw); aspect-ratio: 1/1;
+                                    position: absolute; right: 3vw;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                    transition: transform set.$aniSet;
+                                }
+                            }
+                            // 하위메뉴 펼침. 링크 이동은 common.js 의 preventDefault 로 막는다.
+                            // pointer-events:none 은 키보드(Enter)를 못 막아서 쓰지 않는다.
+                            .depth2 {
+                                height: 0;
+                                overflow: hidden;
+                                background: set.$gray-5;
+                                // :root 의 interpolate-size: allow-keywords 덕에 auto 로도 트랜지션이 걸린다.
+                                transition: height set.$aniSet;
+                                li a {
+                                    display: block;
+                                    padding: 2vw 3vw 2vw 6vw;
+                                    font-size: max(1.4rem, 2vw);
+                                    color: set.$gray-70;
+                                }
+                            }
+                            &.open {
+                                > a {
+                                    color: set.$mCol-60; font-weight: set.$fw-b;
+                                    // 가운데 정렬용 translateY 를 유지해야 해서 rotate 속성 대신 transform 에 합친다.
+                                    &::after {
+                                        transform: translateY(-50%) rotate(90deg);
+                                        background-image: set.icon(che-right, set.$mCol-60);
+                                    }
+                                }
+                                > .depth2 { height: auto; }
+                            }
+                            // 하위메뉴가 없으면 평범한 링크. common.js 도 리스너를 걸지 않아 href 로 그대로 이동한다.
+                            &:not(:has(.depth2)) > a {
+                                &:hover, &:focus-visible {
+                                    color: set.$mCol-60;
+                                    &::after { background-image: set.icon(che-right, set.$mCol-60); }
+                                }
+                            }
+                        }
+                    }
+                }
+                .gnbUtil {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    border-top: 1px solid set.$gray-20;
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 9;
+                    a, button { padding: 3vw; width: 100%; height: 100%;; text-align: center; font-size: max(1.4rem, 2.2vw); display: block; }
+                    a { background: set.$gray-0;}
+                    button { background: set.$mCol-60; color: set.$gray-0; }
+                }
+                &.active {
+                    opacity: 1; z-index: 9999;
+                    pointer-events: all;
+                    visibility: visible;
+                }
+            }
+        }
+        &:has(header.skin02) {
+            .gnbArea .gnbInner .gnbTop { padding: 2rem; }
+            .gnbArea .gnbInner .gnbMenu .depth1 > li > a { padding: 1rem 2rem; }
+            .gnbArea .gnbInner .gnbMenu .depth1 > li.open .depth2 { padding: 1rem 2rem; }
+        }
+        &:has(header.skin03) {
+            .gnbArea .gnbInner .gnbTop { padding: 2rem; }
+            .gnbArea .gnbInner .gnbMenu .depth1 > li > a { padding: 1rem 2rem; }
+            .gnbArea .gnbInner .gnbMenu .depth1 > li.open .depth2 { padding: 1rem 2rem; }
+        }
+    }
+
+
+
+
+
+}
+
+// 535 — 로고 묶음(업체 + 소상공) 축소
+@include set.res-mo-tab() {
+    header.skin02, header.skin03 {
+        .h_inner .cenBar .inner {
+            .logoSet { max-height: 3.2rem; }
+            .logo { max-height: 3.2rem; }
+            .sb_logo { max-height: 2rem; }
+            .logo:has(+ .sb_logo)::after { height: 1.4rem; margin: 0 .8rem; }
+        }
+    }
+}
+
+// 335
+@include set.res-mobile() {
+    header.skin02, header.skin03 {
+        .h_inner .cenBar .inner {
+            .logoSet { max-height: 2.8rem; }
+            .logo { max-height: 2.8rem; }
+            .sb_logo { max-height: 1.6rem; }
+            .logo:has(+ .sb_logo)::after { height: 1.2rem; margin: 0 .6rem; }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+@charset "UTF-8";
+// 과정 상세(커리큘럼) 전용 추가 스타일. 퍼블 시안(sub.scss → sub.css) 뒤에 읽어 그 위에 얹는다.
+@use 'utils';
+@use 'pages/curriculum';

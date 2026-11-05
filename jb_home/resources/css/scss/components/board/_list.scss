@@ -1,0 +1,53 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+// 보드 리스트형 — 한 줄에 [라벨] 제목 …… 날짜.
+// 메인 공지 위젯·사이드 최근글처럼 표(.tb-line)보다 가벼운 목록에 쓴다.
+//   <ul class="bd-list-m">
+//     <li><a href=""><em class="lb-m imp">필독</em><p>제목</p><span>2026.09.01</span></a></li>
+//   </ul>
+// 라벨은 디스플레이 컴포넌트(.lb-*)를 그대로 넣고, 제목은 한 줄 말줄임한다.
+// .line 을 붙이면 행 사이에 구분선이 생긴다. 빈 목록은 li.bd-none 하나로 표시한다.
+$bdListSize: (
+    l: (fs: set.$ft-bd-l, dfs: set.$ft-bd-m, h: 5.2rem, g: 1.2rem),
+    m: (fs: set.$ft-bd-m, dfs: set.$ft-bd-s, h: 4.4rem, g: 1rem),
+    s: (fs: set.$ft-bd-s, dfs: set.$ft-bd-xs, h: 3.6rem, g: .8rem),
+);
+
+@each $name, $prop in $bdListSize {
+    .bd-list-#{$name} {
+        display: flex; flex-direction: column;
+        li {
+            > a, > div {
+                display: flex; align-items: center; gap: map.get($prop, g);
+                min-height: map.get($prop, h);
+                min-width: 0;
+                color: set.$gray-90;
+                .lb, [class^="lb-"] { flex-shrink: 0; }
+                > p {
+                    flex: 1 1 0; min-width: 0;
+                    font-size: map.get($prop, fs);
+                    line-height: 1.4;
+                    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                    transition: color set.$aniSet;
+                }
+                > span {
+                    flex-shrink: 0;
+                    font-size: map.get($prop, dfs);
+                    color: set.$gray-50;
+                    font-variant-numeric: tabular-nums;
+                }
+            }
+            > a:hover, > a:focus-visible {
+                > p { color: set.$mCol-60; text-decoration: underline; text-underline-offset: .3rem; }
+            }
+            &.bd-none {
+                min-height: calc(map.get($prop, h) * 3);
+                display: flex; align-items: center; justify-content: center;
+                font-size: map.get($prop, fs); color: set.$gray-50;
+            }
+        }
+        &.line li + li { border-top: .1rem solid set.$gray-10; }
+    }
+}

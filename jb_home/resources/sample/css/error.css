@@ -1,0 +1,95 @@
+@charset "UTF-8";
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
+/* ------------------------
+           공통
+----------------------- */
+.error-page {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.error-page .error-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4rem;
+}
+.error-page .error-area .error-status {
+  font-size: max(5rem, 8vw);
+  font-weight: 600;
+  color: #0a60a9;
+  font-family: "Paperlogy", sans-serif;
+  text-box: trim-both cap alphabetic;
+}
+.error-page .error-area .error-message {
+  font-size: clamp(3.2rem, 3.9063vw, 4rem);
+  font-weight: 200;
+  color: #9590a2;
+}
+
+.errorArea {
+  height: 100%;
+  padding: 5rem;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.errorArea > img {
+  width: 100%;
+  max-width: 56rem;
+}
+.errorArea em {
+  font-size: clamp(4.2rem, 5.2734vw, 5.4rem);
+  line-height: 1;
+  color: #0a60a9;
+  font-weight: 700;
+  letter-spacing: 0.3rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-family: "Paperlogy", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+.errorArea em span {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+.errorArea > p {
+  font-size: clamp(3.2rem, 3.9063vw, 4rem);
+  font-weight: 500;
+  padding: 1rem 2rem;
+  border-radius: 0.2rem;
+  line-height: 1;
+  font-family: "Paperlogy", sans-serif;
+  background: #0a60a9;
+  color: #ffffff;
+}
+.errorArea > span {
+  display: block;
+  font-size: clamp(2.2rem, 2.5391vw, 2.6rem);
+  color: #7a7588;
+  font-weight: 400;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+}

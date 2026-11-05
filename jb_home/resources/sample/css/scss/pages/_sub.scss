@@ -1,0 +1,4199 @@
+@charset "UTF-8";
+@use '../utils' as set;
+@use 'sass:color';
+@use 'sass:list';
+
+.sub_mypage {
+    > section {
+        @include set.base-width();
+        display: flex; gap: 5rem;
+        // LNB 열기 버튼·닫기 버튼은 패널로 바뀌는 1024px 이하에서만 쓴다.
+        > .bt-lnb { display: none; }
+        .lnbClose { display: none; }
+        > aside {
+            width: 100%; max-width: 34rem;
+            flex-shrink: 0;
+            border-right: .1rem solid set.$gray-20;
+            > nav {
+                // 따라다니지 않고 본문과 함께 흐른다(sticky 없음).
+                // 메뉴가 길어 화면 안에 가두면 잘려 보여서, 높이 제한·내부 스크롤도 두지 않는다.
+                // 시안 기준 안쪽 여백 — 구분선·활성 배경이 aside 경계선에서 2rem 떨어진다.
+                padding: {
+                    right:3rem;
+                    top:5rem;
+                    bottom:10rem;
+                };
+                h1 {
+                    font-size: set.$ft-hd-s; font-family: set.$ft-point;
+                    font-weight: 700; color: set.$gray-100;
+                    letter-spacing: -.05rem;
+                }
+
+                // 좌측 메뉴(LNB). [그룹 제목 + 하위 메뉴] 묶음의 반복이며,
+                // 1024px 이하에서는 이 목록이 왼쪽에서 밀려 들어오는 패널 안에 들어간다(파일 끝 res-laptop 절).
+                // 들여쓰기는 그룹 제목 2rem / 하위 메뉴 4rem 두 단계다(시안).
+                .my_lnb {
+                    margin-top: 4rem;
+                    display: flex; flex-direction: column;
+                    // 그룹 사이는 선으로 끊는다(첫 그룹 위에는 선을 두지 않는다).
+                    .lnb_group + .lnb_group {
+                        margin-top: 3rem; padding-top: 3.4rem;
+                        border-top: .1rem solid set.$gray-20;
+                    }
+                    // 그룹 제목 — 그냥 제목이다(여닫는 기능 없음).
+                    // 오른쪽 화살표도 장식이라 클릭 대상이 아니다.
+                    .lnb_tit {
+                        display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+                        padding: 0 2rem;
+                        font-size: set.$ft-bd-l; font-weight: set.$fw-b; color: set.$gray-100;
+                        &::after {
+                            content: "";
+                            width: 1.1rem; aspect-ratio: 1/1;
+                            flex-shrink: 0;
+                            background: set.icon(che-bot, set.$gray-40) no-repeat center center / contain;
+                        }
+                    }
+                    .lnb_depth {
+                        margin-top: 1.6rem;
+                        display: flex; flex-direction: column; gap: .4rem;
+                        a {
+                            display: block; padding: 1.1rem 2rem 1.1rem 4rem; border-radius: .8rem;
+                            font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m;
+                            transition: all set.$aniSet;
+                            &:hover { background: set.$gray-5; color: set.$gray-100; }
+                        }
+                        // 현재 메뉴. 마크업이 li.on + a[aria-current] 라 둘 중 무엇으로 와도 걸리게 둔다.
+                        li.on > a, a[aria-current="page"] {
+                            background: set.$mCol-5; color: set.$mCol-60; font-weight: set.$fw-b;
+                        }
+                    }
+                }
+            }
+        }
+        > .sec_cont {
+            flex-grow: 1;
+            padding: 5rem 0 14rem;
+        }
+    }
+}
+
+
+#wrap:has(header.scrolled) {
+    #curriculumWrap .cur_side { top: 11rem; }
+}
+
+/* 서브헤더 */
+
+// 구버전
+// .subHeader {
+//     position: relative;
+//     background: set.$gray-10;
+//     isolation: isolate;
+//     &::before {
+//         content: "";
+//         width: 100%; height: 1px;
+//         background: set.$gray-100;
+//         position: absolute; bottom: 0;
+//         z-index: -1;
+//     }
+//     .subTit {
+//         padding: min(5rem, 10vw) 0;
+//         overflow: hidden;
+//         @include set.base-width();
+//         display: flex; align-items: center; justify-content: space-between;
+//         transition: height 300ms cubic-bezier(0.075, 0.82, 0.165, 1), opacity 500ms ease-in-out;
+//         opacity: 1;
+//         h1 {
+//             font-size: set.$ft-hd-l; font-family: set.$ft-point; color: set.$gray-100;
+//             display: flex; align-items: self-end;
+//             line-height: 1; gap: 0.6rem;
+//             transition: all 800ms cubic-bezier(0.075, 0.82, 0.165, 1);
+//         }
+//     }
+//     .sitePath {
+//         display: flex; align-items: center;
+//         .home {
+//             a {
+//                 text-indent: -9999px;
+//                 display: block;
+//                 $homeSize: 2rem;
+//                 width: $homeSize;
+//                 height: $homeSize;
+//                 background: set.icon(ico-here, set.$gray-90) no-repeat 0 0 / contain;
+//             }
+//         }
+//         li {
+//             display: flex; align-items: center; color: set.$gray-70;
+//             &:not(:last-child) {
+//                 &::after {
+//                     content: "";
+//                     display: inline-block;
+//                     width: 1rem; height: 1rem;
+//                     margin: 0 1rem;
+//                     background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+//                 }
+//             }
+//             &:last-child { font-weight: 600; color: set.$gray-100 }
+//         }
+//     }
+//     .subMenu {
+//         @include set.base-width();
+//         .snb {
+//             display: flex;
+//             a { color: inherit; }
+//             li {
+//                 font-size: set.$ft-bd-m; color: set.$gray-70;
+//                 display: block;
+//                 line-height: 1;
+//                 border: 1px solid set.$gray-20;
+//                 border-bottom: 1px solid set.$gray-100;
+//                 background: set.$gray-0;
+//                 font-weight: 300;
+//                 width: 100%; max-width: 22rem; text-align: center;
+//                 &:not(:last-child) { border-right: none; }
+//                 a { padding: 1.6rem .5rem; display: block; }
+//                 &:hover {
+//                     color: set.$gray-100;
+//                 }
+//                 &.active {
+//                     font-weight: 700;
+//                     color: set.$gray-100;
+//                     border: 1px solid set.$gray-100;
+//                     border-bottom: 1px solid set.$gray-0;
+//                 }
+//             }
+//         }
+//     }
+
+
+//     .StepArea {
+//         .StepGuide {
+//             width: 100%; background: set.$gray-5;
+//             display: flex; align-items: center; justify-content: center;
+//             padding: 3.3rem 2rem 3.4rem;
+//             dl {
+//                 display: flex; align-items: center;
+//                 color: set.$gray-50; rotate: 0.4deg;
+//                 &.active {
+//                     color: set.$mCol-60;
+//                     dt, dd { font-weight: 600; }
+//                 }
+//                 &:not(:last-child)::after {
+//                     content: "";
+//                     background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+//                     display: block;
+//                     width: 0.9rem;
+//                     height: 1.4rem;
+//                     margin: 0 min(2vw, 2rem);
+//                 }
+//                 dt { font-size: min(3vw, 1.6rem); font-weight: 600; display: inline-block; margin-right: .6rem; }
+//                 dd { font-size: min(4vw, 2.2rem); font-weight: 500; }
+//             }
+//         }
+//         .StepTit {
+//             background: #D5F3FE;
+//             text-align: center;
+//             height: min(44vw, 45rem);
+//             position: relative;
+//             padding: 0 2rem;
+//             padding-top: 5vw;
+//             overflow: hidden;
+//             h1 {
+//                 font-size: max(2.138vw, set.$ft-tt-l);
+//                 color: set.$gray-100;
+//                 word-break: keep-all;
+//                 span { font-weight: 600; }
+//                 strong {
+//                     display: block;
+//                     font-weight: 600;
+//                     color: set.$mCol-60;
+//                 }
+//             }
+//             isolation: isolate;
+//             & > img {
+//                 position: absolute;
+//                 z-index: -1;
+//                 &.obj-f { width: min(35vw, 36rem);left: 2%; bottom: -1rem; rotate: 0deg; /* TODO 대응 믹스인 없음: shake-left-point */  }
+//                 &.obj-m { width: min(31vw, 32.2rem);right: 2%; bottom: -1rem; /* TODO 대응 믹스인 없음: shake-right-point */ }
+//                 &.obj-city { z-index: -2; left: 50%; transform: translateX(-50%); bottom: 0; }
+//                 &.obj-cloud { z-index: -2; left: 2%;top:2rem; /* TODO 대응 믹스인 없음: swing-left */ }
+//             }
+//         }
+//     }
+// }
+
+
+.subHeader {
+    position: relative;
+    background: set.$gray-10;
+    isolation: isolate;
+    margin-bottom: 4rem;
+    /* isolate 로 z-index 를 가둬 두면 안쪽 z-index:99(snb 드롭다운)가 밖으로 못 나간다.
+       뒤따르는 section(position:relative)이 DOM 순서상 위에 그려져 드롭다운을 덮으므로
+       subHeader 자체를 header(z-index:9) 바로 아래 층으로 올려 둔다. */
+    z-index: 8;
+    &::before {
+        content: "";
+        width: 100%; height: 1px;
+        background: set.$gray-100;
+        position: absolute; bottom: 0;
+        z-index: -1;
+    }
+    .subTit {
+        padding: min(8rem, 15vw) 0;
+        overflow: hidden;
+        @include set.base-width();
+        display: flex; align-items: center; justify-content: space-between;
+        transition: height 300ms cubic-bezier(0.075, 0.82, 0.165, 1), opacity 500ms ease-in-out;
+        opacity: 1;
+        h1 {
+            font-size: set.$ft-hd-l; font-family: set.$ft-point; color: set.$gray-100;
+            display: flex; align-items: self-end;
+            line-height: 1; gap: 0.6rem;
+            transition: all 800ms cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+    }
+    .sitePath {
+        display: flex; align-items: center;
+        .home {
+            a {
+                text-indent: -9999px;
+                display: block;
+                $homeSize: 2rem;
+                width: $homeSize;
+                height: $homeSize;
+                background: set.icon(ico-home, set.$gray-40) no-repeat 0 0 / contain;
+            }
+        }
+        li {
+            display: flex; align-items: center; color: set.$gray-70; font-size: set.$ft-bd-s;
+            &:not(:last-child) {
+                &::after {
+                    content: "";
+                    display: inline-block;
+                    width: 1rem; height: 1rem;
+                    margin: 0 1rem;
+                    background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+                }
+            }
+            &:last-child { font-weight: 600; color: set.$gray-100 }
+        }
+    }
+    .subMenu {
+        border: 1px solid set.$gray-20;
+        border-left:  none;
+        border-right: none;
+        background: set.$gray-0;
+        .sm_inner { 
+            @include set.base-width(); 
+            height: 5rem;
+            display: flex; align-items: center;
+        }
+        a.home {
+            width: 5rem; aspect-ratio: 1/1; display: block;
+            background: set.$gray-0 set.icon(ico-home, set.$gray-50) no-repeat center center / 40%;
+            &:hover {
+                background-color: set.$gray-5;
+            }
+            border: {
+                left: 1px solid set.$gray-20;
+                right: 1px solid set.$gray-20;
+            }
+        }
+        [class^="snb_"] {
+            width: 100%; max-width: 24rem;
+            height: 100%;
+            position: relative;
+            // overflow: visible;
+            visibility: visible;
+            border-right: 1px solid set.$gray-20;
+            &:hover {
+                p::after { rotate: 90deg; }
+                ul { display: block; opacity: 1; pointer-events: all; }
+            }
+            p {
+                padding: 1rem 2rem;
+                color: set.$gray-70;
+                height: 100%;
+                font-size: set.$ft-bd-m;
+                font-weight: 300;
+                display: flex; 
+                justify-content: space-between;
+                align-items: center;
+                &::after {
+                    content: "";
+                    display: block;
+                    width: 1rem; aspect-ratio: 1/1;
+                    scale: -1;
+                    rotate: -90deg;
+                    flex-shrink: 0;
+                    transition: all 300ms ease-in-out;
+                    background: set.icon(che-left, set.$gray-40) no-repeat center center / contain;
+                }
+            }
+            ul { 
+                position: absolute;
+                transition: all 200ms ease-in;
+                opacity: 0;
+                bottom: 0;
+                pointer-events: none;
+                transform: translateY(100%);
+                background: set.$gray-0;
+                padding: 2rem;
+                z-index: 99;
+                width: 100%;
+                box-shadow: 0 1px 0 1px set.$gray-20;
+                // display: none; 
+                li, li a {
+                    color: set.$gray-70;
+                    font-size: set.$ft-bd-m;
+                }
+            }
+        }
+    }
+
+
+    .StepArea {
+        .StepGuide {
+            width: 100%; background: set.$gray-5;
+            display: flex; align-items: center; justify-content: center;
+            padding: 3.3rem 2rem 3.4rem;
+            dl {
+                display: flex; align-items: center;
+                color: set.$gray-50; rotate: 0.4deg;
+                &.active {
+                    color: set.$mCol-60;
+                    dt, dd { font-weight: 600; }
+                }
+                &:not(:last-child)::after {
+                    content: "";
+                    background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+                    display: block;
+                    width: 0.9rem;
+                    height: 1.4rem;
+                    margin: 0 min(2vw, 2rem);
+                }
+                dt { font-size: min(3vw, 1.6rem); font-weight: 600; display: inline-block; margin-right: .6rem; }
+                dd { font-size: min(4vw, 2.2rem); font-weight: 500; }
+            }
+        }
+        .StepTit {
+            background: #D5F3FE;
+            text-align: center;
+            height: min(44vw, 45rem);
+            position: relative;
+            padding: 0 2rem;
+            padding-top: 5vw;
+            overflow: hidden;
+            h1 {
+                font-size: max(2.138vw, set.$ft-tt-l);
+                color: set.$gray-100;
+                word-break: keep-all;
+                span { font-weight: 600; }
+                strong {
+                    display: block;
+                    font-weight: 600;
+                    color: set.$mCol-60;
+                }
+            }
+            isolation: isolate;
+            & > img {
+                position: absolute;
+                z-index: -1;
+                &.obj-f { width: min(35vw, 36rem);left: 2%; bottom: -1rem; rotate: 0deg; /* TODO 대응 믹스인 없음: shake-left-point */  }
+                &.obj-m { width: min(31vw, 32.2rem);right: 2%; bottom: -1rem; /* TODO 대응 믹스인 없음: shake-right-point */ }
+                &.obj-city { z-index: -2; left: 50%; transform: translateX(-50%); bottom: 0; }
+                &.obj-cloud { z-index: -2; left: 2%;top:2rem; /* TODO 대응 믹스인 없음: swing-left */ }
+            }
+        }
+    }
+}
+
+/* 서브비주얼 */
+.subVisual {
+    @include set.base-width();
+    color: set.$gray-0;
+    text-align: center;
+    aspect-ratio: 1400 / 250;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    p {
+        font-size: min(5rem, 10vw);
+        font-family: set.$ft-point;
+        line-height: 1.2;
+        b { color: set.$pCol-60; }
+    }
+    span { font-size: set.$ft-tt-l; }
+}
+
+/* 서브콘텐츠 */
+#wrap:has(.flt_banner) {
+    .contents > section:last-child { padding-bottom: min(30rem, 40vw); }
+}
+
+// 콘텐츠
+.contents {
+    padding-bottom: clamp(4rem, 3vw, 8rem); 
+    box-sizing: border-box;
+    width: 100%;
+    // 섹션
+    > section {
+        width: 100%; height: 100%; position: relative;
+        padding-bottom: min(18rem, 20vw);
+        // 섹션 이너
+
+
+        &:first-of-type .step_inner { 
+            margin-top: -10vw;
+            border-radius: 5rem 5rem 0 0;
+            background: rgba($color: #ffffff, $alpha: 0.92);
+            backdrop-filter: blur(4px);
+            padding: {
+                top: 8rem;
+                bottom: 8rem;
+            }
+            @media screen and (max-width:1024px) {
+            padding: {
+                top: 4rem;
+                bottom: 4rem;
+            }
+            }
+            @media screen and (max-width:560px) {
+            padding: {
+                top: 1.5rem;
+                bottom: 1.5rem;
+            }
+            }
+        }
+        // 스텝 
+        .step_inner {
+            padding: 0 8rem;
+            position: relative;
+            z-index: 2;
+            width: calc(100% - 6rem);
+            margin: 0 auto;
+            max-width: 156rem;
+            transition: all 500ms cubic-bezier(0.165, 0.84, 0.44, 1);
+
+            @media screen and (max-width:1024px) {
+            width: 100%;
+            padding: {
+                top: 0rem;
+                bottom: 0rem;
+                left: 2rem;
+                right: 2rem;
+            }
+            }
+            @media screen and (max-width:560px) {
+            padding: {
+                left: 1.5rem;
+                right: 1.5rem;
+            }
+            }
+        }
+
+
+        .sec_inner {
+            @include set.base-width();
+            display: flex; flex-direction: column; gap: 6rem;
+            height: 100%;
+        }
+        // 캡션
+        .sec_caution {
+            width: 100%;
+            display: flex; align-items: flex-end; justify-content: space-between; gap: 4vw;
+            flex-wrap: wrap;
+            padding-bottom: min(2rem, 4vw);
+            p {
+                span { font-weight: 400; color: set.$mCol-60;}
+                font-size: 1.8rem; color: set.$gray-100; line-height: 1.3; font-weight: 500; word-break: keep-all; text-wrap: balance;
+            }
+            .moreBtn { flex-shrink: 0; }
+        }
+        
+    }
+}
+
+.sec_half { display: flex; justify-content: space-between; gap: max(2rem, 3vw); align-items: flex-start; height: 100%; }
+// 현재 위치(브레드크럼) — subHeader 가 없는 화면에서 본문 맨 위에 놓는다.
+// 모양은 .subHeader .sitePath 와 같게 맞췄고, 항목이 길어지면 가로로 흘려 보낸다.
+.sec_bread {
+    margin-bottom: 2rem;
+    ul {
+        display: flex; align-items: center; flex-wrap: wrap;
+    }
+    li {
+        display: flex; align-items: center; color: set.$gray-60; font-size: set.$ft-bd-m; font-weight: 200;
+        a {
+            color: inherit;
+            &:hover { color: set.$gray-100; text-decoration: underline; }
+        }
+        &:not(:last-child) {
+            &::after {
+                content: "";
+                display: inline-block;
+                width: .9rem; aspect-ratio: 1/1;
+                margin: 0 .8rem;
+                background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+            }
+        }
+        &:last-child { font-weight: 600; color: set.$mCol-60; }
+        // 홈은 아이콘만 남기고 글자는 화면에서 감춘다(스크린리더는 읽는다)
+        // &.home a {
+        //     text-indent: -9999px;
+        //     overflow: hidden;
+        //     display: block;
+        //     width: 2rem; height: 2rem;
+        //     background: set.icon(ico-home, set.$gray-40) no-repeat center center / contain;
+        //     &:hover { background-image: set.icon(ico-home, set.$gray-100); }
+        // }
+    }
+}
+// 섹션 타이틀
+.sec_tit {
+    position: relative;
+    margin-bottom: 2rem;
+    h2 {
+        display: flex; align-items: center;
+        font-size: set.$ft-hd-s;
+        color: set.$gray-100;
+        line-height: 1.2;
+        font-weight: set.$fw-b;
+    }
+
+}
+// 섹션 타이틀 아래 탭 메뉴(분류·상태 필터) — 종전 `.tab-l.ud.mt20.mb40` 를 감싸는 자리.
+// 마크업: <div class="sec_tabmenu"><ul class="tab-l ud"><li>…</li></ul></div>
+// 공통 .tab-*.ud 는 flex-wrap 으로 줄을 바꾸는데, 여기서는 탭이 많아도 한 줄로 두고 좌우 스크롤로 흘린다
+// (줄이 바뀌면 밑줄 탭이 두 줄로 쌓여 어디까지가 탭인지 흐려진다).
+.sec_tabmenu {
+    margin: 2rem 0 4rem;
+    // 탭 높이(글자 + 밑줄 여백). 탭이 없어도 이 높이는 유지된다.
+    min-height: 3.4rem;
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    // 스크롤바가 탭 밑줄 바로 아래에 겹쳐 지저분하다 — 바는 감추고 스크롤(휠·터치·드래그)만 남긴다.
+    // 밑줄 탭이라 '더 있다'는 힌트는 오른쪽 끝에서 잘린 탭 글자가 대신한다.
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+    > [class^="tab-"] {
+        flex-wrap: nowrap;
+        // 컨테이너보다 넓어질 수 있게 내용 폭으로 잡되, 짧으면 컨테이너를 채운다.
+        width: max-content; min-width: 100%;
+        li { flex-shrink: 0; white-space: nowrap; }
+    }
+}
+
+.bd_tit {
+    padding-bottom: 2rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    h3 {
+        color: set.$gray-100;
+        font-size: min(2.6rem, 9vw);
+        font-family: set.$ft-point;
+        line-height: 1.2;
+        letter-spacing: -0.06rem;
+        text-wrap-style: balance;
+        word-break: keep-all;
+        font-weight: 600;
+        flex-grow: 1;
+        b {
+            color: set.$mCol-60;
+            font-weight: 500;
+        }
+    }
+    p {
+        color: set.$gray-70;
+        margin-top: .6rem;
+        font-size: min(1.6rem, 6vw);
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.12;
+        letter-spacing: -0.0165rem;
+        text-wrap-style: pretty;
+        word-break: keep-all;
+        &:has(.moreBtn) {
+            display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 2rem;
+        }
+    }
+    .moreBtn {
+        font-size: set.$ft-bd-m;
+        color: set.$gray-50;
+        display: flex; align-items: center; gap: 0.8rem;
+        transition: all 300ms ease-in-out;
+        &::after {
+            content: "";
+            display: block;
+            width: 1rem; aspect-ratio: 1/1;
+            background: set.icon(arr-right, set.$gray-30) no-repeat center center / contain;
+            transition: all 300ms ease-in-out;
+        }
+        &:hover {
+            color: set.$mCol-60;
+            &::after {
+                background: set.icon(arr-right, set.$mCol-60) no-repeat center center / contain;
+            }
+        }
+    }
+}
+
+
+
+// 섹션 왼쪽
+.sec_left {
+    width: 100%; max-width: 40rem;
+    &.sec_sticky {
+        position: sticky; top: 11rem;
+    }
+    .sec_progress {
+        ul { display: flex; flex-direction: column; gap: 2rem; margin-top: max(2rem, 3vw); }
+        li {
+            display: flex; flex-direction: column; gap: .6rem;
+        }
+        p { font-size: max(set.$ft-bd-l, 1.176vw); line-height: 1.2; font-weight: 600; color: set.$gray-100; transition: font-size 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        i {
+            width: 100%;
+            height: set.$ft-bd-m;
+            box-shadow: 0 0 0 .1rem #EEEEEEEE;
+            border-radius: 100px;
+            padding: 4px;
+            box-sizing: border-box;
+            display: block;
+            span {
+                width: 0%;
+                height: 100%;
+                background: set.$mCol-60;
+                display: block;
+                border-radius: 100px;
+                max-width: 100%;
+            }
+        }
+    }
+}
+// 섹션 오른쪽
+.sec_right {
+    width: 100%; padding-top: 1rem; height: 100%;
+    overflow: hidden;
+    // 차트
+    .chartArea {
+        width: 100%; height: 100%; min-height: 36rem;
+        &.chartRadar { max-height: 58rem; }
+    }
+    canvas { height: 100%; width: 100%; display: block; }
+    // 테이블 - 공지사항
+    .board_list {
+        background: #fff;
+        box-shadow: 0 20px 53px -31px rgb(0 0 0 / 18%);
+        overflow: hidden;
+        border-radius: 2rem;
+    }
+    .info-editor {
+        border-radius: 2rem;
+        border: 2px solid rgba(199, 226, 235, 0.56);
+        background: #FFF;   
+        box-sizing: border-box;
+        padding: min(3vw, 4rem);
+        dt {
+            border-radius: 10rem;
+            background: set.$gray-100;
+            font-size: set.$ft-tt-m;
+            font-weight: 600;
+            line-height: 1.9;
+            letter-spacing: -0.072rem;
+            width: fit-content; color: set.$gray-0;
+            padding: 0.2rem 4rem;
+            margin-bottom: 2rem;
+        }
+        dd {
+            color: set.$gray-50;
+            font-family: Pretendard;
+            font-size: set.$ft-tt-s;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.65;
+            letter-spacing: -0.06rem;
+        }
+    }
+}
+
+
+.sec_tabMenu {
+    width: 100%;
+    border-bottom: 1px solid set.$gray-20;
+    ul {
+        @include set.base-width();
+        display: flex; align-items: center;
+        li {
+            line-height: 1;
+            letter-spacing: -0.032rem;
+            color: set.$gray-50;
+            padding: 2.1rem 4rem;
+            position: relative;
+            &::after {
+                content: "";
+                width: 0%;
+                transition: all 600ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+                bottom: -.1rem; 
+                left: 50%;
+                transform: translateX(-50%);
+                height: 0.3rem;
+                background: transparent;
+                position: absolute;
+            }
+            &.active {
+                color: set.$mCol-60; font-weight: 600;
+                &::after { background: set.$mCol-60; width: 100%; }
+            }
+        }
+    }
+}
+/* 커리큘럼 메인 */
+main {
+    transition: all 500ms ease-in-out;
+    background: set.$mCol-60;
+    width: 100%; min-height: 46rem; display: block; position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    padding: min(5vw, 5rem) 0;
+    .m_inner {
+        @include set.base-width;
+        position: relative;
+        transition: all 500ms;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        // 찜 버튼 — 오른쪽 끝 썸네일(.m_thumb)의 오른쪽 아래에 올린다. 컨테이닝 블록은 .m_inner(position:relative)
+        // 이고 .m_thumb 가 그 오른쪽 끝·가장 큰 요소라 .m_inner 기준 2rem 이 곧 썸네일 기준 2rem 이다
+        // (anchor()/position-anchor 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다).
+        .cur_wish {
+            width: 5rem; aspect-ratio: 1/1; border-radius: 100rem;
+            background: rgba(set.$gray-0, 0.8) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='18' viewBox='0 0 21 18' fill='none'%3E%3Cpath d='M10.2135 18C9.70786 18 9.10112 17.7978 8.69663 17.3933C2.12359 11.6292 2.02247 11.5281 2.02247 11.427L1.92135 11.3258C0.707863 10.1124 0 8.39326 0 6.67416V6.47191C0.101124 2.83146 3.03371 0 6.67416 0C7.78652 0 9.30337 0.606741 10.2135 1.82022C11.1236 0.606741 12.7416 0 13.8539 0C17.4944 0 20.3258 2.83146 20.5281 6.47191V6.67416C20.5281 8.49438 19.8202 10.1124 18.6067 11.427L18.5056 11.5281C18.4045 11.6292 17.5955 12.3371 11.8315 17.4944C11.3258 17.7978 10.8202 18 10.2135 18ZM3.53933 11.1236C3.94382 11.5281 5.96629 12.9438 9.70786 16.1798C10.0112 16.4831 10.4157 16.4831 10.7191 16.1798C14.5618 12.7416 16.7865 10.8202 17.2921 10.4157L17.3933 10.3146C18.4045 9.30337 18.9101 7.98876 18.9101 6.67416V6.47191C18.809 3.64045 16.5843 1.51685 13.7528 1.51685C13.0449 1.51685 11.6292 2.02247 11.1236 3.13483C10.9213 3.53933 10.5169 3.74157 10.1124 3.74157C9.70787 3.74157 9.30337 3.53933 9.10112 3.13483C8.59551 2.1236 7.2809 1.51685 6.47191 1.51685C3.74157 1.51685 1.41573 3.74157 1.31461 6.47191V6.77528C1.31461 8.08989 1.92135 9.40449 2.83146 10.3146L3.53933 11.1236Z' fill='%233B3844'/%3E%3C/svg%3E") no-repeat center center / 40%;
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 10;
+            &:hover {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='18' viewBox='0 0 21 18' fill='none'%3E%3Cpath d='M10.2135 18C9.70786 18 9.10112 17.7978 8.69663 17.3933C2.12359 11.6292 2.02247 11.5281 2.02247 11.427L1.92135 11.3258C0.707863 10.1124 0 8.39326 0 6.67416V6.47191C0.101124 2.83146 3.03371 0 6.67416 0C7.78652 0 9.30337 0.606741 10.2135 1.82022C11.1236 0.606741 12.7416 0 13.8539 0C17.4944 0 20.3258 2.83146 20.5281 6.47191V6.67416C20.5281 8.49438 19.8202 10.1124 18.6067 11.427L18.5056 11.5281C18.4045 11.6292 17.5955 12.3371 11.8315 17.4944C11.3258 17.7978 10.8202 18 10.2135 18ZM3.53933 11.1236C3.94382 11.5281 5.96629 12.9438 9.70786 16.1798C10.0112 16.4831 10.4157 16.4831 10.7191 16.1798C14.5618 12.7416 16.7865 10.8202 17.2921 10.4157L17.3933 10.3146C18.4045 9.30337 18.9101 7.98876 18.9101 6.67416V6.47191C18.809 3.64045 16.5843 1.51685 13.7528 1.51685C13.0449 1.51685 11.6292 2.02247 11.1236 3.13483C10.9213 3.53933 10.5169 3.74157 10.1124 3.74157C9.70787 3.74157 9.30337 3.53933 9.10112 3.13483C8.59551 2.1236 7.2809 1.51685 6.47191 1.51685C3.74157 1.51685 1.41573 3.74157 1.31461 6.47191V6.77528C1.31461 8.08989 1.92135 9.40449 2.83146 10.3146L3.53933 11.1236Z' fill='%235838E6'/%3E%3C/svg%3E");
+            }
+            &.on {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='18' viewBox='0 0 20 18' fill='none'%3E%3Cpath d='M20 6.28326C19.9005 2.78112 17.2139 0 13.8308 0C12.7363 0 11.0448 0.824035 10.3483 2.16309C10.2488 2.4721 9.85075 2.4721 9.75124 2.16309C8.95522 0.927039 7.36318 0.103004 6.16915 0.103004C2.88557 0.103004 0.0995025 2.88412 0 6.28326V6.48927C0 8.24034 0.696517 9.88841 1.89055 11.1245C1.89055 11.1245 1.89055 11.1245 1.89055 11.2275C1.99005 11.3305 6.76617 15.6567 8.95522 17.6137C9.55224 18.1288 10.4478 18.1288 11.0448 17.6137C13.2338 15.6567 17.9104 11.3305 18.1095 11.2275C18.1095 11.2275 18.1095 11.2275 18.1095 11.1245C19.3035 9.99141 20 8.34335 20 6.48927V6.28326Z' fill='%235838E6'/%3E%3C/svg%3E");
+            }
+        }
+        .m_head {
+            display: flex; align-items: center; color: set.$gray-0; gap: 1.4rem;
+            em {
+                padding: .8rem 1.2rem;
+                border: 1px solid set.$gray-0;
+                border-radius: .4rem;
+                line-height: 1;
+            }
+            ul {
+                display: flex; align-items: center;
+                li {
+                    display: flex; align-items: center; font-weight: 500;
+                    &:not(:last-child) {
+                        &::after {
+                            content: "";
+                            width: 1px; height: 1.2rem; background: set.$gray-0; display: block;
+                            margin: 0 1rem;
+                        }
+                    }
+                }
+            }
+        }
+        .m_thumb {
+            width: 100%;
+            max-width: 60rem;
+            overflow: hidden;
+            border-radius: .4rem;
+            transition: all 500ms;
+            position: relative;
+            aspect-ratio: 600 / 336;
+            outline: 2px solid set.$mCol-60;
+            outline-offset: -2px;
+            img { width: 100%; height: 100%; object-fit: cover; }
+            .m_btn {
+                height: 4.2rem;
+                max-width: 16rem;
+                width: 100%;
+                flex-shrink: 0;
+                gap: 2rem;
+                color: set.$gray-0;
+                font-weight: 300;
+                display: flex; align-items: center; justify-content: center;
+                background: set.$mCol-70;
+                transition: background 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
+                position: absolute; right: 2rem; bottom: 2rem;
+                &:hover {
+                    background: set.$mCol-80;
+                }
+            }
+        }
+        .m_copy {
+            box-sizing: border-box;
+            padding-top:set.$ft-tt-s;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            max-width: 71rem;
+            gap: 1rem;
+            h1 {
+                font-size: min(3.8rem, 11vw);
+                font-family: set.$ft-point;
+                color: set.$pCol-60;
+                display: inline-flex; align-items: flex-end;
+                line-height: 1.2;
+                word-break: keep-all;
+                text-wrap: balance;
+            }
+            p {
+                color: set.$gray-0;
+                font-size: max(1.7rem, 0.9vw);
+                font-weight: 300;
+                word-break: keep-all;
+                margin-top: .4rem;
+            }
+            .hashTag {
+                display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; margin: 1.6rem 0; 
+                span { font-size: set.$ft-bd-s; padding: 0.4rem 0.9rem 0.5rem; border-radius: 100px; border: .1rem solid set.$gray-20; color: set.$mCol-60; display: block; width: fit-content; line-height: 1; background: #fff; font-weight: 300;}
+            }
+            .m_data {
+                margin-top: 2rem; color: set.$gray-0; font-size: set.$ft-bd-m;
+                display: flex; flex-direction: column; gap: .6rem;
+                dl {
+                    display: flex; align-items: baseline; gap: 1.4rem;
+                    dt { font-weight: 600; flex-shrink: 0; word-break: keep-all; text-wrap-style: pretty; }
+                    dd { font-weight: 300; text-wrap-style: pretty; word-break: keep-all; }
+                }
+            }
+        }
+    }
+}
+
+
+
+.sec_tabMenu {
+    &.active { font-weight: 600; color: set.$mCol-60; }
+}
+.sec_tabWrap {
+    section {
+        display: none;
+        padding-bottom: min(28rem, 30vw);
+        &.active { display: block; }
+    }
+}
+
+
+/* 유저관련 */
+.userCenter {
+    background: set.$gray-5;
+    padding: 5vw 0;
+    
+    .cauArea { margin-top: min(2rem, 2vw); display: flex; flex-direction: column; gap: .6rem; }
+    .noti-cau {
+        display: block;
+        font-size: 1.6rem;
+        line-height: 1.4;
+        color: set.$gray-50;
+        margin-left: 2rem;
+        position: relative;
+        font-weight: 300;
+        strong { font-weight: 500; color: set.$gray-70; }
+        &::before {
+            content: "※";
+            font-family: set.$ft-basic;
+            display: inline-block; margin-right: 0.2rem;
+            position: absolute; left: -2rem; top: -0.02rem;
+        }
+    }
+
+    .ip-cau {
+        position: relative; color: set.$gray-50; font-weight: 300;
+        margin-top: 1rem;
+        margin-left: 2.6rem;
+        display: none;
+        &::before {
+            content: "";
+            // 구버전 ex-mark(느낌표) → 현재 ico-warning(동그라미+!) 아이콘으로 대체
+            background: set.icon(ico-warning, set.$gray-100) no-repeat center center / contain;
+            width: 2rem; height: 2rem; position: absolute; left: -2.6rem; top: .1rem;
+        }
+        &.warring {
+            color: set.$mCol-60; font-weight: 400;
+            &::before { background-image: set.icon(ico-warning, set.$mCol-60); }
+        }
+    }
+    .form-user {
+        display: flex; flex-direction: column; gap: min(2rem, 4vw);
+        dl {
+            display: flex; flex-direction: column; gap: .6rem;
+            dt {
+                color: set.$gray-100; font-size: 1.8rem; font-weight: 500;
+                i.imp { color: set.$sst-dCol-70; display: inline-block; margin-left: .1rem; }
+            }
+            dd {
+                &.ip-tooltip { .ip-cau { display: block; } }
+                &.ip-faild {
+                    input[type="text"], input[type="password"] {
+                        border: 1px solid set.$sst-dCol-70;
+                        background-color: rgba($color: set.$sst-dCol-70, $alpha: .08);
+                        &::placeholder { color: set.$sst-dCol-70; }
+                    }
+                    .ip-cau {
+                        color: set.$sst-dCol-70;
+                        display: block;
+                        &::before { background-color: set.$sst-dCol-70; }
+                    }
+                }
+                .cut-flex {
+                    display: flex; align-items: center; gap: 1rem;
+                    &.half { width: calc(50% - .5rem); }
+                    &.call {
+                        width: calc(50% - .5rem);
+                        input { text-align: center; }
+                    }
+                    &:not(:last-of-type) { margin-bottom: 1rem; }
+                    span { color: set.$gray-70; font-weight: 200; &.dash { min-width: 1.4rem; text-align: center; } }
+
+                }
+            }
+        }
+    }
+    & > section {
+        .sec_tit {
+            margin-bottom: min(2rem, 4vw);
+            i { 
+                width: min(12rem, 16vw); height: min(12rem, 16vw); display: block; margin: 0 auto 2rem;
+                background: set.icon(ico-user, set.$gray-40) no-repeat center / contain;
+            }
+            p strong { font-weight: 600; color: set.$mCol-60 }
+        }
+        .sec_tit:has(+ .user-pwCheck, + .user-modify) {
+            width: calc(100% - min(6rem, 6vw)); max-width: 100rem; margin: 0 auto 4rem; box-sizing: border-box;
+        }
+        .user-pwCheck, .user-modify {
+            background: set.$gray-0;
+            width: calc(100% - min(6rem, 6vw)); max-width: 100rem; margin: 0 auto; box-sizing: border-box; padding: min(6rem, 6vw);
+        }
+        .user-pwCheck {
+            .pwForm {
+                padding: 3rem;
+                background: set.$gray-5;
+                border-radius: .4rem;
+                & > div {
+                    display: flex; align-items: center; gap: 1rem;
+                }
+            }
+            input {
+                &.loginID, &.loginPW {
+                    transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
+                    height: 6rem; padding: 2rem; padding-left: 5.4rem;
+                    background: set.$gray-0 () no-repeat 2rem center / 2.4rem;
+                    &::placeholder { transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1); }
+                    &:focus-within, &:hover {
+                        box-shadow: 0 0 0 2px set.$mCol-60 inset;
+                        &::placeholder { color: set.$mCol-60;}
+                    }
+                    
+                }
+                &.loginPW {
+                    background-image: set.icon(ico-lock-y, set.$gray-20);
+                    &:focus-within, &:hover {
+                        background-image: set.icon(ico-lock-y, set.$mCol-60);
+                    }
+                }
+            }
+        }
+
+        // 쪽지함
+        .user-message {
+            width: calc(100% - min(6rem, 6vw)); max-width: 140rem; margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            & > div { width: 100%; }
+            .msg-list {
+                max-width: 48rem;
+                display: flex; flex-direction: column; gap: 1rem;
+                & > div { padding: min(3rem, 4vw); box-sizing: border-box; background: set.$gray-0; border-radius: .4rem; }
+                .msg_util {
+                    display: flex; align-items: center; gap: 1rem;
+                }
+                .msg_box {
+                    height: 100%;
+                    .msg_item {
+                        display: flex; align-items: center; gap: 2rem;
+                        padding: 2rem 0;
+                        &:first-child { padding-top: 0; }
+                        &:last-child { padding-bottom: 0; }
+                        &:not(:last-child) { border-bottom: 1px solid set.$gray-10; }
+                        .thumb {
+                            width: 6rem; height: 6rem;
+                            display: block; flex-shrink: 0;
+                            background: set.icon(ico-user, set.$gray-40) no-repeat center / 100%;
+                        }
+                        .info {
+                            dt {
+                                a {
+                                    display: flex; align-items: center;
+                                    .name { color: set.$gray-100; font-weight: 600; }
+                                    .data { color: set.$gray-50; font-weight: 300; }
+                                    .state { color: set.$mCol-60; font-weight: 400; }
+                                    span {
+                                        font-size: set.$ft-bd-m;
+                                        &:not(:last-child) {
+                                            &::after {
+                                                content: "";
+                                                margin: 0 1rem;
+                                                width: 1px; height: 10px; display: inline-block; background: set.$gray-20;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            dd {
+                                font-size: 1.9rem; color: set.$gray-70; font-weight: 400;
+                                a {
+                                    @include set.lineCut($line:1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .msg-view {
+                padding: min(3rem, 4vw); padding-top: min(3.5rem, 4vw); box-sizing: border-box; background: set.$gray-0; border-radius: .4rem; display: flex;  flex-direction: column; 
+                .msg_tit {
+                    display: flex; align-items: center; padding-bottom: min(3.2rem, 5vw); margin-bottom: min(3rem, 5vw);
+                    border-bottom: 1px solid set.$gray-10;
+                    h1 { font-size: min(2.8rem, 5vw); font-weight: 600; color: set.$gray-100; }
+                    p {
+                        color: set.$gray-50; font-size: min(1.8rem, 4vw); font-weight: 300;
+                        &::before {
+                            content: "";
+                            margin: 0 1rem;
+                            width: 1px; height: 10px; display: inline-block; background: set.$gray-20;
+                        }
+                    }
+                }
+                .msg_cont {
+                    width: 100%; height: 100%; display: flex; flex-direction: column;
+                    p { font-size: min(2.2rem, 4.8vw); font-weight: 600; }
+                    .msg_info {
+                        display: flex;
+                        margin: min(1.4rem, 3vw) 0;
+                        & > *:not(:last-child) {
+                            &::after {
+                                content: "";
+                            content: "";
+                            margin: 0 1rem;
+                            width: 1px; height: 12px; display: inline-block; background: set.$gray-20;
+                            }
+                        }
+                        strong { font-weight: 600; }
+                        dl {
+                            display: flex; align-items: center; gap: .4rem;
+                            dt { font-weight: 300; color: set.$gray-70; }
+                            dd { font-weight: 500; color: set.$gray-100 }
+                        }
+                    }
+                    .msg_rec {
+                        width: 100%;
+                        .textArea { width: 100%; height: 100%; max-height: 36rem; border: 1px solid set.$gray-10; box-sizing: border-box; padding: min(2rem, 5vw); color: set.$gray-100; font-size: 1.6rem; font-weight: 400;}
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* 업적관련 */
+.meritCenter {
+    width: 100%;
+    // width: 100%; max-width: 80rem; margin: 0 auto;
+    & > section {
+        padding: min(4rem, 4vw);
+        &:not(:first-child) { border-top: 1px solid set.$gray-10; }
+    }
+    .mer_tit {
+        position: relative;
+        line-height: 1.21;
+        display: flex; align-items: center;
+        margin-bottom: min(2rem, 5vw);
+        h1 {
+            font-size: min(3.2rem, 8vw);
+            font-weight: 600;
+            color: set.$gray-100;
+            word-break: keep-all;
+            text-wrap: pretty;
+            color: set.$gray-100;
+            strong { color: set.$gray-100; font-weight: 700; }
+            b { color: set.$mCol-60; font-weight: 700; }
+        }
+        p {
+            color: set.$gray-50; font-size: min(1.8rem, 4vw); font-weight: 300; word-break: keep-all; text-wrap: pretty;
+            &::before {
+                content: "";
+                margin: 0 1.4rem;
+                width: 1px; height: 10px; display: inline-block; background: set.$gray-20;
+            }
+        }
+        p strong { font-weight: 600; color: set.$mCol-60 }
+        & > img {
+            margin-top: 3vw;
+            max-width: 27vw;
+            margin-left: -8vw;
+        }
+    }
+    .ach_error {
+        background: #fafafa;
+        padding: min(6rem, 8vw); border-radius: 2rem;
+        text-align: center;
+        p { font-size: min(2.4rem, 8vw); font-weight: 500; color: set.$gray-0; padding: .6rem 2rem; line-height: 1.3; background: set.$mCol-60; width: fit-content; margin: 2rem auto 1rem;  border-radius: 100rem;}
+        span { font-size: min(2rem, 5vw); display: block; color: set.$gray-100; line-height: 1.2; }
+    }
+    .ach_grid {
+        display: grid; gap: min(1rem, 4vw); 
+        grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr)); 
+        .ach_item {
+            width: 100%;
+            border: 1px solid #eee;
+            border-radius: 1rem;
+            box-sizing: border-box;
+            padding: 3rem 2rem;
+            .ch_label {
+                display: block; 
+                border-radius: 100rem;
+                color: #777;
+                border: 1px solid set.$gray-10;
+                width: fit-content;
+                margin: 0 auto;
+                padding: .4rem 1rem;
+                input[type="radio"] {
+                    display: none;
+                    & + label {
+                        display: flex;
+                        gap: .6rem;
+                        align-items: center;
+                        span {
+                            display: none;
+                            &.set { display: block; }
+                        }
+                        &::before {
+                            content: "";
+                            flex-shrink: 0;
+                            width: 2rem; height: 2rem;
+                            background: url(set.$img-url + "common/ach-" + "set" + ".svg") no-repeat center / 100% ;
+                        }
+                    }
+                    &:checked +  label {
+                        span {
+                            display: none;
+                            &.pick { display: block; }
+                        }
+                        &::before {
+                            background: url(set.$img-url + "common/ach-" + "pick" + ".svg") no-repeat center / 100% ;
+                        }
+                    }
+                }
+                &.ing {
+                    background: set.$mCol-60;
+                    color: set.$gray-0;
+                    border: 1px solid set.$mCol-60;
+                    input[type="radio"] {
+                        & +  label,
+                        &:checked +  label {
+                            span {
+                                display: none;
+                                color: set.$gray-0;
+                                &.ing { display: block; }
+                            }
+                            &::before {
+                                background: url(set.$img-url + "common/ach-" + "ing" + ".svg") no-repeat center / 100% ;
+                            }
+                        }
+                    }    
+                }
+            }
+            .thumb {
+                padding: 1rem;
+                border-radius: 100rem;
+                border: 1px solid set.$gray-20;
+                width: 10rem;
+                height: 10rem;
+                margin: 1rem auto 2rem;
+                outline: 1px solid set.$gray-10;
+                outline-offset: -1rem;
+                flex-shrink: 0;
+                box-sizing: border-box;
+                padding: min(2.4rem, 20vw);
+                img {
+                    width: 100%; height: 100%; object-fit: scale-down;
+                }
+            }
+            .info {
+                text-align: center;
+                & > p {
+                    font-family: set.$ft-point; font-size: min(2.4rem, 10vw); color: set.$mCol-60; rotate: -0.04deg; word-break: keep-all; text-wrap: balance;
+                }
+                span { font-size: min(2rem, 5vw); color: set.$gray-70; font-weight: 300; }
+                dl {
+                    display: flex; align-items: center;justify-content: center; color: set.$gray-50; font-weight: 300; margin-top: 1rem;
+                    dd {
+                        display: flex; align-items: center;
+                        &::before {
+                            content: "";
+                            width: 1px; height: 10px; 
+                            margin: 0 .8rem; background: set.$gray-20;
+                        }
+                    }
+                }
+            }
+        }
+
+        
+
+    }
+    .ach_list {
+            display: grid; gap: min(1rem, 4vw);
+            grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr)); 
+            .ach_item {
+                width: 100%;
+                border: 1px solid #eee;
+                border-radius: 1rem;
+                box-sizing: border-box;
+                padding: min(3rem, 8vw);
+                display: flex;
+                gap: 3rem;
+                align-items: center;
+                .thumb {
+                    padding: 1rem;
+                    border-radius: 100rem;
+                    border: 1px solid set.$gray-20;
+                    width: 10rem;
+                    height: 10rem;
+                    margin: 1rem 0 2rem;
+                    flex-shrink: 0;
+                    outline: 1px solid set.$gray-10;
+                    outline-offset: -1rem;
+                    box-sizing: border-box;
+                    padding: min(2.4rem, 20vw);
+                    img {
+                        width: 100%; height: 100%; object-fit: scale-down;
+                    }
+                }
+                .info {
+                    & > p {
+                        font-family: set.$ft-point; font-size: min(2.4rem, 10vw); color: set.$mCol-60; rotate: -0.04deg;
+                        word-break: keep-all; text-wrap: balance;
+                    }
+                    span { font-size: min(2rem, 5vw); color: set.$gray-70; font-weight: 300; word-break: keep-all; text-wrap: balance; }
+                    dl {
+                        display: flex; align-items: center; color: set.$gray-50; font-weight: 300; margin-top: 1rem;
+                        dd {
+                            display: flex; align-items: center;
+                            &::before {
+                                content: "";
+                                width: 1px; height: 10px; 
+                                margin: 0 .8rem; background: set.$gray-20;
+                            }
+                        }
+                    }
+                    .pg_rate {
+                        display: flex; align-items: center; gap: 1rem;
+                        & > p { color: set.$gray-100; font-weight: 400; font-size: 1.6rem; }
+                        .progress_bar {
+                            width: 100%;
+                            height: set.$ft-bd-m;
+                            box-shadow: 0 0 0 .1rem #EEEEEEEE;
+                            border-radius: 100px;
+                            padding: 4px;
+                            box-sizing: border-box;
+                            span {
+                                width: 0%;
+                                height: 100%;
+                                background: set.$mCol-60;
+                                display: block;
+                                border-radius: 100px;
+                            }
+                        }
+                    }
+                }
+            }
+    }
+}
+
+/* 박스 스타일 bd 1px */
+.boxArea {
+    @include set.box-border();
+    padding: 4rem;
+    font-size: set.$ft-bd-l;
+    color: set.$gray-70;
+    font-weight: 300;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: .4rem;
+    line-height: 1.4;
+    transition: all 300ms ease-in;
+    &:has(dl) {
+        display: flex; flex-direction: column; gap: 3rem;
+    }
+    dl {
+        position: relative;
+        padding-left: 4rem;
+        &::before {
+            content: "";
+            width: 3.1rem; height: 3.1rem; position: absolute; left: 0; top: 0rem;
+            background: url("data:image/svg+xml,%3Csvg width='30' height='31' viewBox='0 0 30 31' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect y='0.5' width='30' height='30' rx='15' fill='%235838E6'/%3E%3Cpath d='M20.3337 11.5L13.0003 18.8333L9.66699 15.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") no-repeat 0 0 / contain;
+        }
+        dt {
+            font-size: set.$ft-tt-s; font-weight: 600; color: set.$gray-100;
+        }
+        dd {
+            margin-top: .6rem;
+            font-size: set.$ft-bd-l; font-weight: 300; color: set.$gray-70; line-height: 1.4; text-wrap: balance; word-break: keep-all;
+        }
+    }
+}
+
+/* 디테일 스타일 */
+.dtiArea {
+    width: 100%;
+    border-radius: .4rem;
+    overflow: hidden;
+    display: flex; flex-direction: column; gap: 2rem;
+    details {
+        border: 1px solid set.$gray-20;
+        font-size: set.$ft-tt-s;
+        letter-spacing: -0.04rem;
+        transition: all 500ms ease-in;
+        &:hover {
+            summary { color: set.$gray-110; font-weight: 700; }
+        }
+        &:open { 
+            summary {
+                &::before {
+                    transform: rotate(-90deg);
+                }
+            }
+        }
+    }
+    summary {
+        padding: 2rem;
+        padding-left: 10rem;
+        font-weight: 600;
+        color: set.$gray-100;
+        background: set.$gray-5;
+        list-style-type: none;
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute; 
+            width: 1.5rem; height: 1.5rem; display: block; position: absolute;  top: calc(50% - .8rem);
+            left: 4rem;
+            background: set.icon(che-left, set.$gray-40) no-repeat center center / contain;
+            transform: rotate(90deg);
+            transform-origin: 50% 50%;
+            // background-color: #fafafa;
+            border-radius: 100rem;
+            transition: transform 500ms;
+        }
+        &::-webkit-details-marker { display: none; }
+    }
+    ul {
+        li {
+            padding: 2rem;
+            padding-left: 10rem;
+            border-top: 1px solid set.$gray-20;
+            color: set.$gray-70;
+            font-weight: 300;
+            position: relative;
+            display: flex; align-items: center;
+            gap: 1rem;
+            // &::before {
+            //     content: "";
+            //     width: 3.1rem; height: 3.1rem; display: inline-block; position: relative; top: .3rem;
+            //     background: url("data:image/svg+xml,%3Csvg width='30' height='31' viewBox='0 0 30 31' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect y='0.5' width='30' height='30' rx='15' fill='%235838E6'/%3E%3Cpath d='M20.3337 11.5L13.0003 18.8333L9.66699 15.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") no-repeat 0 0 / contain;
+            // }
+
+            dl {
+                position: relative;
+                padding-left: 4rem;
+                &::before {
+                    content: "";
+                    width: 3.1rem; height: 3.1rem; position: absolute; left: 0; top: 0rem;
+                    background: url("data:image/svg+xml,%3Csvg width='30' height='31' viewBox='0 0 30 31' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect y='0.5' width='30' height='30' rx='15' fill='%235838E6'/%3E%3Cpath d='M20.3337 11.5L13.0003 18.8333L9.66699 15.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") no-repeat 0 0 / contain;
+                }
+                dt {
+                    font-size: set.$ft-tt-s; font-weight: 600; color: set.$gray-100;
+                }
+                dd {
+                    margin-top: .6rem;
+                    font-size: set.$ft-bd-l; font-weight: 300; color: set.$gray-70; line-height: 1.6; text-wrap: balance; word-break: keep-all;
+                }
+            }
+
+            &:hover {
+                color: set.$gray-100; font-weight: 500;
+            }
+        }
+    }
+}
+
+/* 프로필 스타일 */
+.profileArea {
+    @include set.box-border();
+    padding: 3rem 4rem;
+    border-left: 1.3rem solid set.$mCol-60;
+    border-radius: .4rem 0 0 .4rem;
+    .pf_name {
+        display: flex; align-items: center;
+        border-bottom: 1px solid set.$gray-20;
+        padding-bottom: 2rem;
+        margin-bottom: 3rem;
+        dt {
+            display: flex;
+            align-items: center;
+            color: set.$gray-100; font-size: set.$ft-bd-l;
+            strong { font-size: set.$ft-tt-l;  color: set.$mCol-60; font-family: set.$ft-point; margin-right: 0.3rem;}
+        }
+        dd {
+            color: set.$gray-50; font-size: set.$ft-bd-m; font-weight: 300; display: flex; align-items: center;
+            &:empty { 
+                &::before { display: none; }
+            }
+            &::before {
+                content: "";
+                flex-shrink: 0;
+                width: 0.3rem; height: 0.3rem; border-radius: 1rem; background: #d9d9d9; display: block; margin: 0 .7rem;
+            }
+        }
+    }
+    .pf_info {
+        display: flex; flex-direction: column;
+        gap: 1rem;
+        .if_item {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-bottom: 3rem;
+            margin-top: 2rem;
+            &:not(:last-child) { border-bottom: 1px solid set.$gray-20; }
+            .thumb {
+                max-width: 20rem;
+                object-fit: cover;
+                object-position: center;
+                border-radius: .4rem;
+                overflow: hidden;
+            }
+            p {
+                font-size: set.$ft-tt-s;
+                font-weight: 600; line-height: 1.1; letter-spacing: -0.04rem;
+                color: set.$gray-100;
+                display: flex; align-items: center; gap: .8rem;
+                &::before {
+                    content: "";
+                    width: 0.6rem; height: 0.6rem; border-radius: 10rem;
+                    background: set.$mCol-60; display: block;
+                }
+            }
+            dl {
+                font-size: set.$ft-bd-m;
+                dt {
+                    color: set.$gray-100;
+                    margin-bottom: .4rem;
+                    font-weight: 500; line-height: 1.1; letter-spacing: -0.032rem;
+                }
+                dd {
+                    color: set.$gray-70;
+                    line-height: 1.7; font-weight: 300; letter-spacing: -0.032rem;
+                }
+            }
+        }
+    }
+}
+
+
+.contents .lec_grid .grid_item .lec_thumb .lec_set.age_grade {
+  left: auto;
+  right: 1rem;
+  top: 1rem;
+  background: #BDF03E;
+  color: #333333;
+}
+
+/* 연령 구분 배지(상세 등 썸네일 밖 텍스트 영역용). 목록/메인의 .lec_set 배지와 동일한 pill 스타일로 통일 */
+.age-grade-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.5;
+  border-radius: 0.4rem;
+  letter-spacing: -0.04rem;
+  padding: 0.4rem 1.4rem;
+  position: relative;
+  vertical-align: middle;
+  cursor: default;
+}
+/* .m_head em(라벨 태그) 등 상위 규칙에 덮이지 않도록 상세 히어로 영역에서 값 고정(테두리 제거) */
+main .m_inner .m_head .age-grade-badge,
+.m_head .age-grade-badge {
+  border: none;
+  padding: 0.4rem 1.4rem;
+  line-height: 1.5;
+}
+/* 배지 hover 시 '수강 가능 연령' 툴팁 */
+.age-grade-badge .age-tip {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.8rem);
+  left: 0;
+  white-space: nowrap;
+  background: #333333;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  padding: 0.6rem 1rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.25);
+  z-index: 30;
+}
+.age-grade-badge .age-tip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 1.4rem;
+  border: 0.5rem solid transparent;
+  border-bottom-color: #333333;
+}
+.age-grade-badge:hover .age-tip {
+  display: block;
+}
+
+/* 서브페이지 */
+.contents {
+    //그리드
+    .lec_grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(29rem, 1fr));
+        gap: clamp(2rem, 2vw, 4rem);
+        .grid_item {
+            .lec_thumb {
+                // TODO 대응 믹스인 없음: slide_thumb
+            }
+            .lec_info {
+                // TODO 대응 믹스인 없음: slide_info
+                &:has(button) {
+                    min-height: 21rem; justify-content: space-between;
+                    button { margin-top: auto; position: relative; z-index: 1; }
+                }
+                .info_prg {
+                    p {
+                        color: set.$gray-110; font-weight: 500;
+                        display: flex; gap: .4rem;
+                    }
+                    > span {
+                        display: block; width: 100%; height: 6px; background: set.$gray-5; margin-top: .4rem; border-radius: 10rem; margin-bottom: 1rem; overflow: hidden;
+                        span {
+                            display: block; height: 100%; background: set.$mCol-60;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // 이벤트
+    .event_grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(39rem, 1fr));
+        gap: clamp(2rem, 2vw, 4rem);
+        .grid_item {
+            .lec_thumb {
+                // TODO 대응 믹스인 없음: slide_thumb($rto:1/1)
+            }
+            .lec_info {
+                // TODO 대응 믹스인 없음: slide_info
+            }
+        }
+    }
+}
+
+/* 서브페이지 - 게시판 목록 표(공지사항·1:1문의·자료실) — .hold_table */
+// .tb-fit 이 표를 컨테이너 폭에 맞추는데(min-width:0 + table-layout:fixed), 모바일에서는 그 폭으로
+// 다섯 칸을 나누면 제목이 몇 글자만 남는다. 표에 최소 폭을 걸어 그보다 좁아지면 .tb-line 의
+// overflow-x:auto 로 좌우 스크롤이 생기게 한다. (.tb-fit table 과 특이도가 같아 클래스를 겹쳐 올린다)
+.tb-line-m.hold_table table { min-width: 74rem; }
+
+
+/* 서브페이지 - 교육과정 안내 */
+#wrap:has(.subEduGuide) {
+    .contents { padding-bottom: 0 !important; }
+}
+.subEduGuide {
+    padding-bottom: 0 !important;
+    .eg_head {
+        background: url(set.$img-url + "sub/edu_guide_bg.png") no-repeat center center / cover;
+        .eg_inner {
+            @include set.base-width();
+            padding: 8rem 0;
+            @include set.res-laptop() { padding: 6rem 0; }
+            @include set.res-tablet() { padding: 4rem 0; }
+            .copy {
+                display: flex; flex-direction: column; gap: 1rem;
+                word-break: keep-all;
+                em {
+                    font-size: set.$ft-tt-s;
+                    font-weight: 500;
+                    color: set.$mCol-60;
+                    display: block;
+                    margin-bottom: 1rem;
+                }
+                h2 {
+                    font-size: set.$ft-dp-m;
+                    font-weight: 700;
+                    font-family: set.$ft-point;
+                    color: set.$gray-100;
+                    line-height: 1;
+                    @include set.res-tablet() { line-height: 1.25; font-size: set.$ft-hd-l; }
+                    strong {
+                        font-family: inherit;
+                        font-size: inherit;
+                        font-weight: inherit;
+                        color: set.$mCol-60;
+                        @include set.res-tablet() { display: block; }
+                    }
+                }
+                p {
+                    font-size: set.$ft-tt-m;
+                    font-weight: 600;
+                    color: set.$gray-100;
+                }
+                span {
+                    display: block;
+                    color: set.$gray-70;
+                    font-size: set.$ft-bd-l;
+                    // 좁은 화면에서는 강제 줄바꿈 대신 자연스럽게 흐르게 한다
+                    br { @include set.res-tablet() { display: none; } }
+                }
+            }
+
+            ul {
+                margin-top: 3rem;
+                display: flex; align-items: center; gap: 3rem;
+                @include set.res-lap-pc() { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+                @include set.res-tablet() { grid-template-columns: 1fr; gap: 1rem; margin-top: 2.4rem; }
+                li {
+                    padding: 3rem 5rem;
+                    display: flex;
+                    align-items: center; gap: 2rem;
+                    border-radius: 1rem;
+                    background: set.$gray-0;
+                    border: .1rem solid set.$mCol-20;
+                    flex-basis: 100%;
+                    word-break: keep-all;
+                    @include set.res-lap-pc() { padding: 3rem; height: 100%; box-sizing: border-box; }
+                    @include set.res-tablet() { padding: 2rem; gap: 1.6rem; }
+                    img {
+                        flex-shrink: 0;
+                        @include set.res-tablet() { width: 3.2rem; }
+                    }
+                    dt {
+                        font-size: set.$ft-tt-s;
+                        font-weight: 600;
+                        color: set.$mCol-60;
+                    }
+                    dd {
+                        font-size: set.$ft-bd-m;
+                        font-weight: 400;
+                        color: set.$gray-50;
+                    }
+                }
+            }
+        }
+        .eg_caption {
+            background: set.$gray-100;
+            padding: 2rem;
+            @include set.res-tablet() { padding: 1.6rem calc(min(6rem, 6vw) / 2); }
+            p {
+                display: flex; align-items: center; gap: 1rem; justify-content: center;
+                font-size: set.$ft-bd-l; font-weight: 600; color: set.$gray-0;  line-height: 1;
+                @include set.res-tablet() { align-items: flex-start; line-height: 1.4; word-break: keep-all; }
+                i {
+                    width: 2rem; aspect-ratio: 1/1; display: block; flex-shrink: 0;
+                    @include set.res-tablet() { margin-top: .2rem; }
+                    background: set.icon(ico-info, set.$gray-0) no-repeat center center / contain;
+                }
+            }
+        }
+    }
+    .eg_body {
+        background: set.$mCol-5;
+        .eb_inner {
+            @include set.base-width();
+            padding: 8rem 0;
+            display: flex; flex-direction: column; gap: 4rem;
+            @include set.res-laptop() { padding: 6rem 0; gap: 3rem; }
+            @include set.res-tablet() { padding: 4rem 0; gap: 2rem; }
+            .edu_step {
+                padding: 5rem;
+                display: flex; align-items: center;
+                background: set.$gray-0; border-radius: 2rem;
+                border: .1rem solid set.$mCol-20;
+                position: relative;
+                word-break: keep-all;
+                // 1200 이하: 제목·구성 영역을 위아래로 쌓는다(가로로는 일러스트와 겹친다)
+                @include set.res-1200() { flex-direction: column; align-items: stretch; gap: 3rem; }
+                @include set.res-tablet() { padding: 3rem 2.4rem; gap: 2.4rem; border-radius: 1.6rem; }
+                @include set.res-mo-tab() { padding: 2.4rem 1.6rem; }
+                .es_tit {
+                    min-width: 38rem;
+                    @include set.res-1200() { min-width: 0; position: relative; z-index: 1; }
+                    em {
+                        line-height: 1; padding: 0.5rem 1rem; border-radius: 10rem; color: set.$gray-0; background: set.$mCol-60; font-size: set.$ft-bd-s; font-weight: 500;
+                    }
+                    p {
+                        font-size: set.$ft-tt-l;
+                        font-weight: 600;
+                        color: set.$gray-100;
+                        font-family: set.$ft-point;
+                        margin: 1.6rem 0 2rem;
+                        line-height: 1;
+                    }
+                    span {
+                        font-size: set.$ft-bd-m;
+                        color: set.$gray-50;
+                        br { @include set.res-tablet() { display: none; } }
+                    }
+                    dl {
+                        margin-top: auto;
+                        margin-top: 3rem;
+                        padding: 3rem; border-radius: 2rem;
+                        @include set.res-1200() { max-width: 38rem; }
+                        @include set.res-tablet() { max-width: none; margin-top: 2rem; padding: 2rem; border-radius: 1.6rem; }
+                        border: .1rem solid set.$mCol-20;
+                        background: set.$mCol-5;
+                        dt {
+                            display: flex; align-items: center; gap: 0.6rem;
+                            font-size: set.$ft-bd-m; 
+                            font-weight: 700;
+                            color: set.$gray-100;
+                            &::before {
+                                content: "";
+                                display: block;
+                                width: 1.8rem; aspect-ratio: 1/1;
+                                background: set.icon(ico-calendar, set.$mCol-60) no-repeat center center / contain;
+                            }
+                        }
+                        dd {
+                            padding-left: 2.6rem;
+                            font-size: set.$ft-tt-l;
+                            font-weight: 600;
+                            font-family: set.$ft-point;
+                            color: set.$mCol-60;
+                        }
+                    }
+                }
+                .es_organ {
+                    border-left: .1rem solid set.$mCol-20;
+                    padding-left: 5rem; margin-left: 5rem;
+                    flex-grow: 1;
+                    @include set.res-1200() {
+                        border-left: 0; border-top: .1rem solid set.$mCol-20;
+                        padding: 3rem 0 0; margin: 0;
+                    }
+                    @include set.res-tablet() { padding-top: 2.4rem; }
+                    p:not(.cau-s, .cau-m) {
+                        font-size: set.$ft-tt-s; font-family: set.$ft-point; font-weight: 600;
+                        margin-bottom: 1rem;
+                        span {
+                            &::after {
+                                content: "·";
+                                display: inline-block;
+                                margin: 0 .6rem;
+                                color: set.$gray-30;
+                            }
+                        }
+                        span, b { font-size: inherit; font-family: inherit; font-weight: inherit; }
+                        span { color: set.$gray-100; }
+                        b    { color: set.$mCol-60; }
+                    }
+                    ul, .es_dl {
+                        margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; max-width: 56rem;
+                        @include set.res-tablet() { max-width: none; }
+                    }
+                    ul {
+                        li {
+                            display: flex; align-items: center; gap: .6rem;
+                            padding: 0.6rem 1.2rem; border-radius: 10rem;
+                            border: .1rem solid set.$mCol-20;
+                            background: set.$mCol-5;
+                            color: set.$mCol-60;
+                            font-size: set.$ft-bd-m;
+                            font-weight: 600;
+                            @include set.res-mo-tab() { align-items: flex-start; line-height: 1.4; border-radius: 2rem; }
+                            &::before {
+                                content: "";
+                                width: 1.6rem; aspect-ratio: 1/1;
+                                flex-shrink: 0;
+                                @include set.res-mo-tab() { margin-top: .2rem; }
+                                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 17 17' fill='none'%3E%3Cpath d='M15.849 7.00256C16.1915 8.68353 15.9474 10.4311 15.1574 11.9539C14.3674 13.4767 13.0792 14.6826 11.5076 15.3705C9.93609 16.0585 8.17621 16.1869 6.52147 15.7343C4.86672 15.2818 3.41714 14.2756 2.41445 12.8836C1.41176 11.4916 0.916585 9.79798 1.01149 8.0851C1.1064 6.37221 1.78565 4.74362 2.93598 3.47093C4.08631 2.19824 5.63818 1.35838 7.33279 1.0914C9.02741 0.824413 10.7623 1.14645 12.2482 2.00381M6.24854 7.7522L8.49854 10.0022L15.9985 2.5022' stroke='%233060FF' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center center / contain;
+                                display: block;
+                            }
+                        }
+                    }
+                    .es_dl {
+                        i {
+                            width: 1.8rem;
+                            &.ico-cal { background: set.icon(ico-calendar, set.$mCol-60) no-repeat center center / contain; }
+                            &.ico-way { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M13.2929 0.292893C13.6834 -0.0976311 14.3166 -0.0976311 14.7071 0.292893L17.7071 3.29289C18.0976 3.68342 18.0976 4.31658 17.7071 4.70711L8.70711 13.7071C8.51957 13.8946 8.26522 14 8 14H5C4.44772 14 4 13.5523 4 13V10C4 9.73478 4.10536 9.48043 4.29289 9.29289L13.2929 0.292893ZM6 10.4142V12H7.58579L15.5858 4L14 2.41421L6 10.4142ZM0 4C0 2.89543 0.895431 2 2 2H7C7.55228 2 8 2.44772 8 3C8 3.55228 7.55228 4 7 4H2V16H14V11C14 10.4477 14.4477 10 15 10C15.5523 10 16 10.4477 16 11V16C16 17.1046 15.1046 18 14 18H2C0.895431 18 0 17.1046 0 16V4Z' fill='%233060ff'/%3E%3C/svg%3E") no-repeat center center / contain; }
+                            &.ico-how { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M17.5019 2.13509C17.8102 2.31401 18 2.64353 18 3V7C19.1848 7 20.2502 7.51635 20.9812 8.33309C21.614 9.0401 22 9.97617 22 11C22 12.0238 21.614 12.9599 20.9812 13.6669C20.2502 14.4836 19.1848 15 18 15V19C18 19.3565 17.8102 19.686 17.5019 19.8649C17.1936 20.0438 16.8134 20.0451 16.5039 19.8682L10 16.1518V21C10 21.5523 9.55228 22 9 22H5C4.44772 22 4 21.5523 4 21V16C2.89543 16 2 15.1046 2 14V8C2 6.89543 2.89543 6 4 6H9.73444L16.5039 2.13176C16.8134 1.9549 17.1936 1.95617 17.5019 2.13509ZM10 14C10.174 14 10.345 14.0454 10.4961 14.1318L16 17.2768V4.72318L10.4961 7.86824C10.345 7.95458 10.174 8 10 8H4V14H10ZM6 16V20H8V16H6ZM18 13C18.5922 13 19.1233 12.7438 19.491 12.3331C19.8083 11.9786 20 11.5129 20 11C20 10.4871 19.8083 10.0214 19.491 9.66691C19.1233 9.25615 18.5922 9 18 9V13Z' fill='%233060ff'/%3E%3C/svg%3E") no-repeat center center / contain; }
+                            &.ico-clock { background: set.icon(ico-clock, set.$mCol-60) no-repeat center center / contain; }
+                        }
+                        dl {
+                            min-height: 6rem;
+                            border-radius: 100rem;
+                            display: flex; align-items: center; gap: 3rem;
+                            background: set.$mCol-5;
+                            border: .1rem solid set.$mCol-20;
+                            padding: 1rem 3rem;
+                            // 좁은 화면: 알약형 → 라벨/값 두 줄 카드
+                            @include set.res-mo-tab() {
+                                flex-direction: column; align-items: flex-start; gap: .4rem;
+                                border-radius: 1.6rem; padding: 1.4rem 2rem;
+                            }
+                            dt {
+                                display: flex; align-items: center; gap: 0.4rem;
+                                font-size: set.$ft-bd-m; font-weight: 600; color: set.$gray-100; min-width: 10rem;
+                                flex-shrink: 0;
+                            }
+                            dd {
+                                font-size: set.$ft-bd-m; font-weight: 600; color: set.$gray-100;
+                                line-height: 1.4;
+                                strong { font-weight: 600; color: set.$mCol-60; font-family: set.$ft-point; font-size: set.$ft-tt-s; }
+                            }
+                        }
+                    }
+                }
+                .es_obj {
+                    position: absolute; right: 5rem; top: 50%;
+                    transform: translateY(-50%);
+                    @include set.res-lap-pc() { width: min(30%, 36rem); }
+                    // 쌓인 레이아웃에서는 제목 영역 오른쪽 위로 작게 옮긴다
+                    @include set.res-1200() { width: min(30%, 26rem); top: 5rem; transform: none; }
+                    @include set.res-tablet() { display: none; }
+                }
+            }
+        }
+    }
+}
+
+/* 서브페이지 - 원격지원 */
+.subRemote {
+    // 각 영역 디자인 아이콘 요소
+    i {
+        &.ico-how {
+            background: url(set.$img-url + "sub/ico-how.svg") no-repeat center center / 100%;
+            position: absolute; left: 50%; transform: translateX(-50%);
+            width: 8rem; height: 8rem;
+            top: -4rem;
+        }
+        &.ico-pro {
+            background: url(set.$img-url + "sub/ico-pro.svg") no-repeat center center / 100%;
+            display: block; margin: 0 auto 3.9rem;
+            width: 8rem; height: 8rem;
+        }
+    }
+    .obj-rmt01,
+    .obj-rmt02 { position: absolute; bottom: -15rem; z-index: 1; }
+    .obj-rmt01 { left: 5%; }
+    .obj-rmt02 { right: 5%; }
+    // 원격지원 상단 타이틀
+    .remote_tit {
+        text-align: center;
+        em, h2 { font-family: 'TTHakgyoansimTtwimteulR', sans-serif; }
+        em {    
+            font-size: 2.4rem;
+            display: block;
+            width: fit-content;
+            position: relative;
+            margin: 0 auto;
+            min-height: 5rem;
+            color: set.$gray-100;
+            text-shadow:
+                -3px -3px 0 #fff,
+                0   -3px 0 #fff,
+                3px -3px 0 #fff,
+                3px  0   0 #fff,
+                3px  3px 0 #fff,
+                0    3px 0 #fff,
+                -3px 3px 0 #fff,
+                -3px 0   0 #fff;
+            margin-bottom: 2rem;
+            span { color: set.$mCol-60; }
+            &::before {
+                content: "";
+                width: 100%; height: 100%; position: absolute; z-index: -1; top: -0.3rem;
+                background: url(set.$img-url + "sub/remote_bubble.svg") no-repeat center / contain;
+            }
+        }
+        h2 {
+            font-size: min(11vw, 6rem); line-height: 1.1;
+            strong { font-size: min(12vw, 7rem); display: block; color: set.$mCol-60; line-height: 1.2; }
+        }
+        p { font-size: min(3vw, 2.2rem); line-height: 1.63; color: set.$gray-70; font-weight: 400; letter-spacing: -0.088rem; margin-top: 2.9rem; }
+    }
+    .remote_how {
+        background: set.$mCol-5; margin-top: 10rem;
+        .ar_checkList {
+            width: 100%; max-width: 100rem; margin: 0 auto; padding: 5.4rem; border-radius: 2rem; border: .5rem solid set.$sst-wCol-50; background: set.$gray-0;
+            ul { display: flex; flex-direction: column; gap: 3rem; width: fit-content; margin: 0 auto; }
+            li {
+                color: set.$gray-100; font-size: min(2.8rem, 5.4vw); font-weight: 500; line-height: 1.4; letter-spacing: -0.112rem;
+                padding-left: 7rem; position: relative; word-break: keep-all; text-wrap: pretty;
+                &::before {
+                    content: "";
+                    width: 6rem; height: 6rem;
+                    left: 0;
+                    border-radius: 100rem;
+                    flex-shrink: 0;
+                    background: set.$gray-5 url(set.$img-url + "sub/ico-check.svg") no-repeat calc(50% + .2rem) 50% / 50%;
+                    position: absolute;
+                    top: -1rem;
+                }
+            }
+            
+        }
+    }
+    .remote_pro {
+        background: set.$gray-5;
+        .remote_step {
+            counter-reset: remoteStep 0;
+            display: flex; align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 6rem 2rem;
+            background: set.$gray-0;
+            border-radius: 1rem;
+            box-shadow: 0 0 23px -13px #00000026;
+            dl {
+                counter-increment: remoteStep;
+                position: relative;
+                text-align: center;
+                width: 100%;
+                &:not(:last-child) { border-right: 1px solid set.$gray-10; }
+                dt {
+                    font-size: 2.2rem;
+                    font-weight: 600;
+                    color: set.$gray-100;
+                    letter-spacing: -0.104rem;
+                    line-height: 1.4;
+                    margin-bottom: .6rem;
+                    &::before {
+                        content: "STEP" " " "0" counter(remoteStep);
+                        display: block;
+                        font-weight: 600; color: set.$mCol-60;
+                        font-size: set.$ft-bd-m;
+                        letter-spacing: -0.05rem;
+                        margin-bottom: .4rem;
+                    }
+                }
+                dd { font-size: set.$ft-bd-l; line-height: 1.18; letter-spacing: -0.088rem; color: set.$gray-70;  }
+                // 썸네일
+                @for $i from 1 through 5 {
+                    &:nth-of-type(#{$i})::before {
+                    content: '';
+                    display: block;
+                    width: 15rem; 
+                    height: min(15vw, 11rem);
+                    margin: 0 auto 2rem;
+                    $num: $i;
+                    @if $i < 10 { $num: '0#{$i}'; }
+                    background: url(set.$img-url + 'sub/remote_step#{$num}.svg') no-repeat center / contain;
+                    }
+                }
+            }
+        }
+    }
+}
+/* 서브페이지 - 교육원소개 */
+.sub_intro {
+    &::before {
+        content: "";
+        width: 100%; height: min(26rem, 10vw); background: set.$mCol-5; position: absolute; bottom: 0; left: 0; z-index: -1;
+    }
+}
+.sec_appeal {
+    background: set.$mCol-5;
+}
+// 요소형
+.ap_el {
+    display: flex;
+    text-align: center;
+    background: set.$gray-0;
+    padding: min(6rem, 5vw);
+    .ap_item {
+        width: 100%;
+        line-height: 1.4;
+        &:not(:last-child) { border-right: 1px solid set.$gray-10; }
+        em { color: set.$mCol-60; font-size: min(5vw, set.$ft-bd-l); font-weight: 700; display: block; margin-bottom: .6rem; }
+        p { color: set.$gray-100; font-size: min(5.4vw, set.$ft-tt-m); font-weight: 600; }
+        span { color: set.$gray-70; font-size: min(4.5vw, set.$ft-tt-s); font-weight: 300; rotate: -0.04deg; }
+    }
+}
+// 그리드형
+.ap_grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr)); gap: min(4rem, 4vw);
+    counter-reset: gridNum 0;
+    &:has(.card_item) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .ap_item {
+        $colors: #1C77C3, #7A5CA2, #E2B24B, #D94848, #258E78, #E27B27; // 1번 ~ 6번 컬러
+        text-align: center;
+        padding: min(5rem, 5vw);
+        box-shadow: 0 0 0 1px set.$gray-10 inset;
+        border-radius: 1rem;
+        opacity: 0;
+        i { width: min(16rem, 25vw); height: min(16rem, 25vw); border-radius: 100rem; display: block; margin: 0 auto 2rem; }
+        p {
+            font-size: set.$ft-tt-m; color: set.$gray-70; font-weight: 300; line-height: 1.4;
+            margin-bottom: .6rem;
+            strong { font-size:  min(7vw, set.$ft-hd-m); font-weight: 700; display: block; }
+        }
+        span { color: set.$ft-tt-s; color: set.$gray-50; line-height: 1.3; text-wrap: pretty; word-break: keep-all; }
+        @for $i from 1 through 6 {
+            
+            &:nth-child(#{$i}) {
+                transition-delay: #{$i}00ms;
+                i {
+                    background: rgba(list.nth($colors, $i), 0.15) url(set.$img-url + "sub/ap_icon0#{$i}.svg") no-repeat 50% 50% / 60%;
+                }
+                p strong { color:  list.nth($colors, $i); }
+            }
+        }
+    }
+
+    .card_item {
+        opacity: 0;
+        position: relative;
+        perspective-origin: center;
+        height: 46rem;
+        counter-increment: gridNum;
+
+        &:hover {
+            .front { transform: rotateY(180deg); }
+            .back { transform: rotateY(0deg); }
+        }
+        .flip { width: 100%; height: 100%; perspective: 140rem; }
+        .front, .back {
+            padding: min(5rem, 5vw);
+            text-align: center;
+            box-shadow: 0 0 0 1px set.$gray-10 inset;
+            border-radius: 1rem;
+            position: absolute;
+            backface-visibility: hidden;
+            transition: all 800ms;
+            transform-style: preserve-3d;
+        }
+        .front {
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background: #fff;
+            span { color: set.$gray-50; }
+        }
+        .back {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            transform: rotateY(-180deg);
+            color: set.$gray-0;
+            background-image: url(set.$img-url + "sub/ap_card_bg.png");
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            &::before {
+                content: "0" counter(gridNum);
+                font-size: min(6rem, 30vw);
+                font-family: set.$ft-point;
+            }
+            p {
+                &::after { 
+                    content: "";
+                    display: block;
+                    width: 100%; height: .3rem; 
+                    margin: 2rem 0 3rem;
+                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='108' height='3' viewBox='0 0 108 3' fill='none'%3E%3Cpath d='M1.28571 2.59155C1.99579 2.59155 2.57143 2.01141 2.57143 1.29577C2.57143 0.580138 1.99579 0 1.28571 0C0.575634 0 0 0.580138 0 1.29577C0 2.01141 0.575634 2.59155 1.28571 2.59155Z' fill='white'/%3E%3Cpath d='M7.07171 0H5.14314C4.4331 0 3.85742 0.580183 3.85742 1.29577C3.85742 2.01137 4.4331 2.59155 5.14314 2.59155H7.07171C7.78174 2.59155 8.35742 2.01137 8.35742 1.29577C8.35742 0.580183 7.78174 0 7.07171 0Z' fill='white'/%3E%3Cpath d='M102.857 0H100.928C100.218 0 99.6426 0.580183 99.6426 1.29577C99.6426 2.01137 100.218 2.59155 100.928 2.59155H102.857C103.567 2.59155 104.143 2.01137 104.143 1.29577C104.143 0.580183 103.567 0 102.857 0Z' fill='white'/%3E%3Cpath d='M106.713 2.59155C107.424 2.59155 107.999 2.01141 107.999 1.29577C107.999 0.580138 107.424 0 106.713 0C106.003 0 105.428 0.580138 105.428 1.29577C105.428 2.01141 106.003 2.59155 106.713 2.59155Z' fill='white'/%3E%3Cpath d='M96.8921 0H11.1073C10.2983 0 9.64258 0.580183 9.64258 1.29577C9.64258 2.01137 10.2986 2.59155 11.1073 2.59155H96.8918C97.7008 2.59155 98.3565 2.01137 98.3565 1.29577C98.3565 0.580183 97.7005 0 96.8918 0H96.8921Z' fill='white'/%3E%3C/svg%3E") no-repeat center / contain;
+                }
+            }
+            span { line-height: 1.4; font-size: set.$ft-tt-m; word-break: keep-all; text-wrap: pretty; }
+        }
+
+        i { width: min(16rem, 25vw); height: min(16rem, 25vw); border-radius: 100rem; display: block; margin: 0 auto 2rem; }
+        p {
+            font-size:  min(7vw, set.$ft-hd-m); font-weight: 700; display: block;
+        }
+        span { line-height: 1.3; text-wrap: pretty; word-break: keep-all; font-size: 2rem; }
+        $colors: #1C77C3, #28A991, #8762D7; // 1번 ~ 6번 컬러
+        @for $i from 1 through 3 {
+
+            &:nth-child(#{$i}) {
+                .front {
+                    p { color:  list.nth($colors, $i); }
+                }
+                .back {
+                    background-color: rgba(list.nth($colors, $i), 1);
+                }
+                transition-delay: #{$i}00ms;
+                i {
+                    background: rgba(list.nth($colors, $i), 0.15) url(set.$img-url + "sub/card_icon0#{$i}.svg") no-repeat 50% 50% / 60%;
+                }
+                
+                
+            }
+        }
+    }
+}
+.sec_banner {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+/* 웨이브 배너 */
+.wave_banner {
+    .swiper-wrapper { transition-timing-function: linear !important;}
+}
+
+
+
+/* 에스넷 아카이브란? */
+.hrd_qus_wrap {
+    width: 100%;
+    background: set.$gray-5;
+    padding: 5rem;
+    border-radius: 7rem;
+}
+// 아카이브 특징
+.hrd_qus {
+    margin: 0 auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; gap: 2rem;
+    .qus_item {
+        display: flex; align-items: center;
+        p {
+            font-size: 2rem;
+            font-family: set.$ft-point;
+            font-weight: 400;
+            padding: 2rem 4rem;
+            background: set.$gray-0;
+            color: set.$gray-100;
+            border-radius: 100rem;
+            border-width: .4rem;
+            border-style: solid;
+            border-color: set.$gray-100;
+            position: relative;
+            rotate: -0.04deg;
+            margin-left: 3rem;
+            &::before, &::after {
+                content: "";
+                width: 0; height: 0;
+                position: absolute;
+                left: 0; top: 50%; transform: translateY(-50%);
+                border-style: solid;
+                border-width: 1rem 1.4rem 1rem 0;
+                margin-left: -1.6rem;
+            }
+            &::before {
+                border-color: transparent set.$gray-100 transparent transparent;
+            }
+            &::after {
+                left: .6rem;
+                border-color: transparent #fff transparent transparent;
+            }
+        }
+        @for $i from 1 through 4 {
+            &:nth-of-type(#{$i}) i::before {
+            content: '';
+            display: block;
+            width: 12.8rem; 
+            height: 12.8rem;
+            border-radius: 100rem;
+            $num: $i;
+            @if $i < 10 { $num: '0#{$i}'; }
+            background: rgba($color: #ffffff, $alpha: 0.7) url(set.$img-url + 'sub/hrd_face#{$num}.svg') no-repeat 50% 50% / 65%;
+            }
+        }
+        &:nth-child(odd) {
+            p {
+                color: set.$mCol-60;
+                border-color: set.$mCol-60;
+                &::before {
+                    border-color: transparent set.$mCol-60 transparent transparent;
+                }
+            }
+        }
+        i { flex-shrink: 0 }
+
+
+    }
+}
+// 프로세스
+.hrd_pro {
+    border-top: 1px solid set.$gray-10;
+    .sec_body { position: relative; }
+    .hrd_pro_slide {
+        overflow: hidden;
+        text-align: center;
+        position: relative;
+        &::before {
+            content: "";
+            width: 100%; height: 1px;
+            background: #eee;
+            position: absolute;
+            left: 0;
+            top: 50%;
+        }
+        .swiper-slide {
+            $colors: #F5A221, #F05786, #27A687, #46B4BE, #2A74BB, #865BA6;
+            dl {
+                position: relative;
+                margin-top: 4rem;
+                dt { font-size: 2.8rem; font-weight: 600; color: set.$gray-100; }
+                dd { font-size: 2rem; font-weight: 400; color: set.$gray-70; line-height: 1.3; }
+                dd {
+                    word-break: keep-all; text-wrap: balance;
+                    li {
+                        position: relative;
+                        &::before { 
+                            content: "";
+                            width: .4rem; height: 0.4rem; background: set.$gray-70; border-radius: 5rem;
+                            position: absolute; top: 1.1rem; left: auto; margin-left: -.8rem;
+                            word-break: keep-all; text-wrap: balance;
+                        }
+                    }
+                }
+            }
+            @for $i from 1 through 6 {
+                &:nth-of-type(#{$i}) {
+                    dl {
+                        &::after {
+                            content: "";
+                            width: 1.2rem; height: 1.2rem; border-radius: 10rem; position: absolute; top: 0;
+                            background: list.nth($colors, $i);
+                            left: 50%; transform: translateX(-50%); top: -2.2rem;
+                        }
+                    }
+                }
+                &:nth-of-type(#{$i}) i::before {
+                content: '';
+                display: block;
+                width: 12.8rem; 
+                height: 12.8rem;
+                border-radius: 100rem;
+                margin: 0 auto;
+                $num: $i;
+                @if $i < 10 { $num: '0#{$i}'; }
+                background: rgba($color: #ffffff, $alpha: 0.7) url(set.$img-url + 'sub/pro_icon#{$num}.svg') no-repeat 50% 50% / 44%;
+                border: .6rem solid list.nth($colors, $i);
+                }
+            }
+        }
+    }
+    .hrd_pro_arrow {
+        display: flex; align-items: center; gap: 1rem;
+        .swiper-button-next, .swiper-button-prev { position: absolute; top: 62.5%; &::after { content: none; } }
+        .swiper-button-prev { @include set.getIcon(che-left, set.$gray-70); /* 구 arrow--prev → getIcon 대체(테두리·hover 없음) */ left: 0; }
+        .swiper-button-next { @include set.getIcon(che-right, set.$gray-70); /* 구 arrow--next → getIcon 대체(테두리·hover 없음) */ right: 0; }
+    }
+}
+// 정책
+.hrd_policy {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50rem, 1fr));
+    gap: 4rem;
+    .policy_item {
+        padding: min(6rem, 5vw);
+        border-radius: .4rem;
+        dl {
+            dt { font-size: min(3rem, 6vw); font-weight: 700; color: set.$gray-100; line-height: 1.2; }
+            dd {
+                font-size: min(1.8rem, 3vw); font-weight: 300; color: set.$gray-70;
+                margin-top: min(1.2rem, 2vw);
+                b { color: set.$gray-100; font-weight: 600; }
+            }
+        }
+        @for $i from 1 through 4 {
+            &:nth-of-type(#{$i}) {
+                $num: $i;
+                @if $i < 10 { $num: '0#{$i}'; }
+                background: set.$gray-0 url(set.$img-url + 'sub/plc_icon#{$num}.png') no-repeat right 5% center / 24%;
+            }
+        }
+    }
+    
+}
+.hrd_caution {
+    font-size: 2rem; color: set.$gray-50; padding-top: 2rem;
+    b { color: set.$gray-100; font-weight: 600; }
+}
+/* 개인정보처리방침 · 이용약관 (views/sample/policy.html, terms.html)
+   구 모바일 사이트(sub-policy / sub-use)를 옮겨 온 화면. 옛 css 는 vw 단위·전용 폰트 크기로 짜여 있어
+   PC 에서 글자가 튀므로 여기서는 공통 폰트 토큰($ft-bd-m 기반)과 board.css 의 표(.tb-grid-m)만 쓴다.
+   두 화면이 한 규격을 공유한다 — 왼쪽 목차(.policy_nav) + 본문(.policy_body), 본문 안은 조·장 단위 .policy_sec.
+   목차의 .on 은 policy.js 가 스크롤 위치로 옮기고, 헤더 높이(--header-h)도 같은 스크립트가 잰다. */
+.sub_policy {
+    --header-h: 20rem;                 // policy.js 가 실제 sticky 헤더 높이로 덮어쓴다(폴백은 PC 헤더 높이)
+    --policy-gap: clamp(3rem, 5vw, 8rem);
+
+    // 목차 + 본문 2단. 본문은 base-width(160rem) 을 다 쓰면 한 줄이 너무 길어 104rem 에서 끊는다.
+    .policy_layout {
+        display: grid; grid-template-columns: 24rem minmax(0, 1fr); gap: var(--policy-gap);
+        align-items: start;
+    }
+    .policy_body {
+        // max-width: 104rem;
+        display: flex; flex-direction: column; gap: clamp(4rem, 5vw, 7rem);
+    }
+
+    // 목차 — PC 에서는 헤더 아래에 붙어 따라오고, 1024px 이하에서는 가로 칩 줄로 바뀐다(반응형 절 참고)
+    .policy_nav {
+        position: sticky; top: calc(var(--header-h) + 2rem);
+        transition: top 300ms ease-in-out;   // 헤더가 접히고 펴지는 속도(layout.js)와 맞춘다
+        .nav_tit {
+            display: block; margin-bottom: 1.2rem;
+            font-size: set.$ft-bd-s; font-weight: set.$fw-b; color: set.$gray-50; letter-spacing: .04em;
+        }
+        ul { display: flex; flex-direction: column; }
+        li {
+            a {
+                display: block; padding: 1rem 1.4rem;
+                border-left: .2rem solid set.$gray-20;
+                font-size: set.$ft-bd-m; line-height: 1.4; color: set.$gray-70;
+                word-break: keep-all; transition: all set.$aniSet;
+                &:hover { color: set.$gray-100; border-color: set.$gray-40; }
+            }
+            &.on a { color: set.$mCol-60; border-color: set.$mCol-60; font-weight: set.$fw-b; }
+        }
+    }
+
+    // 머리말 상자
+    .policy_intro {
+        padding: clamp(2rem, 3vw, 3.2rem) clamp(2rem, 3vw, 4rem);
+        background: set.$gray-5; border-left: .4rem solid set.$mCol-60; border-radius: 0 .8rem .8rem 0;
+        font-size: set.$ft-bd-l; line-height: 1.7; color: set.$gray-100;
+        word-break: keep-all; text-wrap: pretty;
+    }
+
+    // 주요 처리 표시(라벨링) — 조 제목 옆 아이콘과 같은 그림을 쓴다
+    .policy_labels {
+        > strong {
+            display: block; margin-bottom: 1.2rem;
+            font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100;
+        }
+        .label_grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: 1.2rem;
+            > a {
+                display: flex; flex-direction: column; align-items: center; gap: 1rem;
+                padding: 2rem 1rem; border: .1rem solid set.$gray-20; border-radius: .8rem;
+                text-align: center; transition: all set.$aniSet;
+                span {
+                    font-size: set.$ft-bd-s; font-weight: set.$fw-b; color: set.$gray-100; line-height: 1.3;
+                    word-break: keep-all; text-wrap: balance;
+                }
+                &:hover { border-color: set.$mCol-60; background: set.$mCol-5; }
+            }
+        }
+    }
+    // 라벨 아이콘 — 아이콘 그림은 img/sub/policy_ico_0N.svg 7종
+    .policy_ico {
+        display: block; flex-shrink: 0; width: 5.2rem; aspect-ratio: 1/1;
+        background: url() no-repeat center center / contain;
+        @for $i from 1 through 7 {
+            &.ico-#{$i} { background-image: url(set.$img-url + "sub/policy_ico_0#{$i}.svg"); }
+        }
+    }
+
+    // 조·장 단위 절. 목차 앵커가 sticky 헤더 밑으로 숨지 않도록 scroll-margin 을 준다.
+    .policy_sec {
+        scroll-margin-top: calc(var(--header-h) + 2rem);
+        // 절이 이어질 때만 구분선 — 첫 절 앞(머리말·라벨 뒤)은 body 의 gap 만으로 띄운다
+        & + & { padding-top: clamp(3rem, 4vw, 5rem); border-top: .1rem solid set.$gray-20; }
+        > h3 {
+            display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2rem;
+            font-size: set.$ft-tt-m; font-family: set.$ft-point; font-weight: set.$fw-b; color: set.$gray-100;
+            line-height: 1.3; word-break: keep-all; text-wrap: balance;
+            // 조·장 번호 배지
+            em {
+                flex-shrink: 0; padding: .4rem 1rem; border-radius: 100rem;
+                background: set.$mCol-10; color: set.$mCol-60;
+                font-size: set.$ft-bd-s; font-family: set.$ft-basic; font-weight: set.$fw-b; font-style: normal; line-height: 1;
+            }
+            .policy_ico { width: 3.6rem; margin-left: auto; }
+        }
+    }
+
+    // 본문 글 — 모두 $ft-bd-m 기준
+    .policy_text {
+        display: flex; flex-direction: column; gap: 1.6rem;
+        font-size: set.$ft-bd-m; line-height: 1.7; color: set.$gray-80;
+        word-break: keep-all; text-wrap: pretty;
+        h4 { font-size: set.$ft-bd-l; font-weight: set.$fw-b; color: set.$gray-100; line-height: 1.4; }
+        h4 + p { margin-top: -1rem; }
+        b, strong { font-weight: set.$fw-b; color: set.$gray-100; }
+        // ※ 참고·주의
+        .policy_note {
+            display: flex; gap: .4rem;
+            font-size: set.$ft-bd-s; color: set.$gray-60; line-height: 1.6;
+            &::before { content: "※"; flex-shrink: 0; }
+        }
+        // 표 — board.css 의 .tb-grid-m 을 그대로 쓰되, 근거 조문처럼 긴 글이 든 칸은 줄바꿈되게 세로 여백을 준다
+        [class^="tb-grid-"] {
+            table { width: 100%; min-width: 56rem; }
+            tbody td { padding: 1.2rem 1.6rem; height: auto; line-height: 1.6; word-break: keep-all; text-wrap: pretty; }
+            tbody td:first-child { font-weight: set.$fw-b; color: set.$gray-100; }
+        }
+    }
+
+    // 항목 목록 — 1단 ①②③(테두리 원), 2단 1. 2., 3단 -(대시)
+    .policy_list {
+        counter-reset: policy-l1;
+        display: flex; flex-direction: column; gap: .8rem;
+        > li {
+            counter-increment: policy-l1;
+            position: relative; padding-left: 2.8rem;
+            &::before {
+                content: counter(policy-l1);
+                position: absolute; left: 0; top: .3em;
+                display: flex; align-items: center; justify-content: center;
+                width: 1.8rem; aspect-ratio: 1/1; border-radius: 100rem;
+                border: .1rem solid set.$gray-40; color: set.$gray-70;
+                font-size: set.$ft-bd-xs; font-weight: set.$fw-b; line-height: 1;
+            }
+        }
+        // 2단
+        ol {
+            counter-reset: policy-l2;
+            display: flex; flex-direction: column; gap: .6rem; margin-top: .8rem;
+            > li {
+                counter-increment: policy-l2;
+                position: relative; padding-left: 2rem;
+                &::before {
+                    content: counter(policy-l2) ".";
+                    position: absolute; left: 0; top: 0;
+                    color: set.$gray-70; font-weight: set.$fw-b;
+                }
+            }
+        }
+        // 3단
+        ul {
+            display: flex; flex-direction: column; gap: .4rem; margin-top: .6rem;
+            > li {
+                position: relative; padding-left: 1.4rem; color: set.$gray-70;
+                &::before { content: "-"; position: absolute; left: 0; top: 0; }
+            }
+        }
+        // 항목 안 소제목(파기절차 / 파기방법)
+        dl {
+            margin-top: .8rem;
+            dt { font-weight: set.$fw-b; color: set.$gray-100; }
+            dd + dt { margin-top: .8rem; }
+        }
+        .policy_note { margin-top: .4rem; }
+    }
+
+    // 약관 조항 — 장(.policy_sec) 안에 조 단위 dl 이 이어진다
+    .policy_terms {
+        display: flex; flex-direction: column; gap: 2.4rem;
+        > dl {
+            dt {
+                font-size: set.$ft-bd-l; font-weight: set.$fw-b; color: set.$gray-100; line-height: 1.4;
+                margin-bottom: .6rem;
+            }
+            dd { color: set.$gray-80; }
+        }
+    }
+
+    // 시행일 등 맺음말
+    .policy_foot {
+        font-size: set.$ft-bd-m; color: set.$gray-70; line-height: 1.6;
+        b { color: set.$gray-100; font-weight: set.$fw-b; }
+    }
+}
+
+/* 찾아오시는길 */
+.mapArea {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); gap: 4rem;
+    .company {
+        padding: min(3rem, 6vw); box-sizing: border-box; box-shadow: 0 0 0 1px set.$gray-20 inset; border-radius: 1rem;
+        .cp-map {
+            border-radius: .4rem; overflow: hidden; border: 1px solid set.$gray-10;
+        }
+        .cp-tit {
+            font-size: max(1.25vw, 2.4rem);
+            font-weight: 600;
+            rotate: -0.04deg;
+            color: set.$gray-100;
+            margin-bottom: min(1.4rem, 3vw);
+        }
+        .cp-info {
+            display: flex; flex-direction: column; gap: 2rem; margin: 3rem 0 4rem;
+            dl {
+                padding-left: 6.4rem;
+                position: relative;
+                &::before {
+                    content: "";
+                    width: 5rem; height: 5rem;
+                    background: url() no-repeat 0 0 / 100%;
+                    position: absolute; left: 0; top: -.4rem;
+                }
+                $item_list: (add, tel, fax);
+                @for $i from  1 through list.length($item_list) {
+                    $item: list.nth($item_list, $i);
+                    &.if-#{$item}::before {
+                        background-image: url(set.$img-url + "sub/if-#{$item}.svg");
+                    }
+                }
+
+                dt { color: set.$gray-100; font-size: 18px; font-weight: 500; line-height: 1.1; margin-bottom: .4rem; }
+                dd { color: set.$gray-70; font-size: 16px; font-weight: 300; line-height: 1.25; rotate: 0.04deg; word-break: keep-all; text-wrap: pretty;  }
+            }
+        }
+        .cp-btn {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            a {
+                display: block; border-radius: .4rem; display: flex; align-items: center; height:5rem; padding: 0 3rem; justify-content: center;
+                text-align: center; width: 100%; font-size: 16px; font-weight: 500;
+                i {
+                    display: block;
+                    width: 2rem; height: 2rem; margin-right: .6rem;
+                    background: url() no-repeat center;
+                }
+                &.bt-kakao {
+                    background: #FAE100;
+                    color: set.$gray-100;
+                    i {
+                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='16' viewBox='0 0 17 16' fill='none'%3E%3Cpath d='M13.8608 3.05318L11.4098 4.27934L11.4091 4.27999C11.1302 4.41933 10.8226 4.49198 10.5108 4.49198C10.199 4.49198 9.89136 4.41933 9.61244 4.27999L6.79045 2.86867C6.72079 2.83387 6.6456 2.8116 6.56865 2.80259L6.49078 2.79801C6.38687 2.79801 6.28408 2.82159 6.19111 2.86802L6.19177 2.86867L3.14079 4.39384L3.14079 12.9468L5.59244 11.7206L5.69843 11.6716C5.94843 11.5643 6.21794 11.5086 6.49078 11.5086C6.80262 11.5086 7.11017 11.5813 7.38912 11.7206L10.2111 13.132L10.2824 13.1621C10.3555 13.1885 10.4327 13.2027 10.5108 13.2027C10.6146 13.2027 10.7169 13.1783 10.8098 13.132L13.8608 11.6061L13.8608 3.05318ZM15.2008 11.6068C15.2006 11.8555 15.1314 12.0993 15.0006 12.3108C14.8697 12.5224 14.682 12.6929 14.4595 12.8042L14.4601 12.8048L11.4091 14.33C11.1302 14.4694 10.8226 14.5427 10.5108 14.5427C10.199 14.5426 9.89136 14.47 9.61244 14.3306L6.79045 12.9193C6.69745 12.8728 6.59474 12.8486 6.49078 12.8486C6.38687 12.8486 6.28408 12.8722 6.19111 12.9187L6.19177 12.9193L3.74012 14.1455C3.53564 14.2476 3.30761 14.296 3.07928 14.2855C2.85098 14.275 2.62906 14.2063 2.43479 14.0859C2.24044 13.9655 2.07991 13.7971 1.96894 13.5972C1.85798 13.3972 1.80023 13.1722 1.80079 12.9435L1.80079 4.39384L1.80405 4.30028C1.81925 4.08413 1.88653 3.87422 2.00099 3.68916C2.1318 3.47772 2.31908 3.30703 2.54144 3.19582L5.59244 1.67L5.69843 1.62093C5.94843 1.51368 6.21794 1.45801 6.49078 1.45801L6.60724 1.46128C6.87892 1.47705 7.14497 1.54801 7.38912 1.67L10.2111 3.08132L10.2824 3.11142C10.3555 3.13791 10.4327 3.15198 10.5108 3.15198C10.6146 3.15198 10.7169 3.12763 10.8098 3.08132L13.2615 1.85517H13.2621L13.3393 1.81918C13.5229 1.74163 13.7218 1.70607 13.9216 1.71515C14.1499 1.72555 14.3719 1.79381 14.5661 1.91406C14.7604 2.03434 14.9209 2.20249 15.032 2.40216C15.1429 2.6016 15.2009 2.82631 15.2008 3.0545L15.2008 11.6068Z' fill='%23333'/%3E%3Cpath d='M9.83203 13.8675L9.83203 3.81746C9.83203 3.44743 10.132 3.14746 10.502 3.14746C10.8721 3.14746 11.172 3.44743 11.172 3.81746L11.172 13.8675C11.172 14.2375 10.8721 14.5375 10.502 14.5375C10.132 14.5375 9.83203 14.2375 9.83203 13.8675Z' fill='%23333'/%3E%3Cpath d='M5.83203 12.1819L5.83203 2.13191C5.83203 1.76189 6.132 1.46191 6.50203 1.46191C6.87206 1.46191 7.17203 1.76189 7.17203 2.13191L7.17203 12.1819C7.17203 12.552 6.87206 12.8519 6.50203 12.8519C6.132 12.8519 5.83203 12.552 5.83203 12.1819Z' fill='%23333'/%3E%3C/svg%3E");
+                    }
+                    &:hover {
+                        background: color.adjust(#FAE100, $lightness: -3%);
+                    }
+                }
+                &.bt-naver {
+                    background: #00C73C;
+                    color: set.$gray-0;
+                    i { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='16' viewBox='0 0 17 16' fill='none'%3E%3Cpath d='M13.8608 3.05318L11.4098 4.27934L11.4091 4.27999C11.1302 4.41933 10.8226 4.49198 10.5108 4.49198C10.199 4.49198 9.89136 4.41933 9.61244 4.27999L6.79045 2.86867C6.72079 2.83387 6.6456 2.8116 6.56865 2.80259L6.49078 2.79801C6.38687 2.79801 6.28408 2.82159 6.19111 2.86802L6.19177 2.86867L3.14079 4.39384L3.14079 12.9468L5.59244 11.7206L5.69843 11.6716C5.94843 11.5643 6.21794 11.5086 6.49078 11.5086C6.80262 11.5086 7.11017 11.5813 7.38912 11.7206L10.2111 13.132L10.2824 13.1621C10.3555 13.1885 10.4327 13.2027 10.5108 13.2027C10.6146 13.2027 10.7169 13.1783 10.8098 13.132L13.8608 11.6061L13.8608 3.05318ZM15.2008 11.6068C15.2006 11.8555 15.1314 12.0993 15.0006 12.3108C14.8697 12.5224 14.682 12.6929 14.4595 12.8042L14.4601 12.8048L11.4091 14.33C11.1302 14.4694 10.8226 14.5427 10.5108 14.5427C10.199 14.5426 9.89136 14.47 9.61244 14.3306L6.79045 12.9193C6.69745 12.8728 6.59474 12.8486 6.49078 12.8486C6.38687 12.8486 6.28408 12.8722 6.19111 12.9187L6.19177 12.9193L3.74012 14.1455C3.53564 14.2476 3.30761 14.296 3.07928 14.2855C2.85098 14.275 2.62906 14.2063 2.43479 14.0859C2.24044 13.9655 2.07991 13.7971 1.96894 13.5972C1.85798 13.3972 1.80023 13.1722 1.80079 12.9435L1.80079 4.39384L1.80405 4.30028C1.81925 4.08413 1.88653 3.87422 2.00099 3.68916C2.1318 3.47772 2.31908 3.30703 2.54144 3.19582L5.59244 1.67L5.69843 1.62093C5.94843 1.51368 6.21794 1.45801 6.49078 1.45801L6.60724 1.46128C6.87892 1.47705 7.14497 1.54801 7.38912 1.67L10.2111 3.08132L10.2824 3.11142C10.3555 3.13791 10.4327 3.15198 10.5108 3.15198C10.6146 3.15198 10.7169 3.12763 10.8098 3.08132L13.2615 1.85517H13.2621L13.3393 1.81918C13.5229 1.74163 13.7218 1.70607 13.9216 1.71515C14.1499 1.72555 14.3719 1.79381 14.5661 1.91406C14.7604 2.03434 14.9209 2.20249 15.032 2.40216C15.1429 2.6016 15.2009 2.82631 15.2008 3.0545L15.2008 11.6068Z' fill='white'/%3E%3Cpath d='M9.83203 13.8675L9.83203 3.81746C9.83203 3.44743 10.132 3.14746 10.502 3.14746C10.8721 3.14746 11.172 3.44743 11.172 3.81746L11.172 13.8675C11.172 14.2375 10.8721 14.5375 10.502 14.5375C10.132 14.5375 9.83203 14.2375 9.83203 13.8675Z' fill='white'/%3E%3Cpath d='M5.83203 12.1819L5.83203 2.13191C5.83203 1.76189 6.132 1.46191 6.50203 1.46191C6.87206 1.46191 7.17203 1.76189 7.17203 2.13191L7.17203 12.1819C7.17203 12.552 6.87206 12.8519 6.50203 12.8519C6.132 12.8519 5.83203 12.552 5.83203 12.1819Z' fill='white'/%3E%3C/svg%3E"); }
+                    &:hover {
+                        background: color.adjust(#00C73C, $lightness: -3%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/* 서브페이지 - 마이페이지 */
+// 목록(탭 / .bd-util / .card-grid)은 서브 목록과 같은 규격이라 공통 규칙을 그대로 쓰고,
+// 그 위에 얹히는 프로필 요약만 여기서 다룬다.
+#mypageWrap {
+
+    // 프로필 요약(썸네일 / 이름 / 이메일 / 회원정보 수정)
+    .my_profile {
+
+        // 학습 현황 수치(수강중 / 수료 / 미수료 / 수료증)
+        .my_summary {
+        }
+    }
+}
+
+/* 서브페이지 - 마이페이지 목록형(표) */
+// 온라인학습내역처럼 카드가 아니라 표로 뿌리는 화면.
+// 탭·검색·표·라벨·페이징은 전부 공통 컴포넌트고, 여기에는 셀 안 배치만 둔다.
+.sub_mypage > section > .sec_cont {
+    // 표 안에서 라벨·버튼은 셀 폭을 다 먹지 않게 자기 크기만 차지한다(.lb-*, .bt-* 는 flex 라 늘어난다).
+    .tb-line-m {
+        td [class^="lb-"], td [class^="bt-"] { display: inline-flex; }
+        // 과정명만 왼쪽 정렬 — 표는 기본이 가운데 정렬이다.
+        .tb_name {
+            text-align: left;
+            a { color: set.$gray-100; font-weight: set.$fw-b; }
+            a:hover { color: set.$mCol-60; text-decoration: underline; }
+        }
+        // 진도율 = 막대 + 수치. 수치 폭을 고정해 자릿수가 달라도 막대 끝이 흔들리지 않는다.
+        .tb_rate {
+            display: flex; align-items: center; gap: 1rem;
+            [class^="pg-"] { flex-grow: 1; min-width: 6rem; }
+            span {
+                flex-shrink: 0; width: 4.4rem; text-align: right;
+                font-size: set.$ft-bd-s; color: set.$gray-70; font-weight: set.$fw-m;
+            }
+        }
+    }
+    // 회원정보수정 — [기본정보 / 추가정보 / 비밀번호 변경] 절 카드를 쌓은 폼.
+    // 입력 요소 자체(input·select·라디오·버튼)는 디자인시스템(.form-m/.sel-m/.bt-*) 규칙이고,
+    // 여기서는 절 카드의 테두리와 [라벨 | 입력] 배치만 잡는다.
+    // 제목 아래 안내 문구(.cau-m.if)와 폼 사이 간격.
+    > [class^="cau-"] { margin-bottom: 2rem; }
+    .mod_form {
+        // 바꾸지 않는 값(아이디)은 읽기 전용이다 — 입력칸이지만 손댈 수 없다는 것을 색으로 알린다.
+        // disabled 가 아니라 readonly 라 값은 그대로 전송되고 글자도 복사할 수 있다.
+        input[readonly] {
+            background: set.$gray-5; border-color: set.$gray-20; color: set.$gray-50;
+            &:hover { background: set.$gray-5; border-color: set.$gray-20; }
+        }
+        // 절 카드 — 제목 아래를 선으로 끊고 그 밑에 항목을 담는다.
+        .mod_sec {
+            padding: 3rem;
+            border: .1rem solid set.$gray-20; border-radius: .8rem;
+            background: set.$gray-0;
+            & + .mod_sec { margin-top: 2rem; }
+            > h3 {
+                padding-bottom: 1.6rem; margin-bottom: 2.4rem;
+                border-bottom: .1rem solid set.$gray-20;
+                font-size: set.$ft-tt-s; font-weight: set.$fw-b; color: set.$gray-100;
+            }
+        }
+        // 기본정보 절만 [프로필 이미지 칸 | 입력 항목] 2단이다. 이미지 칸만 폭을 고정한다.
+        .mod_basic {
+            display: flex; align-items: flex-start; gap: 4rem;
+        }
+        .mod_photo {
+            flex-shrink: 0; width: 18rem;
+            display: flex; flex-direction: column; align-items: center;
+            // 라벨은 다른 항목의 dt 와 같은 줄에서 시작해야 하므로 칸 폭을 다 쓴다.
+            .ph_tit {
+                align-self: stretch;
+                font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100;
+            }
+            // 등록된 이미지가 없을 때는 자리표시 아이콘(i)이, 있으면 img 가 들어간다.
+            .ph_view {
+                margin-top: 2rem;
+                width: 12rem; aspect-ratio: 1/1; border-radius: 100rem; overflow: hidden;
+                display: flex; align-items: center; justify-content: center;
+                background: set.$gray-10;
+                i {
+                    width: 5rem; aspect-ratio: 1/1;
+                    background: set.icon(ico-user, set.$gray-30) no-repeat center center / contain;
+                }
+                img { width: 100%; height: 100%; object-fit: cover; }
+            }
+            // 파일 선택 버튼 — input[type=file] 은 디자인시스템이 숨기고 label 이 대신 눌린다.
+            > label { margin-top: 2rem; }
+            .ph_cau {
+                margin-top: 1rem; text-align: center;
+                font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m;
+            }
+        }
+        & + .mod_form {
+            margin-top: 2rem;
+        }
+        // 항목 목록 — 한 줄이 dl 하나다. 라벨 칸 폭을 고정해야 입력 시작선이 줄마다 맞는다.
+        .mod_list {
+            flex-grow: 1; min-width: 0; width: 100%;
+            display: flex; flex-direction: column; gap: 1.4rem;
+            .cut-flex {
+                display: flex; gap: 1rem;
+            }
+            .modCheckBox {
+                display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+                & > span { min-height: 4rem; display: flex; align-items: center;}
+                .modCheckOther { flex-grow: 1; width: 100%; display: flex; align-items: center; gap: 1rem; label { flex-shrink: 0; } }
+            }
+            .modAddress {
+                display: flex; flex-direction: column; gap: 1rem;
+            }
+            dl {
+                display: flex; align-items: flex-start; gap: 2rem; min-height: 4rem;
+                > dt {
+                    flex-shrink: 0; width: 12rem;
+                    padding-top: 0.8rem;
+                    font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100;
+                    &.imp::after { content: "*"; margin-left: .4rem; color: set.$sst-dCol-60; }
+                }
+                // anchor-center(앵커 포지셔닝 키워드)는 iOS Safari 가 파싱 오류를 내서 center 로 쓴다 — 앵커가 없으면 둘은 같은 동작이다.
+                > dd { flex-grow: 1; min-width: 0; align-self: center; }
+            }
+            // 셀렉트는 내용 폭이 기본이라 그대로 두면 칸 안에서 짧게 끝난다 — 입력칸과 폭을 맞춘다.
+            // 폭을 따로 정한 휴대폰 앞자리(.ip_phone)만 뺀다.
+            dd:not(.ip_phone) > select { width: 100%; }
+            // 라디오가 든 칸은 가로로 나란히 둔다.
+            dd.checkBox { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem 2.4rem; }
+            // 휴대폰 — [앞자리 선택 | 가운데 | - | 뒷자리]. 선택 칸만 폭을 고정하고 나머지가 반씩 나눈다.
+            dd.ip_phone {
+                display: flex; align-items: center; gap: 1rem;
+                > select { flex: 0 0 11rem; min-width: 0; }
+                > input { flex: 1 1 0; min-width: 0; }
+                > span { flex-shrink: 0; color: set.$gray-40; }
+            }
+            
+            // 비밀번호 보임/숨김 — 입력칸 오른쪽 안에 얹는다(칸 안쪽 여백을 그만큼 넓힌다).
+            dd.ip_pw {
+                position: relative;
+                > input { padding-right: 4.4rem; }
+                // 눌린 상태는 aria-pressed 로 표시하므로 클래스를 따로 두지 않는다.
+                .bt_pw {
+                    position: absolute; top: 50%; right: 1.2rem; translate: 0 -50%;
+                    width: 2rem; aspect-ratio: 1/1; cursor: pointer;
+                    background: set.icon(ico-view, set.$gray-40) no-repeat center center / contain;
+                    &[aria-pressed="true"] { background-image: set.icon(ico-view, set.$mCol-60); }
+                }
+            }
+            // 프로필 사진(개발 화면 views/user/mypage_modify) — 항목 줄의 dd 안에 [미리보기 | 버튼·안내] 가로 배치.
+            // join 의 .join_photo 위젯을 이 화면 스코프로 옮긴 것이다. 위의 .mod_form .mod_photo(시안용 세로 칸)와
+            // 클래스명이 같아, dd.mod_photo 로 한 단계 더 좁혀 세로·18rem 규칙을 되돌린다.
+            dd.mod_photo {
+                display: flex; flex-direction: row; align-items: center; gap: 2rem;
+                width: auto; padding: 1.6rem;
+                background: set.$mCol-5;
+                border: .1rem solid set.$mCol-30; border-radius: .8rem;
+                [hidden] { display: none; }
+                .mod_photo_preview {
+                    flex-shrink: 0; width: 10rem; height: 10rem; overflow: hidden;
+                    border: .1rem solid set.$mCol-20; border-radius: .6rem;
+                    background: set.$gray-0;
+                    > i {
+                        display: block; width: 100%; height: 100%;
+                        background: set.icon(ico-user, set.$gray-40) no-repeat center / 50%;
+                    }
+                    > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+                    // 사진을 고르면 JS 가 i 에, 지우면 img 에 hidden 을 붙인다. 위 > i / > img 의 display:block 이
+                    // 바깥 [hidden] 규칙보다 세서 숨김이 풀리므로, 같은 깊이에서 속성 선택자로 뒤에 두어 이기게 한다.
+                    > [hidden] { display: none; }
+                }
+                .mod_photo_controls { min-width: 0; }
+                .mod_photo_buttons {
+                    display: flex; flex-wrap: wrap; gap: .8rem;
+                    button { min-width: 9rem; }
+                }
+            }
+            // 안내·상태 문구는 프로필 사진 칸과 이력사항 첨부 칸이 같이 쓴다(.mod_photo 밖에도 있어 .mod_list 기준).
+            .mod_photo_help, .mod_photo_status {
+                margin-top: .8rem;
+                font-size: 1.4rem; color: set.$gray-60; line-height: 1.4;
+                overflow-wrap: anywhere;
+            }
+            .mod_photo_status.is-error { color: set.$sst-dCol-60; }
+            .mod_photo_status:empty { display: none; }
+            // 이력사항 첨부는 board.css 공통 컴포넌트(.file-drop-s / .file-list)를 쓴다. 컴포넌트 안쪽 dl·dt 가
+            // 위 .mod_list dl(라벨 12rem + 2rem 간격 + min-height 4rem) 규칙에 잡혀 깨지므로 컴포넌트 배치를 되돌린다.
+            .file-list dl {
+                align-items: center; gap: .2rem; min-height: 0;
+                > dt { width: auto; padding-top: 0; font-size: 1.4rem; }
+                > dd { flex-grow: 0; }
+            }
+        }
+        // 저장/취소 줄
+        .btnArea.f_center {
+            display: flex; align-items: center; justify-content: center; gap: 1rem;
+            margin-top: 4rem;
+            a, button { min-width: 14rem; }
+        }
+        // 좁은 폭에서는 이미지 칸과 라벨을 각각 위로 올려 한 열로 쌓는다.
+        @include set.res-tab-lap() {
+            .mod_sec { padding: 2rem; }
+            .mod_basic { flex-direction: column; align-items: stretch; gap: 2.4rem; }
+            .mod_photo { width: 100%; }
+            .mod_list dl {
+                flex-direction: column; align-items: stretch; gap: .8rem;
+                > dt { width: auto; padding-top: 0; }
+                // 가로 배치용 align-self(center)가 세로 쌓임에서는 dd 를 내용 폭으로 줄이므로 칸 폭을 되돌린다.
+                > dd { align-self: stretch; }
+            }
+            // 활동권역 1~4순위 — 셀렉트 넷을 한 줄에 두면 좁아지므로 2×2 로 접는다.
+            .mod_list .cut-flex {
+                flex-wrap: wrap;
+                > select { flex: 1 1 calc(50% - .5rem); min-width: 0; }
+            }
+            // [입력 | 버튼] 한 줄(휴대폰 번호변경·우편번호 주소검색) — 입력이 남은 폭을 다 쓰고 버튼은 제 폭만 갖는다.
+            .mod_list .flexBox {
+                flex-wrap: nowrap;
+                > input { flex: 1 1 0; min-width: 0; }
+                > button, > a { flex-shrink: 0; }
+            }
+            .btnArea.f_center a, .btnArea.f_center button { min-width: 12rem; }
+        }
+        // 태블릿 이하 — 프로필 사진 칸은 [미리보기 / 버튼·안내] 로 세로 쌓고 미리보기를 줄인다(회원가입 .join_photo 와 동일).
+        @include set.res-tablet() {
+            .mod_list dd.mod_photo {
+                flex-direction: column; align-items: flex-start; gap: 1.2rem;
+                .mod_photo_preview { width: 9.6rem; height: 9.6rem; }
+            }
+        }
+        // 모바일 — 카드 여백을 줄이고, 순위 셀렉트는 한 열로, 사진 버튼과 저장 버튼은 칸 폭을 나눠 채운다.
+        @include set.res-mo-tab() {
+            .mod_sec {
+                padding: 1.6rem;
+                > h3 { padding-bottom: 1.2rem; margin-bottom: 1.6rem; }
+            }
+            .mod_list {
+                gap: 1.2rem;
+                .cut-flex > select { flex-basis: 100%; }
+                dd.mod_photo {
+                    padding: 1.2rem;
+                    .mod_photo_controls { align-self: stretch; }
+                    .mod_photo_buttons button { flex: 1 1 0; min-width: 0; }
+                }
+                dd.checkBox { gap: 1rem 1.6rem; }
+            }
+            .btnArea.f_center {
+                margin-top: 3rem;
+                a, button { flex: 1 1 0; min-width: 0; }
+            }
+        }
+    }
+
+    // 회원정보수정 본인확인 — 회원정보수정으로 들어가기 전 비밀번호를 한 번 더 받는 관문 화면.
+    // 할 일이 하나뿐이라 절 카드(.mod_sec)를 쌓지 않고 카드 한 장 안에
+    // [자물쇠 - 안내 - 입력 - 버튼]을 세로 가운데로 쌓는다. 입력 줄만 왼쪽 정렬이다(라벨이 있어서다).
+    .pw_confirm {
+        display: flex; flex-direction: column; align-items: center;
+        padding: 6rem 3rem;
+        border: .1rem solid set.$gray-20; border-radius: 1.2rem;
+        background: set.$gray-0;
+        text-align: center;
+        // 자물쇠 — 무엇을 묻는 화면인지 한눈에 알리는 장식이라 마크업에서 aria-hidden 을 준다.
+        .pw_ico {
+            width: 9rem; aspect-ratio: 1/1; border-radius: 100rem;
+            display: flex; align-items: center; justify-content: center;
+            background: set.$mCol-10;
+            &::before {
+                content: "";
+                width: 3rem; height: 3.7rem;
+                background: set.icon(ico-lock-y, set.$mCol-60) no-repeat center center / contain;
+            }
+        }
+        > h3 {
+            margin-top: 3rem;
+            font-size: set.$ft-tt-m; font-weight: set.$fw-b; color: set.$gray-100;
+            word-break: keep-all;
+        }
+        .pw_desc {
+            margin-top: 1.6rem;
+            font-size: set.$ft-bd-l; line-height: 1.6; color: set.$gray-70; font-weight: set.$fw-m;
+            word-break: keep-all;
+        }
+        // 입력 줄 — 카드는 가운데 정렬이지만 폼 안은 라벨이 붙는 줄이라 왼쪽으로 되돌린다.
+        // 폭을 여기서 정해야 넓은 화면에서 입력칸이 카드 전체로 늘어나지 않는다.
+        .pw_form {
+            width: 100%; max-width: 58rem;
+            margin-top: 4rem;
+            text-align: left;
+            dt {
+                margin-bottom: 1rem;
+                font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100;
+                &.imp::after { content: "*"; margin-left: .4rem; color: set.$sst-dCol-60; }
+            }
+            // 비밀번호 칸 — 왼쪽 자물쇠는 배경 그림, 오른쪽 보임/숨김은 단추다.
+            // 양쪽 안쪽 여백을 그림·단추 자리만큼 넓혀 글자가 겹치지 않게 한다.
+            dd.ip_pw {
+                position: relative;
+                > input {
+                    width: 100%;
+                    padding-left: 4.8rem; padding-right: 4.8rem;
+                    border-radius: 1rem;
+                    background: set.$gray-5 set.icon(ico-lock-n, set.$gray-40) no-repeat 1.8rem center / 1.6rem;
+                    &:focus-within, &:hover {
+                        background-color: set.$gray-0;
+                        background-image: set.icon(ico-lock-n, set.$mCol-60);
+                    }
+                }
+                // 눌린 상태는 aria-pressed 로 표시하므로 클래스를 따로 두지 않는다(동작은 sub.js).
+                // 감춰진 동안 눈에 빗금이 있는 그림을 쓴다 — 지금 보이지 않는 상태라는 뜻이다.
+                .bt_pw {
+                    position: absolute; top: 50%; right: 1.6rem; translate: 0 -50%;
+                    width: 2rem; aspect-ratio: 1/1; cursor: pointer;
+                    background: set.icon(ico-view-off, set.$gray-40) no-repeat center center / contain;
+                    &[aria-pressed="true"] { background-image: set.icon(ico-view, set.$mCol-60); }
+                }
+            }
+            // 카드 안에서 할 일이 하나라 버튼은 폼 폭을 다 쓴다(로그인 화면과 같은 규격).
+            > button {
+                width: 100%; margin-top: 3rem;
+                border-radius: 1rem;
+            }
+        }
+        @include set.res-tab-lap() {
+            padding: 4rem 2rem;
+            .pw_ico { width: 7.2rem; }
+            .pw_ico::before { width: 2.4rem; height: 3rem; }
+            > h3 { margin-top: 2.4rem; }
+            .pw_form { margin-top: 3rem; }
+            .pw_form dd.ip_pw > input { padding-left: 4.2rem; padding-right: 4.2rem; background-position: 1.4rem center; }
+            .pw_form > button { margin-top: 2rem; }
+        }
+    }
+
+    // 알림함 목록 — [구분 라벨 | 제목·설명 | 날짜] 한 줄이 반복되는 카드.
+    // 카드가 아니라 줄 목록이라 .card-* 를 쓰지 않는다(썸네일·버튼이 없다).
+    .noti_list {
+        border: .1rem solid set.$gray-20; border-radius: 1.2rem;
+        background: set.$gray-0;
+        overflow: hidden;
+        > li + li { border-top: .1rem solid set.$gray-10; }
+        a {
+            display: flex; align-items: center; gap: 2.4rem;
+            padding: 2rem 2.4rem;
+            transition: background set.$aniSet;
+            &:hover { background: set.$gray-5; }
+        }
+        // 구분 라벨 칸 폭을 고정해야 제목 시작선이 줄마다 맞는다.
+        [class^="lb-"] { flex-shrink: 0; min-width: 4.4rem; }
+        .txt { flex-grow: 1; min-width: 0; }
+        .tit {
+            @include set.lineCut($line:1);
+            font-size: set.$ft-bd-l; color: set.$gray-70; font-weight: set.$fw-m;
+        }
+        .desc {
+            @include set.lineCut($line:1);
+            margin-top: .4rem;
+            font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m;
+        }
+        .date { flex-shrink: 0; font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m; }
+        // 미확인 — 제목을 진하게 둔다(구분 라벨의 포인트 색은 마크업에서 .lb-s.po 로 준다).
+        li.new .tit { color: set.$gray-100; font-weight: set.$fw-b; }
+    }
+
+    // 회원탈퇴 — 절 카드 골격(.mod_form/.mod_sec/.mod_list)은 회원정보수정 것을 그대로 쓰고,
+    // 여기서는 그 안에만 들어가는 세 덩어리(확인사항 목록 / 사유 입력 / 동의 줄)를 잡는다.
+    // 경고 배너는 공통 .box_tit 이 안에 든 .de 를 보고 색을 정하므로 목록 간격만 준다.
+    // 경고 배너 안의 안내 목록. 공통 .dot-list-* 는 점이 본문과 같은 진한 색(gray-100)에
+    // 점·글자 간격이 .4rem 이라, 배너 안에 들어오면 점만 도드라지고 제목과 한 덩어리로 읽히지 않는다.
+    // 점을 글자보다 한 톤 낮추고 줄 중앙에 맞춰 앉히는 것까지가 여기서 하는 일이다.
+    .box_tit [class^="dot-list-"] {
+        margin-top: 1.2rem;
+        > li {
+            color: set.$gray-70;
+            & + li { margin-top: .6rem; }
+            // 목록이 아니라 문장이라 어절 중간에서 끊기지 않게 한다.
+            > p { word-break: keep-all; }
+            > p::before {
+                width: .4rem;
+                margin-right: .8rem;
+                background: set.$gray-40;
+                // 첫 줄 글자 중앙에 맞춘다 — 1lh 가 그 줄 높이라 글자 크기(clamp)가 바뀌어도 따라온다.
+                margin-top: calc((1lh - .4rem) / 2);
+            }
+        }
+    }
+    .leave_form {
+        // 남아 있는 것(학습·수료증·포인트) 한 줄. 그 목록 화면으로 가는 링크라 오른쪽에 화살표가 붙는다.
+        .leave_check {
+            border: .1rem solid set.$gray-20; border-radius: .8rem;
+            background: set.$gray-0;
+            overflow: hidden;
+            > li + li { border-top: .1rem solid set.$gray-10; }
+            a {
+                display: flex; align-items: center; gap: 1.6rem;
+                padding: 2rem;
+                transition: background set.$aniSet;
+                &:hover { background: set.$gray-5; }
+                // 화살표는 장식이라 텍스트를 두지 않는다 — 줄 전체가 링크라 이름은 안쪽 문구가 준다.
+                &::after {
+                    content: ""; flex-shrink: 0;
+                    width: .7rem; height: 1.2rem;
+                    background: set.icon(ico-chevron, set.$gray-40) no-repeat center center / contain;
+                    rotate: 180deg;
+                }
+            }
+            // 아이콘 칸 — 종류별 그림만 아래에서 갈아 끼운다.
+            .ico {
+                flex-shrink: 0;
+                width: 4.4rem; aspect-ratio: 1/1; border-radius: .8rem;
+                background-color: set.$mCol-5;
+                background-repeat: no-repeat; background-position: center center; background-size: 2.2rem;
+            }
+            .txt { flex-grow: 1; min-width: 0; }
+            .tit { font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100; }
+            .desc {
+                margin-top: .4rem;
+                font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m;
+            }
+            // 수치는 잃게 되는 양이라 포인트 색으로 눈에 띄게 둔다.
+            .val {
+                flex-shrink: 0;
+                font-size: set.$ft-bd-s; font-weight: set.$fw-b; color: set.$mCol-60;
+            }
+            .ico--study .ico { background-image: set.icon(ico-clock,  set.$mCol-60); }
+            .ico--cert  .ico { background-image: set.icon(ico-comple, set.$mCol-60); }
+            .ico--point .ico { background-image: set.icon(ico-star,  set.$mCol-60); }
+        }
+        // 탈퇴 사유 — 선택 항목이라 라벨 칸 없이 입력만 세로로 쌓는다.
+        .leave_reason {
+            display: flex; flex-direction: column; gap: 1.2rem;
+            > select, > textarea { width: 100%; }
+            // 디자인시스템의 .form-* 는 960px 이하에서 input 과 textarea 에 같은 높이(hs)를 박아
+            // 여러 줄 입력칸이 한 줄로 눌린다 — 이 칸에서만 되돌리고 최소 높이를 준다.
+            > textarea { height: auto; min-height: 12rem; resize: vertical; }
+        }
+        // 동의 줄. 절 카드 밖이라 카드 안쪽 여백만큼 들여 맞춘다.
+        .leave_agree {
+            margin-top: 2rem; padding: 0 .4rem;
+            // 필수 표시는 문구 뒤에 붙는 경고색 꼬리표다.
+            em { color: set.$sst-dCol-60; font-weight: set.$fw-m; }
+        }
+    }
+
+    // 나의 수강평 목록 — 수료한 과정 한 건이 리뷰 카드 한 장이다.
+    // 카드 껍데기(.card-review .card-item 의 .head/.body/.btArea)는 board.css 것을 그대로 쓰고,
+    // 여기서는 이 화면에서만 달라지는 세 가지(카드 사이 간격 / 머리줄 첫 칸 / 작성 버튼 줄)만 잡는다.
+    .card-review {
+        // board.css 의 .card-review 는 카드 사이 간격을 갖고 있지 않다(영상 뷰의 수강평 패널도 같은 이유로 따로 준다).
+        display: flex; flex-direction: column; gap: 1.6rem;
+        // 머리줄 첫 칸이 사람 이름이 아니라 과정명이다 — 상세로 가는 링크라 색과 밑줄을 준다.
+        .head > strong {
+            min-width: 0;
+            a { color: set.$gray-100; }
+            a:hover { color: set.$mCol-60; text-decoration: underline; }
+        }
+        // 미작성 카드의 본문 — 후기가 아니라 안내 문구라 회색 한 톤으로 낮춘다.
+        .rv_none { color: set.$gray-40; }
+        // [수강평 작성] 줄. 카드가 align-items:flex-start 라 stretch 하지 않으면 구분선이 본문 폭에서 끊긴다.
+        // 공통 .btArea 는 버튼이 줄을 나눠 갖도록(flex:1 1 0) 돼 있는데 여기는 버튼이 하나뿐이라
+        // 그대로 두면 한 줄짜리 안내문 아래 화면 폭만 한 버튼이 생긴다 — 제 크기로 되돌려 오른쪽에 붙인다.
+        .btArea {
+            align-self: stretch; justify-content: flex-end;
+            button, a { flex: 0 0 auto; min-width: 14rem; }
+        }
+        // 좁은 폭에서는 머리줄이 한 줄에 다 들어가지 않는다 — 별점·날짜를 통째로 아랫줄로 내린다.
+        @include set.res-mo-tab() {
+            .head { flex-wrap: wrap; }
+            .head > strong { flex-grow: 1; }
+            .head .rv_info { order: 1; flex-basis: 100%; }
+        }
+    }
+
+    // 목록 위 안내 문구를 통째로 강조할 때(예: "발급 가능한 수료증 3건").
+    // 기본 .bt-total 은 숫자만 포인트 색이다.
+    .bt-total.imp p {
+        color: set.$mCol-60; font-weight: set.$fw-b;
+        strong { font-weight: inherit; }
+    }
+    .paginArea { margin-top: 3rem; }
+}
+
+/* 서브페이지 - 커리큘럼 뷰 */
+#curriculumWrap {
+    // 본문 + 신청 사이드 2단. 사이드 폭은 고정, 본문이 남는 폭을 먹는다.
+    // align-items:start 가 있어야 사이드가 세로로 늘어나지 않고 sticky 가 걸린다.
+    .cur_grid {
+        display: grid; grid-template-columns: minmax(0, 1fr) 36rem; gap: 4rem;
+        align-items: start;
+    }
+
+    // 과정 개요(왼쪽 정보 / 오른쪽 썸네일)
+    .cur_head {
+        display: flex; align-items: center; gap: 4rem;
+        padding: 4rem;
+        border-radius: 1.2rem;
+        background: set.$mCol-5;
+        .info {
+            flex-grow: 1; min-width: 0;
+            display: flex; flex-direction: column; align-items: flex-start; gap: 2rem;
+        }
+        // 분류 뱃지 + 메타(유형·시간·차시). 폭이 모자라면 항목 단위로 다음 줄로 내린다 —
+        // 플렉스 항목은 기본으로 줄어들어(min-width:auto) 한글이 글자 단위로 쪼개지므로
+        // 뱃지·항목마다 nowrap + flex-shrink:0 을 주고 줄바꿈은 wrap 이 맡는다.
+        .data--value {
+            display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem;
+            em { border-radius: .2rem; flex-shrink: 0; white-space: nowrap; }
+            ul {
+                display: flex; flex-wrap: wrap; align-items: center; row-gap: .4rem;
+                min-width: 0;
+                li {
+                    flex-shrink: 0; white-space: nowrap;
+                    font-size: set.$ft-bd-m; color: set.$gray-70; font-weight: set.$fw-m;
+                    &:not(:last-child) {
+                        display: flex; align-items: center;
+                        &::after {
+                            content: "";
+                            width: .1rem; height: 1.1rem; margin: 0 1rem;
+                            background: set.$gray-20;
+                        }
+                    }
+                }
+            }
+        }
+        // 두 줄짜리 제목 — 둘째 줄(strong)만 포인트 색이다.
+        h3 {
+            font-size: set.$ft-tt-l; font-family: set.$ft-point; font-weight: 700;
+            color: set.$gray-100; line-height: 1.35;
+            strong { display: block; font-weight: inherit; color: set.$mCol-60; }
+        }
+        .data--hash {
+            display: flex; flex-wrap: wrap; gap: .6rem;
+            em {
+                border-radius: 100rem;
+                font-size: set.$ft-bd-s;
+                font-weight: 500;
+                color: set.$mCol-60;
+                border: .1rem solid set.$mCol-60;
+                background: set.$gray-0;
+                padding: 0.3rem 1rem;
+                &::before {
+                    content: "#";
+                    display: inline-block; margin-right: 0.2rem;
+                }
+            }
+        }
+        .thumb {
+            width: 100%; 
+            max-width: 50%;
+            flex-shrink: 0;
+            aspect-ratio: 16/10;
+            border-radius: .8rem;
+            overflow: hidden;
+            img { width: 100%; height: 100%; object-fit: cover; }
+        }
+    }
+
+    // 탭(커리큘럼 / 강사소개 / 강의소개 / 수강후기) — 공통 .tab-l.ud 를 그대로 쓰고 여백만 잡는다.
+    .cur_tab {
+        margin: 4rem 0 3rem;
+    }
+
+    // 탭 패널 한 장 = 흰 카드. 감춘 패널은 markup 의 hidden 속성으로 빠진다(sub.js 가 토글).
+    .cur_panel {
+        padding: 4rem;
+        border: .1rem solid set.$gray-20; border-radius: 1.2rem;
+        background: set.$gray-0;
+    }
+
+    // 진도 요약
+    .cur_progress {
+        margin-bottom: 3rem;
+        p {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1rem;
+            b { font-size: set.$ft-bd-m; color: set.$gray-70; font-weight: set.$fw-b; }
+            strong { font-size: set.$ft-tt-s; color: set.$mCol-60; font-weight: 700; }
+        }
+        .bar {
+            height: .8rem; border-radius: 100rem; background: set.$gray-10; overflow: hidden;
+            span { display: block; height: 100%; border-radius: inherit; background: set.$mCol-60; }
+        }
+    }
+
+    // 챕터(단원) 한 덩어리
+    .cur_chapter {
+        & + .cur_chapter { margin-top: 2.4rem; }
+        .ch_head {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding-bottom: 1.2rem; border-bottom: .1rem solid set.$gray-20;
+            h3 { font-size: set.$ft-bd-l; font-weight: set.$fw-b; color: set.$gray-100; }
+            span { font-size: set.$ft-bd-s; color: set.$gray-50; flex-shrink: 0; }
+        }
+        // 챕터 안 차시 목록
+        .cur_lesson {
+            li + li { border-top: .1rem solid set.$gray-10; }
+            a {
+                display: flex; align-items: center; gap: 1.6rem;
+                padding: 1.6rem 1.2rem;
+                border-radius: .6rem;
+                transition: background set.$aniSet;
+                &:hover { background: set.$gray-5; }
+            }
+            em {
+                width: 6rem; flex-shrink: 0;
+                font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m;
+            }
+            p { flex-grow: 1; min-width: 0; font-size: set.$ft-bd-m; color: set.$gray-100; @include set.lineCut($line:1); }
+            span { flex-shrink: 0; font-size: set.$ft-bd-s; color: set.$gray-50; }
+            // 수강 완료 / 현재 차시
+            li.done p { color: set.$gray-50; }
+            li.on {
+                a { background: set.$mCol-5; }
+                p { color: set.$mCol-60; font-weight: set.$fw-b; }
+                em { color: set.$mCol-60; }
+            }
+        }
+    }
+
+    // 강사소개 패널
+    .inst_head {
+        display: flex; align-items: baseline; gap: 1rem;
+        padding-bottom: 2rem; border-bottom: .1rem solid set.$gray-20;
+        h3 {
+            font-size: set.$ft-tt-m; font-family: set.$ft-point; color: set.$gray-100; font-weight: 600;
+            strong { color: set.$mCol-60; font-weight: inherit; }
+        }
+        span {
+            font-size: set.$ft-bd-m; color: set.$gray-50;
+            &::before { content: "· "; }
+        }
+    }
+    .inst_photo {
+        width: 100%; max-width: 34rem;
+        margin: 3rem 0 2rem;
+        border-radius: .4rem; overflow: hidden;
+        img { width: 100%; display: block; }
+    }
+    // 소개 / 현 직책 / 주요 경력 — 소제목 앞에 점을 찍고 절 사이를 선으로 끊는다.
+    .inst_sec {
+        & + .inst_sec { margin-top: 3rem; padding-top: 3rem; border-top: .1rem solid set.$gray-20; }
+        h4 {
+            display: flex; align-items: center; gap: .8rem;
+            margin-bottom: 1.6rem;
+            font-size: set.$ft-bd-l; font-weight: set.$fw-b; color: set.$gray-100;
+            &::before {
+                content: "";
+                width: .5rem; aspect-ratio: 1/1; border-radius: 100rem;
+                background: set.$mCol-60;
+            }
+        }
+        p {
+            font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m; line-height: 1.8;
+            word-break: keep-all; white-space: pre-wrap;
+        }
+        // 소개 첫 줄(요약)은 본문보다 진하게
+        p.lead { color: set.$gray-100; font-weight: set.$fw-b; margin-bottom: 1.2rem; line-height: 1.6; }
+    }
+    // 경력 한 덩어리 = 직책(dt) + 상세(dd, 앞에 하이픈)
+    .inst_career {
+        display: flex; flex-direction: column; gap: 1.6rem;
+        dt { font-size: set.$ft-bd-m; color: set.$gray-100; font-weight: set.$fw-b; margin-bottom: .6rem; }
+        dd {
+            display: flex; gap: .8rem;
+            font-size: set.$ft-bd-m; color: set.$gray-50; font-weight: set.$fw-m; line-height: 1.7;
+            &::before { content: "-"; flex-shrink: 0; }
+            & + dd { margin-top: .4rem; }
+        }
+    }
+
+    .cur_util {
+        margin-top: 3rem;
+        display: flex; justify-content: center;
+    }
+
+    // 신청 사이드 — 스크롤해도 따라다닌다.
+    // 헤더가 접힌 높이(11rem) 아래에 붙고, 사이드가 화면보다 길면 그 안에서 스크롤한다.
+    .cur_side {
+        position: sticky; top: 25rem;
+        .side_inner {
+            padding: 2.4rem;
+            border: .1rem solid set.$gray-20; border-radius: 1.2rem;
+            background: set.$gray-0;
+        }
+        // 차수 선택. 옵션 문구(기수 · 기간 (상태))가 사이드 폭보다 길어 접히는데, 줄바꿈·높이(min-height)는
+        // 디자인시스템 .form select 가 기본으로 처리한다(components/form/_forms.scss) — 여기선 여백만 준다.
+        .side_sel { margin-bottom: 1.6rem; }
+        .side_btn {
+            display: flex; flex-direction: column; gap: 1rem;
+            button { width: 100%; }
+            // 하트는 공통 버튼이 챙기는 아이콘 목록에 없어 여기서 배경을 준다.
+            i.ico-heart-line { background: set.icon(ico-heart-line, set.$mCol-60) no-repeat center center / contain; }
+        }
+        // 모집 상태
+        .side_state {
+            margin-top: 2rem; padding: 1.6rem;
+            border-radius: .8rem; background: set.$gray-5;
+            display: flex; flex-direction: column; gap: .6rem;
+            em {
+                display: flex; align-items: center; gap: .6rem;
+                font-size: set.$ft-bd-s; font-weight: set.$fw-b; color: set.$mCol-60;
+                &::before {
+                    content: "";
+                    width: .6rem; aspect-ratio: 1/1; border-radius: 100rem;
+                    background: currentColor;
+                }
+                // 마감 등 다른 상태는 색만 바꾼다.
+                &.state-off { color: set.$gray-50; }
+            }
+            p {
+                font-size: set.$ft-bd-s; color: set.$gray-70; font-weight: set.$fw-m;
+                span { color: set.$gray-20; margin: 0 .4rem; }
+            }
+        }
+        // 사이드 안 절(강의 기본 정보 / 강의 소개 / 공유하기)
+        .side_box {
+            margin-top: 2.4rem; padding-top: 2.4rem;
+            border-top: .1rem solid set.$gray-20;
+            h4 {
+                margin-bottom: 1.6rem;
+                font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100;
+            }
+            > p {
+                font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m; line-height: 1.7;
+                word-break: keep-all;
+            }
+            .data--hash {
+                display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.2rem;
+                em { font-size: set.$ft-bd-s; color: set.$mCol-60; font-weight: set.$fw-m; }
+            }
+        }
+        // 강의 기본 정보 — 2열, 항목마다 앞에 아이콘
+        .side_info {
+            display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6rem 1.2rem;
+            > div { min-width: 0; }
+            dt {
+                display: flex; align-items: center; gap: .6rem;
+                margin-bottom: .4rem;
+                font-size: set.$ft-bd-s; color: set.$gray-100; font-weight: set.$fw-b;
+                &::before {
+                    content: "";
+                    width: 1.6rem; aspect-ratio: 1/1; flex-shrink: 0;
+                }
+            }
+            dd {
+                padding-left: 2.2rem;
+                font-size: set.$ft-bd-s; color: set.$gray-50; font-weight: set.$fw-m; line-height: 1.5;
+                word-break: keep-all;
+            }
+            // 아이콘은 항목 클래스로 갈아 끼운다.
+            .ico--target dt::before { background: set.icon(ico-user,    set.$gray-50) no-repeat center center / contain; }
+            .ico--way    dt::before { background: set.icon(ico-panel,   set.$gray-50) no-repeat center center / contain; }
+            .ico--time   dt::before { background: set.icon(ico-clock,   set.$gray-50) no-repeat center center / contain; }
+            .ico--place  dt::before { background: set.icon(ico-here,    set.$gray-50) no-repeat center center / contain; }
+            .ico--inst   dt::before { background: set.icon(ico-user,    set.$gray-50) no-repeat center center / contain; }
+        }
+        // 공유 버튼 — 원형 아이콘 버튼. 글자는 접근성용이라 화면에서 감춘다.
+        .side_share {
+            ul { display: flex; align-items: center; gap: .8rem; }
+            button {
+                width: 4rem; aspect-ratio: 1/1;
+                border-radius: 100rem;
+                border: .1rem solid set.$gray-20;
+                background: set.$gray-0 none no-repeat center center / 1.8rem;
+                font-size: 0;
+                transition: all set.$aniSet;
+                &:hover { border-color: set.$mCol-60; }
+            }
+            .sh--link  { background-image: set.icon(ico-clip,  set.$gray-70); }
+            .sh--more  { background-image: set.icon(ico-plus,  set.$gray-70); }
+            // 브랜드 색은 실제 아이콘 자산이 나오면 background-image 만 교체한다.
+            .sh--kakao { background-color: #fee500; border-color: #fee500; }
+            .sh--naver { background-color: #03c75a; border-color: #03c75a; }
+            .sh--facebook { background-color: #1877f2; border-color: #1877f2; }
+        }
+    }
+}
+
+
+// 통합검색
+
+.subSearch {
+    .search_head {
+        width: 100%;
+        // height: 36rem;
+        // height: 26rem;
+        background: url(set.$img-url + "sub/search_bg.png") no-repeat 0 0 / cover;
+        .inner {
+            @include set.base-width();
+            height: 100%;
+            display: flex; align-items: center; justify-content: space-between; gap: 4rem;
+            .copy {
+                flex-grow: 1;
+                em { font-size: set.$ft-tt-s; font-weight: 600; color: set.$mCol-60; }
+                h2 { font-size: set.$ft-dp-m; font-weight: 600; color: set.$gray-100; line-height: 1; font-family: set.$ft-point; margin: 1rem 0 2rem; }
+                p  { font-size: set.$ft-bd-l; font-weight: 400; color: set.$gray-50; word-break: keep-all; text-wrap: balance; }
+            }
+            .util {
+                flex-grow: 1;
+                max-width: 70rem;
+                .search-area {
+                    position: relative;
+                    border-radius: 100rem;
+                    border: .3rem solid set.$mCol-60;
+                    background: set.$gray-0;
+                    height: 8rem;
+                    display: flex; align-items: center;
+                    gap: 2rem;
+                    input, select {
+                        outline: none; border: none;
+                        font-size: set.$ft-tt-s;
+                        background: none;
+                        padding: 1rem;
+                        color: set.$gray-50;
+                        height: 8rem;
+                    }
+                    select {
+                        width: 16rem;
+                        flex-shrink: 0;
+                        padding-left: 3rem;
+                        appearance: base-select;
+                        display: flex; align-items: center;
+                        &::picker-icon {
+                            content: "";
+                            background: set.icon(che-bot, set.$gray-30) no-repeat center center / contain;
+                            width: 1.2rem;
+                            aspect-ratio: 1/1;
+                            flex-shrink: 0;
+                            align-self: center;
+                            transform-origin: 50% 50%;
+                            rotate: 0deg;
+                            transition: rotate set.$aniSet;
+                            pointer-events: none;
+                        }
+                        &:not(:open){
+                            &:hover, &.hover {
+                                border-color: set.$mCol-60;
+                                color: set.$mCol-60;
+                                &::picker-icon {
+                                    background: set.icon(che-bot, set.$mCol-60) no-repeat center center / contain !important;
+                                }
+                            }
+                            &:focus, &.focus {
+                                border-color: set.$mCol-60;
+                                color: set.$mCol-60;
+                                &::picker-icon {
+                                    background: set.icon(che-bot, set.$mCol-60) no-repeat center center / contain !important;
+                                }
+                            }
+                        } 
+                        &:open {
+                            border-radius: .2rem .2rem 0 0;
+                            color: set.$mCol-60; font-weight: set.$fw-b;
+                            border-color: set.$mCol-60;
+                            &::picker-icon {
+                                rotate: -180deg;
+                            }
+                            option {
+                                appearance: base-select;
+                            }
+                            &::picker-icon {
+                                background: set.icon(che-bot, set.$mCol-60) no-repeat center center / contain !important;
+                            }
+                        }
+                        &::picker(select) {
+                            @include set.scrollBar($color:set.$mCol-60);
+                            appearance: base-select;
+                            color: set.$gray-100;
+                            overflow-y: auto;
+                            // 검색줄(알약 모양·흰 바탕)에 맞춰 목록도 둥근 카드로 띄운다 — 테두리는 인기검색어 태그와 같은 톤.
+                            // 간격은 margin-block 으로 준다(목록이 위로 뒤집혀 열릴 때도 같은 간격이 남는다).
+                            // 왼쪽은 margin + border + padding + option 여백 = 3rem 으로 닫힌 상태의 글자 시작점과 맞춘다.
+                            margin-block: 1.2rem;
+                            margin-inline-start: .5rem;
+                            padding: .8rem;
+                            border: .1rem solid set.$mCol-20;
+                            border-radius: 2rem;
+                            background: set.$gray-0;
+                            box-shadow: 0 1rem 3rem rgba(set.$mCol-60, .16);
+                            // 펼친 목록 위치는 브라우저 기본(base-select 의 UA 스타일 — select 아래, 넘치면 위로)에 맡긴다.
+                            // anchor()/position-try 는 iOS Safari 가 파싱 오류를 내서 쓰지 않는다.
+                            max-height: 30rem;
+                            height: auto;
+                        }
+                        option {
+                            padding: 1rem 1.6rem;
+                            border-radius: 1.2rem;
+                            background: none;
+                            font-size: set.$ft-bd-m;
+                            font-weight: set.$fw-m;
+                            line-height: 1.4;
+                            color: set.$gray-50;
+                            cursor: pointer;
+                            transition: background set.$aniSet, color set.$aniSet;
+                            & + option { margin-top: .2rem; }
+                            &:hover,
+                            &:focus,
+                            &:focus-visible {
+                                background: set.$mCol-5;
+                                color: set.$mCol-60;
+                                outline: none;
+                            }
+                            &:checked {
+                                background: set.$mCol-5;
+                                color: set.$mCol-60;
+                                font-weight: set.$fw-b;
+                            }
+                            // 선택 표시는 색·굵기로 하므로 브라우저 기본 체크(✓)는 뺀다.
+                            &::checkmark { content: none; }
+                        }
+
+                    }
+                    input {
+                        // min-width: 0 — input 의 기본 최소폭(글자 20자분) 때문에 좁은 화면에서 검색줄이 알약 밖으로 밀려나지 않게 한다.
+                        flex-grow: 1; min-width: 0;
+                        &::placeholder { color: set.$gray-50; }
+                    }
+                    button {
+                        width: 4rem; aspect-ratio: 1/1;
+                        flex-shrink: 0;
+                        display: block;
+                        background: set.icon(ico-search, set.$mCol-60) no-repeat center center / 2.6rem;
+                        margin-right: 2.6rem;
+                    }
+                }
+                .search-keyword {
+                    display: flex; align-items: center;
+                    gap: 1rem;
+                    margin-top: 1.6rem;
+                    p { font-size: set.$ft-bd-m; color: set.$gray-100; font-weight: 400; flex-shrink: 0; }
+                    .items {
+                        display: flex; align-items: center; gap: .6rem;
+                        flex-wrap: wrap;
+                        em {
+                            border-radius: 100rem;
+                            background: set.$gray-0;
+                            border: .1rem solid set.$mCol-20;
+                            color: set.$mCol-60;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .search_result {
+        padding-bottom: 3rem; margin-bottom: 3rem; border-bottom: .1rem solid set.$gray-20;
+        p {
+            font-size: set.$ft-tt-m;
+            font-weight: 600;
+            line-height: 1.4; word-break: keep-all;
+            strong { font-weight: inherit; color: set.$mCol-60; }
+        }
+    }
+    #search_all {
+        .search_items {
+            &:not(:last-child) {
+                padding-bottom: 6rem; margin-bottom: 5rem; border-bottom: .1rem solid set.$gray-20;
+            }
+        }
+    }
+
+
+    .search_items {
+        .search_lists {
+            display: flex; flex-direction: column; gap: 1rem;
+            dl {
+                padding: 3rem;
+                border: .1rem solid set.$gray-20;
+                border-radius: .4rem;
+                display: flex; flex-direction: column;
+                gap: 1.4rem;
+                &:hover {
+                    dt {
+                        a {
+                            display: block;
+                            color: set.$mCol-60;
+                            text-decoration: underline;
+                            text-underline-offset: .4rem;
+                        }
+                    }
+                }
+                dt {
+                    a {
+                        font-size: set.$ft-tt-s;
+                        font-weight: 600; color: set.$gray-100;
+                        line-height: 1.4; word-break: keep-all; overflow-wrap: anywhere;
+                    }
+                }
+                dd {
+                    display: flex; align-items: center; flex-wrap: wrap; row-gap: .6rem;
+                    .get_bc {
+                        display: flex; align-items: center; flex-wrap: wrap;
+                        span {
+                            font-size: set.$ft-bd-s;
+                            color: set.$gray-50;
+                            font-weight: 400;
+                            &:last-child {
+                                color: set.$mCol-60;
+                                font-weight: 600;
+                            }
+                            &:not(:last-child) {
+                                display: flex; align-items: center;
+                                &::after {
+                                    content: "";
+                                    display: block;
+                                    width: 1rem; aspect-ratio: 1/1;
+                                    margin: 0 .4rem;
+                                    background: set.icon(che-right, set.$gray-30) no-repeat center center / contain;
+                                }
+                            }
+                        }
+                    }
+                    .get_data {
+                        display: flex; align-items: center;
+                        &::before {
+                            content: "";
+                            width: .1rem;
+                            height: 1.1rem;
+                            background: set.$gray-20;
+                            display: block;
+                            margin: 0 1rem;
+                        }
+                        strong {
+                            display: block;
+                            margin-right: 1rem;
+                            font-size: set.$ft-bd-s;
+                            font-weight: 600; color: set.$gray-100;
+                        }
+                        span {
+                            font-size: set.$ft-bd-s;
+                            font-weight: 400; color: set.$gray-50;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+/* 반응형 */
+
+/* 1500px */
+@include set.res-lap-pc {
+    // 원격지원
+    .subRemote {
+        > section {
+            &:has(.obj-rmt01) { text-align: center; }
+        }
+        .obj-rmt01, .obj-rmt02 { position: unset; margin: 5vw auto; }
+        .obj-rmt01 { width: 30%; max-width: 22rem; }
+        .obj-rmt02 { width: 43%; max-width: 31rem; }
+        .remote_how { margin-top: 4vw; }
+    }
+
+    .contents > section .sec_head_img { width: calc(100% - 4vw - .4rem); }
+}
+/* 1200px */
+@include set.res-1200 {
+    .subRemote {
+        // 이럴땐 어떻게 해요?
+        .remote_how {
+            .ar_checkList { padding: 5vw; }
+        }
+        // 어떻게 진행 되나요?
+        .remote_pro {
+            .remote_step {
+                display: grid; grid-template-columns: repeat(2, 1fr); padding: 4vw;
+                dl { padding: 6vw 2vw;}
+                dl:nth-child(even) { border-right: none; } 
+                dl:nth-child(-n+2) {
+                    border-bottom: 1px solid set.$gray-10;
+                }
+            }
+        }
+    }
+    /* 어필 요소형 */
+    .ap_el { flex-direction: column; }
+    .ap_el .ap_item { padding: 3vw 0; }
+    .ap_el .ap_item:first-child { padding-top: 0; }
+    .ap_el .ap_item:last-child { padding-bottom: 0; }
+    .ap_el .ap_item:not(:last-child) { border: none; border-bottom: 1px solid set.$gray-10; }
+
+
+    /* 그리드형 - 카드 */
+    .ap_grid:has(.card_item) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+}
+/* 1024px */
+@include set.res-laptop {
+    /* 개인정보처리방침·이용약관 — 목차를 본문 위 가로 칩 줄로 바꾸고 헤더 아래에 붙인다.
+       --header-h 는 policy.js 가 실제 헤더 높이로 채우므로 PC/모바일 헤더 차이는 여기서 신경 쓰지 않는다. */
+    .sub_policy {
+        .policy_layout { grid-template-columns: minmax(0, 1fr); gap: 2.4rem; }
+        .policy_body { max-width: none; }
+        .policy_nav {
+            top: var(--header-h);
+            z-index: 2;
+            // 화면 좌우 여백(base-width)까지 배경을 넓혀 칩이 잘려 들어가는 모양을 만든다
+            margin: 0 calc(-1 * min(3rem, 3vw)); padding: 1rem min(3rem, 3vw);
+            background: set.$gray-0; border-bottom: .1rem solid set.$gray-20;
+            .nav_tit { display: none; }
+            ul {
+                flex-direction: row; gap: .6rem;
+                overflow-x: auto; scrollbar-width: none;
+                &::-webkit-scrollbar { display: none; }
+            }
+            li {
+                flex-shrink: 0;
+                a {
+                    padding: .6rem 1.2rem; border: .1rem solid set.$gray-30; border-radius: 100rem;
+                    font-size: set.$ft-bd-s; white-space: nowrap;
+                    &:hover { border-color: set.$gray-40; }
+                }
+                &.on a { background: set.$mCol-60; border-color: set.$mCol-60; color: set.$gray-0; }
+            }
+        }
+        // 앵커 이동 시 헤더 + 칩 줄 높이만큼 내려 잡는다
+        .policy_sec { scroll-margin-top: calc(var(--header-h) + 6rem); }
+    }
+
+    /* 커리큘럼 뷰 — 2단을 한 단으로 접는다.
+       신청 사이드는 sticky 를 풀고 탭 위(과정 개요 바로 아래)로 올려, 좁은 화면에서도
+       신청 버튼이 먼저 보이게 한다.
+       사이드가 .cur_main 의 형제라 그대로는 개요와 탭 사이에 끼울 수 없어, .cur_main 을 display:contents 로
+       풀어 개요·사이드·탭·패널이 한 세로 플렉스의 형제가 되게 한 뒤 order 로 줄을 세운다.
+       (전에는 column-reverse 와 order:-1 이 서로 상쇄돼 사이드가 맨 아래로 내려가 있었다.) */
+    #curriculumWrap {
+        .cur_grid { display: flex; flex-direction: column; gap: 3rem; }
+        .cur_main { display: contents; }
+        .cur_head { order: -2; }
+        .cur_side {
+            position: static;
+            order: -1;
+            width: 100%; min-width: 0;
+        }
+        // 세로 간격은 gap 이 맡는다 — PC 용 위아래 margin 을 그대로 두면 사이 여백이 두 배로 벌어진다.
+        .cur_tab { margin: 0; }
+        .cur_util { margin-top: 0; }
+        .cur_head {
+            flex-direction: column-reverse; align-items: stretch; gap: 2.4rem;
+            padding: 2.4rem; width: 100%;
+            .thumb { max-width: 100%; aspect-ratio: 16/9; }
+        }
+        .cur_panel { padding: 2.4rem; width: 100%; }
+        .inst_photo { max-width: 100%; }
+    }
+
+    /* 마이페이지 — 좌측 LNB 를 오프캔버스 패널로 전환.
+       좁은 폭에서 34rem 짜리 사이드바를 옆에 두면 본문이 남지 않는다.
+       버튼(.bt-lnb)을 누르면 화면 왼쪽에서 패널이 밀려 들어오고, 딤/Esc/닫기로 닫는다.
+       열고 닫는 동작은 sub.js 가 .active 클래스로 처리한다(헤더 gnbArea 와 같은 방식). */
+    .sub_mypage {
+        > section {
+            position: relative;
+            flex-direction: column; gap: 0;
+            // 열기 아이콘 — 브레드크럼(현재 위치) 줄 오른쪽 끝에 얹는다.
+            // 브레드크럼은 .sec_cont 안이고 버튼은 section 직계라 한 줄로 묶을 수 없어,
+            // section 기준 절대배치로 그 줄 위에 올린다. top 은 .sec_cont 의 위 여백(3rem)과 같고
+            // 높이(4rem)는 아래에서 .sec_bread 최소 높이와 맞춰 중앙선이 어긋나지 않게 했다.
+            > .bt-lnb {
+                position: absolute; right: 0; top: 3rem;
+                display: flex; align-items: center; justify-content: center;
+                width: 4rem; height: 4rem;
+                border-radius: .8rem;
+                background: set.$mCol-60;
+                transition: all set.$aniSet;
+                // 사이드 패널 아이콘. 색은 icon() 이 svg 안 stroke 로 넣어 준다.
+                .ico {
+                    width: 2.4rem; aspect-ratio: 1/1;
+                    background: set.icon(ico-panel, set.$gray-0) no-repeat center center / contain;
+                }
+                &:hover, &:focus-visible { background: set.$mCol-100; }
+            }
+            > aside {
+                // 문서 흐름에서 빠져 화면 전체를 덮는 레이어가 된다(딤 포함).
+                position: fixed; inset: 0; z-index: 999;
+                width: 100%; max-width: none;
+                border-right: none;
+                isolation: isolate;
+                visibility: hidden; opacity: 0;
+                transition: all set.$aniSet;
+                // 딤. 패널 밖을 누르면 닫히는 영역이기도 하다(sub.js).
+                &::before {
+                    content: "";
+                    position: fixed; inset: 0; z-index: -1;
+                    background: rgba(0, 0, 0, .4);
+                    backdrop-filter: blur(.2rem);
+                }
+                > nav {
+                    // 패널 본체 — 화면 왼쪽 밖에서 밀려 들어온다.
+                    position: absolute; left: 0; top: 0;
+                    width: 100%; max-width: 32rem; height: 100%;
+                    box-sizing: border-box;
+                    // 마지막 메뉴가 화면 밑단에 붙지 않게 아래 여백을 넉넉히 둔다.
+                    padding: 2.4rem 2.4rem 10rem;
+                    background: set.$gray-0;
+                    overflow-y: auto;
+                    @include set.scrollBar(set.$gray-30);
+                    translate: -100% 0;
+                    transition: translate set.$aniSet;
+                    h1 { font-size: set.$ft-tt-l; padding-right: 4rem; }
+                    .my_lnb { margin-top: 2rem; }
+                }
+                &.active {
+                    visibility: visible; opacity: 1;
+                    > nav { translate: 0 0; }
+                }
+            }
+            // 닫기(X). 패널 안에서만 보인다.
+            .lnbClose {
+                @include set.ico-close(set.$gray-100);
+                // 믹스인이 height:100% / position:relative 를 박으므로 뒤에서 패널 기준 좌표로 되돌린다.
+                position: absolute; right: 2rem; top: 2.4rem;
+                width: 3.2rem; height: 3.2rem;
+                font-size: 0;
+                // 색만 바꾼다 — 믹스인을 다시 부르면 위 좌표·크기까지 덮어쓴다.
+                &:hover::before, &:hover::after { background: set.$mCol-60; }
+            }
+            > .sec_cont {
+                padding: 3rem 0 8rem;
+                // 브레드크럼 줄에 아이콘 자리를 비워 두고(오른쪽), 줄 높이를 버튼과 맞춘다.
+                // 항목이 많아 두 줄로 접혀도 아이콘은 첫 줄 오른쪽에 그대로 있는다.
+                .sec_bread {
+                    display: flex; align-items: center;
+                    min-height: 4rem;
+                    padding-right: 5rem;
+                }
+            }
+        }
+    }
+
+    .contents .lec_grid .grid_item .lec_info .lec_edus .lec_btns { flex-wrap: wrap; margin-bottom: 1rem; }
+    main {
+        height: auto;
+        padding: 4vw 0;
+        .m_inner {
+            flex-direction: column-reverse;
+            .m_thumb { max-width: unset; }
+            .m_copy { width: 100%; padding-top: 0; }
+        }
+    }
+    .subHeader .StepArea .StepTit {
+        padding: 0; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .subHeader .StepArea .StepTit h1 {
+        background: #ffffffd9;
+        padding: 2rem 1rem;
+        line-height: 1.3;
+        font-size: min(4.4vw, 3.6rem);
+        backdrop-filter: blur(3px);
+    }
+
+    // 서브비주얼
+    .subVisual { padding: 5vw; }
+    .subVisual p { font-size: max(3rem, 4vw); text-wrap-style: balance; word-break: keep-all;}
+    .subVisual span { font-size: max(1.6rem, 2.5vw); text-wrap-style: balance; word-break: keep-all; line-height: 1.2;  }
+
+
+    /* 서브콘텐츠 */
+    .contents {
+        > section {
+            .sec_tit > img { display: none; }
+            &:first-of-type .step_inner { margin-top: 0; border-radius: 0; }
+            .sec_left {
+                max-width: unset;
+                &.sec_sticky { position: unset; }
+            }
+            .sec_right {
+                .board_list { border-radius: 0; }
+            }
+            .sec_half { flex-direction: column; align-items: baseline; }
+            
+        }
+    }
+    /* 유저관련 */
+    .userCenter > section .user-message .msg-list { max-width: 100%; }
+    .userCenter > section .user-message { flex-direction: column; }
+    .userCenter > section .user-message .msg-view .msg_cont .msg_rec .textArea { height: 20vw; }
+
+
+    /* 업적관련 */
+    .meritCenter .mer_tit { flex-direction: column; text-align: center; }
+    .meritCenter .mer_tit p { margin-top: 2vw; }
+    .meritCenter .mer_tit p::before { content: none; }
+    .meritCenter .ach_list { grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr)); }
+    .meritCenter .ach_list .ach_item { flex-direction: column; text-align: center; gap: 0; }
+
+    /* 찾아오시는길 */
+    .mapArea {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* 통합검색 — 문구와 검색줄을 세로로 쌓고 가운데로 모은다.
+       높이를 내용에 맡기고(고정 36rem 을 풀고) 위아래 여백으로 잡는다. */
+    .subSearch {
+        .search_head {
+            height: auto;
+            .inner {
+                flex-direction: column; justify-content: center; gap: 3rem;
+                height: auto; padding: 5rem 0;
+                .copy {
+                    flex-grow: 0;
+                    text-align: center;
+                }
+                .util {
+                    flex-grow: 0;
+                    width: 100%;
+                    .search-area {
+                        input, select { height: 7rem; }
+                    }
+                    .search-keyword { justify-content: center; }
+                }
+            }
+        }
+    }
+}
+/* 720px */
+@include set.res-tablet {
+    /* 개인정보처리방침·이용약관 */
+    .sub_policy {
+        .policy_labels .label_grid { grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: .8rem; }
+        .policy_ico { width: 4.4rem; }
+        .policy_sec > h3 { flex-wrap: wrap; .policy_ico { width: 3.2rem; } }
+        .policy_text [class^="tb-grid-"] table { min-width: 48rem; }
+    }
+
+    /* 커리큘럼 뷰 — 사이드 기본정보를 한 열로 편다(2열은 값이 잘린다) */
+    #curriculumWrap .cur_side .side_info { grid-template-columns: minmax(0, 1fr); }
+
+    //박스 
+    .boxArea { padding: 2rem; }
+    .subHeader .stepTit .StepGuide {
+        padding: 4vw 3vw;
+        dl {
+            dt { display: none; }
+            &.active {
+                &::before {
+                    content: "";
+                    width: 1rem; height: 1rem; border-radius: 10rem; background: set.$mCol-60; margin-right: 1.6vw;
+                    // TODO 대응 믹스인 없음: ani-flicker(400ms)
+                }
+            }
+            &:not(:last-child)::after { width: 8px; height: 12px; }
+        }
+    }
+    /* 원격훈련 */
+    .subRemote {
+        i.ico-how,  i.ico-pro { width: 12vw; height: 12vw; }
+        i.ico-how {  top: -6vw; }
+        i.ico-pro { margin-bottom: 4vw; }
+        .remote_how {
+            .ar_checkList {
+                ul { gap: 4vw; }
+                li {
+                    padding-left: 6.4rem;
+                    &::before {
+                        top: -0.5rem;
+                        width: 5rem; height: 5rem;
+                    }
+                }
+            }
+        }
+    }
+    .hrd_policy { display: grid; grid-template-columns: repeat(1, 1fr); }
+    .hrd_qus_wrap {
+        padding: 4vw;
+        border-radius: 1rem;
+    }
+    .hrd_qus {
+        
+        .qus_item {
+            flex-direction: column; gap: 2vw;
+            p {
+                margin-left: 0; border-radius: 1rem;
+            }
+            p::before {
+                border-color: transparent transparent set.$gray-100 transparent;
+                top: -1.6rem;
+            }
+            p::after {
+                border-color: transparent transparent #fff transparent;
+                top: -1.1rem;
+            }
+            p::before, p::after  {
+                margin-left: 0;
+                border-width: 0 1rem 1.4rem 1rem;
+                left: 50%; transform: translateX(-50%); margin-left: 0;
+                
+            }
+        }
+        .qus_item:nth-child(odd) p::before { border-color: transparent transparent set.$mCol-60 transparent; }
+    }
+    .hrd_pro .hrd_pro_slide::before { display: none; }
+    .ap_grid .card_item .front {
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        text-wrap: pretty; word-break: keep-all;
+    }
+    .mapArea .company .cp-btn {
+        flex-direction: column;
+    }
+
+
+    // 커리큘럼
+    .dtiArea summary::before { left: 2.9rem; }
+    .dtiArea summary { padding-left: 6rem; }
+    .dtiArea ul li { padding-left: 2rem; }
+
+    /* 통합검색 — 검색줄을 한 단계 줄인다(높이 6rem · 테두리 .2rem).
+       펼친 목록은 왼쪽 시작점(margin + border + padding + option 여백 = 2rem)을 줄어든 select 여백에 다시 맞춘다. */
+    .subSearch {
+        .search_head {
+            .inner {
+                gap: 2.4rem; padding: 4rem 0;
+                .util {
+                    .search-area {
+                        gap: 1rem;
+                        border-width: .2rem;
+                        input, select { height: 6rem; padding: 0 .6rem; font-size: set.$ft-bd-l; }
+                        select {
+                            width: 13rem;
+                            padding-left: 2rem;
+                            &::picker(select) {
+                                margin-block: .8rem; margin-inline-start: .1rem;
+                                padding: .6rem;
+                                border-radius: 1.4rem;
+                            }
+                            option { padding: .7rem 1.2rem; border-radius: .8rem; }
+                        }
+                        button { width: 3.2rem; margin-right: 1.6rem; background-size: 2.2rem; }
+                    }
+                    .search-keyword { margin-top: 1.2rem; }
+                }
+            }
+        }
+        .search_result { padding-bottom: 2.4rem; margin-bottom: 2.4rem; }
+        #search_all {
+            .search_items {
+                &:not(:last-child) { padding-bottom: 4rem; margin-bottom: 4rem; }
+            }
+        }
+        .search_items {
+            .search_lists {
+                dl { padding: 2rem; gap: 1rem; }
+            }
+        }
+    }
+
+}
+/* 535px */
+@include set.res-mo-tab {
+    /* 개인정보처리방침·이용약관 — 라벨 3열 고정, 표는 옆으로 흘려 보낸다(.tb-grid 의 overflow-x) */
+    .sub_policy {
+        .policy_labels .label_grid { grid-template-columns: repeat(3, 1fr); }
+        .policy_intro { border-left-width: .3rem; }
+    }
+
+    // 커리큘럼 뷰 — 좁은 폭에서 카드 안쪽 여백을 한 단계 줄인다.
+    #curriculumWrap .cur_head { padding: 2rem 1.6rem; }
+    #curriculumWrap .cur_panel { padding: 2rem 1.6rem; }
+
+    // 열기 아이콘 — 좁은 화면에서 한 단계 줄인다. 브레드크럼 줄 높이도 같이 맞춘다.
+    .sub_mypage > section > .bt-lnb { width: 3.6rem; height: 3.6rem; }
+    .sub_mypage > section > .sec_cont .sec_bread { min-height: 3.6rem; padding-right: 4.4rem; }
+
+    // 마이페이지 LNB 패널 — 화면이 좁아 32rem 패널이 본문을 다 덮으므로 폭을 비율로 잡는다.
+    .sub_mypage > section > aside > nav {
+        max-width: 80%;
+        // 아래 여백은 패널 규칙(10rem)을 유지한다 — 단축표기로 덮으면 마지막 메뉴가 밑단에 붙는다.
+        padding: 2rem 2rem 10rem;
+        .my_lnb a { padding: 1rem 1.2rem 1rem 4rem; }
+    }
+
+    .subHeader .subTit { height: 10rem; flex-direction: column; gap: 2rem; height: auto;}
+    .subHeader .subTit h1 { font-size: 3rem; }
+    .myCont .tabBtn { gap: 2.4rem; margin-bottom: 2.4rem; }
+    .myCont .tabBtn li { font-size: 1.8rem; }
+    .contents {
+        .lec_grid { grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr)); gap: 1rem; }
+        > section {
+            .sec_inner {
+                gap: 2rem;
+            }
+        }
+    }
+    .subRemote {
+        .remote_pro {
+            .remote_step {
+                grid-template-columns: repeat(1, 1fr);
+                padding: 3vw 3vw 3vw 8vw;
+                dl {
+                    &:nth-child(odd), 
+                    &:nth-child(even) {
+                        border: none;
+                        padding-left: 20vw;
+                        text-align: left;
+                        
+                        &::before { position: absolute; left: 0; width: 15vw; top: 50%; transform: translateY(-50%); margin: 0; }
+                    }
+                    dt, dd { word-break: keep-all; text-wrap: pretty;}
+                }
+            }
+        } 
+    }
+    /* 어필 그리드형 */
+    .ap_grid { grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));  }
+
+    /* 통합검색 — 320px 까지 검색줄(select + input + 버튼)이 한 줄에 들어가도록 줄인다(높이 5rem).
+       펼친 목록 시작점은 select 여백 1.6rem 에 맞춘다(border .1 + padding .6 + option .9). */
+    .subSearch {
+        .search_head {
+            .inner {
+                gap: 2rem; padding: 3rem 0;
+                .copy {
+                    em { font-size: set.$ft-bd-l; }
+                    h2 { font-size: set.$ft-hd-l; margin: .6rem 0 1.2rem; }
+                    p  { font-size: set.$ft-bd-m; line-height: 1.5; }
+                }
+                .util {
+                    .search-area {
+                        gap: .4rem;
+                        input, select { height: 5rem; font-size: set.$ft-bd-m; }
+                        select {
+                            width: 10rem;
+                            padding-left: 1.6rem;
+                            &::picker(select) { margin-inline-start: 0; }
+                            option { padding: .7rem .9rem; }
+                        }
+                        button { margin-right: 1.2rem; background-size: 2rem; }
+                    }
+                    // 인기검색어 — 태그가 두 줄로 넘어가도 제목이 첫 줄 태그와 나란하게 위에 붙인다.
+                    .search-keyword {
+                        align-items: flex-start;
+                        p { display: flex; align-items: center; height: 2.6rem; font-size: set.$ft-bd-s; }
+                        .items {
+                            em { height: 2.6rem; padding: .4rem 1rem; font-size: set.$ft-bd-s; }
+                        }
+                    }
+                }
+            }
+        }
+        // 분류 탭 — 탭 3~4개가 좌우 스크롤 없이 한 줄에 들어가도록 안쪽 여백을 줄인다(넘치면 .sec_tabmenu 가 스크롤로 흘린다).
+        .sec_tabmenu {
+            margin-bottom: 2.4rem;
+            .tab-l.nar {
+                li {
+                    height: 4.2rem; font-size: set.$ft-bd-m;
+                    a, button { padding: 0 1.2rem; }
+                }
+            }
+        }
+        .search_result {
+            padding-bottom: 2rem; margin-bottom: 2rem;
+            p { font-size: set.$ft-tt-s; }
+        }
+        #search_all {
+            .search_items {
+                &:not(:last-child) { padding-bottom: 3rem; margin-bottom: 3rem; }
+            }
+        }
+        // 목록 — 경로와 작성일을 두 줄로 쌓는다(한 줄에 두면 320px 에서 넘친다). 사이 구분선은 줄이 갈리므로 뺀다.
+        .search_items {
+            .search_lists {
+                dl {
+                    padding: 1.6rem;
+                    dd {
+                        flex-direction: column; align-items: flex-start;
+                        .get_data {
+                            &::before { display: none; }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+/* 335px */
+@include set.res-mobile {
+
+
+    .contents .lec_grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .infoBox .info_progress .info_user menu {
+        width: 100%; flex-wrap: wrap;
+        a.bt-rd-m { width: 100%; }
+    }
+    /* 업적관련 */
+    .meritCenter .ach_grid,
+    .meritCenter .ach_list {
+        grid-template-columns: repeat(1, 1fr);
+        .ach_item {
+            .thumb { width: 8rem; height: 8rem; }
+        }
+    } 
+}

@@ -1,0 +1,87 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+@use "sass:color";
+
+$pgSize: (
+    xs: ( h:0.6rem, p: 0.1rem, fs: set.$ft-bd-xs, ),
+     s: ( h:1.0rem, p: 0.2rem, fs: set.$ft-bd-s,  ),
+     m: ( h:1.4rem, p: 0.2rem, fs: set.$ft-bd-m,  ),
+     l: ( h:1.8rem, p: 0.3rem, fs: set.$ft-bd-l,  ),
+    xl: ( h:2.2rem, p: 0.3rem, fs: set.$ft-tt-s,  ),
+);
+// 진행률 막대 색. c = 채워진 막대, bg = 그 뒤에 깔리는 전체 바.
+// 전체 바는 테두리 대신 같은 계열의 옅은 색을 깔아 남은 분량이 보이게 한다.
+// 색은 5 단계와 10 단계 사이 — 10 은 눈에 띄고 5 는 거의 안 보여, 두 토큰의 중간값을 쓴다.
+// (팔레트에 없는 단계라 계산식 대신 고정 hex 로 적는다. 정식 단계가 생기면 토큰으로 바꾼다.)
+// base 는 '비교 기준(이전 값)' 이다. 사전/사후처럼 두 막대를 나란히 볼 때
+// 기준 쪽을 흐리게 둬야 지금 값이 눈에 먼저 들어온다.
+$pgState: (
+    fail:   ( c:set.$sst-dCol-60, bg:#fee9e9 ),
+    comple: ( c:set.$sst-sCol-60, bg:#e8fde4 ),
+    warning:     ( c:set.$sst-wCol-60, bg:#fef8e9 ),
+    ne:     ( c:set.$gray-100, bg:#f5f5fa ),
+    base:   ( c:set.$gray-30, bg:#f5f5fa ),
+);
+// 상태를 안 붙였을 때(기본 = 포인트 색) 쓰는 한 쌍.
+$pgBase: set.$mCol-60;
+$pgBaseTrack: #f0f4ff;
+[class^="pg-"] {
+    width: 100%;
+    &:has(dl) {
+        display: flex; flex-direction: column; gap: 1rem;
+        > dl {
+            display: flex; align-items: center; gap: min(6vw, 4rem); justify-content: space-between;
+            dt, dd { color: set.$gray-100; line-height: 1.4; }
+            dt { font-weight: set.$fw-b; }
+            dd { font-weight: set.$fw-m; }
+        }
+    }
+}
+@each $size, $prop in $pgSize {
+    .pg-#{$size} {
+        > dl {
+            dt, dd { font-size: map.get($prop, fs); }
+        }
+        progress {
+            appearance: none;
+            width: 100%;
+            height: map.get($prop, h);
+            border-radius: 100rem;
+            padding: map.get($prop, p);
+            // 테두리 없이 전체 바를 옅은 색으로 깐다.
+            // 요소 자체에도 같은 색을 줘야 ::-webkit-progress-bar 를 모르는 브라우저(파이어폭스)에서도 트랙이 보인다.
+            border: none;
+            background: $pgBaseTrack;
+            overflow: hidden;
+            &::-webkit-progress-bar {
+                background: $pgBaseTrack;
+            }
+            &::-webkit-progress-value {
+                background: $pgBase;
+                border-radius: 100rem;
+                transition: all set.$aniSet;
+            }
+            // 파이어폭스는 값 막대를 이 가상요소로 그린다(트랙은 위 background).
+            &::-moz-progress-bar {
+                background: $pgBase;
+                border-radius: 100rem;
+            }
+        }
+        @each $state, $color in $pgState {
+            &.#{$state} {
+                progress {
+                    background: map.get($color, bg);
+                    &::-webkit-progress-bar { background: map.get($color, bg); }
+                    &::-webkit-progress-value { background: map.get($color, c); }
+                    &::-moz-progress-bar { background: map.get($color, c); }
+                }
+            }
+        }
+
+
+    }
+}
+
+
+

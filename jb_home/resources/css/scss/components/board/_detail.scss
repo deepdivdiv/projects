@@ -1,0 +1,290 @@
+@charset "UTF-8";
+@use '../../utils' as set;
+@use "sass:map";
+
+
+
+.board_view { 
+    border-top: .2rem solid set.$gray-100; 
+    min-width: 0;
+    [hidden] { display: none; }
+
+    .view_head {
+        padding: 3rem 0;
+        border-bottom: .1rem solid set.$gray-20;
+        > em { display: inline-flex; margin-bottom: 1.2rem; }
+        h3 { font-size: set.$ft-tt-l; font-weight: set.$fw-b; color: set.$gray-100; line-height: 1.4; overflow-wrap: anywhere; }
+        .head_info {
+            display: flex; flex-wrap: wrap; gap: 1rem 2.4rem; margin-top: 2rem;
+            font-size: set.$ft-bd-m;
+            dl { 
+                display: flex; gap: .8rem; 
+                dt { color: set.$gray-60; }
+                dd { color: set.$gray-90; }
+            }
+        }
+    }
+    .view_body {
+        min-height: 30rem; padding: 4rem 0;
+        font-size: set.$ft-bd-l; color: set.$gray-90; line-height: 1.8; overflow-wrap: anywhere;
+        p + p { margin-top: 2rem; }
+    }
+    .view_sign {
+        border-top: .1rem solid set.$gray-20; margin-top: 5rem;
+        > div {
+            display: grid; grid-template-columns: 7rem minmax(0, 1fr) auto; align-items: baseline; gap: 1.6rem;
+            padding: 2rem 3rem; border-bottom: .1rem solid set.$gray-20;
+            font-size: set.$ft-bd-m;
+        }
+        .sign_label { color: set.$gray-100; font-weight: set.$fw-b; }
+        a {
+            color: set.$gray-90; overflow-wrap: anywhere;
+            &:hover, &:focus-visible { color: set.$mCol-60; text-decoration: underline; }
+        }
+        .sign_empty, .sign_data { color: set.$gray-60; }
+    }
+    .view_file {
+        dl {
+            display: grid; grid-template-columns: 22rem 1fr;
+            border: {
+                top:    .1rem solid set.$gray-20;
+                bottom: .1rem solid set.$gray-20;
+            };
+            dt, dd { font-size: set.$ft-bd-m; }
+            dt {
+                padding: 2rem;
+                background: set.$gray-5;
+                font-weight: 600;
+                text-align: center;
+                 color: set.$gray-100;
+            }
+            dd {
+                padding: 2rem;
+                color: set.$gray-60;
+                // 첨부 링크 — 한 줄에 하나씩 내려가고, 앞에 ico-clip 아이콘을 단다.
+                a {
+                    display: block;
+                    &:hover {
+                        font-weight: 500;
+                        color: set.$mCol-60;
+                    }
+                    &::before {
+                        content: ''; display: inline-block;
+                        width: 1.6rem; height: 1.5rem; margin-right: .6rem; vertical-align: -.2rem;
+                        background: set.icon(ico-clip, set.$mCol-60) no-repeat center / contain;
+                    }
+                    & + a { margin-top: .6rem; }
+                }
+            }
+        }
+        &:has(+ .view_sign) {
+            dl {
+                border-bottom: none;
+            }
+        }
+        & + .view_sign {
+            margin-top: 0;
+        }
+    }
+    .view_btns {
+        display: flex; justify-content: center; margin-top: 4rem;
+        a { min-width: 14rem; }
+    }
+
+    // 머리의 라벨이 둘 이상일 때(1:1 문의 — 문의유형 + 답변상태) 한 줄에 나란히 둔다.
+    .view_head .head_label {
+        display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem;
+    }
+
+    .view_reply {
+        margin-top: 4rem;
+        border: .1rem solid set.$mCol-20; border-radius: .4rem;
+        background: set.$mCol-5;
+        overflow: hidden;
+        .reply_head {
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .8rem 1.6rem;
+            padding: 2rem 2.4rem;
+            border-bottom: .1rem solid set.$mCol-20;
+            h4 { font-size: set.$ft-tt-s; font-weight: set.$fw-b; color: set.$mCol-60; }
+            dl {
+                display: flex; align-items: center; gap: .8rem;
+                font-size: set.$ft-bd-s;
+                dt { font-weight: set.$fw-b; color: set.$gray-100; }
+                dd { color: set.$gray-60; }
+            }
+        }
+        .reply_body {
+            display: grid; grid-template-columns: 16rem minmax(0, 1fr);
+            padding: 2.4rem;
+        }
+        .reply_writer {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
+            padding-right: 2.4rem;
+            border-right: .1rem solid set.$mCol-20;
+            text-align: center;
+            .writer_img {
+                display: flex; align-items: center; justify-content: center;
+                width: 7.2rem; height: 7.2rem; margin-bottom: .8rem;
+                border: .1rem solid set.$mCol-20; border-radius: 50%;
+                background: set.$gray-0;
+                img { width: 3.6rem; height: auto; }
+            }
+            strong { font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100; }
+            span { font-size: set.$ft-bd-s; color: set.$gray-60; }
+        }
+        // 답변 본문 — 에디터 값이 붙으면 .sun-editor-editable 이 이 안에 든다.
+        .reply_cont {
+            padding-left: 2.4rem;
+            font-size: set.$ft-bd-m; color: set.$gray-90; line-height: 1.8; overflow-wrap: anywhere;
+            p + p { margin-top: .2rem; }
+
+            // 라이브러리(suneditor-contents.min.css)가 이 클래스 자체에 주는 흰 배경(#fff)·안쪽 여백(1.5em)·
+            // 글자(16px/#333/Helvetica Neue)를 걷어낸다. 공지·자료실은 흰 페이지 위라 티가 안 나지만
+            // 답변 카드는 민트(mCol-5)라 흰 상자가 그대로 얹히고 글자도 본문과 따로 논다.
+            // 하위 요소(ul·ol·table·blockquote) 규칙은 건드리지 않는다 — reset 의 list-style:none 을 덮어
+            // 불릿·번호를 되살리는 것이 그 규칙들이라, 함께 걷어내면 답변의 목록이 무너진다.
+            // 라이브러리가 그리는 상자 배경을 스킨에 맞춰 걷어내는 방식은 _table.scss 의 에디터 표와 같다.
+            .sun-editor-editable {
+                padding: 0;
+                background: transparent;
+                font-family: inherit; font-size: inherit; color: inherit;
+            }
+        }
+        .reply_empty {
+            padding: 3.2rem 2.4rem;
+            font-size: set.$ft-bd-m; color: set.$gray-60; text-align: center;
+        }
+    }
+
+    // 등록된 추가 문의 — 운영자 답변(.view_reply)과 같은 [머리 | 작성자·본문] 골격이되, 학습자 쪽이라 회색조로 구분한다.
+    // 머리는 [제목+상태 라벨 | 등록일 · 세로선 · [수정][삭제]], 작성자 칸은 ico-user 아이콘 원 + 이름 + '문의자'.
+    .view_appended {
+        margin-top: 2.4rem;
+        border: .1rem solid set.$gray-20; border-radius: .4rem;
+        background: set.$gray-0;
+        overflow: hidden;
+        // 스레드로 이어질 때(추가 문의 → 추가 답변 → 추가 문의)는 첫 답변보다 좁게 붙인다.
+        & + .view_appended, & + .view_reply { margin-top: 1.6rem; }
+        .appended_head {
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .8rem 1.6rem;
+            padding: 1.6rem 2.4rem;
+            border-bottom: .1rem solid set.$gray-20;
+            background: set.$gray-5;
+        }
+        .appended_title {
+            display: flex; align-items: center; gap: .8rem;
+            h4 { font-size: set.$ft-tt-s; font-weight: set.$fw-b; color: set.$mCol-60; }
+        }
+        .appended_meta {
+            display: flex; align-items: center; gap: 1.6rem;
+            dl {
+                display: flex; align-items: center; gap: .8rem;
+                font-size: set.$ft-bd-s;
+                dt { font-weight: set.$fw-b; color: set.$gray-100; }
+                dd { color: set.$gray-60; }
+            }
+        }
+        .appended_btns {
+            display: flex; gap: .8rem;
+            padding-left: 1.6rem;
+            border-left: .1rem solid set.$gray-20;
+        }
+        .appended_body {
+            display: grid; grid-template-columns: 16rem minmax(0, 1fr);
+            padding: 2.4rem;
+        }
+        .appended_writer {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
+            padding-right: 2.4rem;
+            border-right: .1rem solid set.$gray-20;
+            text-align: center;
+            .writer_img {
+                display: flex; align-items: center; justify-content: center;
+                width: 7.2rem; height: 7.2rem; margin-bottom: .8rem;
+                border: .1rem solid set.$gray-20; border-radius: 50%;
+                background: set.$gray-5;
+                i { display: block; width: 3.2rem; height: 3.2rem; background: set.icon(ico-user, set.$gray-40) no-repeat center / contain; }
+            }
+            strong { font-size: set.$ft-bd-m; font-weight: set.$fw-b; color: set.$gray-100; }
+            span { font-size: set.$ft-bd-s; color: set.$gray-60; }
+        }
+        // 문의 본문 — 학습자 입력이라 th:text 로 담긴 값의 개행을 p 안에서 그대로 살린다
+        // (pre-line 을 바깥에 걸면 p 사이의 줄바꿈 공백까지 빈 줄로 남는다).
+        .appended_cont {
+            padding-left: 2.4rem;
+            font-size: set.$ft-bd-m; color: set.$gray-90; line-height: 1.8; overflow-wrap: anywhere;
+            p { white-space: pre-line; }
+            p + p { margin-top: 1.6rem; }
+        }
+    }
+
+    // 추가 문의 — 답변 아래에서 같은 문의에 내용을 덧붙이는 입력 영역.
+    // 제목 옆 안내 한 줄, 글자수 카운터가 든 textarea, 우측 정렬 [문의 등록].
+    .view_append {
+        margin-top: 4rem;
+        .append_head {
+            display: flex; align-items: baseline; flex-wrap: wrap; gap: .4rem 1.2rem;
+            margin-bottom: 1.2rem;
+            h4 { font-size: set.$ft-tt-s; font-weight: set.$fw-b; color: set.$gray-100; }
+            p { font-size: set.$ft-bd-s; color: set.$gray-60; }
+        }
+        // 카운터를 입력칸 오른쪽 아래에 겹쳐 두므로 그만큼 아래 여백을 남긴다.
+        .append_field {
+            position: relative;
+            textarea { min-height: 12rem; padding-bottom: 3.6rem; line-height: 1.6; }
+            .append_count {
+                position: absolute; right: 1.6rem; bottom: 1.2rem;
+                font-size: set.$ft-bd-xs; color: set.$gray-60; line-height: 1;
+                em { font-style: normal; font-weight: set.$fw-b; color: set.$gray-100; }
+            }
+        }
+        .append_btns {
+            display: flex; justify-content: flex-end; margin-top: 1.6rem;
+            button { min-width: 12rem; }
+        }
+    }
+
+    @include set.res-tablet() {
+        .view_head { 
+            padding: 2.4rem 1.6rem; 
+            .head_info { gap: .8rem 1.6rem; }
+        }
+        .view_body { min-height: 24rem; padding: 3rem 1.6rem; }
+        .view_sign {
+            > div { grid-template-columns: 5rem minmax(0, 1fr); padding: 1.6rem; gap: .8rem 1.2rem; }
+            .sign_data { grid-column: 2; }
+        }
+        .view_btns { margin-top: 3rem; }
+        .view_reply {
+            margin-top: 3rem;
+            .reply_head { padding: 1.6rem; }
+            .reply_body { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; padding: 1.6rem; }
+            .reply_writer {
+                flex-direction: row; justify-content: flex-start; gap: .4rem .8rem;
+                padding: 0 0 1.6rem; border-right: 0; border-bottom: .1rem solid set.$mCol-20;
+                text-align: left;
+                .writer_img { width: 4.8rem; height: 4.8rem; margin: 0 .4rem 0 0; img { width: 2.4rem; } }
+            }
+            .reply_cont { padding-left: 0; }
+        }
+        .view_appended {
+            .appended_head { padding: 1.2rem 1.6rem; }
+            .appended_meta { flex-wrap: wrap; gap: .8rem 1.2rem; }
+            .appended_btns { padding-left: 1.2rem; }
+            .appended_body { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; padding: 1.6rem; }
+            .appended_writer {
+                flex-direction: row; justify-content: flex-start; gap: .4rem .8rem;
+                padding: 0 0 1.6rem; border-right: 0; border-bottom: .1rem solid set.$gray-20;
+                text-align: left;
+                .writer_img { width: 4.8rem; height: 4.8rem; margin: 0 .4rem 0 0; i { width: 2.2rem; height: 2.2rem; } }
+            }
+            .appended_cont { padding-left: 0; }
+        }
+        .view_append {
+            margin-top: 3rem;
+            .append_btns button { flex: 1 1 0; min-width: 0; }
+        }
+    }
+}
+
+

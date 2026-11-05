@@ -1,0 +1,227 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+// [개발 작성] 학습자 구분 선택(views/user/learner_type.html) 전용 규칙 — 퍼블 산출물이 아니다.
+//
+// 미지정 회원(learner_type_cd IS NULL)이 로그인하면 사용자 사이트의 모든 요청이 이 화면으로 돌아오고
+// (LearnerTypeGateInterceptor), 화면은 닫을 수 없는 모달 하나만 띄운다. 모달 껍데기는 퍼블 공통 레이어팝업
+// (.layerPop/.layerItem — components/container/_modal.scss)을 그대로 쓰고, 그 안의 구분 카드·안내문·버튼 줄만 여기서 짓는다.
+// <b>퍼블 원본(components/**·pages/**)을 고치지 않는다</b> — 고치면 퍼블이 그 파일을 다시 넘길 때 우리 추가분이 조용히
+// 사라진다(회원가입 pages/_join_extra.scss · 회원정보수정 pages/_mypage_extra.scss 와 같은 방침).
+// 컴파일 산출물은 sample/css/learner-type.css 이며, npm 빌드가 무관한 .css 까지 다시 쓰므로 손으로 맞춰 둔다.
+//
+//   1) .learner-type-radios  구분 보기를 '고르는 카드'로 그린다. 회원가입(.joinWrap .learner-type-radios)과 같은 모양이지만
+//                            그 규칙은 .joinWrap 안으로 한정돼 있어 여기서 다시 적는다. 모달은 폭이 좁고 보기 문구가 길어
+//                            가로 두 칸이 아니라 세로로 쌓는다.
+//   2) .learner_type_note    구분이 가르는 것과 '서류는 저장 뒤 마이페이지에서' 안내. 모달 안이라 본문보다 한 단계 작게 둔다.
+//   3) .learner_type_logout  [로그아웃] — 닫기가 아니라 '고를 수 없는 사람이 갇히지 않게' 두는 길이라, 저장 버튼 줄과
+//                            붙지 않게 떼어 놓고 폭도 꽉 채우지 않는다.
+//
+// sub.css·dev-override.css 뒤에 읽히므로 같은 구체도면 이 파일이 이긴다.
+
+// 저장 완료 안내만 가운데로 모은다(퍼블 공통 모달 #modalArea 와 같은 인상) — .layerPop 은 왼쪽 정렬이 기본이고,
+// 고르는 화면은 입력 폼이라 그 기본을 그대로 쓴다(라벨·안내가 가운데로 모이면 어느 칸의 설명인지 흐려진다).
+// <b>클래스를 .modalItem 으로 바꾸거나 id 를 modalArea 로 두지 않는다</b>: 그 규격은 #modalArea 안에만 걸려 있어 클래스만
+// 바꾸면 모양이 잡히지 않고, id 를 쓰면 퍼블 common.js 의 getSstModal 이 이 요소를 자기 모달로 잡아 '바탕 클릭 시 닫기'를
+// 붙인다 — 닫을 수 없어야 하는 화면이라 그 순간 게이트가 뚫린다.
+.learner_type_gate .learner_type_saved {
+    text-align: center;
+	max-width: 67rem;
+}
+
+.learner_type_gate .learner-type-radios {
+    display: flex;
+    // 보기 문구가 길어(공고 문구 그대로) 한 줄에 둘을 두면 두 줄로 접힌다 — 모달에서는 세로로 쌓는다.
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 2rem;
+
+    > .sel-m {
+        display: flex;
+    }
+
+    // 카드 모양은 .sel-m 이 아니라 label 에 건다 — .sel-m 에 걸면 안쪽 여백이 라벨 바깥이라
+    // 테두리 안을 눌러도 선택되지 않는 자리가 생긴다(회원가입과 같은 이유).
+    > .sel-m label {
+        flex: 1;
+        gap: 1rem;
+        // 디자인시스템이 보기 안쪽에 flex-wrap:wrap 을 주는데(.sel > *), 문구가 길어지면 점과 글자가 서로 다른 줄로 갈린다.
+        flex-wrap: nowrap;
+        padding: 1.8rem 2rem;
+        border: .1rem solid set.$gray-30;
+        border-radius: 1rem;
+        background: set.$gray-0;
+        color: set.$gray-90;
+        font-size: set.$ft-bd-l;
+        line-height: 1.4;
+        cursor: pointer;
+        transition: all set.$aniSet;
+
+        // 문구가 두 줄로 접혀도 라디오 점이 찌그러지지 않게 한다.
+        i { flex-shrink: 0; }
+    }
+
+    > .sel-m label:hover {
+        border-color: set.$mCol-50;
+        background: set.$mCol-5;
+    }
+    // 아직 안 고른 보기의 미리보기 점도 메인 컬러로(기본값은 회색이라 카드 색과 따로 논다).
+    > .sel-m input:not(:checked) + label:hover i::before {
+        background-color: set.$mCol-50;
+    }
+
+    // 고른 카드. 선은 border-width 가 아니라 inset box-shadow 로 굵게 그린다 — 테두리 두께가 바뀌면 카드 크기가 흔들린다.
+    > .sel-m input:checked + label {
+        border-color: set.$mCol-60;
+        box-shadow: 0 0 0 .1rem set.$mCol-60 inset;
+        background: set.$mCol-10;
+        color: set.$mCol-80;
+        font-weight: set.$fw-b;
+    }
+    > .sel-m input:checked + label i {
+        box-shadow: 0 0 0 .6rem set.$mCol-60 inset;
+    }
+
+    // 커스텀 라디오는 실제 input 을 감추고 라벨의 i 를 대신 그리므로 포커스가 가도 화면에 표시가 없다.
+    // 키보드로만 고르는 사람이 지금 어느 보기에 있는지 보이게 한다(회원가입과 같은 보정).
+    > .sel-m input:focus + label i {
+        outline: .2rem solid set.$mCol-60;
+        outline-offset: .3rem;
+    }
+}
+
+// 구분별 제출 서류 묶음 — 고른 구분의 것만 보인다(표시는 화면 스크립트가 style 로 켜고 끈다).
+.learner_type_gate .learner_type_docs {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: .1rem solid set.$gray-20;
+
+    .learner_type_docs_title {
+        color: set.$gray-100;
+        font-size: set.$ft-bd-m;
+        font-weight: set.$fw-b;
+    }
+}
+
+// 서류 한 칸(라벨 + 첨부 컴포넌트 + 안내·오류). 첨부는 회원가입·회원정보수정과 같은 컴포넌트(.file-drop-s / .file-list)를 쓴다.
+.learner_type_gate .learner_type_file {
+    margin-top: 1.6rem;
+
+    > label {
+        display: block;
+        margin-bottom: .6rem;
+        color: set.$gray-90;
+        font-size: set.$ft-bd-m;
+        font-weight: set.$fw-b;
+
+        // 필수 표식(*)은 라벨 글자 뒤에 붙인다(퍼블 .imp 는 빨간 별 한 글자).
+        .imp { margin-left: .2rem; }
+    }
+
+    // 오류 칸 표시 — 퍼블 .set__er 와 같은 뜻으로 드롭존·목록에 빨간 테두리를 두른다.
+    &.set__er .file-drop-s,
+    &.set__er .file-list {
+        outline: .1rem solid set.$sst-dCol-60;
+        outline-offset: .3rem;
+    }
+}
+
+// 드롭존은 한 치수 줄인다 — 퍼블 기본값(.file-drop-s 는 padding 3rem · 제목 2rem)으로 두면
+// 서류 세 칸이 들어가는 이 모달이 화면을 넘겨 스크롤만 길어진다. 모양·동작은 그대로다.
+.learner_type_gate .file-drop-s {
+    padding: 1.6rem;
+
+    p { font-size: set.$ft-bd-l; }
+
+    span {
+        margin-bottom: .8rem;
+        font-size: set.$ft-bd-s;
+    }
+}
+
+.learner_type_gate .learner_type_file_help {
+    margin-top: .4rem;
+    color: set.$gray-50;
+    font-size: set.$ft-bd-s;
+}
+
+// 첨부 컴포넌트가 쓰는 한 줄 상태칸(확장자·용량 오류). 비어 있으면 자리도 차지하지 않는다.
+.learner_type_gate .learner_type_file_status {
+    margin-top: .4rem;
+    color: set.$gray-50;
+    font-size: set.$ft-bd-s;
+
+    &:empty { display: none; }
+
+    &.is-error { color: set.$sst-dCol-60; }
+}
+
+.learner_type_gate .learner_type_note {
+    margin-top: 1.6rem;
+    color: set.$gray-50;
+    font-size: set.$ft-bd-s;
+    line-height: 1.5;
+
+    > li {
+        position: relative;
+        padding-left: 1rem;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0; top: .8rem;
+            width: .3rem; height: .3rem;
+            border-radius: 100rem;
+            background: set.$gray-50;
+        }
+    }
+
+    > li + li {
+        margin-top: .4rem;
+    }
+
+    strong {
+        color: set.$gray-90;
+        font-weight: set.$fw-b;
+    }
+}
+
+.learner_type_gate .learner_type_error {
+    margin-top: 1.2rem;
+}
+
+// 저장 완료 안내의 아이콘. 퍼블 레이어팝업(.layerPop)에는 모달·다이얼로그와 달리 아이콘 자리 규격이 없어
+// (그 둘은 #modalArea/#dialogArea 에 따로 적혀 있다) 여기서 같은 크기로 맞춘다 — 모양(배경 아이콘)은 퍼블 믹스인이 준다.
+.learner_type_gate .layerItem > i {
+    width: 5rem;
+    aspect-ratio: 1/1;
+    display: block;
+    margin: 0 auto 1rem;
+    border-radius: 100rem;
+}
+
+// 저장 완료 뒤의 '잘못 고른 경우' 안내. 퍼블 공통 모달의 안내 줄과 같은 모양으로 둔다 — 바탕 상자 없이
+// 본문 아래 붉은 글씨 한 줄(놓치면 안 되는 안내라 색으로만 눈에 띄게 한다). 화면에 style 을 박지 않고 여기서 준다.
+//
+// <b>선택자를 짧게 적으면 덮이지 않는다</b> — 퍼블 규칙이 `.layerPop .layerItem > span`(클래스 2 + 요소 1)이라
+// 클래스 둘짜리(.learner_type_gate .learner_type_saved_note)보다 구체도가 높아 색·크기·여백을 그쪽이 가져간다.
+// 뒤에 읽히는 것만으로는 이기지 못하므로 같은 모양으로 한 단계 좁혀 적는다(회원정보수정 _mypage_extra.scss 와 같은 이유).
+.learner_type_gate .layerItem > span.learner_type_saved_note {
+    display: block;
+    margin-top: 1.2rem;
+    color: set.$sst-dCol-60;
+    font-size: set.$ft-bd-m;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+// [로그아웃] 은 저장과 한 줄에 나란히 두지 않는다 — 나란히 두면 '취소' 처럼 보여 닫고 나갈 수 있다는 오해를 준다.
+// 대신 아래에 쌓되 <b>폭은 저장과 같게</b> 맞춘다(.dlBtn 의 버튼은 flex:1 1 0 으로 줄을 꽉 채운다) —
+// 폭이 다르면 둘이 한 묶음으로 보이지 않고 로그아웃만 덧붙인 것처럼 어긋나 보인다.
+.learner_type_gate .learner_type_logout {
+    margin-top: 1.2rem;
+
+    > button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,367 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+
+/* ------------------------
+           공통
+----------------------- */
+
+
+
+/* ------------------------
+        메인 비주얼
+----------------------- */
+main {
+    background: url(set.$img-url + 'main/mainVisual.png') no-repeat center center / cover;
+    .m_inner {
+        @include set.base-width();
+        display: flex; align-items: center; gap: 2rem;
+        justify-content: space-between;
+        padding: 5rem 0;
+    }
+    .m_copy {
+        flex-grow: 1;
+        p {
+            font-size: set.$ft-tt-l;
+            font-weight: 500;
+            color: set.$gray-100;
+            letter-spacing: -0.06rem;
+            margin-bottom: 1.4rem;
+        }
+        h1 {
+            font-size: set.$ft-dp-m;
+            font-weight: 600;
+            color: set.$gray-100;
+            font-family: set.$ft-point;
+            line-height: 1.2;
+            margin-bottom: 4rem;
+            strong {
+                font-size: set.$ft-dp-l;
+                font-weight: 700;
+                color: set.$mCol-60;
+                display: block;
+            }
+        }
+        a, button { border-radius: 100rem; }
+    }
+    .m_login {
+        border-radius: 1rem;
+        display: flex; flex-direction: column;
+        gap: 3rem;
+        width: 100%; max-width: 50rem;
+        background: rgba(set.$gray-0, 0.86);
+        backdrop-filter: blur(4px);
+        padding: 8rem 4rem;
+        text-align: center;
+        > p {
+            font-size: set.$ft-dp-m;
+            font-weight: 700;
+            font-family: set.$ft-point;
+            color: set.$mCol-60;
+            line-height: 1;
+        }
+        .lg_form {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        .lg_btns {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            a, button {
+                width: 100%;
+            }
+        }
+        .login_id, .login_pw {
+            height: 6.4rem;
+            border: .1rem solid set.$mCol-30;
+            border-radius: .4rem;
+            font-size: set.$ft-bd-l;
+            color: set.$gray-100;
+            padding-left: 4.6rem;
+            outline: 0rem solid rgba(set.$mCol-60, .2);
+            transition: all 300ms ease-in-out;
+            &::placeholder {
+                color: set.$gray-40;
+                font-weight: 300;
+            }
+            &:focus-visible {
+                outline-width: .4rem;
+            }
+        }
+        .login_id {
+            background: set.$mCol-5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 17 17' fill='none'%3E%3Cpath d='M11.3717 8.92958C12.1887 8.2868 12.785 7.40535 13.0777 6.40787C13.3704 5.41038 13.345 4.34647 13.0048 3.36414C12.6647 2.3818 12.0269 1.52991 11.1801 0.92696C10.3333 0.324012 9.31957 0 8.28003 0C7.24048 0 6.22679 0.324012 5.37997 0.92696C4.53315 1.52991 3.89531 2.3818 3.5552 3.36414C3.21509 4.34647 3.18962 5.41038 3.48233 6.40787C3.77503 7.40535 4.37137 8.2868 5.18836 8.92958C3.78842 9.49045 2.56693 10.4207 1.6541 11.6212C0.741275 12.8216 0.171329 14.2473 0.00502653 15.7462C-0.00701131 15.8557 0.00262365 15.9664 0.0333811 16.0721C0.0641385 16.1778 0.115416 16.2765 0.184286 16.3624C0.323376 16.5358 0.52568 16.6469 0.746693 16.6712C0.967707 16.6956 1.18933 16.6311 1.3628 16.492C1.53627 16.3529 1.64738 16.1506 1.67169 15.9296C1.85468 14.3006 2.63143 12.7961 3.85354 11.7036C5.07565 10.6111 6.65744 10.0071 8.29669 10.0071C9.93595 10.0071 11.5177 10.6111 12.7398 11.7036C13.962 12.7961 14.7387 14.3006 14.9217 15.9296C14.9444 16.1343 15.0421 16.3235 15.1959 16.4604C15.3498 16.5974 15.549 16.6725 15.755 16.6712H15.8467C16.0651 16.6461 16.2648 16.5357 16.4022 16.364C16.5395 16.1923 16.6035 15.9732 16.58 15.7546C16.4129 14.2514 15.8399 12.8221 14.9224 11.6198C14.0049 10.4174 12.7775 9.48748 11.3717 8.92958V8.92958ZM8.28003 8.33791C7.62076 8.33791 6.97629 8.14242 6.42813 7.77615C5.87996 7.40987 5.45272 6.88928 5.20043 6.28019C4.94814 5.6711 4.88212 5.00088 5.01074 4.35428C5.13936 3.70768 5.45683 3.11373 5.923 2.64756C6.38918 2.18138 6.98312 1.86391 7.62973 1.7353C8.27633 1.60668 8.94655 1.67269 9.55564 1.92498C10.1647 2.17727 10.6853 2.60452 11.0516 3.15268C11.4179 3.70084 11.6134 4.34531 11.6134 5.00458C11.6134 5.88864 11.2622 6.73648 10.6371 7.3616C10.0119 7.98672 9.16408 8.33791 8.28003 8.33791Z' fill='%230A60A9'/%3E%3C/svg%3E") no-repeat center left 2rem / 1.6rem;
+        }
+        .login_pw {
+            background: set.$mCol-5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='17' viewBox='0 0 15 17' fill='none'%3E%3Cpath d='M13.3333 8.95833C13.3333 7.46256 12.1208 6.25 10.625 6.25H3.95833C2.46256 6.25 1.25 7.46256 1.25 8.95833V12.2917C1.25 13.7874 2.46256 15 3.95833 15H10.625C12.1208 15 13.3333 13.7874 13.3333 12.2917V8.95833ZM14.5833 12.2917C14.5833 14.4778 12.8111 16.25 10.625 16.25H3.95833C1.77221 16.25 0 14.4778 0 12.2917V8.95833C0 6.77221 1.77221 5 3.95833 5H10.625C12.8111 5 14.5833 6.77221 14.5833 8.95833V12.2917Z' fill='%230A60A9'/%3E%3Cpath d='M7.91602 11.4582C7.91602 11.8033 7.63619 12.0832 7.29102 12.0832C6.94584 12.0832 6.66602 11.8033 6.66602 11.4582L6.66602 9.7915C6.66602 9.44633 6.94584 9.1665 7.29102 9.1665C7.63619 9.1665 7.91602 9.44633 7.91602 9.7915L7.91602 11.4582Z' fill='%230A60A9'/%3E%3Cpath d='M3.33301 3.95833C3.33301 2.92553 3.72924 1.98573 4.37712 1.28092C4.39621 1.26014 4.4162 1.24024 4.43571 1.21989C4.48141 1.17225 4.52767 1.12523 4.57568 1.07992C4.5916 1.0649 4.60674 1.04908 4.62288 1.03434C4.68625 0.97648 4.75197 0.921207 4.81901 0.867513C4.8344 0.855205 4.84983 0.842966 4.8654 0.830892C5.0157 0.714135 5.17501 0.608769 5.34147 0.514323C5.34633 0.511571 5.35125 0.508917 5.35612 0.506185C5.44217 0.457841 5.52991 0.412224 5.61979 0.37028C5.62244 0.369048 5.62528 0.368251 5.62793 0.367025C5.81022 0.282452 5.99992 0.211802 6.19596 0.155436C6.19711 0.155106 6.19807 0.154138 6.19922 0.153809H6.20166C6.38881 0.100307 6.58127 0.0597139 6.77865 0.0341797C6.79383 0.0321956 6.80902 0.03029 6.82422 0.0284831C6.91611 0.0176772 7.00884 0.00928342 7.10254 0.00488281C7.11094 0.00448149 7.11936 0.00441669 7.12777 0.00406901C7.18203 0.00186306 7.23654 0 7.29134 0V0.00325521C7.7403 0.00325716 8.18892 0.0765454 8.61702 0.228678C9.39511 0.505245 10.0672 1.01838 10.5392 1.69596C10.7364 1.97918 10.667 2.36864 10.3838 2.56592C10.1006 2.76316 9.7112 2.69349 9.51383 2.41048C9.19084 1.94682 8.73037 1.59546 8.19792 1.40625C7.66877 1.21828 7.09422 1.19893 6.55404 1.35173C6.54751 1.35357 6.54102 1.35553 6.53451 1.35742C6.19032 1.45757 5.87182 1.62524 5.59538 1.84733C5.57214 1.86603 5.55043 1.88649 5.52783 1.90592C5.48661 1.94134 5.44567 1.97705 5.40658 2.01497C5.38881 2.03221 5.37097 2.04934 5.35368 2.06706C5.31069 2.1111 5.26922 2.1567 5.22917 2.20378C4.82659 2.67648 4.58301 3.28877 4.58301 3.95833V5.625H3.33301V3.95833Z' fill='%230A60A9'/%3E%3C/svg%3E") no-repeat center left 2rem / 1.6rem;
+        }
+        .lg_util {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            ul {
+                display: flex; align-items: center;
+                li {
+                    &:not(:last-child) {
+                        &::after {
+                            content: "|";
+                            display: inline-block;
+                            margin: 0 1rem;
+                            font-size: set.$ft-bd-m;
+                            font-weight: 100;
+                            color: set.$gray-50;
+                        }
+                    }
+                    a {
+                        color: set.$gray-60;
+                        font-size: set.$ft-bd-m;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.edu_list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(42rem, 1fr)); gap: 2rem;
+    .el_item {
+        padding: 4rem;
+        border: .1rem solid set.$gray-20;
+        display: flex; align-items: center; gap: 3rem;
+        background: set.$gray-0 set.icon(arr-right, set.$gray-40) no-repeat center right 3rem / 1.8rem;
+        dl {
+            dt {
+                font-size: set.$ft-tt-s;
+                font-weight: 600;
+                color: set.$gray-100;
+            }
+            dd {
+                font-size: set.$ft-bd-m;
+                color: set.$gray-50;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+.infoBanner {
+    background: set.$mCol-5;
+    .inner {
+        @include set.base-width();
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6rem 0;
+        .ib_tit {
+            p {
+                font-size: set.$ft-hd-s;
+                font-family: set.$ft-point;
+                font-weight: 600;
+                line-height: 1.2;
+                color: set.$gray-100;
+                strong {
+                    color: set.$mCol-60;
+                    font-weight: 600;
+                    display: block;
+                }
+            }
+            span {
+                font-size: set.$ft-bd-m;
+                line-height: 1.4;
+                color: set.$gray-50;
+                font-weight: 400;
+                display: block;
+                margin-top: 1rem;
+            }
+        }
+        .ib_list {
+            display: flex; align-items: center;
+            > div {
+                padding: 0 5.4vw;
+                display: flex; flex-direction: column; justify-content: center; align-items: center;
+                text-align: center;
+                p {
+                    font-size: set.$ft-tt-m;
+                    font-weight: 600;
+                    font-family: set.$ft-point;
+                    color: set.$gray-100;
+                    margin-top: 1.4rem;
+                }
+                span {
+                    font-size: set.$ft-bd-m;
+                    color: set.$gray-50;
+                    line-height: 1.3;
+                    font-weight: 400;
+                }
+                &:not(:last-child) {
+                    border-right: .1rem solid set.$mCol-20;
+                }
+            }
+        }
+    }
+}
+
+
+.BannerZone {
+    background-color: set.$mCol-60;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    // 1920px 화면 기준 높이를 36rem으로 줄이고, 유동 높이와 최소 높이도 20% 축소한다.
+    // 좁은 화면에서 문구가 줄바꿈되면 내용에 맞춰 높이가 늘어나도록 min-height를 사용한다.
+    .sec_inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: baseline;
+        min-height: clamp(24rem, 18.75vw, 36rem);
+        padding: { top: 4rem; bottom: 4rem; }
+        @include set.res-laptop() {
+            padding: { top: 3.2rem; bottom: 3.2rem; }
+        }
+        @include set.res-tablet() {
+            min-height: 20.8rem;
+            padding: { top: 2.4rem; bottom: 2.4rem; }
+        }
+    }
+    // 좁은 화면에서는 배너 문구를 폰트 스케일 기준 두 단계씩 내린다
+    // (bd-l→bd-s, hd-m→tt-l, dp-s→hd-m). 높이가 줄어드는 구간과 같은 지점에서 함께 바꾼다.
+    em {
+        font-family: set.$ft-point;
+        font-size: set.$ft-bd-l;
+        font-weight: 500;
+        color: rgba(set.$gray-0, 0.5);
+        display: block;
+        margin-bottom: 2rem;
+        letter-spacing: 0.56rem;
+        @include set.res-laptop() {
+            font-size: set.$ft-bd-s;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.36rem;
+        }
+    }
+    dl {
+        line-height: 1.2;
+        dt {
+            font-family: set.$ft-point;
+            color: set.$gray-0;
+            font-size: set.$ft-hd-m;
+            font-weight: set.$fw-b;
+            @include set.res-laptop() { font-size: set.$ft-tt-l; }
+        }
+        dd {
+            font-family: set.$ft-point;
+            color: #5CE7FF;
+            font-size: set.$ft-dp-s;
+            font-weight: set.$fw-b;
+            @include set.res-laptop() { font-size: set.$ft-hd-m; }
+        }
+    }
+    button, a {
+        border-radius: 100rem;
+        margin-top: 3rem;
+        min-width: 16rem;
+        font-size: set.$ft-bd-m;
+        @include set.res-tab-lap() { font-size: set.$ft-bd-s; }
+        @include set.res-laptop() { margin-top: 2rem; }
+    }
+}
+
+
+
+
+/* ------------------------
+   공지사항 + 이벤트존 (메인 하단)
+   왼쪽은 탭(.tab-m.ud) + 보드 리스트(.bd-list-m) 로 만든 공지 카드,
+   오른쪽은 이벤트 배너 한 장. 배너 이미지는 화면이 th:style 로 넘긴다(없으면 그라데이션만).
+----------------------- */
+
+.noticeZone {
+    .sec_inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 2.4rem;
+        @include set.res-laptop() { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
+    }
+
+    // 공지 카드
+    .nz_board {
+        display: flex; flex-direction: column;
+        padding: 2rem 3.2rem 2.4rem;
+        background: set.$gray-0;
+        border: .1rem solid set.$gray-10;
+        border-radius: 1.6rem;
+        min-height: 28rem;
+        box-shadow: 0 10px 23px 3px rgba(set.$gray-100, 0.04);   // .barTab 과 같은 그림자
+        @include set.res-tablet() { padding: 1.6rem 2rem 2rem; border-radius: 1.2rem; }
+
+        .nz_head {
+            display: flex; align-items: flex-end; justify-content: space-between; gap: 1.6rem;
+            border-bottom: .1rem solid set.$gray-20;
+            margin-bottom: .8rem;
+            // 밑줄 탭 — 헤더 하단선 위에 탭 밑줄이 얹히도록 li 의 padding-bottom 만 조금 키운다.
+            .tab-m.ud {
+                gap: 2.4rem;
+                li {
+                    padding: 1.2rem 0;
+                    font-weight: set.$fw-b;
+                    &.on { color: set.$gray-100; }
+                    a { display: block; color: inherit; }
+                }
+                @include set.res-mo-tab() { gap: 1.6rem; }
+            }
+            // 더보기(+) — 선택된 탭의 목록 페이지로 간다.
+            .nz_more {
+                flex-shrink: 0;
+                width: 3rem; aspect-ratio: 1/1;
+                margin-bottom: .6rem;
+                display: flex; align-items: center; justify-content: center;
+                transition: border-color set.$aniSet, background set.$aniSet;
+                &::before {
+                    content: "";
+                    width: 1.2rem; height: 1.2rem;
+                    @include set.getIcon(ico-plus, set.$gray-60);
+                }
+                &:hover { border-color: set.$mCol-60; background: set.$mCol-5; }
+            }
+        }
+        .nz_panel[hidden] { display: none; }
+    }
+
+    // 이벤트 배너
+    .nz_event {
+        a {
+            display: flex; flex-direction: column; justify-content: center;
+            height: 100%; min-height: 24rem;
+            box-sizing: border-box;
+            padding: 3.2rem 4rem;
+            border-radius: 1.6rem;
+            color: set.$gray-0;
+            background: url(set.$img-url + "main/nzEvent.png") no-repeat center center / cover;
+            // background-color: set.$mCol-120;
+            // background-image:
+            //     radial-gradient(60% 90% at 90% 50%, rgba(set.$mCol-60, .55) 0%, rgba(set.$mCol-60, 0) 70%),
+            //     linear-gradient(120deg, set.$gray-120 0%, set.$mCol-120 60%, set.$mCol-100 100%);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            overflow: hidden;
+            isolation: isolate;
+            @include set.res-tablet() { min-height: 18rem; padding: 2.4rem; border-radius: 1.2rem; }
+        }
+        em {
+            font-size: set.$ft-bd-m;
+            font-weight: set.$fw-m;
+            color: rgba(set.$gray-0, .7);
+            line-height: 1.4;
+            @include set.res-tablet() { font-size: set.$ft-bd-s; }
+        }
+        strong {
+            display: block;
+            margin-top: 1rem;
+            font-family: set.$ft-point;
+            font-size: set.$ft-tt-l;
+            font-weight: set.$fw-b;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            word-break: keep-all;
+            @include set.res-tablet() { font-size: set.$ft-tt-s; }
+        }
+    }
+}

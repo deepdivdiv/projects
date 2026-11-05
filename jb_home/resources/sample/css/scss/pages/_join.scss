@@ -1,0 +1,578 @@
+@charset "UTF-8";
+@use '../utils' as set;
+
+/*
+  회원가입(단계형) 페이지 스타일.
+
+  구버전 퍼블리싱(jb_content/resources/css/diagnosis.css)의 단계 화면 구조
+  (StepGuide / StepContents / StepTit / stepForm / agreeSet / user-info)를 옮겨 온 것이다.
+
+  구버전 CSS 는 input·button 같은 요소 선택자와 .btn-* 유틸을 전역에 다시 정의해
+  기존 화면(common/board/sub)과 충돌하므로 그 부분은 가져오지 않는다.
+  버튼·인풋·체크박스는 프로젝트 디자인 시스템(.bt-*, .form-*, .sel-*)을 그대로 쓴다.
+
+  또 모든 규칙을 페이지 루트 .joinWrap 안에 넣어 이 화면 밖으로 새지 않게 한다.
+  (구버전의 .StepGuide 는 sub.css 의 .subHeader .stepTit .StepGuide 와 이름이 겹치지만
+   양쪽 다 스코프가 있어 서로 닿지 않는다.)
+
+  STEP 2(정보 입력)는 절 카드(.join_sec)를 쌓는 구성이라 껍데기 흰 카드를 .stepForm.bare 로 벗는다.
+  카드 골격은 마이페이지 회원정보수정(pages/_sub.scss 의 "회원정보수정" 절)과 같고,
+  카드 안 항목 배치(.form-user)만 이 화면 방식([라벨 위 / 입력 아래])이다.
+*/
+.joinWrap {
+    width: 100%;
+    background: set.$gray-5;
+
+    /* 단계 표시 바 : 약관동의 · 정보입력 · 가입완료
+       원형 번호를 선으로 잇는다. 지나온 단계(.complete)와 현재 단계(.active) 쪽 선은 파랑,
+       남은 단계는 회색이다. 선은 dl 의 ::after 로 [앞 원 중심 → 자기 원 중심]까지 긋는데,
+       dl 이 모두 같은 너비(flex:1)여야 -50% 가 앞 원의 중심에 정확히 닿는다.
+       (::before 는 태블릿에서 현재 단계 앞의 점으로 쓰므로 선은 ::after 로 긋는다.) */
+    .StepGuide {
+        width: 100%;
+        max-width: 100rem;
+        margin: 0 auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 3.3rem 2rem 3.4rem;
+        position: relative;
+        dl {
+            flex: 1 1 0;
+            min-width: 0;
+            position: relative;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 1.2rem;
+            color: set.$gray-10;
+            /* 앞 단계와 잇는 선 — 원 지름(5.6rem)의 절반 높이에 맞춘다 */
+            &:not(:first-child)::after {
+                content: "";
+                position: absolute;
+                top: 2.8rem;
+                margin-top: -0.1rem;
+                left: -50%;
+                right: 50%;
+                height: 0.2rem;
+                background: set.$gray-20;
+            }
+            dt {
+                position: relative;
+                z-index: 1;
+                width: 5.6rem; aspect-ratio: 1/1;
+                border-radius: 100rem;
+                background: set.$gray-30;
+                color: set.$gray-0;
+                display: flex; align-items: center; justify-content: center;
+                font-size: set.$ft-tt-s;
+                font-weight: 600;
+                overflow: hidden;
+            }
+            &.active {
+                &::after { background: set.$mCol-60; }
+                dt { background: set.$mCol-60; }
+                dd { color: set.$gray-100; }
+            }
+            &.complete {
+                &::after { background: set.$mCol-60; }
+                dt {
+                    text-indent: -9999px;
+                    &::after {
+                        content: "";
+                        width: 100%; height: 100%;
+                        position: absolute;
+                        background: set.$mCol-60 set.icon(ico-check, set.$gray-0) no-repeat center center / 2.4rem;
+                    }
+                }
+                dd { color: set.$gray-100; }
+            }
+            dd { font-size: min(4vw, 2rem); font-weight: 600; color: set.$gray-40; }
+        }
+    }
+
+    /* 단계 본문 */
+    .StepContents {
+        padding: min(5rem, 10vw) 0 3rem;
+        display: flex;
+        flex-direction: column;
+        background: set.$gray-0;
+    }
+
+    /* 단계 제목 — 제목은 크게, 아래 한 줄 설명은 본문 크기의 회색 문구다(시안). */
+    .StepTit {
+        text-align: center;
+        margin-bottom: 2rem;
+        h1 {
+            font-size: min(7vw, 3.4rem);
+            color: set.$gray-100;
+            font-family: set.$ft-point;
+            line-height: 1.2;
+            word-break: keep-all;
+            font-weight: 600;
+            text-wrap-style: pretty;
+            strong { color: set.$mCol-60; }
+        }
+        > p {
+            color: set.$gray-50;
+            font-weight: 300;
+            font-size: set.$ft-bd-m;
+            line-height: 1.4;
+            word-break: keep-all;
+            text-wrap-style: pretty;
+            margin-top: 1.2rem;
+            span { color: set.$gray-100; font-weight: 700; }
+        }
+    }
+
+    /* 흰 카드(약관·입력폼 공통 껍데기) */
+    .stepForm {
+        width: calc(100% - min(6rem, 6vw));
+        max-width: 100rem;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: min(4rem, 6vw);
+        border-radius: 0.8rem;
+        background: set.$gray-0;
+        /* 안쪽에 절 카드(.join_sec)를 쌓는 단계는 껍데기를 벗는다 —
+           흰 칸 위에 흰 칸이 겹치면 카드 경계가 보이지 않는다. */
+        &.bare {
+            padding: 0;
+            border-radius: 0;
+            background: none;
+        }
+    }
+
+    /* STEP 1 : 약관 동의 */
+    .agreeSet {
+        .join_all {
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid set.$gray-30;
+            label { font-size: set.$ft-tt-s; color: set.$gray-100; }
+        }
+        .joinList .jl_item {
+            margin-bottom: 3rem;
+            &:last-child { margin-bottom: 0; }
+            > p { padding-bottom: 1rem; }
+            /* 약관 본문 박스 */
+            > div {
+                border: 1px solid set.$gray-30;
+                box-sizing: border-box;
+                padding: 2rem;
+                color: set.$gray-70;
+                font-weight: 400;
+                font-size: set.$ft-bd-l;
+                > div {
+                    max-height: 27rem;
+                    min-height: 10rem;
+                    overflow-y: auto;
+                    line-height: 1.5;
+                    @include set.scrollBar(set.$gray-30);
+                }
+            }
+        }
+    }
+
+    /* 약관 본문(장·조 구조) */
+    .policyArea {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+    }
+    .policySec > p {
+        font-size: set.$ft-tt-s;
+        color: set.$gray-100;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .policy-define {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+        dl {
+            font-size: set.$ft-bd-l;
+            line-height: 1.3;
+            dt { color: set.$gray-100; font-weight: 700; }
+            dd { color: set.$gray-70; font-weight: 400; }
+        }
+        /* 점 목록 */
+        ol {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            line-height: 1.4;
+            margin-top: 0.6rem;
+            font-weight: 300;
+            li {
+                position: relative;
+                margin-left: 1rem;
+                &::before {
+                    content: "";
+                    width: 0.4rem;
+                    height: 0.4rem;
+                    display: inline-block;
+                    border-radius: 10rem;
+                    background: set.$gray-70;
+                    position: absolute;
+                    top: 0.9rem;
+                    left: -1rem;
+                }
+            }
+        }
+        /* 번호 목록 */
+        ul {
+            counter-reset: policy-num 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            line-height: 1.4;
+            font-weight: 300;
+            li {
+                counter-increment: policy-num;
+                margin-left: 2.2rem;
+                &::before {
+                    content: counter(policy-num);
+                    font-size: set.$ft-bd-xs;
+                    font-weight: 700;
+                    border: 2px solid set.$gray-50;
+                    color: set.$gray-50;
+                    line-height: 0.5;
+                    height: 1.6rem;
+                    width: 1.6rem;
+                    border-radius: 10rem;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    top: -0.2rem;
+                    margin-right: 0.5rem;
+                    margin-left: -2.2rem;
+                }
+            }
+            .caution {
+                display: block;
+                font-size: set.$ft-bd-m;
+                line-height: 1.4;
+                color: set.$gray-50;
+                &::before {
+                    content: "\203B";
+                    display: inline-block;
+                    margin-right: 0.2rem;
+                }
+            }
+        }
+    }
+
+    /* STEP 2 : 정보 입력
+       절(節) 카드 [계정정보 / 기본정보 / 본인인증] 을 쌓고, 카드 안 항목은
+       [라벨 위 / 입력 아래] 로 한 줄에 하나씩 쌓는다.
+       카드 골격은 마이페이지 회원정보수정(pages/_sub.scss 의 "회원정보수정" 절)과 같고,
+       항목 배치만 이 화면 방식이다 — 가입은 처음 오는 사람이 위에서 아래로 한 번만 읽어 내려가게 한다. */
+
+    /* 절 카드 — 제목 아래를 선으로 끊고 그 밑에 항목을 담는다. */
+    .join_sec {
+        padding: min(3rem, 5vw);
+        border: 0.1rem solid set.$gray-20;
+        border-radius: 0.8rem;
+        background: set.$gray-0;
+        > h3 {
+            padding-bottom: 1.6rem;
+            margin-bottom: 2.4rem;
+            border-bottom: 0.1rem solid set.$gray-20;
+            font-size: set.$ft-tt-s;
+            font-weight: set.$fw-b;
+            color: set.$gray-100;
+        }
+    }
+    /* 카드 안 항목 목록 — 한 줄이 dl 하나다. */
+    .join_list {
+        display: flex;
+        flex-direction: column;
+        gap: min(2rem, 4vw);
+    }
+
+    /* 폼 자체는 절 카드를 쌓는 열이다(카드 사이 간격). */
+    .form-user {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        dl {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            dt {
+                color: set.$gray-100;
+                font-size: set.$ft-bd-l;
+                font-weight: 500;
+                i.imp { color: set.$sst-dCol-60; display: inline-block; margin-left: 0.1rem; }
+            }
+            dd {
+                /* 인풋 + 버튼 한 줄 */
+                .cut-flex {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    button, a { flex-shrink: 0; }
+                    &.half { width: calc(50% - 0.5rem); }
+                    &:not(:last-of-type) { margin-bottom: 1rem; }
+                    span { color: set.$gray-70; font-weight: 200; }
+                    span.dash { min-width: 1.4rem; text-align: center; }
+                }
+                &.checkBox { display: flex; align-items: center; gap: 2rem; }
+            }
+        }
+    }
+
+    /* 프로필 사진 선택과 미리보기 */
+    .join_photo {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        padding: 2rem;
+        background: set.$mCol-5;
+        border-radius: 1rem;
+        border: .1rem solid set.$mCol-30;
+        [hidden] { display: none; }
+        .join_photo_preview {
+            flex-shrink: 0;
+            width: 12rem;
+            height: 12rem;
+            overflow: hidden;
+            border: 0.1rem solid set.$mCol-20;
+            border-radius: .6rem;
+            background: set.$gray-0;
+            > i {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background: set.icon(ico-user, set.$gray-40) no-repeat center / 50%;
+            }
+            > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+            > [hidden] { display: none; }
+        }
+        .join_photo_controls { min-width: 0; }
+        .join_photo_buttons { 
+            display: flex; flex-wrap: wrap; gap: 0.8rem;
+            button, a {
+                min-width: 9rem;
+            }
+        }
+        .join_photo_help, .join_photo_status {
+            margin-top: 0.8rem;
+            font-size: set.$ft-bd-m;
+            color: set.$gray-60;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+        .join_photo_status.is-error { color: set.$sst-dCol-60; }
+        @include set.res-tablet() {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.2rem;
+            .join_photo_preview { width: 9.6rem; height: 9.6rem; }
+        }
+    }
+
+    /* 첨부파일(.file-drop-s / .file-list) — board.css 공통 컴포넌트를 이력사항 칸에서 그대로 쓴다.
+       컴포넌트 머리말의 dl 은 [총 N개파일 (용량)] 가로 배치인데, 위 .form-user dl(세로 쌓기)과 특이도가
+       같아(둘 다 0,2,1) 나중에 읽히는 이 파일이 이겨 버린다. 컴포넌트 배치를 여기서 되돌린다.
+       (.fl_list 안쪽 dl 은 board.css 규칙이 더 구체적이라 손댈 필요가 없다.) */
+    .file-list .fl_head dl {
+        flex-direction: row;
+        align-items: center;
+        gap: .2rem;
+        dt { font-size: set.$ft-bd-s; font-weight: 700; }
+    }
+
+    /* 안내·오류 문구 */
+    .ip-cau {
+        position: relative;
+        color: set.$gray-50;
+        font-weight: 300;
+        font-size: set.$ft-bd-m;
+        margin-top: 1rem;
+        margin-left: 2.6rem;
+        display: none;
+        &::before {
+            content: "!";
+            background: set.$gray-100;
+            color: set.$gray-0;
+            font-size: 1.2rem;
+            line-height: 2rem;
+            text-align: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 100rem;
+            position: absolute;
+            left: -2.6rem;
+            top: 0.1rem;
+        }
+        &.on { display: block; }
+        &.warring {
+            color: set.$sst-dCol-60;
+            font-weight: 400;
+            display: block;
+            &::before { background-color: set.$sst-dCol-60; }
+        }
+    }
+
+    /* 본인인증 안내 — 본인인증 절 카드에 담기는 가로형 안내 상자.
+       [원형 아이콘 | 제목·설명·버튼] 이며 카드 안이라 테두리 없이 배경만 옅게 깐다. */
+    .cer-item {
+        display: flex;
+        align-items: center;
+        gap: 2.4rem;
+        padding: min(2.4rem, 5vw);
+        border-radius: 0.8rem;
+        background: set.$gray-5;
+        > i {
+            flex-shrink: 0;
+            width: 7rem;
+            aspect-ratio: 1/1;
+            border-radius: 100rem;
+            background: set.$mCol-10 set.icon(ico-call, set.$mCol-60) no-repeat center center / 3.2rem;
+        }
+        /* 제목·설명·버튼을 한 열로 쌓는다 — 버튼은 설명 아래 왼쪽에 붙는다(시안). */
+        .cer_info {
+            flex-grow: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            > button { margin-top: 1.2rem; }
+        }
+        dt {
+            font-size: set.$ft-bd-l;
+            font-weight: set.$fw-b;
+            color: set.$gray-100;
+        }
+        dd {
+            margin-top: 0.6rem;
+            font-size: set.$ft-bd-m;
+            color: set.$gray-70;
+            line-height: 1.4;
+        }
+    }
+
+    /* STEP 3 : 가입 완료 */
+    .user-info {
+        width: calc(100% - min(6rem, 6vw));
+        max-width: 90rem;
+        margin: 0 auto;
+        background: set.$gray-0;
+        border-radius: 1rem;
+        padding: min(4rem, 6vw);
+        border: 0.3rem solid set.$gray-20;
+        box-sizing: border-box;
+        > i {
+            width: min(12rem, 16vw);
+            height: min(12rem, 16vw);
+            display: block;
+            margin: 0 auto 1rem;
+            background: set.icon(ico-user, set.$mCol-60) no-repeat center / contain;
+        }
+        > img { display: block; max-width: 10rem; margin: 0 auto; margin-bottom: .4rem; }
+        h2 {
+            font-family: set.$ft-point;
+            font-size: set.$ft-hd-s;
+            font-weight: 700;
+            text-align: center;
+            color: set.$mCol-60;
+            margin-bottom: 2rem;
+        }
+        .user-data { display: flex; flex-direction: column; gap: 1rem; }
+        dl {
+            border-radius: 10rem;
+            width: 100%;
+            max-width: 40rem;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            background: set.$gray-5;
+            padding: 1.4rem 4rem;
+            color: set.$gray-100;
+            box-sizing: border-box;
+            dt { font-size: set.$ft-bd-m; min-width: 5.8rem; text-align-last: justify; padding-top: 0.2rem; }
+            dd {
+                font-size: set.$ft-tt-m;
+                display: flex;
+                align-items: center;
+                line-height: 1;
+                &::before {
+                    content: "";
+                    width: 1px;
+                    height: 1.2rem;
+                    background: set.$gray-30;
+                    display: inline-block;
+                    margin: 0 1.4rem;
+                }
+            }
+        }
+        .caution {
+            color: set.$gray-50;
+            font-size: set.$ft-bd-m;
+            font-weight: 300;
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+    }
+
+    /* 하단 버튼 줄 */
+    .btnArea {
+        display: flex;
+        gap: 1rem;
+        margin: min(6vw, 6rem) 0 min(8vw, 10rem);
+        &.f_center { justify-content: center; }
+        &.f_right { justify-content: flex-end; }
+        /* 디자인 시스템 버튼은 폭이 내용에 맞춰지므로 단계 버튼만 최소 폭을 준다 */
+        [class^="bt-"] { min-width: min(16rem, 40vw); }
+    }
+
+    /* 단계 전환 : JS 가 .on 을 옮겨 붙인다 */
+    .stepPanel { display: none; }
+    .stepPanel.on { display: block; }
+}
+.job-field {
+    display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between;
+    .job-field-group {
+        min-height: 5rem;
+        &.job-field-etc { flex-grow: 1; }
+    }
+}
+
+@include set.res-tablet {
+    .joinWrap {
+        .StepGuide {
+            padding: 4vw 3vw;
+            dl {
+                dt { display: none; }
+                /* 원을 감추므로 잇는 선도 함께 감춘다 */
+                &::after { display: none; }
+                &.active::before {
+                    content: "";
+                    width: 1rem;
+                    height: 1rem;
+                    border-radius: 10rem;
+                    background: set.$mCol-40;
+                    margin-right: 1.6vw;
+                }
+            }
+        }
+        .user-info dl {
+            flex-direction: column;
+            dd::before { display: none; }
+        }
+        .form-user dl dd .cut-flex.half { width: 100%; }
+        /* 본인인증 안내는 아이콘을 위로 올려 한 열로 쌓는다. */
+        .cer-item {
+            flex-direction: column;
+            gap: 1.6rem;
+            > i { width: 6rem; }
+            .cer_info {
+                align-items: center;
+                text-align: center;
+            }
+        }
+    }
+}

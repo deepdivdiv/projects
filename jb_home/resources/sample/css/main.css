@@ -1,0 +1,438 @@
+@charset "UTF-8";
+@keyframes ani-spinner {
+  0% {
+    rotate: 0turn;
+  }
+  100% {
+    rotate: 1turn;
+  }
+}
+/* ------------------------
+           공통
+----------------------- */
+/* ------------------------
+        메인 비주얼
+----------------------- */
+main {
+  background: url("../img/main/mainVisual.png") no-repeat center center/cover;
+}
+main .m_inner {
+  width: calc(100% - min(6rem, 6vw));
+  max-width: 160rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: space-between;
+  padding: 5rem 0;
+}
+main .m_copy {
+  flex-grow: 1;
+}
+main .m_copy p {
+  font-size: clamp(2.6rem, 2.9297vw, 3rem);
+  font-weight: 500;
+  color: #3b3844;
+  letter-spacing: -0.06rem;
+  margin-bottom: 1.4rem;
+}
+main .m_copy h1 {
+  font-size: clamp(4.6rem, 6.25vw, 6.4rem);
+  font-weight: 600;
+  color: #3b3844;
+  font-family: "Paperlogy", sans-serif;
+  line-height: 1.2;
+  margin-bottom: 4rem;
+}
+main .m_copy h1 strong {
+  font-size: clamp(5rem, 7.6172vw, 7.8rem);
+  font-weight: 700;
+  color: #0a60a9;
+  display: block;
+}
+main .m_copy a, main .m_copy button {
+  border-radius: 100rem;
+}
+main .m_login {
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  max-width: 50rem;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(4px);
+  padding: 8rem 4rem;
+  text-align: center;
+}
+main .m_login > p {
+  font-size: clamp(4.6rem, 6.25vw, 6.4rem);
+  font-weight: 700;
+  font-family: "Paperlogy", sans-serif;
+  color: #0a60a9;
+  line-height: 1;
+}
+main .m_login .lg_form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+main .m_login .lg_btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+main .m_login .lg_btns a, main .m_login .lg_btns button {
+  width: 100%;
+}
+main .m_login .login_id, main .m_login .login_pw {
+  height: 6.4rem;
+  border: 0.1rem solid #96bfe7;
+  border-radius: 0.4rem;
+  font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
+  color: #3b3844;
+  padding-left: 4.6rem;
+  outline: 0rem solid rgba(10, 96, 169, 0.2);
+  transition: all 300ms ease-in-out;
+}
+main .m_login .login_id::placeholder, main .m_login .login_pw::placeholder {
+  color: #aea9ba;
+  font-weight: 300;
+}
+main .m_login .login_id:focus-visible, main .m_login .login_pw:focus-visible {
+  outline-width: 0.4rem;
+}
+main .m_login .login_id {
+  background: #eef4fb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 17 17' fill='none'%3E%3Cpath d='M11.3717 8.92958C12.1887 8.2868 12.785 7.40535 13.0777 6.40787C13.3704 5.41038 13.345 4.34647 13.0048 3.36414C12.6647 2.3818 12.0269 1.52991 11.1801 0.92696C10.3333 0.324012 9.31957 0 8.28003 0C7.24048 0 6.22679 0.324012 5.37997 0.92696C4.53315 1.52991 3.89531 2.3818 3.5552 3.36414C3.21509 4.34647 3.18962 5.41038 3.48233 6.40787C3.77503 7.40535 4.37137 8.2868 5.18836 8.92958C3.78842 9.49045 2.56693 10.4207 1.6541 11.6212C0.741275 12.8216 0.171329 14.2473 0.00502653 15.7462C-0.00701131 15.8557 0.00262365 15.9664 0.0333811 16.0721C0.0641385 16.1778 0.115416 16.2765 0.184286 16.3624C0.323376 16.5358 0.52568 16.6469 0.746693 16.6712C0.967707 16.6956 1.18933 16.6311 1.3628 16.492C1.53627 16.3529 1.64738 16.1506 1.67169 15.9296C1.85468 14.3006 2.63143 12.7961 3.85354 11.7036C5.07565 10.6111 6.65744 10.0071 8.29669 10.0071C9.93595 10.0071 11.5177 10.6111 12.7398 11.7036C13.962 12.7961 14.7387 14.3006 14.9217 15.9296C14.9444 16.1343 15.0421 16.3235 15.1959 16.4604C15.3498 16.5974 15.549 16.6725 15.755 16.6712H15.8467C16.0651 16.6461 16.2648 16.5357 16.4022 16.364C16.5395 16.1923 16.6035 15.9732 16.58 15.7546C16.4129 14.2514 15.8399 12.8221 14.9224 11.6198C14.0049 10.4174 12.7775 9.48748 11.3717 8.92958V8.92958ZM8.28003 8.33791C7.62076 8.33791 6.97629 8.14242 6.42813 7.77615C5.87996 7.40987 5.45272 6.88928 5.20043 6.28019C4.94814 5.6711 4.88212 5.00088 5.01074 4.35428C5.13936 3.70768 5.45683 3.11373 5.923 2.64756C6.38918 2.18138 6.98312 1.86391 7.62973 1.7353C8.27633 1.60668 8.94655 1.67269 9.55564 1.92498C10.1647 2.17727 10.6853 2.60452 11.0516 3.15268C11.4179 3.70084 11.6134 4.34531 11.6134 5.00458C11.6134 5.88864 11.2622 6.73648 10.6371 7.3616C10.0119 7.98672 9.16408 8.33791 8.28003 8.33791Z' fill='%230A60A9'/%3E%3C/svg%3E") no-repeat center left 2rem/1.6rem;
+}
+main .m_login .login_pw {
+  background: #eef4fb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='17' viewBox='0 0 15 17' fill='none'%3E%3Cpath d='M13.3333 8.95833C13.3333 7.46256 12.1208 6.25 10.625 6.25H3.95833C2.46256 6.25 1.25 7.46256 1.25 8.95833V12.2917C1.25 13.7874 2.46256 15 3.95833 15H10.625C12.1208 15 13.3333 13.7874 13.3333 12.2917V8.95833ZM14.5833 12.2917C14.5833 14.4778 12.8111 16.25 10.625 16.25H3.95833C1.77221 16.25 0 14.4778 0 12.2917V8.95833C0 6.77221 1.77221 5 3.95833 5H10.625C12.8111 5 14.5833 6.77221 14.5833 8.95833V12.2917Z' fill='%230A60A9'/%3E%3Cpath d='M7.91602 11.4582C7.91602 11.8033 7.63619 12.0832 7.29102 12.0832C6.94584 12.0832 6.66602 11.8033 6.66602 11.4582L6.66602 9.7915C6.66602 9.44633 6.94584 9.1665 7.29102 9.1665C7.63619 9.1665 7.91602 9.44633 7.91602 9.7915L7.91602 11.4582Z' fill='%230A60A9'/%3E%3Cpath d='M3.33301 3.95833C3.33301 2.92553 3.72924 1.98573 4.37712 1.28092C4.39621 1.26014 4.4162 1.24024 4.43571 1.21989C4.48141 1.17225 4.52767 1.12523 4.57568 1.07992C4.5916 1.0649 4.60674 1.04908 4.62288 1.03434C4.68625 0.97648 4.75197 0.921207 4.81901 0.867513C4.8344 0.855205 4.84983 0.842966 4.8654 0.830892C5.0157 0.714135 5.17501 0.608769 5.34147 0.514323C5.34633 0.511571 5.35125 0.508917 5.35612 0.506185C5.44217 0.457841 5.52991 0.412224 5.61979 0.37028C5.62244 0.369048 5.62528 0.368251 5.62793 0.367025C5.81022 0.282452 5.99992 0.211802 6.19596 0.155436C6.19711 0.155106 6.19807 0.154138 6.19922 0.153809H6.20166C6.38881 0.100307 6.58127 0.0597139 6.77865 0.0341797C6.79383 0.0321956 6.80902 0.03029 6.82422 0.0284831C6.91611 0.0176772 7.00884 0.00928342 7.10254 0.00488281C7.11094 0.00448149 7.11936 0.00441669 7.12777 0.00406901C7.18203 0.00186306 7.23654 0 7.29134 0V0.00325521C7.7403 0.00325716 8.18892 0.0765454 8.61702 0.228678C9.39511 0.505245 10.0672 1.01838 10.5392 1.69596C10.7364 1.97918 10.667 2.36864 10.3838 2.56592C10.1006 2.76316 9.7112 2.69349 9.51383 2.41048C9.19084 1.94682 8.73037 1.59546 8.19792 1.40625C7.66877 1.21828 7.09422 1.19893 6.55404 1.35173C6.54751 1.35357 6.54102 1.35553 6.53451 1.35742C6.19032 1.45757 5.87182 1.62524 5.59538 1.84733C5.57214 1.86603 5.55043 1.88649 5.52783 1.90592C5.48661 1.94134 5.44567 1.97705 5.40658 2.01497C5.38881 2.03221 5.37097 2.04934 5.35368 2.06706C5.31069 2.1111 5.26922 2.1567 5.22917 2.20378C4.82659 2.67648 4.58301 3.28877 4.58301 3.95833V5.625H3.33301V3.95833Z' fill='%230A60A9'/%3E%3C/svg%3E") no-repeat center left 2rem/1.6rem;
+}
+main .m_login .lg_util {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+main .m_login .lg_util ul {
+  display: flex;
+  align-items: center;
+}
+main .m_login .lg_util ul li:not(:last-child)::after {
+  content: "|";
+  display: inline-block;
+  margin: 0 1rem;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 100;
+  color: #9590a2;
+}
+main .m_login .lg_util ul li a {
+  color: #8d869b;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+}
+
+.edu_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(42rem, 1fr));
+  gap: 2rem;
+}
+.edu_list .el_item {
+  padding: 4rem;
+  border: 0.1rem solid #e0dfe8;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  background: #ffffff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cg clip-path='url(%23clip0_55_9671)'%3E%3Cpath d='M8.70703 0.292955C8.31651 -0.0975703 7.68349 -0.0975703 7.29297 0.292955C6.90248 0.683483 6.90246 1.31651 7.29297 1.70702L12.5859 7H1C0.447715 7 0 7.44772 0 8C4.07147e-05 8.55226 0.44774 9.00001 1 9.00001H12.5859L7.29297 14.293C6.90248 14.6835 6.90246 15.3165 7.29297 15.7071C7.68348 16.0975 8.31652 16.0975 8.70703 15.7071L15.707 8.70704C15.7382 8.6759 15.7658 8.64238 15.792 8.60841C15.8058 8.5905 15.8195 8.57256 15.832 8.55372C15.858 8.51473 15.8804 8.47413 15.9004 8.43262C15.9223 8.38705 15.9421 8.34012 15.957 8.29102C15.9621 8.2743 15.9655 8.25716 15.9697 8.24024C15.9888 8.1632 16 8.08292 16 8C16 7.92033 15.9903 7.84285 15.9727 7.76856C15.9678 7.74801 15.9632 7.72731 15.957 7.70704C15.9421 7.65828 15.9222 7.61168 15.9004 7.56641C15.8812 7.52662 15.8597 7.48769 15.835 7.4502C15.7976 7.39354 15.7548 7.34078 15.707 7.29297L8.70703 0.292955Z' fill='%23aea9ba'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_55_9671'%3E%3Crect width='16' height='16' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E") no-repeat center right 3rem/1.8rem;
+}
+.edu_list .el_item dl dt {
+  font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  font-weight: 600;
+  color: #3b3844;
+}
+.edu_list .el_item dl dd {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  color: #9590a2;
+  font-weight: 400;
+}
+
+.infoBanner {
+  background: #eef4fb;
+}
+.infoBanner .inner {
+  width: calc(100% - min(6rem, 6vw));
+  max-width: 160rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6rem 0;
+}
+.infoBanner .inner .ib_tit p {
+  font-size: clamp(3rem, 3.5156vw, 3.6rem);
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #3b3844;
+}
+.infoBanner .inner .ib_tit p strong {
+  color: #0a60a9;
+  font-weight: 600;
+  display: block;
+}
+.infoBanner .inner .ib_tit span {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  line-height: 1.4;
+  color: #9590a2;
+  font-weight: 400;
+  display: block;
+  margin-top: 1rem;
+}
+.infoBanner .inner .ib_list {
+  display: flex;
+  align-items: center;
+}
+.infoBanner .inner .ib_list > div {
+  padding: 0 5.4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.infoBanner .inner .ib_list > div p {
+  font-size: clamp(2.2rem, 2.5391vw, 2.6rem);
+  font-weight: 600;
+  font-family: "Paperlogy", sans-serif;
+  color: #3b3844;
+  margin-top: 1.4rem;
+}
+.infoBanner .inner .ib_list > div span {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  color: #9590a2;
+  line-height: 1.3;
+  font-weight: 400;
+}
+.infoBanner .inner .ib_list > div:not(:last-child) {
+  border-right: 0.1rem solid #bcd6f0;
+}
+
+.BannerZone {
+  background-color: #0a60a9;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+.BannerZone .sec_inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: baseline;
+  min-height: clamp(24rem, 18.75vw, 36rem);
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+@media screen and (max-width: 1024px) {
+  .BannerZone .sec_inner {
+    padding-top: 3.2rem;
+    padding-bottom: 3.2rem;
+  }
+}
+@media screen and (max-width: 720px) {
+  .BannerZone .sec_inner {
+    min-height: 20.8rem;
+    padding-top: 2.4rem;
+    padding-bottom: 2.4rem;
+  }
+}
+.BannerZone em {
+  font-family: "Paperlogy", sans-serif;
+  font-size: clamp(1.6rem, 1.7578vw, 1.8rem);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 2rem;
+  letter-spacing: 0.56rem;
+}
+@media screen and (max-width: 1024px) {
+  .BannerZone em {
+    font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.36rem;
+  }
+}
+.BannerZone dl {
+  line-height: 1.2;
+}
+.BannerZone dl dt {
+  font-family: "Paperlogy", sans-serif;
+  color: #ffffff;
+  font-size: clamp(3.2rem, 3.9063vw, 4rem);
+  font-weight: 600;
+}
+@media screen and (max-width: 1024px) {
+  .BannerZone dl dt {
+    font-size: clamp(2.6rem, 2.9297vw, 3rem);
+  }
+}
+.BannerZone dl dd {
+  font-family: "Paperlogy", sans-serif;
+  color: #5CE7FF;
+  font-size: clamp(4.2rem, 5.2734vw, 5.4rem);
+  font-weight: 600;
+}
+@media screen and (max-width: 1024px) {
+  .BannerZone dl dd {
+    font-size: clamp(3.2rem, 3.9063vw, 4rem);
+  }
+}
+.BannerZone button, .BannerZone a {
+  border-radius: 100rem;
+  margin-top: 3rem;
+  min-width: 16rem;
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+}
+@media screen and (max-width: 960px) {
+  .BannerZone button, .BannerZone a {
+    font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  }
+}
+@media screen and (max-width: 1024px) {
+  .BannerZone button, .BannerZone a {
+    margin-top: 2rem;
+  }
+}
+
+/* ------------------------
+   공지사항 + 이벤트존 (메인 하단)
+   왼쪽은 탭(.tab-m.ud) + 보드 리스트(.bd-list-m) 로 만든 공지 카드,
+   오른쪽은 이벤트 배너 한 장. 배너 이미지는 화면이 th:style 로 넘긴다(없으면 그라데이션만).
+----------------------- */
+.noticeZone .sec_inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2.4rem;
+}
+@media screen and (max-width: 1024px) {
+  .noticeZone .sec_inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+  }
+}
+.noticeZone .nz_board {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3.2rem 2.4rem;
+  background: #ffffff;
+  border: 0.1rem solid #f3f3f8;
+  border-radius: 1.6rem;
+  min-height: 28rem;
+  box-shadow: 0 10px 23px 3px rgba(59, 56, 68, 0.04);
+}
+@media screen and (max-width: 720px) {
+  .noticeZone .nz_board {
+    padding: 1.6rem 2rem 2rem;
+    border-radius: 1.2rem;
+  }
+}
+.noticeZone .nz_board .nz_head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.6rem;
+  border-bottom: 0.1rem solid #e0dfe8;
+  margin-bottom: 0.8rem;
+}
+.noticeZone .nz_board .nz_head .tab-m.ud {
+  gap: 2.4rem;
+}
+.noticeZone .nz_board .nz_head .tab-m.ud li {
+  padding: 1.2rem 0;
+  font-weight: 600;
+}
+.noticeZone .nz_board .nz_head .tab-m.ud li.on {
+  color: #3b3844;
+}
+.noticeZone .nz_board .nz_head .tab-m.ud li a {
+  display: block;
+  color: inherit;
+}
+@media screen and (max-width: 535px) {
+  .noticeZone .nz_board .nz_head .tab-m.ud {
+    gap: 1.6rem;
+  }
+}
+.noticeZone .nz_board .nz_head .nz_more {
+  flex-shrink: 0;
+  width: 3rem;
+  aspect-ratio: 1/1;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 300ms ease-in-out, background 300ms ease-in-out;
+}
+.noticeZone .nz_board .nz_head .nz_more::before {
+  content: "";
+  width: 1.2rem;
+  height: 1.2rem;
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M8 0C8.63118 2.75899e-08 9.14286 0.511675 9.14286 1.14286V6.85714H14.8571C15.4883 6.85714 16 7.36882 16 8C16 8.63118 15.4883 9.14286 14.8571 9.14286H9.14286V14.8571C9.14286 15.4883 8.63118 16 8 16C7.36882 16 6.85714 15.4883 6.85714 14.8571V9.14286H1.14286C0.511675 9.14286 7.00769e-07 8.63118 0 8C5.51797e-08 7.36882 0.511675 6.85714 1.14286 6.85714H6.85714V1.14286C6.85714 0.511675 7.36882 -2.75899e-08 8 0Z' fill='%238d869b'/%3E%3C/svg%3E") no-repeat center center/contain;
+}
+.noticeZone .nz_board .nz_head .nz_more:hover {
+  border-color: #0a60a9;
+  background: #eef4fb;
+}
+.noticeZone .nz_board .nz_panel[hidden] {
+  display: none;
+}
+.noticeZone .nz_event a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  min-height: 24rem;
+  box-sizing: border-box;
+  padding: 3.2rem 4rem;
+  border-radius: 1.6rem;
+  color: #ffffff;
+  background: url("../img/main/nzEvent.png") no-repeat center center/cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+  isolation: isolate;
+}
+@media screen and (max-width: 720px) {
+  .noticeZone .nz_event a {
+    min-height: 18rem;
+    padding: 2.4rem;
+    border-radius: 1.2rem;
+  }
+}
+.noticeZone .nz_event em {
+  font-size: clamp(1.4rem, 1.5625vw, 1.6rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+@media screen and (max-width: 720px) {
+  .noticeZone .nz_event em {
+    font-size: clamp(1.2rem, 1.3672vw, 1.4rem);
+  }
+}
+.noticeZone .nz_event strong {
+  display: block;
+  margin-top: 1rem;
+  font-family: "Paperlogy", sans-serif;
+  font-size: clamp(2.6rem, 2.9297vw, 3rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+@media screen and (max-width: 720px) {
+  .noticeZone .nz_event strong {
+    font-size: clamp(1.8rem, 1.9531vw, 2rem);
+  }
+}

@@ -1,0 +1,639 @@
+@charset "UTF-8";
+@use '../utils' as set;
+@use 'sass:color';
+
+
+#videoWrap {
+  background: set.$mCol-10;
+  width: 100%; height: 100%; min-height: 100vh;
+  display: flex; align-items: flex-start; gap: 4rem;
+  box-sizing: border-box; padding: 4rem;
+
+  header,
+  .videoContent,
+  .videoAside {
+    border-radius: 1rem;
+    background: set.$gray-0;
+    transition: all 300ms ease;
+    height: calc(100vh - 8rem);
+  }
+
+  header {
+    width: 10rem;
+    padding: 4rem 0;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-direction: column;
+    hr { width: 60%; height: 1px; background: set.$gray-20; display: block; border: none; }
+    menu {
+        font-size: set.$ft-bd-m;
+        color: set.$gray-100;
+        display: flex; flex-direction: column; gap:3rem;
+        i { width: 6rem; aspect-ratio: 1/1; border-radius: 1rem; display: block;  box-shadow: 0 0 0 .1rem set.$gray-20 inset;}
+        li {
+            color: set.$gray-100; cursor: pointer;
+            display: flex; flex-direction: column; justify-content: center; gap: 0.7rem; align-items: center;
+            &.active:not(:hover) { i { box-shadow: none; } font-weight: 600; color: set.$mCol-60; }
+            &:hover { font-weight: 600; color: set.$mCol-60; }
+
+        }
+        .vm-list {
+            &.active {
+                i { background: set.$mCol-60 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='15' viewBox='0 0 17 15' fill='none'%3E%3Cpath d='M1.625 13V15H0V13H1.625ZM15.4375 13C15.9898 13 16.4375 13.4477 16.4375 14C16.4375 14.5523 15.9898 15 15.4375 15H5.6875C5.13522 15 4.6875 14.5523 4.6875 14C4.6875 13.4477 5.13522 13 5.6875 13H15.4375ZM1.625 6.5V8.5H0V6.5H1.625ZM15.4375 6.5C15.9898 6.5 16.4375 6.94772 16.4375 7.5C16.4375 8.05228 15.9898 8.5 15.4375 8.5H5.6875C5.13522 8.5 4.6875 8.05228 4.6875 7.5C4.6875 6.94772 5.13522 6.5 5.6875 6.5H15.4375ZM1.625 0V2H0V0H1.625ZM15.4375 0C15.9898 0 16.4375 0.447715 16.4375 1C16.4375 1.55228 15.9898 2 15.4375 2H5.6875C5.13522 2 4.6875 1.55228 4.6875 1C4.6875 0.447715 5.13522 0 5.6875 0H15.4375Z' fill='white'/%3E%3C/svg%3E") no-repeat center center / 1.8rem; }
+                &:hover {
+                    i { background: set.$mCol-70 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='15' viewBox='0 0 17 15' fill='none'%3E%3Cpath d='M1.625 13V15H0V13H1.625ZM15.4375 13C15.9898 13 16.4375 13.4477 16.4375 14C16.4375 14.5523 15.9898 15 15.4375 15H5.6875C5.13522 15 4.6875 14.5523 4.6875 14C4.6875 13.4477 5.13522 13 5.6875 13H15.4375ZM1.625 6.5V8.5H0V6.5H1.625ZM15.4375 6.5C15.9898 6.5 16.4375 6.94772 16.4375 7.5C16.4375 8.05228 15.9898 8.5 15.4375 8.5H5.6875C5.13522 8.5 4.6875 8.05228 4.6875 7.5C4.6875 6.94772 5.13522 6.5 5.6875 6.5H15.4375ZM1.625 0V2H0V0H1.625ZM15.4375 0C15.9898 0 16.4375 0.447715 16.4375 1C16.4375 1.55228 15.9898 2 15.4375 2H5.6875C5.13522 2 4.6875 1.55228 4.6875 1C4.6875 0.447715 5.13522 0 5.6875 0H15.4375Z' fill='white'/%3E%3C/svg%3E") no-repeat center center / 1.8rem; }
+                }
+            }
+            &:hover {
+                i { background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='15' viewBox='0 0 17 15' fill='none'%3E%3Cpath d='M1.625 13V15H0V13H1.625ZM15.4375 13C15.9898 13 16.4375 13.4477 16.4375 14C16.4375 14.5523 15.9898 15 15.4375 15H5.6875C5.13522 15 4.6875 14.5523 4.6875 14C4.6875 13.4477 5.13522 13 5.6875 13H15.4375ZM1.625 6.5V8.5H0V6.5H1.625ZM15.4375 6.5C15.9898 6.5 16.4375 6.94772 16.4375 7.5C16.4375 8.05228 15.9898 8.5 15.4375 8.5H5.6875C5.13522 8.5 4.6875 8.05228 4.6875 7.5C4.6875 6.94772 5.13522 6.5 5.6875 6.5H15.4375ZM1.625 0V2H0V0H1.625ZM15.4375 0C15.9898 0 16.4375 0.447715 16.4375 1C16.4375 1.55228 15.9898 2 15.4375 2H5.6875C5.13522 2 4.6875 1.55228 4.6875 1C4.6875 0.447715 5.13522 0 5.6875 0H15.4375Z' fill='%233060FF'/%3E%3C/svg%3E") no-repeat center center / 1.8rem; }    
+            }
+            i { background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='15' viewBox='0 0 17 15' fill='none'%3E%3Cpath d='M1.625 13V15H0V13H1.625ZM15.4375 13C15.9898 13 16.4375 13.4477 16.4375 14C16.4375 14.5523 15.9898 15 15.4375 15H5.6875C5.13522 15 4.6875 14.5523 4.6875 14C4.6875 13.4477 5.13522 13 5.6875 13H15.4375ZM1.625 6.5V8.5H0V6.5H1.625ZM15.4375 6.5C15.9898 6.5 16.4375 6.94772 16.4375 7.5C16.4375 8.05228 15.9898 8.5 15.4375 8.5H5.6875C5.13522 8.5 4.6875 8.05228 4.6875 7.5C4.6875 6.94772 5.13522 6.5 5.6875 6.5H15.4375ZM1.625 0V2H0V0H1.625ZM15.4375 0C15.9898 0 16.4375 0.447715 16.4375 1C16.4375 1.55228 15.9898 2 15.4375 2H5.6875C5.13522 2 4.6875 1.55228 4.6875 1C4.6875 0.447715 5.13522 0 5.6875 0H15.4375Z' fill='%23999999'/%3E%3C/svg%3E") no-repeat center center / 1.8rem; }    
+        }
+        .vm-lear {
+            &.active {
+                i { background: set.$mCol-60 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Cpath d='M20.1668 15.3459V4.2817C20.1668 3.1817 19.2685 2.36586 18.1777 2.45753H18.1227C16.1977 2.62253 13.2735 3.60337 11.6418 4.63003L11.486 4.73086C11.2202 4.89586 10.7802 4.89586 10.5143 4.73086L10.2852 4.59337C8.6535 3.57587 5.7385 2.6042 3.8135 2.44836C2.72266 2.3567 1.8335 3.1817 1.8335 4.27253V15.3459C1.8335 16.2259 2.5485 17.0509 3.4285 17.1609L3.69433 17.1975C5.6835 17.4634 8.75433 18.4717 10.5143 19.4342L10.551 19.4525C10.7985 19.59 11.1927 19.59 11.431 19.4525C13.191 18.4809 16.271 17.4634 18.2693 17.1975L18.5718 17.1609C19.4518 17.0509 20.1668 16.2259 20.1668 15.3459Z' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M11 5.0332V18.7832' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.104 7.7832H5.0415' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.7915 10.5332H5.0415' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center center / 2.2rem; }
+                &:hover {
+                    i { background: set.$mCol-70 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Cpath d='M20.1668 15.3459V4.2817C20.1668 3.1817 19.2685 2.36586 18.1777 2.45753H18.1227C16.1977 2.62253 13.2735 3.60337 11.6418 4.63003L11.486 4.73086C11.2202 4.89586 10.7802 4.89586 10.5143 4.73086L10.2852 4.59337C8.6535 3.57587 5.7385 2.6042 3.8135 2.44836C2.72266 2.3567 1.8335 3.1817 1.8335 4.27253V15.3459C1.8335 16.2259 2.5485 17.0509 3.4285 17.1609L3.69433 17.1975C5.6835 17.4634 8.75433 18.4717 10.5143 19.4342L10.551 19.4525C10.7985 19.59 11.1927 19.59 11.431 19.4525C13.191 18.4809 16.271 17.4634 18.2693 17.1975L18.5718 17.1609C19.4518 17.0509 20.1668 16.2259 20.1668 15.3459Z' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M11 5.0332V18.7832' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.104 7.7832H5.0415' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.7915 10.5332H5.0415' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center center / 2.2rem; }
+                }
+            }
+            &:hover {
+                i { background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Cpath d='M20.1668 15.3459V4.2817C20.1668 3.1817 19.2685 2.36586 18.1777 2.45753H18.1227C16.1977 2.62253 13.2735 3.60337 11.6418 4.63003L11.486 4.73086C11.2202 4.89586 10.7802 4.89586 10.5143 4.73086L10.2852 4.59337C8.6535 3.57587 5.7385 2.6042 3.8135 2.44836C2.72266 2.3567 1.8335 3.1817 1.8335 4.27253V15.3459C1.8335 16.2259 2.5485 17.0509 3.4285 17.1609L3.69433 17.1975C5.6835 17.4634 8.75433 18.4717 10.5143 19.4342L10.551 19.4525C10.7985 19.59 11.1927 19.59 11.431 19.4525C13.191 18.4809 16.271 17.4634 18.2693 17.1975L18.5718 17.1609C19.4518 17.0509 20.1668 16.2259 20.1668 15.3459Z' stroke='%233060FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M11 5.0332V18.7832' stroke='%233060FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.104 7.7832H5.0415' stroke='%233060FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.7915 10.5332H5.0415' stroke='%233060FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center center / 2.2rem; }
+            }
+            i { background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'%3E%3Cpath d='M20.1668 15.3459V4.2817C20.1668 3.1817 19.2685 2.36586 18.1777 2.45753H18.1227C16.1977 2.62253 13.2735 3.60337 11.6418 4.63003L11.486 4.73086C11.2202 4.89586 10.7802 4.89586 10.5143 4.73086L10.2852 4.59337C8.6535 3.57587 5.7385 2.6042 3.8135 2.44836C2.72266 2.3567 1.8335 3.1817 1.8335 4.27253V15.3459C1.8335 16.2259 2.5485 17.0509 3.4285 17.1609L3.69433 17.1975C5.6835 17.4634 8.75433 18.4717 10.5143 19.4342L10.551 19.4525C10.7985 19.59 11.1927 19.59 11.431 19.4525C13.191 18.4809 16.271 17.4634 18.2693 17.1975L18.5718 17.1609C19.4518 17.0509 20.1668 16.2259 20.1668 15.3459Z' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M11 5.0332V18.7832' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.104 7.7832H5.0415' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.7915 10.5332H5.0415' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center center / 2.2rem; }
+        }
+        .vm-eva {
+            &.active {
+                i { background: set.$mCol-60 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M12.4883 0.30014C12.8055 -0.0167136 13.3195 -0.0167133 13.6367 0.30014L17.6992 4.36264C18.0165 4.67994 18.0165 5.19475 17.6992 5.51205L5.51172 17.6996C5.35936 17.8518 5.15292 17.9378 4.9375 17.9378H0.875C0.426371 17.9378 0.0626651 17.5739 0.0625 17.1253V13.0628C0.0625 12.8473 0.148408 12.64 0.300781 12.4876L12.4883 0.30014ZM1.6875 13.3988V16.3128H4.59961L15.9756 4.93784L13.0625 2.02475L1.6875 13.3988Z' fill='white'/%3E%3Cpath d='M3.07434 10.8633L7.13684 14.9258L5.98779 16.0748L1.92529 12.0123L3.07434 10.8633Z' fill='white'/%3E%3Cpath d='M11.1993 2.73828L15.2618 6.80078L14.1128 7.94983L10.0503 3.88733L11.1993 2.73828Z' fill='white'/%3E%3C/svg%3E") no-repeat center center / 2rem; }
+                &:hover {
+                    i { background: set.$mCol-60 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M12.4883 0.30014C12.8055 -0.0167136 13.3195 -0.0167133 13.6367 0.30014L17.6992 4.36264C18.0165 4.67994 18.0165 5.19475 17.6992 5.51205L5.51172 17.6996C5.35936 17.8518 5.15292 17.9378 4.9375 17.9378H0.875C0.426371 17.9378 0.0626651 17.5739 0.0625 17.1253V13.0628C0.0625 12.8473 0.148408 12.64 0.300781 12.4876L12.4883 0.30014ZM1.6875 13.3988V16.3128H4.59961L15.9756 4.93784L13.0625 2.02475L1.6875 13.3988Z' fill='white'/%3E%3Cpath d='M3.07434 10.8633L7.13684 14.9258L5.98779 16.0748L1.92529 12.0123L3.07434 10.8633Z' fill='white'/%3E%3Cpath d='M11.1993 2.73828L15.2618 6.80078L14.1128 7.94983L10.0503 3.88733L11.1993 2.73828Z' fill='white'/%3E%3C/svg%3E") no-repeat center center / 2rem; }
+                }
+            }
+            &:hover {
+                i { background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M12.4883 0.30014C12.8055 -0.0167136 13.3195 -0.0167133 13.6367 0.30014L17.6992 4.36264C18.0165 4.67994 18.0165 5.19475 17.6992 5.51205L5.51172 17.6996C5.35936 17.8518 5.15292 17.9378 4.9375 17.9378H0.875C0.426371 17.9378 0.0626651 17.5739 0.0625 17.1253V13.0628C0.0625 12.8473 0.148408 12.64 0.300781 12.4876L12.4883 0.30014ZM1.6875 13.3988V16.3128H4.59961L15.9756 4.93784L13.0625 2.02475L1.6875 13.3988Z' fill='%233060FF'/%3E%3Cpath d='M3.07434 10.8633L7.13684 14.9258L5.98779 16.0748L1.92529 12.0123L3.07434 10.8633Z' fill='%233060FF'/%3E%3Cpath d='M11.1993 2.73828L15.2618 6.80078L14.1128 7.94983L10.0503 3.88733L11.1993 2.73828Z' fill='%233060FF'/%3E%3C/svg%3E") no-repeat center center / 2rem; }
+            }
+            i { background: set.$gray-0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M12.4883 0.30014C12.8055 -0.0167136 13.3195 -0.0167133 13.6367 0.30014L17.6992 4.36264C18.0165 4.67994 18.0165 5.19475 17.6992 5.51205L5.51172 17.6996C5.35936 17.8518 5.15292 17.9378 4.9375 17.9378H0.875C0.426371 17.9378 0.0626651 17.5739 0.0625 17.1253V13.0628C0.0625 12.8473 0.148408 12.64 0.300781 12.4876L12.4883 0.30014ZM1.6875 13.3988V16.3128H4.59961L15.9756 4.93784L13.0625 2.02475L1.6875 13.3988Z' fill='%23999999'/%3E%3Cpath d='M3.07434 10.8633L7.13684 14.9258L5.98779 16.0748L1.92529 12.0123L3.07434 10.8633Z' fill='%23999999'/%3E%3Cpath d='M11.1993 2.73828L15.2618 6.80078L14.1128 7.94983L10.0503 3.88733L11.1993 2.73828Z' fill='%23999999'/%3E%3C/svg%3E") no-repeat center center / 2rem; }
+        }
+        .vm-que {
+            &.active {
+                i { background: set.$mCol-60  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22' fill='none'%3E%3Cpath d='M10 8.25062C10 7.2381 10.8954 6.41729 12 6.41729C13.1046 6.41729 14 7.2381 14 8.25062C14 8.6156 13.8837 8.95566 13.6831 9.24135C13.0854 10.0928 12 10.9048 12 11.9173V12.3756M12 14.6673V15.584M3 8.37158V13.6297C3 15.0261 3.7923 16.3164 5.07846 17.0146L9.92154 19.6437C11.2077 20.3419 12.7923 20.3419 14.0785 19.6437L18.9215 17.0146C20.2077 16.3164 21 15.0261 21 13.6297V8.37158C21 6.9752 20.2077 5.68489 18.9215 4.9867L14.0785 2.35763C12.7923 1.65944 11.2077 1.65944 9.92154 2.35763L5.07846 4.9867C3.7923 5.68489 3 6.9752 3 8.37158Z' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center center / 2.4rem; }
+                &:hover {
+                    i { background: set.$mCol-60  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22' fill='none'%3E%3Cpath d='M10 8.25062C10 7.2381 10.8954 6.41729 12 6.41729C13.1046 6.41729 14 7.2381 14 8.25062C14 8.6156 13.8837 8.95566 13.6831 9.24135C13.0854 10.0928 12 10.9048 12 11.9173V12.3756M12 14.6673V15.584M3 8.37158V13.6297C3 15.0261 3.7923 16.3164 5.07846 17.0146L9.92154 19.6437C11.2077 20.3419 12.7923 20.3419 14.0785 19.6437L18.9215 17.0146C20.2077 16.3164 21 15.0261 21 13.6297V8.37158C21 6.9752 20.2077 5.68489 18.9215 4.9867L14.0785 2.35763C12.7923 1.65944 11.2077 1.65944 9.92154 2.35763L5.07846 4.9867C3.7923 5.68489 3 6.9752 3 8.37158Z' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center center / 2.4rem; }
+                }
+            }
+            &:hover {
+                i { background: set.$gray-0  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22' fill='none'%3E%3Cpath d='M10 8.25062C10 7.2381 10.8954 6.41729 12 6.41729C13.1046 6.41729 14 7.2381 14 8.25062C14 8.6156 13.8837 8.95566 13.6831 9.24135C13.0854 10.0928 12 10.9048 12 11.9173V12.3756M12 14.6673V15.584M3 8.37158V13.6297C3 15.0261 3.7923 16.3164 5.07846 17.0146L9.92154 19.6437C11.2077 20.3419 12.7923 20.3419 14.0785 19.6437L18.9215 17.0146C20.2077 16.3164 21 15.0261 21 13.6297V8.37158C21 6.9752 20.2077 5.68489 18.9215 4.9867L14.0785 2.35763C12.7923 1.65944 11.2077 1.65944 9.92154 2.35763L5.07846 4.9867C3.7923 5.68489 3 6.9752 3 8.37158Z' stroke='%233060FF' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center center / 2.4rem; }
+            }
+            i { background: set.$gray-0  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='22' viewBox='0 0 24 22' fill='none'%3E%3Cpath d='M10 8.25062C10 7.2381 10.8954 6.41729 12 6.41729C13.1046 6.41729 14 7.2381 14 8.25062C14 8.6156 13.8837 8.95566 13.6831 9.24135C13.0854 10.0928 12 10.9048 12 11.9173V12.3756M12 14.6673V15.584M3 8.37158V13.6297C3 15.0261 3.7923 16.3164 5.07846 17.0146L9.92154 19.6437C11.2077 20.3419 12.7923 20.3419 14.0785 19.6437L18.9215 17.0146C20.2077 16.3164 21 15.0261 21 13.6297V8.37158C21 6.9752 20.2077 5.68489 18.9215 4.9867L14.0785 2.35763C12.7923 1.65944 11.2077 1.65944 9.92154 2.35763L5.07846 4.9867C3.7923 5.68489 3 6.9752 3 8.37158Z' stroke='%23999999' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center center / 2.4rem; }
+        }
+    }
+    .vm-setting {
+        display: flex; flex-direction: column; gap: 0.6rem;
+        font-size: set.$ft-bd-m; color: set.$gray-50; cursor: pointer;
+        i {
+            width: 2.8rem;
+            aspect-ratio: 1/1;
+            background: set.icon(ico-setting, set.$gray-50) no-repeat center center / contain;
+        }
+        // menu 밖에 있어 위 `menu li.active` 가 걸리지 않으므로 여기서 따로 준다.
+        &.active, &:hover {
+            font-weight: 600; color: set.$mCol-60;
+            i { background: set.icon(ico-setting, set.$mCol-60) no-repeat center center / contain; }
+        }
+    }
+  }
+
+  .videoContent {
+    flex-grow: 1;
+    overflow: hidden;
+    min-width: 0; // 내부 콘텐츠(video 등)의 min-content 때문에 확대가 막히는 것 방지
+    .videoArea {
+        position: relative; // 컨트롤바를 영상 위에 얹는 기준
+        width: 100%;
+        aspect-ratio: 16/8;
+        background: set.$gray-120;
+        overflow: hidden;
+        video { width: 100%; height: 100%; object-fit: contain; display: block; }
+        // 전체화면은 <video> 가 아니라 이 영역째 띄운다 — video 만 띄우면 브라우저 기본 컨트롤이 나오고
+        // 우리 컨트롤바는 화면에서 사라진다. 화면 비율은 영상과 다르므로 고정 비율을 푼다.
+        &:fullscreen { aspect-ratio: auto; height: 100%; }
+
+        /* ---- 커스텀 컨트롤바 (마크업 video_view.html / 동작 video.js) ---- */
+        .videoControlBar {
+            position: absolute; left: 0; bottom: 0; z-index: 2;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 2.4rem 1.4rem;
+            isolation: isolate; // 아래 그라데이션(::before)을 이 상자 안에만 깐다
+            transition: opacity 300ms ease;
+            // 재생 중 한동안 조작이 없으면 video.js 가 붙인다(정지 상태에서는 붙이지 않는다).
+            &.is-hide { opacity: 0; pointer-events: none; }
+
+            // 밝은 장면 위에서도 흰 아이콘이 보이도록 아래쪽만 어둡게 깐다.
+            &::before {
+                content: "";
+                position: absolute; left: 0; bottom: 0; z-index: -1;
+                width: 100%; height: calc(100% + 4rem);
+                background: linear-gradient(0deg, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, 0) 100%);
+                opacity: .7; transition: opacity 500ms ease;
+                pointer-events: none;
+            }
+            &:hover, &:focus-within {
+                &::before { opacity: 1; }
+                // 조작하는 동안에는 진행바를 두껍게 해 잡기 쉽게 한다.
+                .mov-gauge p { height: .7rem; }
+            }
+
+            .ctr-state {
+                position: relative;
+                display: flex; align-items: center; justify-content: space-between;
+                width: 100%;
+                padding-top: 2.4rem; // 위에 얹은 진행바(.set-seekBar) 자리
+                .sta-left, .sta-right { display: flex; align-items: center; gap: 1.6rem; }
+            }
+
+            // 재생 위치 — 버튼 줄 위에 가로로 꽉 채워 얹는다.
+            .set-seekBar {
+                position: absolute; left: 0; top: 0; width: 100%;
+                .mov-gauge {
+                    padding: .6rem 0; // 얇은 막대는 정확히 누르기 어려워 클릭 여유를 둔다
+                    cursor: pointer;
+                    touch-action: none; // 끌어서 이동할 때 화면이 같이 스크롤되지 않게
+                    p { position: relative; width: 100%; height: .3rem; transition: height 300ms ease; }
+                    span {
+                        position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+                        display: block; height: 100%; border-radius: 50rem;
+                    }
+                    .mov-here {
+                        z-index: 1; width: 0; background: set.$gray-0;
+                        &::after { // 현재 위치 손잡이
+                            content: "";
+                            position: absolute; right: 0; top: 50%; transform: translate(50%, -50%);
+                            width: 1.4rem; aspect-ratio: 1/1;
+                            border-radius: 100rem; background: set.$mCol-60;
+                            pointer-events: none;
+                        }
+                    }
+                    .mov-total { width: 100%; background: rgba(255, 255, 255, .35); }
+                }
+            }
+
+            // 재생/일시정지는 한 자리에 겹쳐 두고 지금 쓸 것에만 on 을 남긴다.
+            .set-from {
+                position: relative;
+                width: 2.4rem; aspect-ratio: 1/1;
+                button {
+                    position: absolute; left: 0; top: 0;
+                    width: 100%; height: 100%;
+                    display: none;
+                    &.on { display: block; }
+                }
+            }
+
+            // 음량 — 버튼 위로 조절바가 열린다(.on). 오른쪽으로 열면 타이머와 겹친다.
+            .set-sound {
+                position: relative;
+                .vol-gauge {
+                    position: absolute; left: 50%; bottom: calc(100% + 1.4rem); z-index: 3;
+                    transform: translateX(-50%);
+                    display: none;
+                    width: 12rem;
+                    box-sizing: border-box;
+                    padding: 1.4rem;
+                    border-radius: 5rem;
+                    background: rgba(0, 0, 0, .74);
+                    touch-action: none;
+                    cursor: pointer;
+                    &.on { display: block; }
+                    p { position: relative; width: 100%; height: .4rem; }
+                    span {
+                        position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+                        display: block; height: 100%; border-radius: 50rem;
+                    }
+                    .vol-here {
+                        z-index: 1; background: set.$gray-0;
+                        &::after {
+                            content: "";
+                            position: absolute; right: 0; top: 50%; transform: translate(50%, -50%);
+                            width: 1.2rem; aspect-ratio: 1/1;
+                            border-radius: 100rem; background: set.$mCol-60;
+                            pointer-events: none;
+                        }
+                    }
+                    .vol-total { width: 100%; background: rgba(255, 255, 255, .4); }
+                }
+            }
+
+            .set-timer {
+                color: set.$gray-0;
+                font-size: set.$ft-bd-s;
+                font-weight: 300;
+                // 숫자 폭이 고정이라야 재생 중에 뒤 글자가 흔들리지 않는다.
+                p { display: flex; align-items: center; font-variant-numeric: tabular-nums; }
+            }
+
+            .ctr-play, .ctr-pause, .ctr-volume, .ctr-fullscreen {
+                display: block;
+                width: 2.4rem; aspect-ratio: 1/1;
+                background: no-repeat center center / contain;
+                cursor: pointer;
+                opacity: .9;
+                // 버튼 글자는 스크린리더용으로 남기고 화면 밖으로 민다.
+                text-indent: -9999px; overflow: hidden; white-space: nowrap;
+                &:hover { opacity: 1; }
+            }
+            .ctr-play { background-image: set.icon(ico-play, set.$gray-0); }
+            .ctr-pause { background-image: set.icon(ico-pause, set.$gray-0); }
+            .ctr-volume {
+                background-image: set.icon(ico-volume, set.$gray-0);
+                &.ctr-mute { background-image: set.icon(ico-mute, set.$gray-0); }
+            }
+            .ctr-fullscreen { background-image: set.icon(ico-full, set.$gray-0); }
+        }
+        // 전체화면 중에는 해제 아이콘으로 바꾼다(video.js 가 is-full 을 붙인다).
+        // 위 .videoControlBar 안 선언보다 선택자가 길어야 이긴다.
+        &.is-full .videoControlBar .ctr-fullscreen { background-image: set.icon(ico-full-off, set.$gray-0); }
+    }
+    .videoInfo {
+        padding: 1rem 3rem;
+        dl {
+            dt { font-size: set.$ft-tt-m; font-weight: 600; color: set.$gray-100; }
+            dd { 
+                font-size: set.$ft-bd-l; font-weight: 200; color: set.$gray-50; margin-top: 0.4rem; 
+                display: flex; align-items: center;
+                p {
+                    font-weight: 600;
+                    color: set.$mCol-60; display: flex; align-items: center; gap: .4rem;
+                    i {
+                        width: 1.8rem;
+                        background: set.icon(ico-clock, set.$mCol-60) no-repeat center center / contain;
+                    }
+                }
+                span {
+                    &::before {
+                        content: "·";
+                        font-weight: 200;
+                        margin: 0 .5rem;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+        .infoTip {
+            font-size: set.$ft-bd-m;
+            color: set.$gray-50;
+            border-radius: .6rem;
+            border: .1rem solid set.$mCol-20;
+            background: set.$mCol-5;
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1.4rem 2rem;
+            margin: 2rem 0;
+            i { background: set.icon(ico-info, set.$mCol-60) no-repeat center center / contain; width: 1.8rem;}
+        }
+        .btnArea {
+            display: flex; align-items: center; gap: 1rem;
+            // padding-top: 4rem; margin-top: 4rem; border-top: .1rem solid set.$gray-20;
+        }
+    }
+  }
+
+  .videoAside {
+    $asideWidth: 56rem;
+    $asidePadding: 3rem;
+    // 폭을 확정하고 줄어들지 않게 둔다. 폭이 유동적이면 접히는 동안 목록 글자가 다시 줄바꿈되면서
+    // 항목 높이가 바뀌어 화면이 출렁인다. 남는 폭은 flex-grow:1 인 .videoContent 가 가져간다.
+    width: $asideWidth; flex-shrink: 0;
+    padding: $asidePadding;
+    overflow: hidden; // 폭이 줄어드는 동안 내부 콘텐츠가 비어져 나오지 않게
+    // display:none 은 전환이 안 되므로, 실제 폭을 만드는 max-width 를 0 으로 줄인다.
+    // #videoWrap 의 gap 4rem 은 폭이 0 이어도 남으므로 음수 마진으로 상쇄한다.
+    .as_panel {
+        display: none; // header 메뉴가 고른 하나(.is-on)만 보인다
+        // 제목·진행률은 내용만큼만 쓰고 남는 높이를 목록이 가져가게 한다.
+        // (목록 높이를 calc 로 빼면 제목 글자 크기·진행률 영역이 바뀔 때마다 어긋난다)
+        height: 100%;
+        // 부모가 접혀도 이 폭은 그대로 유지된다(넘치는 만큼은 위 overflow:hidden 이 잘라 낸다).
+        // 그래서 접히는 내내 줄바꿈·높이가 처음 그대로고, 내용이 통째로 밀려 나가듯 보인다.
+        width: $asideWidth - $asidePadding * 2;
+        &.is-on { display: flex; flex-direction: column; }
+    }
+    .as_tit {
+        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 2rem;
+        .as_close {
+            // 이미지 없이 선 두 개를 ±45도로 겹쳐 X 를 만든다.
+            position: relative; width: 2.4rem; aspect-ratio: 1/1; flex-shrink: 0;
+            box-sizing: border-box;
+            &::before, &::after {
+                content: "";
+                width: 100%; height: .1rem; background: set.$gray-50;
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: 0 0;
+            }
+            &::before { rotate: 45deg; }
+            &::after { rotate: -45deg; }
+            &:hover {
+                &::before, &::after { background: set.$gray-100; }
+            }
+        }
+        p { font-size: set.$ft-tt-s; font-weight: 600; color: set.$gray-100; }
+    }
+    .as_data { flex-shrink: 0; margin-bottom: 1rem; }
+    .as_conList {
+        // min-height: 0 이 없으면 flex 아이템 기본값(min-height:auto) 때문에
+        // 목록이 내용 높이만큼 늘어나 스크롤이 생기지 않는다.
+        flex: 1; min-height: 0;
+        overflow-y: auto; overflow-x: hidden;
+        scrollbar-gutter: stable; // 항목 수에 따라 스크롤바가 생겼다 사라져도 폭이 흔들리지 않게
+        padding-bottom: 4rem;
+        ul {
+            display: flex; flex-direction: column;
+            counter-reset: asConItem;
+            li {
+                counter-increment: asConItem;
+                display: flex; align-items: center; gap: 1.4rem; padding: 1rem 2rem; 
+                &:not(:first-of-type) {
+                    border-top: 1px solid set.$gray-20;
+                }
+                dl { flex-grow: 1; }
+                &.ing {
+                    border: .1rem solid set.$mCol-30; background: set.$mCol-5;
+                    border-radius: 1rem;
+                    & + li { border-top: none; }
+                    dl dt { color: set.$mCol-60; }
+                    .state {
+                        &::before { content: "진행중"; font-weight: 600; color: set.$mCol-60; }
+                    }
+                    .num {
+                        &::before {
+                            content: "";
+                            width: 1.6rem;
+                            display: block;
+                            aspect-ratio: 1/1;
+                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='13' viewBox='0 0 11 13' fill='none'%3E%3Cpath d='M1.08521 0.115555L10.1287 5.89332C10.4283 6.08477 10.4891 6.44693 10.2643 6.7022C10.2257 6.746 10.1801 6.78491 10.1287 6.81776L1.08521 12.5955C0.78554 12.787 0.360407 12.7352 0.135652 12.48C0.0475987 12.38 0 12.2583 0 12.1333V0.577776C0 0.258679 0.303667 0 0.678258 0C0.825013 0 0.967809 0.0405471 1.08521 0.115555Z' fill='%233060FF'/%3E%3C/svg%3E") no-repeat center center / contain;
+                        }
+                    }
+                }
+                &.comple {
+                    .state {
+                        &::before {
+                            content: "";
+                            display: block;
+                            width: 2.2rem; aspect-ratio: 1/1;
+                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='14' viewBox='0 0 20 14' fill='none'%3E%3Cpath d='M18.9704 0.233809C19.2973 0.537342 19.3399 1.03243 19.0859 1.38533L19.0162 1.4704L7.64121 13.7204C7.31325 14.0736 6.7684 14.0911 6.41858 13.7791L6.34151 13.7012L0.216507 6.7012C-0.101714 6.33751 -0.0648616 5.78472 0.29882 5.4665C0.634527 5.17276 1.13137 5.18156 1.45611 5.4707L1.53352 5.54881L7.02014 11.8178L17.7338 0.279609C18.0374 -0.0472727 18.5324 -0.0898893 18.8853 0.16412L18.9704 0.233809Z' fill='%233060FF'/%3E%3C/svg%3E") no-repeat center center / contain;
+                        }
+                    }
+                }
+                &:hover {
+                    dl dt { color: set.$mCol-60; }
+                }
+                .state {
+                    &::before {
+                        content: "미완료";
+                        font-size: set.$ft-bd-s;
+                        font-weight: 300;
+                        color: set.$gray-50;
+                        rotate: -0.04deg;
+                    }
+                }
+            }
+            .num {
+                flex-shrink: 0;
+                font-size: set.$ft-bd-s;
+                display: block;
+                width: 1.6rem; aspect-ratio: 1/1; text-align: center;
+                color: set.$gray-50; font-weight: 200;
+                &::before { content: counter(asConItem); }
+            }
+            .thumb {
+                // 썸네일이 없을 때(img 가 비었을 때) 카드 컴포넌트와 같은 'NO IMAGE' 자리표시자를 쓴다.
+                // 이미지 채움(object-fit)까지 믹스인이 들고 있으므로 여기서 다시 쓰지 않는다.
+                @include set.notImg();
+                flex-shrink: 0;
+                overflow: hidden; border-radius: .4rem;
+                // 믹스인이 .thumb:not(img) 에 width/height:100% 를 걸어 두므로 크기를 그냥 주면 씹힌다.
+                // 같은 선택자로 다시 잡아야 이긴다. (li 마다 썸네일 크기가 같아야 번호·제목 열이 맞는다)
+                // 16/9 는 aspect-ratio 대신 실수치로 준다 — img 의 height:100% 가 풀려면 높이가 확정돼야 한다.
+                &:not(img) {
+                    width: 11.4rem; height: 6.4rem;
+                    // 자리표시자 그림 기본값(35%)은 이 크기에서 너무 작아 목록에서만 키운다.
+                    background-size: 70%;
+                }
+            }
+            dl {
+                dt { font-size: set.$ft-bd-m; font-weight: 700; color: set.$gray-100; margin-bottom: 0.4rem; }
+                dd { font-size: set.$ft-bd-s; font-weight: 300; color: set.$gray-50; }
+            }
+
+
+        }
+    }
+    // 수강평 패널. 남는 높이를 받아 안에서 스크롤하는 규칙은 .as_conList 와 같다.
+    .as_review {
+        flex: 1; min-height: 0;
+        overflow-y: auto; overflow-x: hidden;
+        scrollbar-gutter: stable;
+        padding-bottom: 4rem;
+        // .card-review(board.css)는 카드 사이 간격을 갖고 있지 않아 이 패널에서만 세로로 벌린다.
+        .card-review { display: flex; flex-direction: column; gap: 1rem; }
+    }
+    // 평점 요약 — 왼쪽은 평균 점수, 오른쪽은 별점과 참여 인원.
+    // 별은 카드 리뷰와 같은 공통 rating 믹스인이고, 점수는 인라인 --score 로 넘긴다.
+    .total_rank {
+        display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+        padding: 2rem 2.4rem; margin-bottom: 2rem;
+        border-radius: 1rem; background: set.$gray-5;
+        dl {
+            dt { font-size: set.$ft-bd-s; font-weight: 300; color: set.$gray-50; }
+            dd {
+                font-size: set.$ft-hd-m; font-weight: 700; color: set.$gray-100;
+                line-height: 1.1; margin-top: .4rem;
+            }
+        }
+        // 인원수는 믹스인이 .rank > span 으로 이미 잡아 둔다(작은 회색 글씨).
+        .rank { @include set.rating(2.4rem, .8rem); flex-shrink: 0; }
+    }
+    // 한 패널 안에서 목록 ↔ 작성 폼을 갈아 끼운다(video.js 가 is-on 을 옮긴다).
+    // .as_panel 이 이미 flex 컬럼이라, 켜진 뷰가 남는 높이를 다 가져가고 그 안에서 다시 나눈다.
+    .as_view {
+        display: none;
+        &.is-on { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    }
+    // 작성 뷰의 뒤로가기. .as_close 와 같은 자리(제목 줄)에 있어 크기를 맞춘다.
+    .as_back {
+        width: 2.4rem; aspect-ratio: 1/1; flex-shrink: 0;
+        background: set.icon(arr-left, set.$gray-50) no-repeat center center / 1.6rem;
+        &:hover { background-image: set.icon(arr-left, set.$gray-100); }
+    }
+    // 뒤로가기가 붙어도 닫기 버튼이 오른쪽 끝에 남게 한다.
+    .as_tit p { flex-grow: 1; }
+
+    // 질문 작성 폼 — 등록 폼은 공통 테이블 폼(.tb-form-s, board.css)을 그대로 쓴다.
+    // .tb-form-s 안에 .form-s 가 들어 있어 인풋 크기·오류 상태(.set__er)까지 따라오므로,
+    // 여기서는 사이드 폭(50rem)에서만 어긋나는 것들만 손본다.
+    .as_write { padding-right: .4rem; }
+    .as_write > .cau-s { margin-bottom: 1.6rem; }
+    .tb-form-s {
+        // 라벨 칸이 좁아 두 줄로 넘어가므로 세로 가운데가 아니라 줄바꿈을 허용한다.
+        th { line-height: 1.3; word-break: keep-all; }
+        // 한 칸에 인풋과 안내문구가 같이 들어간다. 테이블 셀이라 gap 이 안 먹어 마진으로 띄운다.
+        td {
+            [class^="cau-"] { margin-top: .6rem; }
+            // 파일 이름 칸은 직접 못 고치는 자리라 비활성처럼 보이게 한다(디자인 시스템에 readonly 스타일이 없다).
+            .fileName { background: set.$gray-5; color: set.$gray-70; pointer-events: none; }
+            textarea { min-height: 12rem; }
+        }
+    }
+    // 목록의 학습자료 버튼(.wp100)과 달리 작성 뷰는 취소·등록 두 개를 반씩 나눈다.
+    .btnArea {
+        flex-shrink: 0; margin-top: 2rem;
+        display: flex; align-items: center; gap: 1rem;
+        button { flex: 1 1 0; }
+    }
+    // 학습 질문 패널 — 탭은 공통 .tab-{size}.ud, 목록은 공통 .acd-{size} 를 그대로 쓰고
+    // 여기서는 패널 폭에 맞추는 것만 손본다.
+    .as_tab {
+        flex-shrink: 0; // .as_tit 과 마찬가지로 남는 높이는 아래 목록이 가져간다
+        margin-bottom: 1.6rem;
+        border-bottom: .1rem solid set.$gray-20;
+    }
+    .as_qna {
+        // 아코디언 화살표(summary::after)가 오른쪽 끝에 있어 제목이 그 아래로 들어간다.
+        summary {
+            padding-right: 4rem;
+            em { background: set.$mCol-60; }
+            em.wait { background: set.$gray-40; }
+        }
+        .qna_ask { color: set.$gray-90; }
+        .qna_ans {
+            margin-top: 1.2rem; padding: 1.2rem 1.4rem;
+            border-radius: .6rem; background: set.$mCol-5;
+            strong { display: block; margin-bottom: .4rem; font-weight: 600; color: set.$mCol-60; }
+            p { color: set.$gray-90; }
+        }
+        .qna_none {
+            padding: 4rem 0; text-align: center;
+            font-size: set.$ft-bd-m; color: set.$gray-50;
+        }
+    }
+    &.is-hide {
+      max-width: 0;
+      padding-left: 0; padding-right: 0; // 좌우 패딩 6rem 은 max-width:0 으로 줄지 않아 그만큼 남는다
+      margin-left: -4rem;
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+
+/* 반응형 */
+
+// 좁은 화면에서는 헤더·본문·사이드 3단 가로 배치를 유지할 수 없다.
+// 헤더는 하단 고정 탭바가 되고, 사이드는 그 탭바 위로 올라오는 시트가 된다.
+$navHeight: 6.8rem;
+$mobileGutter: 1.6rem;
+// iOS 홈 인디케이터가 탭바를 가리지 않게 안전영역만큼 더 띄운다.
+$navSafe: calc(#{$navHeight} + env(safe-area-inset-bottom, 0px));
+
+/* 1200px — 아직 3단이지만 영상이 너무 좁아지므로 여백과 사이드 폭을 줄인다 */
+@include set.res-1200 {
+  #videoWrap {
+    padding: 2rem; gap: 2rem;
+    header, .videoContent, .videoAside { height: calc(100vh - 4rem); }
+    header { width: 8rem; padding: 3rem 0; }
+    header menu { gap: 2rem; }
+    header menu i { width: 5rem; }
+
+    .videoAside {
+      // 폭을 바꿀 때는 .as_panel(고정폭)과 접힘 마진(= #videoWrap gap)도 같이 맞춰야
+      // 접히는 동안 줄바꿈이 다시 잡히거나 빈 칸이 남지 않는다.
+      width: 40rem; padding: 2rem;
+      .as_panel { width: 36rem; }
+      .as_conList ul li { padding: 1rem; }
+      &.is-hide { margin-left: -2rem; }
+    }
+  }
+}
+
+/* 1024px — 헤더는 하단 탭바로, 사이드는 시트로 */
+@include set.res-laptop {
+  #videoWrap {
+    display: block;
+    height: auto; padding: 0 0 $navSafe; // 하단 탭바가 가리는 만큼 비워 둔다
+    min-height: 100dvh;
+
+    header, .videoContent, .videoAside { height: auto; border-radius: 0; }
+
+    /* 헤더 → 하단 고정 탭바 */
+    header {
+      position: fixed; left: 0; bottom: 0; z-index: 30;
+      width: 100%; height: auto; min-height: $navSafe; // 안전영역까지 포함해야 탭 내용이 6.8rem 을 유지한다
+      padding: 0 0 env(safe-area-inset-bottom, 0px);
+      flex-direction: row;
+      border-top: .1rem solid set.$gray-20;
+      hr { display: none; } // 세로 배치용 구분선이라 가로에서는 쓰지 않는다
+      // 메뉴 4개 + 설정 1개를 5등분해 아이콘 간격이 화면 폭을 타지 않게 한다.
+      menu { flex: 4 1 0; flex-direction: row; gap: 0; }
+      menu li, .vm-setting {
+        flex: 1 1 0; gap: .3rem;
+        font-size: set.$ft-bd-xs; white-space: nowrap;
+      }
+      // 6rem 사각형은 탭바 높이에 들어가지 않는다. 아이콘 자체 크기(background)는 그대로 두고 상자만 줄인다.
+      menu i { width: 3.2rem; border-radius: .8rem; box-shadow: none; }
+      .vm-setting i { width: 2.4rem; }
+    }
+
+    .videoContent {
+      .videoArea { aspect-ratio: 16/9; }
+      // 컨트롤바도 좁아진 폭에 맞춰 여백·간격만 줄인다(구조는 그대로).
+      .videoArea .videoControlBar {
+        padding: 0 $mobileGutter 1rem;
+        .ctr-state { padding-top: 2rem; }
+        .ctr-state .sta-left, .ctr-state .sta-right { gap: 1.2rem; }
+        .ctr-play, .ctr-pause, .ctr-volume, .ctr-fullscreen { width: 2rem; }
+        .set-from { width: 2rem; }
+      }
+      .videoInfo {
+        padding: 2rem $mobileGutter;
+        .infoTip { margin: 1.6rem 0; padding: 1.2rem 1.4rem; }
+        .btnArea { flex-wrap: wrap; button { flex: 1 1 auto; } }
+      }
+    }
+
+    /* 사이드 → 평소에는 숨어 있다가 탭바 위로 올라오는 시트 */
+    .videoAside {
+      position: fixed; left: 0; bottom: $navSafe; z-index: 20;
+      width: 100%; max-width: none;
+      height: 60dvh; max-height: calc(100dvh - #{$navHeight} - 4rem);
+      padding: 2rem $mobileGutter;
+      border-radius: 1.6rem 1.6rem 0 0;
+      box-shadow: 0 -.4rem 2rem rgba(0, 0, 0, .12);
+      .as_panel { width: 100%; }
+      .as_conList ul li { padding: 1rem 0; }
+      // 가로 폭이 100% 라 max-width 로는 접히지 않는다. 아래로 밀어 내고 여백은 되돌린다.
+      // 처음 진입 시 이 상태로 시작하는 것은 video.js 가 화면 폭을 보고 붙여 준다.
+      &.is-hide {
+        max-width: none;
+        margin-left: 0;
+        padding-left: $mobileGutter; padding-right: $mobileGutter;
+        transform: translateY(100%);
+      }
+    }
+  }
+}
+
+/* 720px */
+@include set.res-tablet {
+  #videoWrap {
+    .videoContent .videoInfo .btnArea button { flex: 1 1 45%; }
+    // 좁은 화면에서는 손가락으로 끌 자리를 넓히고, 음량 조절바와 타이머는 폭에 맞춰 줄인다.
+    .videoContent .videoArea .videoControlBar {
+      .set-seekBar .mov-gauge { padding: 1rem 0; }
+      .set-sound .vol-gauge { width: 9rem; }
+      .set-timer { font-size: set.$ft-bd-xs; }
+    }
+    .videoAside {
+      height: 68dvh;
+      // 크기는 믹스인(.thumb:not(img))과 같은 선택자로 덮어야 한다 — 위 기본값과 같은 이유.
+      .as_conList ul li { gap: 1rem; .thumb:not(img) { width: 9.2rem; height: 5.2rem; } }
+    }
+  }
+}
