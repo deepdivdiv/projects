@@ -3,6 +3,7 @@ package com.snet.musicapk;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import java.io.BufferedInputStream;
@@ -26,9 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,17 +70,38 @@ final class ZipLibrary {
     static final class EntryStream implements Closeable {
         final InputStream in;
         final long size;
-        private final ZipFile zip;
+        private final ZipReader reader;
 
-        EntryStream(ZipFile zip, InputStream in, long size) {
-            this.zip = zip;
+        EntryStream(ZipReader reader, InputStream in, long size) {
+            this.reader = reader;
             this.in = in;
             this.size = size;
         }
 
         @Override
         public void close() throws IOException {
-            zip.close();
+            try {
+                in.close();
+            } finally {
+                reader.close();
+            }
+        }
+    }
+
+    /** ZIP의 위치. ref는 파일 경로이거나, 스토어 버전에서는 문서 주소다. */
+    static final class Source {
+        final String name;
+        final long size;
+        final String ref;
+
+        Source(String name, long size, String ref) {
+            this.name = name;
+            this.size = size;
+            this.ref = ref;
+        }
+
+        static Source of(File file) {
+            return new Source(file.getName(), file.length(), file.getPath());
         }
     }
 
@@ -108,20 +128,20 @@ final class ZipLibrary {
         return isAudio(name) || isUnplayableAudio(name) ? name.substring(0, name.lastIndexOf('.')) : name;
     }
 
-    private static String id(File zip) {
-        return hash(zip.getName() + "/" + zip.length());
+    private static String id(Source zip) {
+        return hash(zip.name + "/" + zip.size);
     }
 
     /** 처음 열 때만 목록을 만들고, 그 뒤로는 저장해 둔 목록으로 바로 연다. */
-    static JSObject open(Context context, File zip, Runnable onSlowOpen) throws IOException, JSONException {
+    static JSObject open(Context context, Source zip, Runnable onSlowOpen) throws IOException, JSONException {
         String id = id(zip);
         File dir = new File(root(context), id);
         File metaFile = new File(dir, META);
         if (metaFile.exists()) {
             JSONObject meta = readMeta(metaFile);
             if (isIndexed(meta)) {
-                if (!zip.getPath().equals(meta.optString("source"))) {
-                    meta.put("source", zip.getPath()); // 파일을 옮겨도 계속 재생되게 한다.
+                if (!zip.ref.equals(meta.optString("source"))) {
+                    meta.put("source", zip.ref); // 파일을 옮겨도 계속 재생되게 한다.
                     Files.write(metaFile.toPath(), meta.toString().getBytes(StandardCharsets.UTF_8));
                 }
                 return load(context, PATH_PREFIX + id);
@@ -129,10 +149,10 @@ final class ZipLibrary {
         }
         onSlowOpen.run();
         List<Entry> entries;
-        try {
-            entries = scan(zip);
+        try (ZipReader reader = reader(context, zip.ref)) {
+            entries = scan(reader);
         } catch (ZipException e) {
-            throw new IOException("암호가 걸렸거나 손상된 ZIP은 열 수 없습니다.");
+            throw new IOException("손상된 ZIP이거나 지원하지 않는 형식입니다.");
         }
         if (entries.isEmpty()) {
             throw new IOException("ZIP 안에 재생할 수 있는 파일이 없습니다.");
@@ -146,8 +166,8 @@ final class ZipLibrary {
                 .put("duration", e.duration));
         }
         JSONObject meta = new JSONObject()
-            .put("name", zip.getName().replaceFirst("(?i)\\.zip$", ""))
-            .put("source", zip.getPath())
+            .put("name", zip.name.replaceFirst("(?i)\\.zip$", ""))
+            .put("source", zip.ref)
             .put("tracks", tracks);
         deleteRecursively(dir); // 예전 버전이 풀어 둔 사본이 있으면 공간을 돌려준다.
         if (!dir.mkdirs()) {
@@ -155,6 +175,27 @@ final class ZipLibrary {
         }
         Files.write(metaFile.toPath(), meta.toString().getBytes(StandardCharsets.UTF_8));
         return load(context, PATH_PREFIX + id);
+    }
+
+    /** 스토어 버전은 경로 없이 파일 설명자로만 ZIP을 읽을 수 있다. */
+    private static ZipReader reader(Context context, String ref) throws IOException {
+        if (!ref.startsWith("content:")) {
+            return ZipReader.open(new File(ref));
+        }
+        ParcelFileDescriptor descriptor;
+        try {
+            descriptor = context.getContentResolver().openFileDescriptor(Uri.parse(ref), "r");
+        } catch (SecurityException e) {
+            throw new IOException("폴더 연결이 끊겼습니다. 다시 연결해 주세요.");
+        }
+        if (descriptor == null) {
+            throw new IOException("ZIP 파일을 열 수 없습니다.");
+        }
+        FileInputStream in = new FileInputStream(descriptor.getFileDescriptor());
+        return new ZipReader(in.getChannel(), () -> {
+            in.close();
+            descriptor.close();
+        });
     }
 
     private static boolean isIndexed(JSONObject meta) throws JSONException {
@@ -166,62 +207,57 @@ final class ZipLibrary {
         return new JSONObject(new String(Files.readAllBytes(metaFile.toPath()), StandardCharsets.UTF_8));
     }
 
-    /** 이름 바이트를 보존해 두었다가 decodeName에서 UTF-8/CP949를 판별한다. */
-    private static ZipFile openZip(File zip) throws IOException {
-        return new ZipFile(zip, StandardCharsets.ISO_8859_1);
+    static List<Entry> scan(File zipFile) throws IOException {
+        try (ZipReader reader = ZipReader.open(zipFile)) {
+            return scan(reader);
+        }
     }
 
     /** 재생할 곡을 정렬해서 돌려준다. file은 ZIP 안 순번이라 같은 ZIP이면 항상 같다. */
-    static List<Entry> scan(File zipFile) throws IOException {
+    static List<Entry> scan(ZipReader zip) throws IOException {
         List<Entry> entries = new ArrayList<>();
-        try (ZipFile zip = openZip(zipFile)) {
-            Enumeration<? extends ZipEntry> all = zip.entries();
-            for (int index = 0; all.hasMoreElements(); index++) {
-                ZipEntry entry = all.nextElement();
-                String source = decodeName(entry.getName()).replace('\\', '/');
-                if (entry.isDirectory() || source.startsWith("__MACOSX/") || !isAudio(source)) {
-                    continue;
-                }
-                String base = source.substring(source.lastIndexOf('/') + 1);
-                if (base.startsWith("._")) {
-                    continue;
-                }
-                // 항목 이름을 경로로 쓰지 않으므로 ../ 같은 이름이 앱 폴더 밖으로 나갈 수 없다.
-                String extension = base.substring(base.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
-                Entry e = new Entry();
-                e.source = source;
-                e.file = String.format(Locale.ROOT, "%05d.%s", entries.size(), extension);
-                e.title = stripExtension(base);
-                e.index = index;
-                try (InputStream in = zip.getInputStream(entry)) {
-                    e.duration = AudioProbe.durationMs(in, entry.getSize(), base);
-                }
-                entries.add(e);
+        for (ZipReader.Item item : zip.items()) {
+            String source = item.name.replace('\\', '/');
+            if (item.directory || source.startsWith("__MACOSX/") || !isAudio(source)) {
+                continue;
             }
+            String base = source.substring(source.lastIndexOf('/') + 1);
+            if (base.startsWith("._")) {
+                continue;
+            }
+            if (item.encrypted) {
+                throw new IOException("암호가 걸린 ZIP은 열 수 없습니다.");
+            }
+            // 항목 이름을 경로로 쓰지 않으므로 ../ 같은 이름이 앱 폴더 밖으로 나갈 수 없다.
+            String extension = base.substring(base.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
+            Entry e = new Entry();
+            e.source = source;
+            e.file = String.format(Locale.ROOT, "%05d.%s", entries.size(), extension);
+            e.title = stripExtension(base);
+            e.index = item.index;
+            try (InputStream in = zip.open(item, 0)) {
+                e.duration = AudioProbe.durationMs(in, item.size, base);
+            }
+            entries.add(e);
         }
         Comparator<String> order = MusicPlayerPlugin.naturalOrder();
         entries.sort((a, b) -> order.compare(a.source, b.source));
         return entries;
     }
 
-    /** ZIP 안 index번째 항목을 position부터 읽는다. */
-    static EntryStream openEntry(File zipFile, int index, long position) throws IOException {
-        ZipFile zip = openZip(zipFile);
+    private static EntryStream openEntry(ZipReader reader, int index, long position) throws IOException {
         try {
-            Enumeration<? extends ZipEntry> all = zip.entries();
-            for (int i = 0; all.hasMoreElements(); i++) {
-                ZipEntry entry = all.nextElement();
-                if (i == index) {
-                    InputStream in = zip.getInputStream(entry);
-                    AudioProbe.skipFully(in, position);
-                    return new EntryStream(zip, in, entry.getSize());
-                }
-            }
-            throw new IOException("ZIP 안에서 파일을 찾을 수 없습니다.");
+            ZipReader.Item item = reader.item(index);
+            return new EntryStream(reader, reader.open(item, position), item.size);
         } catch (IOException | RuntimeException e) {
-            zip.close();
+            reader.close();
             throw e;
         }
+    }
+
+    /** ZIP 안 index번째 항목을 position부터 읽는다. */
+    static EntryStream openEntry(File zipFile, int index, long position) throws IOException {
+        return openEntry(ZipReader.open(zipFile), index, position);
     }
 
     /** zipentry://id/파일명 주소를 실제 ZIP 항목으로 찾아 연다. */
@@ -236,7 +272,7 @@ final class ZipLibrary {
             for (int i = 0; i < tracks.length(); i++) {
                 JSONObject t = tracks.getJSONObject(i);
                 if (t.getString("file").equals(uri.getLastPathSegment())) {
-                    return openEntry(new File(meta.getString("source")), t.getInt("index"), position);
+                    return openEntry(reader(context, meta.getString("source")), t.getInt("index"), position);
                 }
             }
             throw new IOException("ZIP 안에서 파일을 찾을 수 없습니다.");

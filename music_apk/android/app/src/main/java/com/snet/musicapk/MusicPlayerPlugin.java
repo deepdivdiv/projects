@@ -2,6 +2,7 @@ package com.snet.musicapk;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,7 +15,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.util.Base64;
 import androidx.activity.result.ActivityResult;
@@ -41,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -155,6 +159,9 @@ public class MusicPlayerPlugin extends Plugin {
     // ---- 권한 ----
 
     private boolean hasFileAccess() {
+        if (BuildConfig.STORE) {
+            return !TreeBrowser.roots(getContext()).isEmpty();
+        }
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
             ? Environment.isExternalStorageManager()
             : getPermissionState("storage") == PermissionState.GRANTED;
@@ -163,6 +170,7 @@ public class MusicPlayerPlugin extends Plugin {
     private void resolveAccess(PluginCall call) {
         JSObject result = new JSObject();
         result.put("granted", hasFileAccess());
+        result.put("store", BuildConfig.STORE);
         call.resolve(result);
     }
 
@@ -174,7 +182,12 @@ public class MusicPlayerPlugin extends Plugin {
     /** ZIP과 폴더를 그대로 보려면 '모든 파일 접근'이 필요하고, 이 권한은 설정 화면에서만 켤 수 있다. */
     @PluginMethod
     public void requestAccess(PluginCall call) {
-        if (hasFileAccess()) {
+        if (BuildConfig.STORE) {
+            Intent picker = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                .putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            startActivityForResult(call, picker, "folderPicked");
+        } else if (hasFileAccess()) {
             resolveAccess(call);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Intent intent = new Intent(
@@ -185,6 +198,29 @@ public class MusicPlayerPlugin extends Plugin {
         } else {
             requestPermissionForAlias("storage", call, "accessCallback");
         }
+    }
+
+    /** 앱을 다시 켜도 쓸 수 있도록 권한을 저장해 둔다. */
+    @ActivityCallback
+    private void folderPicked(PluginCall call, ActivityResult result) {
+        Intent data = result.getData();
+        if (data != null && data.getData() != null) {
+            getContext().getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        resolveAccess(call);
+    }
+
+    @PluginMethod
+    public void removeFolder(PluginCall call) {
+        String tree = call.getString("tree");
+        if (tree != null) {
+            try {
+                getContext().getContentResolver().releasePersistableUriPermission(Uri.parse(tree), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } catch (SecurityException ignored) {
+                // 이미 끊긴 연결이다.
+            }
+        }
+        resolveAccess(call);
     }
 
     @ActivityCallback
@@ -412,6 +448,14 @@ public class MusicPlayerPlugin extends Plugin {
             try (ZipLibrary.EntryStream entry = ZipLibrary.openEntry(getContext(), uri, 0)) {
                 result.put("size", entry.size);
             }
+        } else if (DocumentsContract.isDocumentUri(getContext(), uri)) {
+            String[] columns = { OpenableColumns.SIZE };
+            try (Cursor c = getContext().getContentResolver().query(uri, columns, null, null, null)) {
+                if (c != null && c.moveToFirst()) {
+                    result.put("size", c.getLong(0));
+                }
+            }
+            result.put("path", DocumentsContract.getDocumentId(uri).replaceFirst("^primary:", ""));
         } else if ("file".equals(scheme)) {
             result.put("path", uri.getPath());
             result.put("size", new File(uri.getPath()).length());
@@ -434,6 +478,11 @@ public class MusicPlayerPlugin extends Plugin {
         String text = call.getString("text", "");
         new Thread(() -> {
             try {
+                if (BuildConfig.STORE) {
+                    saveToDownloads(name, text);
+                    call.resolve(new JSObject().put("path", "Download/" + name));
+                    return;
+                }
                 File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                 dir.mkdirs();
                 File file = new File(dir, name);
@@ -447,6 +496,20 @@ public class MusicPlayerPlugin extends Plugin {
                 call.reject("파일을 저장하지 못했습니다.");
             }
         }).start();
+    }
+
+    /** 저장소 권한 없이 Download 폴더에 쓴다. */
+    private void saveToDownloads(String name, String text) throws IOException {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Downloads.DISPLAY_NAME, name);
+        values.put(MediaStore.Downloads.MIME_TYPE, "text/plain");
+        Uri target = getContext().getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+        if (target == null) {
+            throw new IOException("저장 위치를 만들 수 없습니다.");
+        }
+        try (OutputStream out = getContext().getContentResolver().openOutputStream(target)) {
+            out.write(text.getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     @PluginMethod

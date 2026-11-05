@@ -5,6 +5,7 @@
 
   let browsing = null, folder = null, index = 0, position = 0, duration = 0, playing = false;
   const SPEEDS = [1, 2, 4, 8, 16];
+  let storeMode = false;
   let speed = 1, busyTimer = 0, toastTimer = 0, infoToken = null, lastExport = null;
   let dragging = false, sheetMode = null, editing = null, lastSave = 0, artToken = 0, currentArt = null;
 
@@ -196,6 +197,7 @@
   function renderBrowser() {
     const r = browsing, ul = $('browseList');
     $('access').hidden = true;
+    $('browseList').hidden = false;
     $('btnUp').hidden = r.parent == null;
     $('browseTitle').textContent = r.name;
     const nav = $('crumbs'); nav.textContent = '';
@@ -216,12 +218,14 @@
     $('btnExportFolder').hidden = !marks().length;
     const here = folder && folder.path === r.path;
     $('btnResume').hidden = !r.tracks.length;
+    $('btnConnect').hidden = !(storeMode && r.isRoot);
     $('btnResume').textContent = here ? '재생 화면' : '이어듣기';
 
     ul.textContent = '';
     for (const d of r.dirs) {
       const li = row({ tile: 'folder', name: d.name, sub: d.count ? `음악 ${d.count}개` : '', onTap: () => browse(d.path) });
-      li.append(starButton({ path: d.path, name: d.name, where: pathText(r) }));
+      if (d.tree) li.append(action('trash', '연결 해제', () => disconnect(d)));
+      else li.append(starButton({ path: d.path, name: d.name, where: pathText(r) }));
       ul.append(li);
     }
     for (const z of r.zips) {
@@ -258,6 +262,25 @@
     $('miniFolder').textContent = folder.name;
     $('miniBar').style.width = (total ? folderPos() / total * 100 : 0) + '%';
     $('miniIcon').setAttribute('d', playing ? PAUSE : PLAY);
+  }
+  async function disconnect(d) {
+    if (!confirm(`'${d.name}' 폴더 연결을 해제할까요?\n폰의 파일은 지워지지 않습니다.`)) return;
+    const r = await B.removeFolder(d.tree);
+    if (r.granted) browse(''); else showAccess();
+  }
+  function showAccess() {
+    browsing = null;
+    show('folders');
+    for (const id of ['btnUp', 'btnResume', 'btnConnect', 'btnExportFolder', 'browseEmpty']) $(id).hidden = true;
+    $('browseList').textContent = ''; $('crumbs').textContent = ''; $('browseInfo').textContent = '';
+    $('browseList').hidden = true;
+    $('browseTitle').textContent = 'DIV AUDIO APP';
+    if (storeMode) {
+      $('accessTitle').textContent = '음악 폴더를 연결해 주세요';
+      $('accessText').textContent = '음악이 들어 있는 폴더를 고르면 하위 폴더와 ZIP까지 앱에서 볼 수 있습니다.';
+      $('btnAccess').textContent = '음악 폴더 연결';
+    }
+    $('access').hidden = false;
   }
   function playFrom(r, i) {
     if (folder && folder.path === r.path) { B.skipTo(i, 0); B.play(); show('player'); }
@@ -331,7 +354,9 @@
   // ---- 북마크 내보내기 ----
   // 한 줄에 하나: 파일명(확장자 제외) / 분:초 / 메모. 폴더가 여러 개면 [폴더] 제목으로 묶는다.
   const naturally = (x, y) => x.localeCompare(y, 'ko', { numeric: true });
-  const shortPath = p => p.replace(/^\/storage\/emulated\/0\/?/, '');
+  // 스토어 버전의 경로는 문서 주소라서 읽을 수 있는 경로로 바꿔 비교한다.
+  const plainPath = p => (p.startsWith('content:') ? decodeURIComponent(p.split('/document/').pop()) : p);
+  const shortPath = p => plainPath(p).replace(/^\/storage\/emulated\/0\/?/, '').replace(/^primary:/, '');
   const SCOPES = [['here', '이 폴더'], ['tree', '하위 폴더 포함'], ['all', '모든 폴더']];
   const zipInfo = new Map();
   let exporting = null;
@@ -341,11 +366,12 @@
     for (const path of new Set(list.map(m => m.folder))) {
       if (!path.startsWith('zip:') || zipInfo.has(path)) continue;
       const r = await B.listDir(path).catch(() => null);
-      if (r) zipInfo.set(path, { parent: r.parent, name: r.name });
+      if (r) zipInfo.set(path, { parent: r.parent == null ? null : plainPath(r.parent), name: r.name });
     }
     hideBusy();
   }
   function realPath(folderPath) {
+    // 일반 폴더는 그대로, ZIP은 들어 있는 폴더 아래의 경로로 본다.
     const z = zipInfo.get(folderPath);
     if (!folderPath.startsWith('zip:')) return folderPath;
     return z && z.parent != null ? z.parent + '/' + z.name : null;
@@ -355,7 +381,7 @@
     if (m.folder === base.path) return true;
     if (scope === 'here' || base.path.startsWith('zip:')) return false;
     const path = realPath(m.folder);
-    return !!path && (!base.path || path.startsWith(base.path + '/'));
+    return !!path && (!base.path || plainPath(path).startsWith(plainPath(base.path) + '/'));
   }
   function groupLabel(folderPath) {
     const path = realPath(folderPath);
@@ -620,6 +646,8 @@
   }
   function closeSettings() { document.activeElement && document.activeElement.blur(); show(settingsFrom); }
   $('btnSettings').onclick = openSettings;
+  $('btnLicenses').onclick = () => { $('licensesText').textContent = window.LICENSES; $('licenses').hidden = false; };
+  $('licensesClose').onclick = () => { $('licenses').hidden = true; };
   $('btnSettings2').onclick = openSettings;
   $('btnSettingsClose').onclick = closeSettings;
   $('eqToggle').onclick = () => { prefs.eqOn = !prefs.eqOn; applyEq(); };
@@ -679,7 +707,8 @@
   // 안드로이드 뒤로가기 버튼: 입력창 > 리스트 > 플레이어 > 폴더 순으로 닫고, 마지막엔 앱을 내린다.
   const nativeApp = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
   if (nativeApp) nativeApp.addListener('backButton', () => {
-    if (!$('info').hidden) closeInfo();
+    if (!$('licenses').hidden) $('licenses').hidden = true;
+    else if (!$('info').hidden) closeInfo();
     else if (!$('exportMenu').hidden) $('exportMenu').hidden = true;
     else if (!$('dialog').hidden) $('dialog').hidden = true;
     else if (!$('settings').hidden) closeSettings();
@@ -710,9 +739,11 @@
     }
     await browse('');
   }
-  $('btnAccess').onclick = async () => { if (await B.requestAccess()) start(); };
-  B.hasAccess().then(ok => {
-    if (ok) start();
-    else { $('browseTitle').textContent = 'Music'; $('access').hidden = false; }
+  async function connectFolder() { if (await B.requestAccess()) { $('access').hidden = true; start(); } }
+  $('btnAccess').onclick = connectFolder;
+  $('btnConnect').onclick = async () => { await B.requestAccess(); browse(''); };
+  B.hasAccess().then(({ granted, store }) => {
+    storeMode = !!store;
+    if (granted) start(); else showAccess();
   });
 })();

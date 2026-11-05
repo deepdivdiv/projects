@@ -72,7 +72,7 @@ final class FileBrowser {
         return slash > 0 ? path.substring(0, slash) : null;
     }
 
-    private static JSArray crumbsJson(List<String[]> crumbs) throws JSONException {
+    static JSArray crumbsJson(List<String[]> crumbs) throws JSONException {
         JSArray out = new JSArray();
         for (String[] c : crumbs) {
             JSObject item = new JSObject();
@@ -84,6 +84,9 @@ final class FileBrowser {
     }
 
     static JSObject list(Context context, String path, Runnable onExtract) throws IOException, JSONException {
+        if (BuildConfig.STORE) {
+            return TreeBrowser.list(context, path, onExtract);
+        }
         List<String[]> roots = roots(context);
         if (roots.isEmpty()) {
             throw new IOException("저장소를 찾을 수 없습니다.");
@@ -96,7 +99,7 @@ final class FileBrowser {
         }
         File file = new File(path);
         if (file.isFile() && ZipLibrary.isZip(file.getName())) {
-            return listZip(context, roots, ZipLibrary.open(context, file, onExtract));
+            return listZip(context, roots, ZipLibrary.open(context, ZipLibrary.Source.of(file), onExtract));
         }
         if (!file.isDirectory()) {
             throw new IOException("폴더를 찾을 수 없습니다.");
@@ -119,7 +122,7 @@ final class FileBrowser {
         return out;
     }
 
-    private static JSObject empty(String path, String name) {
+    static JSObject empty(String path, String name) {
         JSObject out = new JSObject();
         out.put("path", path);
         out.put("name", name);
@@ -131,13 +134,15 @@ final class FileBrowser {
         return out;
     }
 
-    /** 풀어 둔 ZIP의 내용에 경로 정보를 더해 일반 폴더와 같은 모양으로 만든다. */
+    /** ZIP 내용에 경로 정보를 더해 일반 폴더와 같은 모양으로 만든다. */
     private static JSObject listZip(Context context, List<String[]> roots, JSObject zip) throws JSONException {
         String source = zip.getString("source");
         String parent = source == null ? null : new File(source).getParent();
-        List<String[]> crumbs = parent == null ? new ArrayList<>() : crumbs(roots, parent);
-        crumbs.add(new String[] { zip.getString("name"), zip.getString("path") });
+        return zipListing(zip, parent, parent == null ? new ArrayList<>() : crumbs(roots, parent));
+    }
 
+    static JSObject zipListing(JSObject zip, String parent, List<String[]> crumbs) throws JSONException {
+        crumbs.add(new String[] { zip.getString("name"), zip.getString("path") });
         JSObject out = empty(zip.getString("path"), zip.getString("name"));
         out.put("zip", true);
         out.put("tracks", zip.getJSONArray("tracks"));

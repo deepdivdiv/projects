@@ -6,7 +6,8 @@
 
   if (native) {
     window.Bridge = {
-      hasAccess: () => native.hasAccess().then(r => r.granted),
+      hasAccess: () => native.hasAccess(),
+      removeFolder: tree => native.removeFolder({ tree }),
       requestAccess: () => native.requestAccess().then(r => r.granted),
       requestNotifications: () => native.requestNotifications(),
       listDir: path => native.listDir({ path: path || '' }),
@@ -35,7 +36,7 @@
   const art = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#ff7a59"/><stop offset=".5" stop-color="#d6336c"/><stop offset="1" stop-color="#3b5bdb"/></linearGradient></defs><rect width="600" height="600" fill="url(#g)"/><circle cx="300" cy="300" r="150" fill="#ffd43b"/></svg>');
   const pale = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="600" height="600" fill="#fff4d6"/><circle cx="300" cy="300" r="170" fill="#ffe08a"/></svg>');
   const crumbs = path => {
-    const out = [{ name: '내장 메모리', path: ROOT }]; let cur = ROOT;
+    const out = /store/.test(location.hash) ? [{ name: '내 폴더', path: '' }] : [{ name: '내장 메모리', path: ROOT }]; let cur = ROOT;
     for (const part of path.slice(ROOT.length).split('/').filter(Boolean)) { cur += '/' + part; out.push({ name: part, path: cur }); }
     return out;
   };
@@ -55,6 +56,8 @@
   };
   const zipFolder = () => ({ ...dir(MUSIC, MUSIC), path: 'zip:sample', name: '수업자료', zip: true, crumbs: [...crumbs(MUSIC), { name: '수업자료', path: 'zip:sample' }], tracks: tracks('수업자료', [300, 240]) });
   let extracted = false;
+  const storeMock = /store/.test(location.hash);
+  let connected = [];
 
   let q = [], i = 0, pos = 0, playing = false, speed = 1, cb = () => {}, busy = () => {};
   const emit = () => cb({ index: i, position: pos, duration: q[i] ? q[i].duration : 0, playing, speed });
@@ -65,13 +68,18 @@
     emit();
   }, 500);
   window.Bridge = {
-    hasAccess: async () => !/noaccess/.test(location.hash) || !!window.__granted,
-    requestAccess: async () => { window.__granted = true; return true; },
+    hasAccess: async () => ({ granted: storeMock ? connected.length > 0 : !/noaccess/.test(location.hash) || !!window.__granted, store: storeMock }),
+    requestAccess: async () => { window.__granted = true; if (storeMock && !connected.includes(MUSIC)) connected.push(MUSIC); return true; },
+    removeFolder: async tree => { connected = connected.filter(x => x !== tree); return { granted: connected.length > 0 }; },
     requestNotifications: async () => {},
     listDir: async path => {
       if (path === 'zip:sample' || path === MUSIC + '/수업자료.zip') {
         if (!extracted) { busy(); await new Promise(r => setTimeout(r, 400)); extracted = true; }
         return zipFolder();
+      }
+      if (storeMock && !path) {
+        return { path: '', name: '내 폴더', isRoot: true, crumbs: [{ name: '내 폴더', path: '' }], zips: [], eggs: [], tracks: [], unplayable: [],
+          dirs: connected.map(c => ({ name: c.split('/').pop(), path: c, tree: c, count: 0 })) };
       }
       const r = tree[path || ROOT];
       if (!r) throw new Error('폴더를 찾을 수 없습니다.');

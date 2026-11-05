@@ -1,4 +1,6 @@
 node_modules/
 *.apk
+*.aab
 build.log
 test.log
+keystore/

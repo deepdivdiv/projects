@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+// 출시 서명 정보. 비밀번호가 들어 있어 저장소에 넣지 않는다.
+def keystoreFile = rootProject.file('../keystore/keystore.properties')
+def keystore = new Properties()
+if (keystoreFile.exists()) {
+    keystoreFile.withInputStream { keystore.load(it) }
+}
+
 android {
     testOptions {
         unitTests.returnDefaultValues = true
@@ -19,8 +26,39 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
+    flavorDimensions = ["distribution"]
+    productFlavors {
+        // 지금까지 쓰던 앱. 패키지가 같아서 덮어 설치하면 북마크가 유지된다.
+        personal {
+            dimension "distribution"
+            buildConfigField "boolean", "STORE", "false"
+        }
+        // Google Play 버전. 패키지 ID는 첫 업로드 뒤에는 바꿀 수 없다.
+        store {
+            dimension "distribution"
+            applicationId "com.snet.divaudio"
+            minSdkVersion 29
+            buildConfigField "boolean", "STORE", "true"
+        }
+    }
+    signingConfigs {
+        release {
+            if (keystoreFile.exists()) {
+                storeFile rootProject.file('../keystore/' + keystore['storeFile'])
+                storePassword keystore['storePassword']
+                keyAlias keystore['keyAlias']
+                keyPassword keystore['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
+            if (keystoreFile.exists()) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

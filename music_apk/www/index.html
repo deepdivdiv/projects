@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<title>Music</title>
+<title>DIV AUDIO APP</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,6 +19,7 @@
     <button id="btnFavs" class="icon" aria-label="즐겨찾기"><svg viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z" fill="currentColor"/></svg></button>
     <button id="btnSettings2" class="icon" aria-label="설정"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z" fill="currentColor"/></svg></button>
     <button id="btnResume" class="pill" hidden>이어듣기</button>
+    <button id="btnConnect" class="pill" hidden>폴더 연결</button>
   </header>
   <nav id="crumbs" class="crumbs" aria-label="현재 경로"></nav>
   <div class="infoRow">
@@ -28,8 +29,8 @@
   <ul id="browseList" class="list"></ul>
   <p id="browseEmpty" class="empty" hidden>이 폴더에는 음악이 없습니다.</p>
   <div id="access" class="access" hidden>
-    <h2>파일 접근 권한이 필요합니다</h2>
-    <p>폴더와 ZIP 파일을 그대로 보여 주려면 설정에서<br>'모든 파일 접근'을 허용해 주세요.</p>
+    <h2 id="accessTitle">파일 접근 권한이 필요합니다</h2>
+    <p id="accessText">폴더와 ZIP 파일을 그대로 보여 주려면 설정에서<br>'모든 파일 접근'을 허용해 주세요.</p>
     <button id="btnAccess" class="cta">권한 허용하러 가기</button>
   </div>
   <div id="mini" class="mini" hidden>
@@ -112,6 +113,11 @@
       <div id="eqBands" class="bands"></div>
       <button id="eqReset" class="textBtn">초기화</button>
     </div>
+
+    <h2 class="sec">앱 정보</h2>
+    <div class="panel">
+      <button id="btnLicenses" class="linkRow">오픈소스 라이선스</button>
+    </div>
   </div>
 </section>
 
@@ -151,6 +157,17 @@
   </div>
 </div>
 
+<!-- 오픈소스 라이선스 -->
+<div id="licenses" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="오픈소스 라이선스">
+    <div class="infoHead">
+      <div class="text"><div class="name">오픈소스 라이선스</div></div>
+      <button id="licensesClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <pre id="licensesText"></pre>
+  </div>
+</div>
+
 <!-- 북마크 내보내기 -->
 <div id="exportMenu" class="dim bottom" hidden>
   <div class="infoPanel" role="dialog" aria-label="북마크 내보내기">
@@ -170,7 +187,7 @@
   </div>
 </div>
 
-<div id="busy" class="dim" hidden><p>ZIP 여는 중…</p></div>
+<div id="busy" class="dim" hidden><p>불러오는 중…</p></div>
 
 <!-- 북마크 입력 -->
 <div id="dialog" class="dim" hidden>
@@ -191,6 +208,7 @@
   </form>
 </div>
 
+<script src="licenses.js"></script>
 <script src="bridge.js"></script>
 <script src="app.js"></script>
 </body>

@@ -201,3 +201,5 @@ li.on .tile { background: #fff; color: #000; }
 #exportScopes .chip { flex: 1 1 0; min-width: 0; padding: 0 4px; font-size: 12px; white-space: nowrap; }
 .cta:disabled { opacity: .35; }
 .thumb > svg { width: 36%; height: 36%; color: rgba(255,255,255,.4); }
+.linkRow { display: block; width: 100%; padding: 4px 0; font-size: 14px; text-align: left; }
+#licensesText { margin: 12px 0 0; overflow: auto; font-family: inherit; font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; color: var(--dim); user-select: text; -webkit-user-select: text; }

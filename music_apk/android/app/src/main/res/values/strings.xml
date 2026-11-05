@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Music</string>
-    <string name="title_activity_main">Music</string>
+    <string name="app_name">DIV AUDIO APP</string>
+    <string name="title_activity_main">DAA</string>
     <string name="package_name">com.snet.musicapk</string>
     <string name="custom_url_scheme">com.snet.musicapk</string>
 </resources>

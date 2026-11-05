@@ -395,6 +395,89 @@ public class PlayerLogicTest {
     }
 
     @Test
+    public void encryptedAndBrokenZipsAreRefused() throws Exception {
+        java.io.File zip = zipOf(ZipEntry.DEFLATED, StandardCharsets.UTF_8, "a.mp3");
+        byte[] bytes = java.nio.file.Files.readAllBytes(zip.toPath());
+        // 목차의 암호화 표시를 켠다.
+        for (int i = bytes.length - 22; i >= 0; i--) {
+            if (bytes[i] == 'P' && bytes[i + 1] == 'K' && bytes[i + 2] == 1 && bytes[i + 3] == 2) {
+                bytes[i + 8] |= 1;
+                break;
+            }
+        }
+        java.io.File locked = java.nio.file.Files.createTempFile("locked", ".zip").toFile();
+        locked.deleteOnExit();
+        java.nio.file.Files.write(locked.toPath(), bytes);
+        try {
+            ZipLibrary.scan(locked);
+            assertTrue("암호 ZIP을 받아들였습니다", false);
+        } catch (java.io.IOException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("암호"));
+        }
+
+        java.io.File junk = java.nio.file.Files.createTempFile("junk", ".zip").toFile();
+        junk.deleteOnExit();
+        byte[] noise = new byte[5000];
+        new java.util.Random(3).nextBytes(noise);
+        java.nio.file.Files.write(junk.toPath(), noise);
+        try {
+            ZipLibrary.scan(junk);
+            assertTrue("깨진 ZIP을 받아들였습니다", false);
+        } catch (java.util.zip.ZipException expected) {
+            assertTrue(true);
+        }
+
+        // 잘린 ZIP과 임의로 망가뜨린 목차도 앱을 죽이지 않고 오류로 끝나야 한다.
+        byte[] good = java.nio.file.Files.readAllBytes(zip.toPath());
+        java.util.Random random = new java.util.Random(11);
+        java.io.File broken = java.nio.file.Files.createTempFile("broken", ".zip").toFile();
+        broken.deleteOnExit();
+        for (int round = 0; round < 200; round++) {
+            byte[] copy = good.clone();
+            for (int k = 0; k < 6; k++) {
+                copy[copy.length - 1 - random.nextInt(120)] = (byte) random.nextInt();
+            }
+            java.nio.file.Files.write(broken.toPath(), copy);
+            try {
+                ZipLibrary.scan(broken);
+            } catch (java.io.IOException expected) {
+                assertTrue(true);
+            }
+        }
+    }
+
+    @Test
+    public void readerSharesChannelBetweenStreams() throws Exception {
+        java.io.File zip = zipOf(ZipEntry.STORED, StandardCharsets.UTF_8, "가.mp3", "나.mp3");
+        byte[] mp3 = fixture("vbr_art.mp3");
+        try (ZipReader reader = ZipReader.open(zip)) {
+            java.io.InputStream a = reader.open(reader.item(0), 100);
+            java.io.InputStream b = reader.open(reader.item(1), 5000);
+            byte[] x = new byte[64], y = new byte[64];
+            for (int round = 0; round < 3; round++) {
+                assertEquals(64, AudioProbe.readFully(a, x, 0, 64));
+                assertEquals(64, AudioProbe.readFully(b, y, 0, 64));
+                assertTrue(Arrays.equals(Arrays.copyOfRange(mp3, 100 + round * 64, 164 + round * 64), x));
+                assertTrue(Arrays.equals(Arrays.copyOfRange(mp3, 5000 + round * 64, 5064 + round * 64), y));
+            }
+        }
+    }
+
+    @Test
+    public void treePathsFollowDocumentIds() {
+        assertEquals("강의", TreeBrowser.nameOf("primary:Music/강의"));
+        assertEquals("Music", TreeBrowser.nameOf("primary:Music"));
+        assertEquals("primary", TreeBrowser.nameOf("primary:"));
+        assertEquals(Arrays.asList("primary:Music", "primary:Music/강의", "primary:Music/강의/1장"),
+            TreeBrowser.chain("primary:Music", "primary:Music/강의/1장"));
+        assertEquals(Arrays.asList("primary:", "primary:Music"), TreeBrowser.chain("primary:", "primary:Music"));
+        assertEquals("primary:Music", TreeBrowser.parentId("primary:Music", "primary:Music/강의"));
+        assertEquals(null, TreeBrowser.parentId("primary:Music", "primary:Music"));
+        // 비슷한 이름의 다른 폴더를 하위로 착각하면 안 된다.
+        assertEquals(Arrays.asList("primary:Music", "primary:Music2/a"), TreeBrowser.chain("primary:Music", "primary:Music2/a"));
+    }
+
+    @Test
     public void openingIsMuchFasterThanExtractingEverything() throws Exception {
         java.io.File file = java.nio.file.Files.createTempFile("bigzip", ".zip").toFile();
         file.deleteOnExit();
