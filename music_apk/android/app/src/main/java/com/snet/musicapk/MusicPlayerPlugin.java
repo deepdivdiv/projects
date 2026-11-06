@@ -22,6 +22,7 @@ import android.provider.Settings;
 import android.util.Base64;
 import androidx.activity.result.ActivityResult;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.util.Consumer;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
@@ -61,6 +62,7 @@ import org.json.JSONObject;
 @CapacitorPlugin(
     name = "MusicPlayer",
     permissions = {
+        @Permission(alias = "audio", strings = { Manifest.permission.READ_MEDIA_AUDIO }),
         @Permission(alias = "storage", strings = { Manifest.permission.READ_EXTERNAL_STORAGE }),
         @Permission(alias = "notifications", strings = { Manifest.permission.POST_NOTIFICATIONS })
     }
@@ -69,6 +71,7 @@ public class MusicPlayerPlugin extends Plugin {
 
     private static final long TICK_MS = 500;
     private static final int THUMB_SIZE = 144;
+    private static final int MAX_IMPORT_BYTES = 10 * 1024 * 1024;
 
     private final Handler main = new Handler(Looper.getMainLooper());
     private final ExecutorService thumbs = Executors.newFixedThreadPool(2);
@@ -150,6 +153,13 @@ public class MusicPlayerPlugin extends Plugin {
         state.put("position", controller.getCurrentPosition());
         state.put("duration", Math.max(duration, 0));
         state.put("speed", PlaybackService.requestedSpeed);
+        MediaItem current = controller.getCurrentMediaItem();
+        if (current != null) {
+            state.put("uri", current.mediaId);
+        }
+        PlaybackService service = PlaybackService.instance;
+        state.put("sleepLeft", service == null ? 0 : service.sleepLeft());
+        state.put("sleepEnd", service != null && service.sleepAtEnd());
         state.put("playing", controller.getPlayWhenReady()
             && controller.getPlaybackState() != Player.STATE_ENDED
             && controller.getPlaybackState() != Player.STATE_IDLE);
@@ -171,6 +181,7 @@ public class MusicPlayerPlugin extends Plugin {
         JSObject result = new JSObject();
         result.put("granted", hasFileAccess());
         result.put("store", BuildConfig.STORE);
+        result.put("version", BuildConfig.VERSION_NAME);
         call.resolve(result);
     }
 
@@ -231,6 +242,73 @@ public class MusicPlayerPlugin extends Plugin {
     @PermissionCallback
     private void accessCallback(PluginCall call) {
         resolveAccess(call);
+    }
+
+    // ---- 라이브러리 ----
+
+    private String audioAlias() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? "audio" : "storage";
+    }
+
+    /** 개인용은 모든 파일 접근으로 읽고, 스토어 버전은 오디오 읽기 권한이 따로 필요하다. */
+    private boolean hasLibraryAccess() {
+        return BuildConfig.STORE ? getPermissionState(audioAlias()) == PermissionState.GRANTED : hasFileAccess();
+    }
+
+    @PluginMethod
+    public void getLibrary(PluginCall call) {
+        new Thread(() -> {
+            JSObject result = new JSObject();
+            if (!hasLibraryAccess()) {
+                result.put("denied", true);
+                call.resolve(result);
+                return;
+            }
+            try {
+                result.put("tracks", LibraryScanner.scan(getContext()));
+                call.resolve(result);
+            } catch (Exception e) {
+                call.reject("음악 목록을 읽지 못했습니다.");
+            }
+        }).start();
+    }
+
+    @PluginMethod
+    public void requestAudio(PluginCall call) {
+        if (hasLibraryAccess() || !BuildConfig.STORE) {
+            audioCallback(call);
+        } else {
+            requestPermissionForAlias(audioAlias(), call, "audioCallback");
+        }
+    }
+
+    @PermissionCallback
+    private void audioCallback(PluginCall call) {
+        call.resolve(new JSObject().put("granted", hasLibraryAccess()));
+    }
+
+    // ---- 시스템 글꼴 ----
+
+    @PluginMethod
+    public void getSystemFonts(PluginCall call) {
+        if (!SystemFontExporter.supported()) {
+            call.resolve(new JSObject().put("fonts", new JSArray()));
+            return;
+        }
+        main.post(() -> {
+            try {
+                List<Object> found = SystemFontExporter.find(getActivity());
+                new Thread(() -> {
+                    try {
+                        call.resolve(SystemFontExporter.export(getContext(), found));
+                    } catch (Exception e) {
+                        call.reject("글꼴을 읽지 못했습니다.");
+                    }
+                }).start();
+            } catch (RuntimeException e) {
+                call.reject("글꼴을 찾지 못했습니다.");
+            }
+        });
     }
 
     @PluginMethod
@@ -324,11 +402,12 @@ public class MusicPlayerPlugin extends Plugin {
     @PluginMethod
     public void getThumb(PluginCall call) {
         String uri = call.getString("uri");
+        int size = call.getInt("size", THUMB_SIZE);
         thumbs.execute(() -> {
             JSObject result = new JSObject();
             try {
                 File dir = new File(getContext().getCacheDir(), "thumbs");
-                File cached = new File(dir, Integer.toHexString(uri.hashCode()) + "_" + uri.length());
+                File cached = new File(dir, Integer.toHexString(uri.hashCode()) + "_" + uri.length() + "_" + size);
                 String dataUrl;
                 if (cached.exists()) {
                     dataUrl = new String(Files.readAllBytes(cached.toPath()), StandardCharsets.UTF_8);
@@ -339,7 +418,7 @@ public class MusicPlayerPlugin extends Plugin {
                     } catch (Exception ignored) {
                         // 앨범아트 없음으로 처리한다.
                     }
-                    dataUrl = art == null ? "" : toDataUrl(art, THUMB_SIZE);
+                    dataUrl = art == null ? "" : toDataUrl(art, size);
                     dir.mkdirs();
                     Files.write(cached.toPath(), dataUrl.getBytes(StandardCharsets.UTF_8));
                 }
@@ -502,7 +581,7 @@ public class MusicPlayerPlugin extends Plugin {
     private void saveToDownloads(String name, String text) throws IOException {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Downloads.DISPLAY_NAME, name);
-        values.put(MediaStore.Downloads.MIME_TYPE, "text/plain");
+        values.put(MediaStore.Downloads.MIME_TYPE, name.endsWith(".json") ? "application/json" : "text/plain");
         Uri target = getContext().getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
         if (target == null) {
             throw new IOException("저장 위치를 만들 수 없습니다.");
@@ -510,6 +589,102 @@ public class MusicPlayerPlugin extends Plugin {
         try (OutputStream out = getContext().getContentResolver().openOutputStream(target)) {
             out.write(text.getBytes(StandardCharsets.UTF_8));
         }
+    }
+
+    /** 백업 파일이나 발췌 이미지를 다른 앱으로 보낸다. */
+    @PluginMethod
+    public void shareFile(PluginCall call) {
+        String name = safeName(call.getString("name", "share"));
+        String mime = call.getString("mime", "application/octet-stream");
+        String base64 = call.getString("data");
+        String text = call.getString("text", "");
+        new Thread(() -> {
+            try {
+                File dir = new File(getContext().getCacheDir(), "shared");
+                ZipLibrary.deleteRecursively(dir);
+                dir.mkdirs();
+                File file = new File(dir, name);
+                Files.write(file.toPath(), base64 != null ? Base64.decode(base64, Base64.DEFAULT) : text.getBytes(StandardCharsets.UTF_8));
+                Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", file);
+                Intent send = new Intent(Intent.ACTION_SEND)
+                    .setType(mime)
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                getActivity().startActivity(Intent.createChooser(send, name));
+                call.resolve();
+            } catch (Exception e) {
+                call.reject("공유하지 못했습니다.");
+            }
+        }).start();
+    }
+
+    private static String safeName(String name) {
+        return name.replaceAll("[\\\\/:*?\"<>|]", "_");
+    }
+
+    /** 발췌 이미지를 갤러리에 저장한다. 저장소 권한이 필요 없다. */
+    @PluginMethod
+    public void saveImage(PluginCall call) {
+        String name = safeName(call.getString("name", "image.jpg"));
+        String base64 = call.getString("data", "");
+        new Thread(() -> {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                call.reject("이 안드로이드 버전에서는 저장할 수 없습니다. 공유하기를 이용해 주세요.");
+                return;
+            }
+            try {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, name);
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/DAA");
+                Uri target = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                if (target == null) {
+                    throw new IOException("저장 위치를 만들 수 없습니다.");
+                }
+                try (OutputStream out = getContext().getContentResolver().openOutputStream(target)) {
+                    out.write(Base64.decode(base64, Base64.DEFAULT));
+                }
+                call.resolve();
+            } catch (Exception e) {
+                call.reject("이미지를 저장하지 못했습니다.");
+            }
+        }).start();
+    }
+
+    /** 백업 파일을 사용자가 골라서 읽는다. */
+    @PluginMethod
+    public void pickText(PluginCall call) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT)
+            .addCategory(Intent.CATEGORY_OPENABLE)
+            .setType("*/*")
+            .putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "text/plain", "application/json", "application/octet-stream" });
+        startActivityForResult(call, intent, "textPicked");
+    }
+
+    @ActivityCallback
+    private void textPicked(PluginCall call, ActivityResult result) {
+        Intent data = result.getData();
+        if (data == null || data.getData() == null) {
+            call.resolve(new JSObject().put("cancelled", true));
+            return;
+        }
+        Uri uri = data.getData();
+        new Thread(() -> {
+            try (InputStream in = getContext().getContentResolver().openInputStream(uri)) {
+                if (in == null) {
+                    throw new IOException();
+                }
+                byte[] buffer = new byte[MAX_IMPORT_BYTES + 1];
+                int size = AudioProbe.readFully(in, buffer, 0, buffer.length);
+                if (size > MAX_IMPORT_BYTES) {
+                    call.reject("파일이 너무 큽니다.");
+                    return;
+                }
+                call.resolve(new JSObject().put("text", new String(buffer, 0, size, StandardCharsets.UTF_8)));
+            } catch (Exception e) {
+                call.reject("파일을 읽지 못했습니다.");
+            }
+        }).start();
     }
 
     @PluginMethod
@@ -581,9 +756,23 @@ public class MusicPlayerPlugin extends Plugin {
         int index = call.getInt("index", 0);
         long position = call.getDouble("position", 0.0).longValue();
         boolean play = call.getBoolean("play", false);
+        String folder = call.getString("folder");
         withController(call, c -> {
             try {
+                PlaybackService service = PlaybackService.instance;
+                if (service != null) {
+                    service.saveNow(); // 목록을 바꾸기 전에 지금 곡의 위치를 남긴다.
+                }
+                PlaybackService.queueFolder = folder;
+                if (folder != null) {
+                    new ResumeStore(getContext()).rememberFolder(folder);
+                }
                 if (sameQueue(c, tracks)) {
+                    if (play) {
+                        c.seekTo(index, position);
+                        recover(c);
+                        c.play();
+                    }
                     emitState(); // 앱을 다시 열어도 재생 중인 곡을 끊지 않는다.
                     return;
                 }
@@ -656,6 +845,46 @@ public class MusicPlayerPlugin extends Plugin {
         withController(call, c -> {
             PlaybackService.requestedSpeed = speed;
             c.setPlaybackSpeed(speed);
+            emitState();
+        });
+    }
+
+    /** 폴더의 마지막 곡과 곡별 들은 위치를 돌려준다. */
+    @PluginMethod
+    public void getResume(PluginCall call) {
+        ResumeStore store = new ResumeStore(getContext());
+        String folder = call.getString("folder", "");
+        JSONArray uris = call.getArray("uris");
+        JSObject positions = new JSObject();
+        for (int i = 0; uris != null && i < uris.length(); i++) {
+            String uri = uris.optString(i);
+            long position = store.position(uri);
+            if (position > 0) {
+                positions.put(uri, position);
+            }
+        }
+        JSObject result = new JSObject();
+        result.put("positions", positions);
+        String last = store.lastUri(folder);
+        if (last != null) {
+            result.put("uri", last);
+        }
+        String lastFolder = store.lastFolder();
+        if (lastFolder != null) {
+            result.put("lastFolder", lastFolder);
+        }
+        call.resolve(result);
+    }
+
+    @PluginMethod
+    public void setSleep(PluginCall call) {
+        long delay = call.getDouble("delay", 0.0).longValue();
+        boolean endOfTrack = call.getBoolean("endOfTrack", false);
+        withController(call, c -> {
+            PlaybackService service = PlaybackService.instance;
+            if (service != null) {
+                service.setSleep(delay, endOfTrack);
+            }
             emitState();
         });
     }

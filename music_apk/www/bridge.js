@@ -12,11 +12,19 @@
       requestNotifications: () => native.requestNotifications(),
       listDir: path => native.listDir({ path: path || '' }),
       getArt: uri => native.getArt({ uri }).then(r => r.dataUrl || null),
-      getThumb: uri => native.getThumb({ uri }).then(r => r.dataUrl || null),
+      getThumb: (uri, size) => native.getThumb({ uri, size }).then(r => r.dataUrl || null),
+      getLibrary: () => native.getLibrary(),
+      getSystemFonts: () => native.getSystemFonts().then(r => ({ ...r, fonts: r.fonts.map(f => ({ ...f, url: window.Capacitor.convertFileSrc(f.path) })) })),
+      requestAudio: () => native.requestAudio().then(r => r.granted),
       getTags: uri => native.getTags({ uri }),
       saveText: (name, text) => native.saveText({ name, text }),
       shareText: (title, text) => native.shareText({ title, text }),
-      setQueue: (tracks, index, position, play) => native.setQueue({ tracks, index, position, play }),
+      setQueue: (tracks, index, position, play, folder) => native.setQueue({ tracks, index, position, play, folder }),
+      getResume: (folder, uris) => native.getResume({ folder, uris }),
+      setSleep: (delay, endOfTrack) => native.setSleep({ delay, endOfTrack }),
+      shareFile: (name, mime, payload) => native.shareFile({ name, mime, ...payload }),
+      saveImage: (name, data) => native.saveImage({ name, data }),
+      pickText: () => native.pickText(),
       play: () => native.play(),
       pause: () => native.pause(),
       seekTo: position => native.seekTo({ position }),
@@ -54,21 +62,51 @@
     [MUSIC + '/영어 듣기']: dir(MUSIC + '/영어 듣기', MUSIC, { tracks: tracks('영어 듣기', [684, 512, 903, 455]) }),
     [MUSIC + '/강의 녹음']: dir(MUSIC + '/강의 녹음', MUSIC, { tracks: tracks('강의 녹음', [3600, 2700]) }),
   };
+  function mockLibrary() {
+    const albums = [
+      ['윈터필드 1부', '임의주X김명준', 'ACO', '드라마', 2024, 12], ['윈터필드 2부', '임의주X김명준', 'ACO', '드라마', 2025, 8],
+      ['삼천의 밤', '박성영X정주원', 'ACO', '드라마', 2023, 6], ['Deadman Switch', 'Kim', 'Studio K', 'Rock', 2022, 5],
+      ['Tinder Box', '나은혁X박요한', 'ACO', '드라마', 2021, 4], ['가을 강의', '홍길동', '', '교육', 2020, 3],
+    ];
+    const out = [];
+    albums.forEach(([album, artist, albumArtist, genre, year, n], a) => {
+      for (let k = 1; k <= n; k++) out.push({ uri: `${a === 0 ? '영어' : 'lib'}${a}_${k}`, title: `${album} ${k}화`, tag: `${album} ${k}화`, artist, album, albumId: a + 1, albumArtist, genre, year, track: k, added: 1700000000 + a * 1000 + k, duration: (200 + k * 7) * 1000, dir: ROOT + '/Music/' + album });
+    });
+    out.push({ uri: 'lib_none', title: '태그없음', tag: '', artist: '', album: '', albumId: 99, albumArtist: '', genre: '', year: 0, track: 0, added: 1, duration: 60000, dir: ROOT + '/Download' });
+    return out;
+  }
   const zipFolder = () => ({ ...dir(MUSIC, MUSIC), path: 'zip:sample', name: '수업자료', zip: true, crumbs: [...crumbs(MUSIC), { name: '수업자료', path: 'zip:sample' }], tracks: tracks('수업자료', [300, 240]) });
   let extracted = false;
   const storeMock = /store/.test(location.hash);
   let connected = [];
 
-  let q = [], i = 0, pos = 0, playing = false, speed = 1, cb = () => {}, busy = () => {};
-  const emit = () => cb({ index: i, position: pos, duration: q[i] ? q[i].duration : 0, playing, speed });
+  let q = [], i = 0, pos = 0, playing = false, speed = 1, cb = () => {}, busy = () => {}, queueFolder = null, sleepAt = 0, sleepEnd = false;
+  // 재생 서비스의 위치 저장을 흉내 낸다. 새로고침이 앱 재시작 역할을 한다.
+  const R = () => JSON.parse(localStorage.getItem('__mockResume') || '{"p":{},"f":{}}');
+  function persist() {
+    if (!q[i] || !queueFolder) return;
+    const r = R(), done = pos >= q[i].duration - 3000;
+    if (done) delete r.p[q[i].uri]; else r.p[q[i].uri] = pos;
+    r.f[queueFolder] = done && q[i + 1] ? q[i + 1].uri : q[i].uri;
+    r.last = queueFolder;
+    localStorage.setItem('__mockResume', JSON.stringify(r));
+  }
+  const emit = () => {
+    persist();
+    cb({ index: i, position: pos, duration: q[i] ? q[i].duration : 0, playing, speed, uri: q[i] && q[i].uri, sleepLeft: sleepAt ? Math.max(0, sleepAt - Date.now()) : 0, sleepEnd });
+  };
   setInterval(() => {
     if (!playing || !q[i]) return;
     pos += 500 * speed;
-    if (pos >= q[i].duration) { if (i < q.length - 1) { i++; pos = 0; } else { playing = false; pos = q[i].duration; } }
+    if (sleepAt && Date.now() >= sleepAt) { sleepAt = 0; playing = false; }
+    if (pos >= q[i].duration) {
+      if (sleepEnd) { sleepEnd = false; playing = false; pos = q[i].duration; }
+      else if (i < q.length - 1) { i++; pos = 0; } else { playing = false; pos = q[i].duration; }
+    }
     emit();
   }, 500);
   window.Bridge = {
-    hasAccess: async () => ({ granted: storeMock ? connected.length > 0 : !/noaccess/.test(location.hash) || !!window.__granted, store: storeMock }),
+    hasAccess: async () => ({ version: '1.1', granted: storeMock ? connected.length > 0 : !/noaccess/.test(location.hash) || !!window.__granted, store: storeMock }),
     requestAccess: async () => { window.__granted = true; if (storeMock && !connected.includes(MUSIC)) connected.push(MUSIC); return true; },
     removeFolder: async tree => { connected = connected.filter(x => x !== tree); return { granted: connected.length > 0 }; },
     requestNotifications: async () => {},
@@ -86,6 +124,9 @@
       return r;
     },
     getArt: async uri => (uri.startsWith('영어') ? art : uri.startsWith('단독') ? pale : null),
+    getSystemFonts: async () => window.__sysFonts || { fonts: [] },
+    getLibrary: async () => (/nolib/.test(location.hash) && !window.__libOk ? { denied: true } : { tracks: mockLibrary() }),
+    requestAudio: async () => { window.__libOk = true; return true; },
     getThumb: async uri => { window.__thumbs = (window.__thumbs || 0) + 1; return uri.startsWith('영어') ? art : uri.startsWith('단독') ? pale : null; },
     getTags: async uri => (uri.startsWith('영어') ? {
       tags: [{ label: '제목', value: '듣기 1강' }, { label: '아티스트', value: '홍길동' }, { label: '앨범', value: '기초 영어 듣기' }, { label: '장르', value: '교육' }, { label: '연도', value: '2024' }, { label: '트랙', value: '1/4' }, { label: '코멘트', value: '여러 줄 메모\n두 번째 줄' }],
@@ -94,7 +135,16 @@
     } : { tags: [], tech: [] }),
     saveText: async (name, text) => { window.__saved = { name, text }; return { path: '/storage/emulated/0/Download/' + name }; },
     shareText: async (title, text) => { window.__shared = { title, text }; },
-    setQueue: async (t, idx, p, play) => { q = t; i = idx; pos = p; playing = !!play; emit(); },
+    setQueue: async (t, idx, p, play, folder) => { persist(); queueFolder = folder; q = t; i = idx; pos = p; playing = !!play; emit(); },
+    getResume: async (folder, uris) => {
+      const r = R(), positions = {};
+      for (const u of uris) if (r.p[u]) positions[u] = r.p[u];
+      return { uri: r.f[folder], positions, lastFolder: r.last };
+    },
+    setSleep: async (delay, end) => { sleepAt = delay ? Date.now() + delay : 0; sleepEnd = !!end; emit(); },
+    shareFile: async (name, mime, payload) => { window.__sharedFile = { name, mime, ...payload }; },
+    saveImage: async (name, data) => { window.__image = { name, size: data.length }; },
+    pickText: async () => window.__pick || { cancelled: true },
     play: async () => { playing = true; emit(); },
     pause: async () => { playing = false; emit(); },
     seekTo: async p => { pos = p; emit(); },

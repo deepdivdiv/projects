@@ -464,6 +464,25 @@ public class PlayerLogicTest {
     }
 
     @Test
+    public void resumeKeepsPositionUntilTrackIsFinished() {
+        assertEquals(90000, ResumeStore.positionToKeep(90000, 600000));
+        assertEquals(596000, ResumeStore.positionToKeep(596000, 600000));
+        assertEquals(0, ResumeStore.positionToKeep(597000, 600000)); // 끝에서 3초 안이면 다 들은 곡
+        assertEquals(0, ResumeStore.positionToKeep(600000, 600000));
+        assertEquals(5000, ResumeStore.positionToKeep(5000, -9223372036854775807L)); // 길이를 아직 모를 때
+        assertEquals(0, ResumeStore.positionToKeep(-5, 600000));
+        assertTrue(!ResumeStore.finished(5000, 0));
+    }
+
+    @Test
+    public void sleepFadesOnlyAtTheEnd() {
+        assertEquals(1f, PlaybackService.sleepVolume(60000), 0);
+        assertEquals(1f, PlaybackService.sleepVolume(PlaybackService.SLEEP_FADE_MS), 0);
+        assertEquals(0.5f, PlaybackService.sleepVolume(PlaybackService.SLEEP_FADE_MS / 2), 0.001);
+        assertEquals(0f, PlaybackService.sleepVolume(0), 0);
+    }
+
+    @Test
     public void treePathsFollowDocumentIds() {
         assertEquals("강의", TreeBrowser.nameOf("primary:Music/강의"));
         assertEquals("Music", TreeBrowser.nameOf("primary:Music"));

@@ -2,6 +2,9 @@ package com.snet.musicapk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media3.common.AudioAttributes;
@@ -28,12 +31,132 @@ public class PlaybackService extends MediaSessionService {
     /** 화면에서 고른 배속. DefaultAudioSink가 8배로 잘라내는 값을 SpeedChain이 되살릴 때 쓴다. */
     static volatile float requestedSpeed = 1f;
 
+    /** 취침 시간이 이만큼 남으면 소리를 서서히 줄인다. */
+    static final long SLEEP_FADE_MS = 15000;
+    private static final long SAVE_INTERVAL_MS = 2000;
+
+    /** 같은 프로세스의 플러그인이 취침 타이머와 위치 저장을 부르는 통로. */
+    static volatile PlaybackService instance;
+    /** 재생 중인 목록의 폴더. 곡 위치를 폴더별 마지막 곡과 함께 저장할 때 쓴다. */
+    static volatile String queueFolder;
+
     private MediaSession session;
+    private ExoPlayer exo;
+    private ResumeStore resume;
+    private final Handler main = new Handler(Looper.getMainLooper());
+    private long sleepDeadline;
+    private boolean sleepAtEnd;
+
+    private final Runnable saver = new Runnable() {
+        @Override
+        public void run() {
+            saveNow();
+            if (exo != null && exo.isPlaying()) {
+                main.postDelayed(this, SAVE_INTERVAL_MS);
+            }
+        }
+    };
+
+    private final Runnable sleepTick = new Runnable() {
+        @Override
+        public void run() {
+            long left = sleepLeft();
+            if (exo == null || sleepDeadline == 0) {
+                return;
+            }
+            if (left <= 0) {
+                exo.pause();
+                setSleep(0, false);
+                return;
+            }
+            exo.setVolume(sleepVolume(left));
+            main.postDelayed(this, 500);
+        }
+    };
+
+    private final Player.Listener listener = new Player.Listener() {
+        @Override
+        public void onIsPlayingChanged(boolean isPlaying) {
+            main.removeCallbacks(saver);
+            if (isPlaying) {
+                main.postDelayed(saver, SAVE_INTERVAL_MS);
+            } else {
+                saveNow();
+            }
+        }
+
+        @Override
+        public void onPositionDiscontinuity(
+            @NonNull Player.PositionInfo oldPosition,
+            @NonNull Player.PositionInfo newPosition,
+            int reason
+        ) {
+            if (reason == Player.DISCONTINUITY_REASON_AUTO_TRANSITION && oldPosition.mediaItem != null) {
+                resume.clear(oldPosition.mediaItem.mediaId);
+            }
+            saveNow();
+        }
+
+        @Override
+        public void onPlaybackStateChanged(int state) {
+            if (state == Player.STATE_ENDED) {
+                saveNow();
+            }
+        }
+
+        @Override
+        public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
+            if (reason == Player.PLAY_WHEN_READY_CHANGE_REASON_END_OF_MEDIA_ITEM) {
+                setSleep(0, false);
+            }
+        }
+    };
+
+    /** 남은 시간에 따른 음량. 끝나기 직전까지 서서히 줄인다. */
+    static float sleepVolume(long leftMs) {
+        return leftMs >= SLEEP_FADE_MS ? 1f : Math.max(0f, (float) leftMs / SLEEP_FADE_MS);
+    }
+
+    void saveNow() {
+        if (exo == null) {
+            return;
+        }
+        MediaItem item = exo.getCurrentMediaItem();
+        if (item == null) {
+            return;
+        }
+        int next = exo.getCurrentMediaItemIndex() + 1;
+        String nextUri = next < exo.getMediaItemCount() ? exo.getMediaItemAt(next).mediaId : null;
+        resume.save(queueFolder, item.mediaId, exo.getCurrentPosition(), exo.getDuration(), nextUri);
+    }
+
+    /** minutes 대신 밀리초로 받는다. 0이고 endOfTrack이 아니면 끈다. */
+    void setSleep(long delayMs, boolean endOfTrack) {
+        main.removeCallbacks(sleepTick);
+        sleepDeadline = delayMs > 0 ? SystemClock.elapsedRealtime() + delayMs : 0;
+        sleepAtEnd = endOfTrack;
+        if (exo != null) {
+            exo.setVolume(1f);
+            exo.setPauseAtEndOfMediaItems(endOfTrack);
+        }
+        if (sleepDeadline != 0) {
+            main.post(sleepTick);
+        }
+    }
+
+    long sleepLeft() {
+        return sleepDeadline == 0 ? 0 : Math.max(0, sleepDeadline - SystemClock.elapsedRealtime());
+    }
+
+    boolean sleepAtEnd() {
+        return sleepAtEnd;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         requestedSpeed = 1f;
+        resume = new ResumeStore(this);
         DefaultRenderersFactory renderers = new DefaultRenderersFactory(this) {
             @Override
             protected AudioSink buildAudioSink(
@@ -47,7 +170,7 @@ public class PlaybackService extends MediaSessionService {
                     .build();
             }
         };
-        ExoPlayer player = new ExoPlayer.Builder(this, renderers, new DefaultMediaSourceFactory(new ZipDataSource.Factory(this)))
+        exo = new ExoPlayer.Builder(this, renderers, new DefaultMediaSourceFactory(new ZipDataSource.Factory(this)))
             .setAudioAttributes(
                 new AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
@@ -56,8 +179,12 @@ public class PlaybackService extends MediaSessionService {
                 true
             )
             .setHandleAudioBecomingNoisy(true)
+            // 화면이 꺼져도 재생과 취침 타이머가 멈추지 않게 CPU를 깨워 둔다.
+            .setWakeMode(C.WAKE_MODE_LOCAL)
             .build();
-        session = new MediaSession.Builder(this, player).setCallback(new Callback()).build();
+        exo.addListener(listener);
+        session = new MediaSession.Builder(this, exo).setCallback(new Callback()).build();
+        instance = this;
     }
 
     @Nullable
@@ -68,6 +195,7 @@ public class PlaybackService extends MediaSessionService {
 
     @Override
     public void onTaskRemoved(@Nullable Intent rootIntent) {
+        saveNow();
         Player player = session.getPlayer();
         if (!player.getPlayWhenReady() || player.getMediaItemCount() == 0) {
             stopSelf();
@@ -76,6 +204,10 @@ public class PlaybackService extends MediaSessionService {
 
     @Override
     public void onDestroy() {
+        saveNow();
+        main.removeCallbacksAndMessages(null);
+        instance = null;
+        exo = null;
         session.getPlayer().release();
         session.release();
         session = null;
