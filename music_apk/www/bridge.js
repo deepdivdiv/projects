@@ -31,6 +31,7 @@
       skipTo: (index, position) => native.skipTo({ index, position }),
       setSpeed: speed => native.setSpeed({ speed }),
       setEq: (enabled, gains) => native.setEq({ enabled, gains }),
+      setTheme: (dark, color) => native.setTheme({ dark, color }),
       onZipBusy: cb => native.addListener('zipBusy', cb),
       onError: cb => native.addListener('playError', cb),
       onState: cb => native.addListener('state', cb),
@@ -106,6 +107,7 @@
     emit();
   }, 500);
   window.Bridge = {
+    setTheme: async () => {},
     hasAccess: async () => ({ version: '1.1', granted: storeMock ? connected.length > 0 : !/noaccess/.test(location.hash) || !!window.__granted, store: storeMock }),
     requestAccess: async () => { window.__granted = true; if (storeMock && !connected.includes(MUSIC)) connected.push(MUSIC); return true; },
     removeFolder: async tree => { connected = connected.filter(x => x !== tree); return { granted: connected.length > 0 }; },

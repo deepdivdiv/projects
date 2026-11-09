@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaDataSource;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
@@ -20,9 +21,12 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.util.Base64;
+import android.view.Window;
 import androidx.activity.result.ActivityResult;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.core.util.Consumer;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
@@ -188,6 +192,22 @@ public class MusicPlayerPlugin extends Plugin {
     @PluginMethod
     public void hasAccess(PluginCall call) {
         resolveAccess(call);
+    }
+
+    /** 색상 테마에 맞춰 앱 바탕과 상태 표시줄 아이콘 색을 바꾼다. */
+    @PluginMethod
+    public void setTheme(PluginCall call) {
+        boolean dark = Boolean.TRUE.equals(call.getBoolean("dark", true));
+        int color = Color.parseColor(call.getString("color", "#000000"));
+        getActivity().runOnUiThread(() -> {
+            Window window = getActivity().getWindow();
+            window.getDecorView().setBackgroundColor(color);
+            getBridge().getWebView().setBackgroundColor(color);
+            WindowInsetsControllerCompat bars = WindowCompat.getInsetsController(window, window.getDecorView());
+            bars.setAppearanceLightStatusBars(!dark);
+            bars.setAppearanceLightNavigationBars(!dark);
+            call.resolve();
+        });
     }
 
     /** ZIP과 폴더를 그대로 보려면 '모든 파일 접근'이 필요하고, 이 권한은 설정 화면에서만 켤 수 있다. */

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>DIV AUDIO APP</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="pc.css">
+</head>
+<body>
+
+<div id="bg"><img id="bgArt" alt=""></div>
+
+<!-- 창 단추 -->
+<div id="winbar" class="winbar">
+  <span class="spacer"></span>
+  <button id="winMini" class="wbtn" aria-label="미니 플레이어"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="11.5" y="11.5" width="6.5" height="5" rx="1" fill="currentColor"/></svg></button>
+  <button id="winFloat" class="wbtn" aria-label="플로팅 (항상 위)"><svg viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v6L6.5 13.5h11L14 9.5v-6M12 13.5v7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="winMin" class="wbtn" aria-label="최소화"><svg viewBox="0 0 24 24"><path d="M6 12h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+  <button id="winMax" class="wbtn" aria-label="최대화"><svg viewBox="0 0 24 24"><rect class="maxIcon" x="6.5" y="6.5" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><g class="restoreIcon" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="8" width="11" height="11" rx="1.5"/><path d="M8 8V6.5A1.5 1.5 0 0 1 9.5 5h8A1.5 1.5 0 0 1 19 6.5v8a1.5 1.5 0 0 1-1.5 1.5H16"/></g></svg></button>
+  <button id="winClose" class="wbtn close" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+</div>
+
+<!-- 미니 플레이어 / 플로팅 -->
+<div id="compact" class="compact">
+  <div class="cpMain">
+    <div class="cpArt"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 6.4a5.6 5.6 0 0 1 5.6 5.6M12 17.6A5.6 5.6 0 0 1 6.4 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><img id="cpArt" alt="" hidden></div>
+    <div class="cpBody">
+      <div class="cpTop">
+        <div class="cpText">
+          <div id="cpTitle" class="name ellipsis"></div>
+          <div id="cpSub" class="sub ellipsis"></div>
+        </div>
+        <label class="cpOpacity"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg><input id="cpOpacity" class="seek thin" type="range" min="5" max="100" value="100" aria-label="투명도"><span id="cpOpacityValue">100%</span></label>
+        <button id="cpPin" class="wbtn" aria-label="항상 위에 고정"><svg viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v6L6.5 13.5h11L14 9.5v-6M12 13.5v7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button id="cpExpand" class="wbtn" aria-label="원래 크기로"><svg viewBox="0 0 24 24"><path d="M14 4.5h5.5V10M10 19.5H4.5V14M19.5 4.5 13.5 10.5M4.5 19.5l6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button id="cpClose" class="wbtn close" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+      </div>
+      <div class="cpCtl">
+        <span id="cpTime" class="cpTime">00:00 / 00:00</span>
+        <span class="spacer"></span>
+        <button id="cpPrev" class="cpBtn" aria-label="이전 트랙"><svg viewBox="0 0 24 24"><path d="M5 4h2.6v16H5zM20 4v16L8.6 12z" fill="currentColor"/></svg></button>
+        <button id="cpBack" class="cpBtn" aria-label="뒤로 건너뛰기"><svg viewBox="0 0 24 24"><path d="M12 5V1.5L7 6l5 4.5V7a6.5 6.5 0 1 1-6.5 6.5H3.5A8.5 8.5 0 1 0 12 5z" fill="currentColor"/></svg></button>
+        <button id="cpPlay" class="cpBtn main" aria-label="재생/정지"><svg viewBox="0 0 24 24"><path id="cpIcon" d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button>
+        <button id="cpFwd" class="cpBtn" aria-label="앞으로 건너뛰기"><svg viewBox="0 0 24 24"><path d="M12 5V1.5L17 6l-5 4.5V7a6.5 6.5 0 1 0 6.5 6.5h2A8.5 8.5 0 1 1 12 5z" fill="currentColor"/></svg></button>
+        <button id="cpNext" class="cpBtn" aria-label="다음 트랙"><svg viewBox="0 0 24 24"><path d="M16.4 4H19v16h-2.6zM4 4v16l11.4-8z" fill="currentColor"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <input id="cpSeek" class="seek thin" type="range" min="0" max="1000" value="0" aria-label="현재 파일 위치">
+</div>
+
+<!-- 재생목록 -->
+<section id="folders" class="screen">
+  <header class="bar icons">
+    <h1 id="browseTitle" class="ellipsis">재생목록</h1>
+    <span class="spacer"></span>
+    <button id="btnSearch" class="icon" aria-label="검색"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m16.5 16.5 4.2 4.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    <button id="btnSettings2" class="icon" aria-label="설정"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z" fill="currentColor"/></svg></button>
+  </header>
+  <div id="searchBar" class="searchBar" hidden>
+    <input id="searchInput" type="search" placeholder="곡, 앨범, 아티스트, 파일 이름" autocomplete="off" enterkeyhint="search">
+    <button id="searchClose" class="textBtn">취소</button>
+  </div>
+  <div id="listTools" class="listTools" hidden>
+    <span id="listInfo" class="sub"></span>
+    <span class="spacer"></span>
+    <button id="btnAddFiles" class="pill">파일 추가</button>
+    <button id="btnAddFolder" class="pill">폴더 추가</button>
+    <button id="btnSortList" class="pill">이름순 정렬</button>
+    <button id="btnClearList" class="pill">비우기</button>
+  </div>
+  <div id="addStatus" class="addStatus" hidden></div>
+  <ul id="playlist" class="list" hidden></ul>
+  <div id="listEmpty" class="listEmpty">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 6.4a5.6 5.6 0 0 1 5.6 5.6M12 17.6A5.6 5.6 0 0 1 6.4 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <h2>음악 파일이나 폴더를 끌어다 놓으세요</h2>
+    <p>폴더는 안에 든 곡을 모두 넣고, ZIP은 풀지 않고 그대로 재생합니다.</p>
+    <div class="listEmptyActions">
+      <button id="btnAddFiles2" class="cta">파일 추가</button>
+      <button id="btnAddFolder2" class="cta ghost">폴더 추가</button>
+    </div>
+  </div>
+  <div id="mini" class="mini" hidden>
+    <span id="miniBar" class="miniBar"></span>
+    <div class="miniText">
+      <div id="miniTitle" class="name ellipsis"></div>
+      <div id="miniFolder" class="sub ellipsis"></div>
+    </div>
+    <button id="miniExpand" class="icon" aria-label="플레이어 펼치기 (P)"><svg viewBox="0 0 24 24"><path d="m18 5-7 7 7 7M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button id="miniPlay" class="icon" aria-label="재생/정지"><svg viewBox="0 0 24 24"><path id="miniIcon" d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button>
+  </div>
+</section>
+
+<div id="dropLine" class="dropLine" hidden></div>
+<div id="marquee" class="marquee" hidden></div>
+<div class="dropFrame" aria-hidden="true"><span>놓으면 재생목록에 넣습니다</span></div>
+<div id="rowMenu" class="rowMenu" role="menu" hidden>
+  <button id="rowPlay">재생</button>
+  <button id="rowInfo">자세히 보기</button>
+  <button id="rowReveal">파일 위치 열기</button>
+  <button id="rowRemove" class="danger">목록에서 빼기</button>
+</div>
+
+<!-- 플레이어 화면 -->
+<section id="player" class="screen" hidden>
+  <header class="bar icons">
+    <button id="btnBack" class="icon" aria-label="뒤로가기"><svg viewBox="0 0 24 24"><path d="M15.5 4 7.5 12l8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button id="btnFold" class="icon" aria-label="플레이어 접기 (P)"><svg viewBox="0 0 24 24"><path d="m6 5 7 7-7 7M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span class="spacer"></span>
+    <button id="btnMarks" class="icon" aria-label="북마크 리스트"><svg viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.2-6 4.2z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/></svg></button>
+    <button id="btnSettings" class="icon" aria-label="설정"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z" fill="currentColor"/></svg></button>
+  </header>
+
+  <div class="folderCard">
+    <div class="folderRow">
+      <span id="folderName" class="ellipsis"></span>
+      <span id="folderPct">0%</span>
+    </div>
+    <input id="folderSeek" class="seek thin" type="range" min="0" max="1000" value="0" aria-label="재생목록 전체 위치">
+    <div id="folderTime" class="folderTime">00:00 / 00:00</div>
+  </div>
+
+  <div class="artWrap"><div id="gestureHint" class="gestureHint" hidden></div><div class="thumb"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 6.4a5.6 5.6 0 0 1 5.6 5.6M12 17.6A5.6 5.6 0 0 1 6.4 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><img id="art" alt="" hidden></div></div>
+
+  <div class="titleRow">
+    <div class="titleText">
+      <div id="trackTitle"></div>
+      <div id="trackAlbum" class="sub ellipsis"></div>
+    </div>
+    <button id="btnInfo" class="round" aria-label="자세히 보기"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.3" fill="currentColor"/></svg></button>
+    <button id="btnAddMark" class="round" aria-label="북마크 추가"><svg viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.2-6 4.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5M9.5 10h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+
+  <input id="trackSeek" class="seek" type="range" min="0" max="1000" value="0" aria-label="현재 파일 위치">
+  <div class="times"><span id="timeCur">00:00</span><span id="timeDur">00:00</span></div>
+
+  <div class="controls">
+    <button id="btnPrev" class="ctl" aria-label="이전 트랙"><svg viewBox="0 0 24 24"><path d="M5 4h2.6v16H5zM20 4v16L8.6 12z" fill="currentColor"/></svg></button>
+    <button id="btnBack10" class="ctl seek10" aria-label="뒤로 건너뛰기"><svg viewBox="0 0 24 24"><path d="M12 5V1.5L7 6l5 4.5V7a6.5 6.5 0 1 1-6.5 6.5H3.5A8.5 8.5 0 1 0 12 5z" fill="currentColor"/></svg><b>10</b></button>
+    <button id="btnPlay" class="ctl main" aria-label="재생/정지"><svg viewBox="0 0 24 24"><path id="playIcon" d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button>
+    <button id="btnFwd10" class="ctl seek10" aria-label="앞으로 건너뛰기"><svg viewBox="0 0 24 24"><path d="M12 5V1.5L17 6l-5 4.5V7a6.5 6.5 0 1 0 6.5 6.5h2A8.5 8.5 0 1 1 12 5z" fill="currentColor"/></svg><b>10</b></button>
+    <button id="btnNext" class="ctl" aria-label="다음 트랙"><svg viewBox="0 0 24 24"><path d="M16.4 4H19v16h-2.6zM4 4v16l11.4-8z" fill="currentColor"/></svg></button>
+  </div>
+
+  <div class="extras">
+    <button id="btnSpeed" class="pill" aria-label="재생 속도">1x</button>
+    <button id="btnSleep" class="pill" aria-label="취침 예약"><svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="currentColor"/></svg><span id="sleepLabel">취침</span></button>
+    <label class="vol" title="음량 (위/아래 화살표)"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input id="volume" class="seek thin" type="range" min="0" max="100" value="100" aria-label="음량"></label>
+  </div>
+</section>
+
+<!-- 설정 -->
+<section id="settings" class="screen" hidden>
+  <header class="bar icons">
+    <button id="btnSettingsClose" class="icon" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M15.5 4 7.5 12l8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <h1>설정</h1>
+  </header>
+  <div class="setScroll">
+    <h2 class="sec">색상 테마</h2>
+    <div class="panel"><div id="themeChips" class="chips"></div></div>
+
+    <h2 class="sec">건너뛰기 시간</h2>
+    <div class="panel">
+      <div class="setLabel">뒤로 <span id="skipBackValue" class="setValue"></span></div>
+      <div id="skipBackChips" class="chips"></div>
+      <div class="setLabel gap">앞으로 <span id="skipFwdValue" class="setValue"></span></div>
+      <div id="skipFwdChips" class="chips"></div>
+    </div>
+
+    <div class="secRow">
+      <h2 class="sec">이퀄라이저</h2>
+      <button id="eqToggle" class="switch" role="switch" aria-label="이퀄라이저 켜기"><i></i></button>
+    </div>
+    <div id="eqPanel" class="panel">
+      <div id="eqPresets" class="chips scroll"></div>
+      <div id="eqBands" class="bands"></div>
+      <button id="eqReset" class="textBtn">초기화</button>
+    </div>
+
+    <h2 class="sec">북마크 백업</h2>
+    <div class="panel">
+      <button id="btnBackupSave" class="linkRow">전체 백업 파일 저장</button>
+      <button id="btnImport" class="linkRow">백업 파일 들여오기</button>
+      <p class="setNote">백업 파일이나 내보낸 텍스트 파일을 다시 가져올 수 있습니다. 같은 북마크는 중복으로 추가되지 않습니다.</p>
+    </div>
+
+    <div class="secRow">
+      <h2 class="sec">마우스 동작</h2>
+      <button id="gestureToggle" class="switch" role="switch" aria-label="마우스 동작 사용"><i></i></button>
+    </div>
+    <div class="panel">
+      <p class="setNote first">목록 클릭: 선택 (Ctrl, Shift로 여러 곡)<br>목록 더블클릭: 재생<br>고른 줄이나 폴더 제목 줄 끌기: 순서 변경<br>고르지 않은 줄이나 빈 곳 끌기: 범위 선택 (Ctrl: 더하기)<br>목록 오른쪽 클릭: 메뉴<br>썸네일 클릭: 재생/정지<br>썸네일 왼쪽/오른쪽 더블클릭: 뒤로/앞으로 건너뛰기<br>재생 화면 좌우로 끌기: 이전/다음 곡<br>북마크 왼쪽으로 끌기: 삭제<br>배속 버튼 좌우로 끌기: 속도 변경</p>
+    </div>
+
+    <h2 class="sec">키보드</h2>
+    <div class="panel">
+      <p class="setNote first">Space: 재생/정지<br>Enter: 고른 곡 재생<br>Delete: 고른 곡을 목록에서 빼기<br>Ctrl + A: 전체 선택<br>Ctrl + O: 파일 추가<br>← →: 뒤로/앞으로 건너뛰기<br>Ctrl + ← →: 이전/다음 곡<br>↑ ↓: 음량<br>B: 북마크 추가<br>S: 재생 속도 변경<br>P: 플레이어 접기/펼치기<br>Ctrl + F: 목록 검색<br>Esc: 뒤로 가기<br>키보드의 미디어 키도 사용할 수 있습니다.</p>
+    </div>
+
+    <h2 class="sec">앱 정보</h2>
+    <div class="panel">
+      <div id="appVersion" class="setNote first"></div>
+      <div id="appFont" class="setNote"></div>
+      <button id="btnLicenses" class="linkRow gap">오픈소스 라이선스</button>
+    </div>
+  </div>
+</section>
+
+<!-- 파일 리스트 / 북마크 리스트 -->
+<section id="sheet" class="screen" hidden>
+  <header class="bar icons">
+    <button id="btnSheetClose" class="icon" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M15.5 4 7.5 12l8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <h1 id="sheetTitle"></h1>
+    <span class="spacer"></span>
+    <button id="btnImportSheet" class="pill" hidden>들여오기</button>
+    <button id="btnExport" class="pill" hidden>내보내기</button>
+  </header>
+  <p id="sheetPath" class="pathLine ellipsis"></p>
+  <ul id="sheetList" class="list"></ul>
+  <p id="sheetEmpty" class="empty" hidden></p>
+</section>
+
+<div id="toast" class="toast" hidden></div>
+
+<!-- 파일 자세히 보기 -->
+<div id="info" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="파일 정보">
+    <div class="infoHead">
+      <span id="infoTile" class="tile track"></span>
+      <div class="text">
+        <div id="infoTitle" class="name"></div>
+        <div id="infoAlbum" class="sub ellipsis"></div>
+      </div>
+      <button id="infoClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="infoBody">
+      <h3>태그</h3>
+      <dl id="infoTags"></dl>
+      <p id="infoEmpty" class="infoNote" hidden>입력된 태그가 없습니다.</p>
+      <h3>파일 정보</h3>
+      <dl id="infoTech"></dl>
+    </div>
+  </div>
+</div>
+
+<!-- 취침 예약 -->
+<div id="sleepMenu" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="취침 예약">
+    <div class="infoHead">
+      <div class="text"><div class="name">취침 예약</div><div id="sleepStatus" class="sub"></div></div>
+      <button id="sleepClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div id="sleepChoices" class="chips sleepChips"></div>
+  </div>
+</div>
+
+<!-- 북마크 메뉴 -->
+<div id="markMenu" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="북마크 메뉴">
+    <div class="infoHead">
+      <div class="text"><div id="markMenuTitle" class="name"></div><div id="markMenuSub" class="sub"></div></div>
+      <button id="markMenuClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="menuList">
+      <button id="markText">텍스트로 내보내기</button>
+      <button id="markImage">이미지로 내보내기</button>
+      <button id="markEdit">수정</button>
+      <button id="markDelete" class="danger">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- 이미지 발췌 -->
+<div id="excerptMenu" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="이미지로 내보내기">
+    <div class="infoHead">
+      <div class="text"><div class="name">이미지로 내보내기</div></div>
+      <button id="excerptClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <canvas id="excerptCanvas" width="1080" height="1080"></canvas>
+    <div class="excerptOption"><span>글꼴</span><div id="excerptFonts" class="chips"></div></div>
+    <div class="excerptOption"><span>배경</span><div id="excerptBgs" class="chips"></div></div>
+    <input id="excerptFile" type="file" accept="image/*" hidden>
+    <div class="exportActions">
+      <button id="excerptSave" class="cta">저장하기</button>
+      <button id="excerptShare" class="cta ghost">이미지 복사</button>
+    </div>
+  </div>
+</div>
+
+<!-- 오픈소스 라이선스 -->
+<div id="licenses" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="오픈소스 라이선스">
+    <div class="infoHead">
+      <div class="text"><div class="name">오픈소스 라이선스</div></div>
+      <button id="licensesClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <pre id="licensesText"></pre>
+  </div>
+</div>
+
+<!-- 북마크 내보내기 -->
+<div id="exportMenu" class="dim bottom" hidden>
+  <div class="infoPanel" role="dialog" aria-label="북마크 내보내기">
+    <div class="infoHead">
+      <div class="text">
+        <div class="name">북마크 내보내기</div>
+        <div id="exportCount" class="sub"></div>
+      </div>
+      <button id="exportClose" class="act" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div id="exportScopes" class="chips"></div>
+    <pre id="exportPreview"></pre>
+    <div class="exportActions">
+      <button id="exportSave" class="cta">파일로 저장</button>
+      <button id="exportShare" class="cta ghost">복사하기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 북마크 입력 -->
+<div id="dialog" class="dim" hidden>
+  <form id="markForm" class="dialog">
+    <h2 id="dialogTitle">북마크 추가</h2>
+    <p id="dialogFile" class="ellipsis sub"></p>
+    <label>위치 (분:초)
+      <input id="markTime" inputmode="numeric" placeholder="00:00" autocomplete="off">
+    </label>
+    <label>메모
+      <textarea id="markMemo" rows="3" placeholder="메모를 입력하세요"></textarea>
+    </label>
+    <p id="markError" class="error" hidden>시간은 00:00 형식으로 파일 길이 안에서 입력해 주세요.</p>
+    <div class="actions">
+      <button type="button" id="markCancel">취소</button>
+      <button type="submit" class="primary">저장</button>
+    </div>
+  </form>
+</div>
+
+<script src="licenses.js"></script>
+<script src="gestures.js"></script>
+<script src="bridge.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

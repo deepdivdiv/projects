@@ -4,7 +4,7 @@
   const PLAY = 'M7 4l13 8-13 8z', PAUSE = 'M6 4h4.5v16H6zM13.5 4H18v16h-4.5z';
 
   let browsing = null, folder = null, index = 0, position = 0, duration = 0, playing = false;
-  const SPEEDS = [1, 2, 4, 8, 16];
+  const SPEEDS = [1, 1.25, 1.5, 1.75, 2];
   let storeMode = false, sheetColl = null, systemFontLoaded = false;
   let speed = 1, busyTimer = 0, toastTimer = 0, infoToken = null, lastExport = null;
   let dragging = false, sheetMode = null, editing = null, artToken = 0, currentArt = null;
@@ -547,6 +547,7 @@
     save('lastFolder', f.path);
     renderTrack(); renderProgress(); show('player');
     await B.setQueue(f.tracks, index, position, !!autoplay, f.path);
+    adoptMarks();
   }
 
   // ---- 파일 / 북마크 리스트 ----
@@ -895,7 +896,7 @@
     if (!data || data.type !== 'bookmarks' || !Array.isArray(data.bookmarks)) throw new Error('format');
     return data.bookmarks
       .filter(m => m && clean(m.title) && Number.isFinite(m.position) && m.position >= 0)
-      .map(m => ({ folder: clean(m.folder) || clean(m.label), label: clean(m.label), uri: clean(m.uri), title: m.title, position: m.position, memo: clean(m.memo) }));
+      .map(m => ({ folder: clean(m.folder) || clean(m.label), label: clean(m.label), uri: clean(m.uri), title: m.title, position: m.position, memo: clean(m.memo), duration: Number.isFinite(m.duration) ? m.duration : 0 }));
   }
   // 내보낸 텍스트: [폴더] 제목 아래에 '파일명 / 분:초 / 메모', 또는 한 건짜리 '[분:초] 메모 파일명'
   function fromText(text, currentFolder) {
@@ -936,6 +937,63 @@
     save('bookmarks', all);
     return added;
   }
+  // 경로가 다른 곳에서 만든 북마크는 지금 목록에 보이지 않는다. 사용자가 허락하면 시간과 메모만 살려 곡에 다시 붙인다.
+  // 흔한 파일 이름이 다른 폴더의 곡에 잘못 붙을 수 있어서 자동으로 붙이지 않고 묻는다.
+  function attachMark(all, m, t) {
+    const same = x => x !== m && x.uri === t.uri && Math.round(x.position / 1000) === Math.round(m.position / 1000) && (x.memo || '').trim() === (m.memo || '').trim();
+    if (all.some(same)) { all.splice(all.indexOf(m), 1); return; }
+    Object.assign(m, { folder: t.dir || folder.path, label: '', uri: t.uri, title: t.title, duration: t.duration });
+  }
+  // 폴더 이름을 바꾸면 경로가 달라져 북마크가 보이지 않는다. 원래 자리에서 곡이 사라졌고 이름과 길이가 같은 곡이 있으면 그 곡으로 옮긴다.
+  // 원본이 남아 있으면 복사본이므로 옮기지 않는다.
+  const LENGTH_SLACK_MS = 1500;
+  async function adoptMarks() {
+    const opened = folder;
+    if (!opened) return;
+    const places = new Map();
+    const titlesAt = path => {
+      if (!places.has(path)) places.set(path, B.listDir(path).then(r => new Set((r.tracks || []).map(t => t.title)), () => new Set()));
+      return places.get(path);
+    };
+    const sameLength = (m, t) => !m.duration || !t.duration || Math.abs(m.duration - t.duration) <= LENGTH_SLACK_MS;
+    const moved = [];
+    for (const m of marks()) {
+      // 같은 곡이 여럿이면 나중에 넣은 쪽이 옮겨진 폴더다.
+      const t = [...opened.tracks].reverse().find(x => x.title === m.title && sameLength(m, x) && !(x.uri === m.uri && belongsTo(m, opened)));
+      if (t && !(await titlesAt(m.folder)).has(m.title)) moved.push([m.id, t]);
+    }
+    if (!moved.length || folder !== opened) return;
+    const all = marks();
+    for (const [id, t] of moved) {
+      const m = all.find(x => x.id === id);
+      if (m) attachMark(all, m, t);
+    }
+    save('bookmarks', all);
+    toast(`폴더가 바뀐 북마크 ${moved.length}개를 새 위치로 옮겼습니다.`);
+    if (!$('sheet').hidden) renderSheet();
+  }
+  const fitsIn = (m, t) => !t.duration || m.position <= t.duration;
+  function relinkMarks(incoming) {
+    if (!folder) return { linked: 0, tooLong: 0 };
+    const key = m => [m.title, Math.round(m.position / 1000), (m.memo || '').trim()].join('\u0000');
+    const wanted = new Set(incoming.map(key)), all = marks();
+    // 폴더 표시가 없는 파일은 지금 폴더 소속으로 들어오므로 곡까지 찾아야 찾은 것이다.
+    const lost = all.filter(m => wanted.has(key(m)) && !(belongsTo(m, folder) && trackIndexOf(m) >= 0));
+    const namesake = m => folder.tracks.find(t => t.title === m.title);
+    const named = lost.filter(namesake), rest = lost.filter(m => !namesake(m));
+    let linked = 0, tooLong = 0;
+    const attachAll = (list, trackOf) => {
+      for (const m of list) {
+        const t = trackOf(m);
+        if (fitsIn(m, t)) { attachMark(all, m, t); linked++; } else tooLong++;
+      }
+    };
+    if (named.length && confirm(`경로가 달라 찾지 못한 북마크가 ${named.length}개 있습니다.\n파일 이름이 같은 곡에 시간과 메모를 붙일까요?`)) attachAll(named, namesake);
+    const now = track();
+    if (rest.length && now && confirm(`파일 이름도 다른 북마크가 ${rest.length}개 있습니다.\n지금 곡 '${now.title}'에 시간과 메모를 붙일까요?`)) attachAll(rest, () => now);
+    save('bookmarks', all);
+    return { linked, tooLong };
+  }
   async function importMarks() {
     let picked;
     try { picked = await B.pickText(); } catch (e) { toast(e.message || '파일을 읽지 못했습니다.'); return; }
@@ -946,7 +1004,8 @@
       if (!list.length) throw new Error('format');
       await locateZips(marks());
       const added = mergeMarks(list), skipped = list.length - added;
-      toast(`북마크 ${added}개를 가져왔습니다.` + (skipped ? ` (중복 ${skipped}개 제외)` : ''));
+      const { linked, tooLong } = relinkMarks(list);
+      toast(`북마크 ${added}개를 가져왔습니다.` + (skipped ? ` (중복 ${skipped}개 제외)` : '') + (linked ? ` ${linked}개는 곡에 다시 연결했습니다.` : '') + (tooLong ? ` ${tooLong}개는 곡 길이를 넘어서 연결하지 않았습니다.` : ''));
       if (!$('sheet').hidden) renderSheet();
       if (browsing && !$('folders').hidden) renderBrowser();
     } catch (e) {
@@ -1088,7 +1147,7 @@
       const m = all.find(x => x.id === editing.id);
       if (m) { m.position = ms; m.memo = memo; }
     } else {
-      all.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2, 7), folder: ref.dir || folder.path, uri: ref.uri, title: ref.title, position: ms, memo });
+      all.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2, 7), folder: ref.dir || folder.path, uri: ref.uri, title: ref.title, position: ms, memo, duration: ref.duration });
     }
     save('bookmarks', all);
     $('dialog').hidden = true;
@@ -1225,6 +1284,29 @@
   $('eqReset').onclick = () => { prefs.eqPreset = '기본'; prefs.eqGains = EQ_PRESETS['기본'].slice(); renderEq(); };
   applySkipLabels();
   applyEq();
+
+  // ---- 색상 테마 ----
+  const THEMES = {
+    white: { name: '화이트', bg: '#ffffff' }, black: { name: '블랙', bg: '#000000', dark: true },
+    pink: { name: '핑크', bg: '#FFD6E7' }, blue: { name: '연블루', bg: '#eaf3fc' },
+  };
+  function setTheme(wanted) {
+    const key = THEMES[wanted] ? wanted : 'black', theme = THEMES[key];
+    prefs.theme = key;
+    savePrefs();
+    document.documentElement.dataset.theme = key;
+    document.documentElement.classList.toggle('light', !theme.dark);
+    B.setTheme(!!theme.dark, theme.bg).catch(() => {});
+    for (const b of $('themeChips').children) b.classList.toggle('on', b.dataset.theme === key);
+  }
+  for (const [key, theme] of Object.entries(THEMES)) {
+    const b = el('button', 'chip themeChip', theme.name);
+    b.dataset.theme = key;
+    b.style.setProperty('--swatch', theme.bg);
+    b.onclick = () => setTheme(key);
+    $('themeChips').append(b);
+  }
+  setTheme(prefs.theme);
 
   // ---- 조작 ----
   $('btnUp').onclick = () => { if (browsing && browsing.parent != null) browse(browsing.parent); };

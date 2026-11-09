@@ -1,0 +1,44 @@
+{
+  "app": "DIV AUDIO APP",
+  "type": "bookmarks",
+  "version": 1,
+  "exportedAt": "2026-11-06T00:37:19.002Z",
+  "bookmarks": [
+    {
+      "id": "1793922597219-y4ed1",
+      "folder": "/storage/emulated/0/Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]",
+      "uri": "content://media/external/audio/media/22970",
+      "title": "PAYBACK part01_TR05",
+      "position": 732000,
+      "memo": "뭐야 개그맨이었던거야?",
+      "label": "Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]"
+    },
+    {
+      "id": "1793922776202-k9efk",
+      "folder": "/storage/emulated/0/Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]",
+      "uri": "content://media/external/audio/media/22967",
+      "title": "PAYBACK part01_TR02",
+      "position": 633000,
+      "memo": "너 다 울었으면 가면 벗어봐",
+      "label": "Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]"
+    },
+    {
+      "id": "1793922850927-e1g2a",
+      "folder": "/storage/emulated/0/Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]",
+      "uri": "content://media/external/audio/media/22967",
+      "title": "PAYBACK part01_TR02",
+      "position": 676000,
+      "memo": "세상에 천벌이라는게 있을까?",
+      "label": "Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]"
+    },
+    {
+      "id": "1793922978992-78fcj",
+      "folder": "/storage/emulated/0/Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]",
+      "uri": "content://media/external/audio/media/22967",
+      "title": "PAYBACK part01_TR02",
+      "position": 779000,
+      "memo": "그렇게 4년 6개월 3억5천3백7십20",
+      "label": "Download/NAVER MYBOX/[ 취미생활 ]/오디오/[드라마CD]/[夜海] BLCD 058 페이백 1 [무손실]"
+    }
+  ]
+}

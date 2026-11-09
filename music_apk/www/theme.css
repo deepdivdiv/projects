@@ -1,0 +1,59 @@
+/* 색상 테마와 유리 효과. 폰 앱과 PC 프로그램이 이 파일을 같이 쓴다. style.css 다음에 불러온다. */
+:root {
+  --blur: 28px;
+  --ink: 255,255,255; --fg: rgb(var(--ink)); --bg: #000; --solid: #fff; --onSolid: #000; --highlight: #ffd479; --danger: #ff8a80;
+  --panel: rgba(34,34,40,.72); --scrim: rgba(0,0,0,.42);
+  --glassFill: rgba(12,12,16,.42); --glassInner: rgba(255,255,255,.1); --glassEdge: rgba(255,255,255,.16); --glassShine: rgba(255,255,255,.22);
+  --glassShadow: 0 18px 48px rgba(0,0,0,.45);
+  --orbs: radial-gradient(45% 55% at 12% 18%, rgba(88,86,214,.42), transparent 70%), radial-gradient(40% 50% at 88% 12%, rgba(255,55,135,.24), transparent 70%), radial-gradient(50% 55% at 72% 92%, rgba(0,160,220,.3), transparent 70%);
+}
+:root.light {
+  --onSolid: #fff; --danger: #b3122f;
+  --panel: rgba(255,255,255,.74); --scrim: rgba(var(--ink),.2);
+  --glassFill: rgba(255,255,255,.36); --glassInner: rgba(255,255,255,.44); --glassEdge: rgba(255,255,255,.66); --glassShine: rgba(255,255,255,.85);
+  --glassShadow: 0 16px 44px rgba(var(--ink),.16);
+}
+:root[data-theme=white] {
+  --ink: 28,28,32; --bg: #fff; --solid: #1c1c20; --highlight: #1c1c20;
+  --glassFill: rgba(255,255,255,.5); --glassEdge: rgba(255,255,255,.9); --glassInner: rgba(255,255,255,.6);
+  --orbs: radial-gradient(45% 55% at 12% 18%, rgba(120,170,255,.42), transparent 70%), radial-gradient(40% 50% at 88% 12%, rgba(255,170,205,.38), transparent 70%), radial-gradient(50% 55% at 72% 92%, rgba(150,230,210,.36), transparent 70%);
+}
+:root[data-theme=pink] {
+  --ink: 84,36,60; --bg: #FFD6E7; --solid: #C43C7C; --highlight: #C43C7C;
+  --orbs: radial-gradient(45% 55% at 12% 18%, rgba(255,255,255,.8), transparent 70%), radial-gradient(40% 50% at 88% 12%, rgba(255,178,208,.55), transparent 70%), radial-gradient(50% 55% at 72% 92%, rgba(255,236,214,.65), transparent 70%);
+}
+:root[data-theme=blue] {
+  --ink: 26,50,80; --bg: #eaf3fc; --solid: #2a72c4; --highlight: #2a72c4;
+  --orbs: radial-gradient(45% 55% at 12% 18%, rgba(120,180,255,.6), transparent 70%), radial-gradient(40% 50% at 88% 12%, rgba(255,255,255,.85), transparent 70%), radial-gradient(50% 55% at 72% 92%, rgba(140,230,240,.55), transparent 70%);
+}
+
+/* 유리 효과: 화면 전체에 뒤의 색 번짐이 비친다. 배경을 움직이면 매번 다시 흐리게 그려야 해서 멈춰 둔다.
+   고른 색이 앨범마다 달라 보이지 않도록 블랙에서만 앨범아트를 배경으로 쓴다. */
+#bg::before { content: ""; position: absolute; inset: 0; background: var(--orbs); }
+#bg img { filter: blur(44px) brightness(.6) saturate(1.3); } /* 밝은 앨범아트 위에서도 흰 글자가 읽히도록 어둡게 깐다. */
+.light #bg img, .light #bg::after { display: none; }
+.screen { overflow: hidden; background: var(--glassFill); backdrop-filter: blur(var(--blur)) saturate(170%); }
+.pill:not(.on), .chip:not(.on), .round, .folderCard, .panel, .mini, .searchBar input, .cta.ghost {
+  background: var(--glassInner); box-shadow: inset 0 0 0 1px var(--glassEdge), inset 0 1px 0 var(--glassShine);
+}
+.tile, .thumb { background: var(--glassInner); }
+.thumb { box-shadow: 0 16px 40px rgba(0,0,0,.28), inset 0 0 0 1px var(--glassEdge); }
+.list li.on { background: var(--glassInner); box-shadow: inset 0 0 0 1px var(--glassEdge); }
+.dim { background: var(--scrim); backdrop-filter: blur(14px) saturate(150%); }
+.infoPanel, .dialog { background: var(--panel); border: 1px solid var(--glassEdge); box-shadow: var(--glassShadow), inset 0 1px 0 var(--glassShine); }
+.toast {
+  background: var(--panel); backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid var(--glassEdge); box-shadow: 0 10px 30px rgba(0,0,0,.2), inset 0 1px 0 var(--glassShine);
+}
+.ctl.main { box-shadow: 0 10px 28px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.35); }
+.switch i { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+
+/* 밝은 테마: 어두운 바탕 전제로 정해진 색을 바꾼다. */
+.light #player .folderRow, .light #player .folderTime, .light #player .titleText, .light #player .times, .light #player .bar, .light #player .ctl:not(.main) { filter: none; }
+.light .gestureHint, .light .railHint { color: #fff; }
+.light .switch:not(.on) { background: rgba(var(--ink),.3); }
+.light .tile.folder, .light .tile.zip { background: var(--glassInner); }
+.light .tile.zip { color: var(--solid); }
+
+.themeChip { display: inline-flex; align-items: center; gap: 7px; }
+.themeChip::before { content: ''; width: 14px; height: 14px; border-radius: 50%; background: var(--swatch); box-shadow: 0 0 0 1px rgba(128,128,128,.6); }
