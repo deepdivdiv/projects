@@ -5,6 +5,8 @@
 
   let browsing = null, folder = null, index = 0, position = 0, duration = 0, playing = false;
   const SPEEDS = [1, 1.25, 1.5, 1.75, 2];
+  const isIOS = !!(window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'ios');
+  const SAVED_TEXT = isIOS ? '파일 앱 > DIV AUDIO APP > 내보내기에 저장했습니다.' : 'Download 폴더에 저장했습니다.';
   let storeMode = false, sheetColl = null, systemFontLoaded = false;
   let speed = 1, busyTimer = 0, toastTimer = 0, infoToken = null, lastExport = null;
   let dragging = false, sheetMode = null, editing = null, artToken = 0, currentArt = null;
@@ -623,7 +625,8 @@
   }
   const naturally = (x, y) => x.localeCompare(y, 'ko', { numeric: true });
   // 스토어 버전의 경로는 문서 주소라서 읽을 수 있는 경로로 바꿔 비교한다.
-  const plainPath = p => (p.startsWith('content:') ? decodeURIComponent(p.split('/document/').pop()) : p);
+  // iOS는 'bm:연결id/폴더/하위' 형태라 연결 id를 떼어 낸다.
+  const plainPath = p => (p.startsWith('content:') ? decodeURIComponent(p.split('/document/').pop()) : p.startsWith('bm:') ? p.replace(/^bm:[^/]+\//, '') : p);
   const shortPath = p => plainPath(p).replace(/^\/storage\/emulated\/0\/?/, '').replace(/^primary:/, '');
   const SCOPES = [['here', '이 폴더'], ['tree', '하위 폴더 포함'], ['all', '모든 폴더']];
   const zipInfo = new Map();
@@ -702,7 +705,7 @@
     try {
       const r = await B.saveText(exportFileName(), exporting.text);
       $('exportMenu').hidden = true;
-      toast('Download 폴더에 저장했습니다.');
+      toast(SAVED_TEXT);
       lastExport = r.path;
     } catch (e) { toast('파일을 저장하지 못했습니다.'); }
   };
@@ -865,7 +868,7 @@
     try {
       await B.saveImage(excerptName(), excerptData());
       $('excerptMenu').hidden = true;
-      toast('갤러리의 DAA 앨범에 저장했습니다.');
+      toast(isIOS ? '사진 앱에 저장했습니다.' : '갤러리의 DAA 앨범에 저장했습니다.');
     } catch (e) { toast(e.message || '이미지를 저장하지 못했습니다.'); }
   };
   $('excerptShare').onclick = () => { B.shareFile(excerptName(), 'image/jpeg', { data: excerptData() }).catch(() => toast('공유하지 못했습니다.')); };
@@ -880,11 +883,12 @@
     }, null, 2);
   }
   const backupName = () => `DAA_북마크백업_${stamp()}.json`;
+  if (isIOS) $('btnBackupSave').textContent = '전체 백업 파일 저장 (파일 앱)';
   $('btnBackupSave').onclick = async () => {
     if (!marks().length) { toast('저장된 북마크가 없습니다.'); return; }
     try {
       await B.saveText(backupName(), await backupText());
-      toast('Download 폴더에 저장했습니다.');
+      toast(SAVED_TEXT);
     } catch (e) { toast('파일을 저장하지 못했습니다.'); }
   };
   $('btnBackupShare').onclick = async () => {
