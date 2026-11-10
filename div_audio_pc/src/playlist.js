@@ -90,7 +90,7 @@ class Collector {
 
   async zipTracks(file) {
     const zip = await this.zips.open(file);
-    return zip.tracks.map(t => ({ ...t, dir: zip.path, place: zip.name }));
+    return zip.tracks.map(({ folder, ...t }) => ({ ...t, dir: zip.path, place: zip.name, subdir: folder }));
   }
 
   /** 곡 목록과 함께, 뺀 파일의 종류별 개수와 열지 못한 이유를 돌려준다. */

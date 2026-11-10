@@ -128,9 +128,21 @@ const api = {
     const r = await dialog.showOpenDialog(win, { title: '폴더 추가', properties: ['openDirectory', 'multiSelections'] });
     return r.canceled ? [] : r.filePaths;
   },
-  loadPlaylist() {
+  async loadPlaylist() {
     const list = readJson('playlist.json', []);
-    return Array.isArray(list) ? list : [];
+    if (!Array.isArray(list)) return [];
+    // 예전에 넣은 ZIP 곡에는 ZIP 안의 폴더가 없어서 채워 넣는다.
+    const zipFolders = new Map();
+    for (const t of list) {
+      if (typeof t.subdir === 'string' || !(t.dir || '').startsWith('zip:')) continue;
+      if (!zipFolders.has(t.dir)) {
+        const zip = await zips.load(t.dir).catch(() => null);
+        zipFolders.set(t.dir, new Map(zip ? zip.tracks.map(z => [z.uri, z.folder]) : []));
+      }
+      const folder = zipFolders.get(t.dir).get(t.uri);
+      if (typeof folder === 'string') t.subdir = folder;
+    }
+    return list;
   },
   savePlaylist: tracks => writeSafely('playlist.json', tracks),
   takeOpened: () => opened.splice(0),

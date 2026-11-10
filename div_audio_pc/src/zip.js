@@ -16,6 +16,13 @@ const FLAG_ENCRYPTED = 1, FLAG_UTF8 = 0x800;
 const PATH_PREFIX = 'zip:';
 const ENTRY_SCHEME = 'zipentry';
 
+/** ZIP 안 곡들의 폴더. 모든 곡이 한 폴더에 싸여 있으면 그 껍데기 폴더는 뺀다. 맨 위의 곡은 ''. */
+function innerFolders(sources) {
+  const parts = sources.map(s => s.split('/').slice(0, -1));
+  while (parts.length && parts.every(p => p.length && p[0] === parts[0][0])) parts.forEach(p => p.shift());
+  return parts.map(p => p.join('/'));
+}
+
 async function readAt(file, offset, length) {
   const buffer = Buffer.alloc(length);
   const { bytesRead } = await file.read(buffer, 0, length, offset);
@@ -189,7 +196,20 @@ class ZipLibrary {
       e.duration = await this.probeStream(stream, e.base, e.item.size).catch(() => 0);
       stream.destroy();
     }
-    return entries.sort((a, b) => naturalOrder(a.source, b.source));
+    entries.sort((a, b) => naturalOrder(a.source, b.source));
+    innerFolders(entries.map(e => e.source)).forEach((folder, i) => { entries[i].folder = folder; });
+    return entries;
+  }
+
+  /** 폴더 정보가 없던 예전 목록에 ZIP 안의 폴더를 채운다. ZIP을 찾지 못하면 그대로 둔다. */
+  async addFolders(dir, meta) {
+    if (meta.tracks.every(t => typeof t.folder === 'string')) return meta;
+    const items = await itemsOf(meta.source).catch(() => null);
+    if (!items) return meta;
+    const folders = innerFolders(meta.tracks.map(t => (items[t.index] ? items[t.index].name.replace(/\\/g, '/') : '')));
+    meta.tracks.forEach((t, i) => { t.folder = folders[i]; });
+    await this.writeMeta(dir, meta).catch(() => {});
+    return meta;
   }
 
   /** 처음 열 때만 목록을 만들고, 그 뒤로는 저장해 둔 목록으로 바로 연다. */
@@ -211,18 +231,19 @@ class ZipLibrary {
     if (!entries.length) throw new Error('ZIP 안에 재생할 수 있는 파일이 없습니다.');
     await this.writeMeta(dir, {
       name: name.replace(/\.zip$/i, ''), source: zipPath,
-      tracks: entries.map(e => ({ file: e.file, title: e.title, index: e.index, duration: e.duration })),
+      tracks: entries.map(e => ({ file: e.file, title: e.title, index: e.index, duration: e.duration, folder: e.folder })),
     });
     return this.load(PATH_PREFIX + id);
   }
 
   async load(zipPath) {
     const dir = this.dirFor(zipPath);
-    const meta = dir && await this.readMeta(dir).catch(() => null);
+    let meta = dir && await this.readMeta(dir).catch(() => null);
     if (!meta) throw new Error('ZIP을 찾을 수 없습니다.');
+    meta = await this.addFolders(dir, meta);
     return {
       path: zipPath, name: meta.name, source: meta.source,
-      tracks: meta.tracks.map(t => ({ uri: `${ENTRY_SCHEME}://${path.basename(dir)}/${t.file}`, title: t.title, duration: t.duration })),
+      tracks: meta.tracks.map(t => ({ uri: `${ENTRY_SCHEME}://${path.basename(dir)}/${t.file}`, title: t.title, duration: t.duration, folder: t.folder || '' })),
     };
   }
 
@@ -239,4 +260,4 @@ class ZipLibrary {
   }
 }
 
-module.exports = { ZipLibrary, entryStream, itemsOf, decodeName, PATH_PREFIX };
+module.exports = { ZipLibrary, entryStream, itemsOf, decodeName, innerFolders, PATH_PREFIX };

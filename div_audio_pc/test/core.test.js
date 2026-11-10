@@ -6,7 +6,7 @@ const os = require('os');
 const path = require('path');
 const zlib = require('zlib');
 const iconv = require('iconv-lite');
-const { ZipLibrary, entryStream, itemsOf } = require('../src/zip');
+const { ZipLibrary, entryStream, itemsOf, innerFolders } = require('../src/zip');
 const { Collector, ProbeCache, clean, parentOf, fileUri } = require('../src/playlist');
 const { Media } = require('../src/media');
 const tags = require('../src/tags');
@@ -78,6 +78,22 @@ test('ZIP: 목록, 정렬, CP949 이름, 맥 찌꺼기 제외', async () => {
   assert.equal(z.name, '수업자료');
   for (const t of z.tracks) assert.ok(Math.abs(t.duration - 10000) < 800, `${t.title}: ${t.duration}`);
   assert.match(z.tracks[0].uri, /^zipentry:\/\/[0-9a-f]{16}\/\d{5}\.wav$/);
+});
+
+test('ZIP: 안의 폴더를 곡마다 기억한다. 전체를 감싼 폴더는 뺀다', async () => {
+  const z = await library.open(zipPath);
+  assert.deepEqual(z.tracks.map(t => t.folder), ['', '', '폴더']);
+  assert.deepEqual(innerFolders(['앨범/CD1/a.mp3', '앨범/CD2/b.mp3']), ['CD1', 'CD2']);
+  assert.deepEqual(innerFolders(['앨범/a.mp3', '앨범/b.mp3']), ['', '']);
+  assert.deepEqual(innerFolders(['a.mp3', 'x/b.mp3']), ['', 'x']);
+});
+
+test('ZIP: 폴더 정보가 없던 예전 목록도 열 때 채운다', async () => {
+  const z = await library.open(zipPath), dir = library.dirFor(z.path);
+  const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
+  for (const t of meta.tracks) delete t.folder;
+  fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta));
+  assert.deepEqual((await library.load(z.path)).tracks.map(t => t.folder), ['', '', '폴더']);
 });
 
 test('ZIP: 두 번째부터는 목록을 다시 만들지 않는다', async () => {
@@ -166,6 +182,7 @@ test('끌어다 놓은 폴더와 파일을 곡으로 모은다', async () => {
   const inZip = r.tracks[3];
   assert.ok(inZip.uri.startsWith('zipentry:') && inZip.dir.startsWith('zip:'));
   assert.equal(inZip.place, 'z');
+  assert.deepEqual(r.tracks.slice(3).map(t => t.subdir), ['', '', '폴더']);
 
   const one = await c.collect([path.join(dir, '2.flac')]);
   assert.deepEqual(one.tracks.map(t => t.title), ['2']);

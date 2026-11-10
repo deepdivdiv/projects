@@ -1249,20 +1249,23 @@
   const tracksOfHead = li => playlist.tracks.slice(Number(li.dataset.at), Number(li.dataset.at) + Number(li.dataset.count));
 
   // 같은 폴더의 곡은 항상 붙어 있게 한다. 폴더 순서는 먼저 나온 곡을 따른다.
+  // ZIP 안에 폴더가 있으면 그 폴더별로 묶는다. ZIP 맨 위의 곡은 ZIP 이름으로 묶는다.
+  const groupKey = t => (t.subdir ? `${t.dir}/${t.subdir}` : t.dir);
   function groupedOrder(list) {
     const groups = new Map();
     for (const t of list) {
-      if (!groups.has(t.dir)) groups.set(t.dir, []);
-      groups.get(t.dir).push(t);
+      const key = groupKey(t);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(t);
     }
     return [...groups.values()].flat();
   }
   function groupsOf(list) {
     const groups = [];
     list.forEach((t, i) => {
-      const last = groups[groups.length - 1];
-      if (last && last.dir === t.dir) last.tracks.push(t);
-      else groups.push({ dir: t.dir, place: t.place, start: i, tracks: [t] });
+      const last = groups[groups.length - 1], key = groupKey(t);
+      if (last && last.key === key) last.tracks.push(t);
+      else groups.push({ key, dir: t.dir, subdir: t.subdir || '', place: t.place, start: i, tracks: [t] });
     });
     return groups;
   }
@@ -1277,31 +1280,34 @@
   }
   function groupRow(g, name) {
     const total = g.tracks.reduce((s, t) => s + t.duration, 0), zip = g.dir.startsWith('zip:');
-    const li = row({ tile: zip ? 'zip' : 'folder', name, sub: `${g.tracks.length}곡 · ${fmt(total)}` });
+    const li = row({ tile: zip && !g.subdir ? 'zip' : 'folder', name, sub: `${g.tracks.length}곡 · ${fmt(total)}` });
     li.classList.add('groupRow');
-    li.classList.toggle('closed', foldedGroups.has(g.dir));
+    li.classList.toggle('closed', foldedGroups.has(g.key));
     li.dataset.at = g.start;
     li.dataset.count = g.tracks.length;
-    li.title = zip ? g.place : g.dir;
+    li.title = zip ? [g.place, g.subdir].filter(Boolean).join('/') : g.dir;
     const fold = el('button', 'act foldBtn');
     fold.innerHTML = CHEVRON;
     fold.setAttribute('aria-label', '폴더 접기/펼치기');
-    fold.onclick = () => toggleGroup(g.dir);
+    fold.onclick = () => toggleGroup(g.key);
     li.prepend(fold);
     li.append(action('trash', '폴더를 목록에서 빼기', () => removeTracks(g.tracks)));
     return li;
   }
-  function toggleGroup(dir) {
-    if (!foldedGroups.delete(dir)) foldedGroups.add(dir);
+  function toggleGroup(key) {
+    if (!foldedGroups.delete(key)) foldedGroups.add(key);
     prefs.foldedGroups = [...foldedGroups];
     savePrefs();
     renderPlaylist();
   }
-  // 이름이 같은 폴더는 상위 폴더까지 보여 구분한다.
+  // 이름이 같은 폴더는 상위 폴더까지 보여 구분한다. ZIP 안의 폴더는 'ZIP 이름 › 폴더'로 보인다.
   function groupNames(groups) {
     const seen = {};
     for (const g of groups) seen[g.place] = (seen[g.place] || 0) + 1;
-    return g => (seen[g.place] > 1 && !g.dir.startsWith('zip:') ? shortPath(g.dir).split('/').slice(-2).join('/') : g.place);
+    return g => {
+      if (g.subdir) return `${g.place} › ${g.subdir.split('/').join(' › ')}`;
+      return seen[g.place] > 1 && !g.dir.startsWith('zip:') ? shortPath(g.dir).split('/').slice(-2).join('/') : g.place;
+    };
   }
   function playlistRow(t, i, inGroup) {
     const about = [t.artist, t.album].filter(Boolean).join(' · ') || (inGroup ? '' : t.place);
@@ -1410,9 +1416,9 @@
     const fresh = r.tracks.filter(t => !known.has(t.uri) && known.add(t.uri));
     const wasEmpty = !folder;
     // 이미 있는 폴더의 곡은 놓은 자리와 상관없이 그 폴더의 끝으로 들어간다. 묶음이 끌려오지 않게 한다.
-    const dirs = new Set(playlist.tracks.map(t => t.dir)), list = playlist.tracks.slice();
-    list.splice(at ?? list.length, 0, ...fresh.filter(t => !dirs.has(t.dir)));
-    list.push(...fresh.filter(t => dirs.has(t.dir)));
+    const dirs = new Set(playlist.tracks.map(groupKey)), list = playlist.tracks.slice();
+    list.splice(at ?? list.length, 0, ...fresh.filter(t => !dirs.has(groupKey(t))));
+    list.push(...fresh.filter(t => dirs.has(groupKey(t))));
     if (fresh.length) await applyTracks(list);
     toast(addedText(fresh.length, r.tracks.length - fresh.length, r));
     if (r.tracks.length && (play || wasEmpty)) playFrom(playlist, playlist.tracks.findIndex(t => t.uri === r.tracks[0].uri));
@@ -1433,7 +1439,7 @@
     applyTracks(rest);
   }
   function sortTracks() {
-    applyTracks(playlist.tracks.slice().sort((a, b) => naturally(a.dir, b.dir) || naturally(a.title, b.title)));
+    applyTracks(playlist.tracks.slice().sort((a, b) => naturally(a.dir, b.dir) || naturally(a.subdir || '', b.subdir || '') || naturally(a.title, b.title)));
   }
   const addFiles = async () => addPaths(await B.pickFiles());
   const addFolder = async () => addPaths(await B.pickFolder());
