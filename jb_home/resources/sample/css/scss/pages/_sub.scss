@@ -3,7 +3,9 @@
 @use 'sass:color';
 @use 'sass:list';
 
-.sub_mypage {
+// 서브 공통 레이아웃 — article > section 안에 [aside(LNB) + .sec_cont(본문)] 2단 구조.
+// LNB 는 마이페이지 전용이 아니라 모든 서브페이지가 같이 쓴다.
+article {
     > section {
         @include set.base-width();
         display: flex; gap: 5rem;
@@ -3747,11 +3749,11 @@ main .m_inner .m_head .age-grade-badge,
         .inst_photo { max-width: 100%; }
     }
 
-    /* 마이페이지 — 좌측 LNB 를 오프캔버스 패널로 전환.
+    /* 서브 공통 — 좌측 LNB 를 오프캔버스 패널로 전환.
        좁은 폭에서 34rem 짜리 사이드바를 옆에 두면 본문이 남지 않는다.
        버튼(.bt-lnb)을 누르면 화면 왼쪽에서 패널이 밀려 들어오고, 딤/Esc/닫기로 닫는다.
        열고 닫는 동작은 sub.js 가 .active 클래스로 처리한다(헤더 gnbArea 와 같은 방식). */
-    .sub_mypage {
+    article {
         > section {
             position: relative;
             flex-direction: column; gap: 0;
@@ -4061,11 +4063,11 @@ main .m_inner .m_head .age-grade-badge,
     #curriculumWrap .cur_panel { padding: 2rem 1.6rem; }
 
     // 열기 아이콘 — 좁은 화면에서 한 단계 줄인다. 브레드크럼 줄 높이도 같이 맞춘다.
-    .sub_mypage > section > .bt-lnb { width: 3.6rem; height: 3.6rem; }
-    .sub_mypage > section > .sec_cont .sec_bread { min-height: 3.6rem; padding-right: 4.4rem; }
+    article > section > .bt-lnb { width: 3.6rem; height: 3.6rem; }
+    article > section > .sec_cont .sec_bread { min-height: 3.6rem; padding-right: 4.4rem; }
 
-    // 마이페이지 LNB 패널 — 화면이 좁아 32rem 패널이 본문을 다 덮으므로 폭을 비율로 잡는다.
-    .sub_mypage > section > aside > nav {
+    // 서브 공통 LNB 패널 — 화면이 좁아 32rem 패널이 본문을 다 덮으므로 폭을 비율로 잡는다.
+    article > section > aside > nav {
         max-width: 80%;
         // 아래 여백은 패널 규칙(10rem)을 유지한다 — 단축표기로 덮으면 마지막 메뉴가 밑단에 붙는다.
         padding: 2rem 2rem 10rem;

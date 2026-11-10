@@ -89,8 +89,14 @@ final class TreeBrowser {
         return DocumentsContract.getTreeDocumentId(uri);
     }
 
+    /**
+     * tree/{id}/document/{id} 이면 문서 id, tree/{id} 이면 연결한 폴더 id.
+     * DocumentsContract.isDocumentUri는 Context로 제공자를 확인하므로 null을 넘기면 NPE가 난다(원스토어 신고 오류).
+     */
     private static String documentId(Uri uri) {
-        return DocumentsContract.isDocumentUri(null, uri) ? DocumentsContract.getDocumentId(uri) : treeId(uri);
+        List<String> segments = uri.getPathSegments();
+        boolean document = segments.size() >= 4 && "document".equals(segments.get(2));
+        return document ? DocumentsContract.getDocumentId(uri) : treeId(uri);
     }
 
     private static Uri document(Uri tree, String id) {
