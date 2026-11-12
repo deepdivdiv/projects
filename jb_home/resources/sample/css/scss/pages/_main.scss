@@ -365,3 +365,141 @@ main {
         }
     }
 }
+
+
+
+/* ------------------------
+   메인 반응형
+   공통(헤더·푸터·섹션 여백)은 common.css 가 처리하고, 여기서는 메인 화면 고유 요소만 맞춘다.
+   main.css 는 메인 페이지에서만 로드되므로 헤더 보정도 여기서 한다.
+----------------------- */
+
+// 상단 안내띠 — 좁은 화면에서 두 줄 이상으로 감기므로 줄간격을 살린다.
+.topStrip {
+    @include set.res-tablet() {
+        padding: .8rem 1.6rem;
+        img { flex-shrink: 0; width: 4rem; }
+        p { line-height: 1.4; font-size: set.$ft-bd-xs; word-break: keep-all; }
+    }
+}
+
+// 헤더 — 메인은 전체메뉴(.gnbArea) 없이 1depth 메뉴 3개뿐이라 1024 이하에서도 메뉴를 숨기지 않는다.
+header.skin01 {
+    @include set.res-laptop() {
+        .h_inner {
+            gap: 1rem;
+            nav { display: flex; flex-grow: 0; }
+            nav .depth1 > li > a { font-size: set.$ft-bd-m; padding: 0 1.2rem; }
+            .logo img { width: 16rem; }
+            .h_side .loginBtn {
+                i { width: 1.8rem; }
+                p { font-size: set.$ft-bd-s; }
+            }
+        }
+    }
+    // 535 이하 — 로고/로그인 한 줄, 메뉴는 아래 줄로 내린다.
+    @include set.res-mo-tab() {
+        height: auto;
+        .h_inner {
+            flex-wrap: wrap;
+            .logo { height: 5rem; display: flex; align-items: center; }
+            .logo img { width: 13rem; height: auto; }
+            nav {
+                order: 3;
+                width: 100%; height: 4.4rem;
+                border-top: .1rem solid set.$gray-10;
+                .depth1 { width: 100%; justify-content: space-around; }
+                .depth1 > li > a { padding: 0 .8rem; }
+            }
+        }
+    }
+}
+
+// 메인 비주얼 — 1024 이하에서 문구 / 로그인 박스를 위아래로 쌓는다.
+main {
+    @include set.res-laptop() {
+        background-position: 30% center;
+        .m_inner { flex-direction: column; align-items: stretch; gap: 4rem; padding: 6rem 0; }
+        .m_copy {
+            text-align: center;
+            h1 { margin-bottom: 3rem; }
+        }
+        .m_login { margin: 0 auto; padding: 5rem 4rem; gap: 2.4rem; }
+    }
+    @include set.res-tablet() {
+        .m_inner { gap: 3rem; padding: 4rem 0; }
+        .m_copy {
+            p { font-size: set.$ft-bd-l; margin-bottom: 1rem; }
+            h1 {
+                font-size: 3.2rem; margin-bottom: 2.4rem; word-break: keep-all;
+                strong { font-size: 3.8rem; }
+            }
+        }
+        .m_login {
+            padding: 3.2rem 2rem; gap: 2rem;
+            > p { font-size: 3.6rem; }
+            .login_id, .login_pw { height: 5.2rem; font-size: set.$ft-bd-m; padding-left: 4.4rem; }
+        }
+    }
+    @include set.res-mobile() {
+        .m_copy h1 {
+            font-size: 2.6rem;
+            strong { font-size: 3rem; }
+        }
+        .m_login .lg_util { flex-direction: column; align-items: flex-start; }
+    }
+}
+
+// 교육과정 — 카드 최소폭(42rem)이 화면보다 넓어지지 않게 한다.
+.edu_list {
+    grid-template-columns: repeat(auto-fill, minmax(min(42rem, 100%), 1fr));
+    @include set.res-laptop() {
+        grid-template-columns: repeat(auto-fill, minmax(min(32rem, 100%), 1fr));
+        gap: 1.6rem;
+        .el_item { padding: 3rem 5rem 3rem 3rem; gap: 2rem; background-position: center right 2.4rem; }
+    }
+    @include set.res-tablet() {
+        gap: 1.2rem;
+        .el_item {
+            padding: 2rem 4.4rem 2rem 2rem; gap: 1.6rem;
+            background-size: 1.4rem; background-position: center right 2rem;
+            img { width: 4rem; flex-shrink: 0; }
+        }
+    }
+}
+
+// 안내 배너 — 1024 이하 세로 배치, 535 이하에서는 안내 3개도 세로로 쌓는다.
+.infoBanner {
+    .inner {
+        @include set.res-laptop() {
+            flex-direction: column; gap: 3.2rem;
+            padding: 4.8rem 0;
+            text-align: center;
+            .ib_list {
+                width: 100%; justify-content: center;
+                > div { flex: 1; padding: 0 2rem; }
+            }
+        }
+        @include set.res-tablet() {
+            padding: 4rem 0;
+            .ib_tit p { font-size: 2.6rem; }
+            .ib_list > div {
+                padding: 0 1.2rem;
+                img { width: 4.4rem; }
+                p { font-size: set.$ft-tt-s; margin-top: 1rem; }
+                span { font-size: set.$ft-bd-s; word-break: keep-all; }
+            }
+        }
+        @include set.res-mo-tab() {
+            gap: 2.4rem;
+            .ib_list {
+                flex-direction: column;
+                > div {
+                    width: 100%; padding: 2rem 0;
+                    br { display: none; }
+                    &:not(:last-child) { border-right: none; border-bottom: .1rem solid set.$mCol-20; }
+                }
+            }
+        }
+    }
+}
