@@ -71,6 +71,7 @@ function fixtures() {
   ] }));
   const wav = fs.readFileSync(FIX + 'tone.wav');
   zipOf(`${LIB}/수업자료.zip`, [['1강.wav', wav, true], ['2강.mp3', fs.readFileSync(FIX + 'info.mp3'), false]]);
+  zipOf(`${ROOT}/추가/묶음.zip`, [['묶음/맨위 곡.wav', wav, false], ['묶음/1부/1부 1번.wav', wav, false], ['묶음/1부/1부 2번.wav', wav, true], ['묶음/2부/2부 1번.wav', wav, false]]);
 }
 
 async function launch(port, files = []) {
@@ -693,6 +694,26 @@ async function step(name, fn) {
     assert.equal(await text('trackTitle'), '연 곡');
     assert.ok((await rowsOf()).includes('연 곡'));
     await g.evaluate(() => window.Bridge.pause()); await sleep(200);
+  });
+  await step('ZIP 안의 폴더는 ZIP 줄 아래에 한 단계 들여 묶는다', async () => {
+    const fold = name => g.evaluate(n => [...document.querySelectorAll('#playlist li.groupRow')].find(x => x.querySelector('.name').textContent === n).querySelector('.foldBtn').click(), name);
+    cdp = null; // 앞에서 앱을 다시 켜서 끌어다 놓기 연결을 새로 만든다.
+    await dropAt([`${ROOT}/추가/묶음.zip`]);
+    for (let n = 0; n < 40 && !(await rowsOf()).includes('2부 1번'); n++) await sleep(250);
+    const zipHeads = (await heads()).filter(h => ['묶음', '1부', '2부'].includes(h));
+    assert.deepEqual(zipHeads, ['묶음', '1부', '2부'], '감싼 폴더는 빼고 ZIP 이름 아래에 폴더가 보인다');
+    const layout = await g.evaluate(() => [...document.querySelectorAll('#playlist li')].map(li => [li.querySelector('.name').textContent, li.classList.contains('subGroup') ? 'sub' : li.classList.contains('deep') ? 'deep' : li.classList.contains('inGroup') ? 'in' : li.classList.contains('groupRow') ? 'head' : '']));
+    const at = layout.findIndex(([n]) => n === '묶음');
+    assert.deepEqual(layout.slice(at, at + 7), [['묶음', 'head'], ['맨위 곡', 'in'], ['1부', 'sub'], ['1부 1번', 'deep'], ['1부 2번', 'deep'], ['2부', 'sub'], ['2부 1번', 'deep']], JSON.stringify(layout.slice(at)));
+    assert.match(await g.evaluate(() => [...document.querySelectorAll('#playlist li.groupRow')].find(x => x.querySelector('.name').textContent === '묶음').innerText), /4곡/);
+    await g.evaluate(() => { const u = document.getElementById('playlist'); u.scrollTop = u.scrollHeight; }); await sleep(300);
+    await shot('zip_folders');
+    await fold('1부'); await sleep(200);
+    assert.ok(!(await rowsOf()).includes('1부 1번') && (await rowsOf()).includes('2부 1번'), '안의 폴더만 접힌다');
+    await fold('1부'); await fold('묶음'); await sleep(200);
+    assert.ok(!(await heads()).includes('1부') && !(await rowsOf()).includes('맨위 곡'), 'ZIP 줄을 접으면 안의 폴더까지 접힌다');
+    await fold('묶음'); await sleep(200);
+    assert.ok((await rowsOf()).includes('1부 1번'));
   });
   await step('앱 오류 없음', async () => {
     assert.deepEqual(app.errors, []);

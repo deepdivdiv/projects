@@ -122,16 +122,18 @@
   const tracksOfHead = li => playlist.tracks.slice(Number(li.dataset.at), Number(li.dataset.at) + Number(li.dataset.count));
 
   // 같은 폴더의 곡은 항상 붙어 있게 한다. 폴더 순서는 먼저 나온 곡을 따른다.
-  // ZIP 안에 폴더가 있으면 그 폴더별로 묶는다. ZIP 맨 위의 곡은 ZIP 이름으로 묶는다.
+  // ZIP의 곡은 한데 붙어 있고, 그 안에서 다시 ZIP 안의 폴더별로 붙어 있게 한다.
+  // ZIP 맨 위의 곡은 ZIP 줄 바로 아래, 안의 폴더들보다 앞에 둔다.
   const groupKey = t => (t.subdir ? `${t.dir}/${t.subdir}` : t.dir);
   function groupedOrder(list) {
-    const groups = new Map();
+    const dirs = new Map();
     for (const t of list) {
-      const key = groupKey(t);
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(t);
+      if (!dirs.has(t.dir)) dirs.set(t.dir, new Map([[t.dir, []]]));
+      const subs = dirs.get(t.dir), key = groupKey(t);
+      if (!subs.has(key)) subs.set(key, []);
+      subs.get(key).push(t);
     }
-    return [...groups.values()].flat();
+    return [...dirs.values()].flatMap(subs => [...subs.values()].flat());
   }
   function groupsOf(list) {
     const groups = [];
@@ -151,10 +153,12 @@
       li.classList.toggle('picked', tracks.every(t => selected.has(t.uri)));
     }
   }
-  function groupRow(g, name) {
+  // depth 1은 ZIP 줄 아래에 한 단계 들여 쓴 ZIP 안의 폴더 줄이다.
+  function groupRow(g, name, depth = 0) {
     const total = g.tracks.reduce((s, t) => s + t.duration, 0), zip = g.dir.startsWith('zip:');
     const li = row({ tile: zip && !g.subdir ? 'zip' : 'folder', name, sub: `${g.tracks.length}곡 · ${fmt(total)}` });
     li.classList.add('groupRow');
+    li.classList.toggle('subGroup', depth > 0);
     li.classList.toggle('closed', foldedGroups.has(g.key));
     li.dataset.at = g.start;
     li.dataset.count = g.tracks.length;
@@ -173,20 +177,19 @@
     savePrefs();
     renderPlaylist();
   }
-  // 이름이 같은 폴더는 상위 폴더까지 보여 구분한다. ZIP 안의 폴더는 'ZIP 이름 › 폴더'로 보인다.
+  // 이름이 같은 폴더는 상위 폴더까지 보여 구분한다.
   function groupNames(groups) {
     const seen = {};
-    for (const g of groups) seen[g.place] = (seen[g.place] || 0) + 1;
-    return g => {
-      if (g.subdir) return `${g.place} › ${g.subdir.split('/').join(' › ')}`;
-      return seen[g.place] > 1 && !g.dir.startsWith('zip:') ? shortPath(g.dir).split('/').slice(-2).join('/') : g.place;
-    };
+    for (const g of groups) if (!g.subdir) seen[g.place] = (seen[g.place] || 0) + 1;
+    return g => (seen[g.place] > 1 && !g.dir.startsWith('zip:') ? shortPath(g.dir).split('/').slice(-2).join('/') : g.place);
   }
-  function playlistRow(t, i, inGroup) {
-    const about = [t.artist, t.album].filter(Boolean).join(' · ') || (inGroup ? '' : t.place);
+  // depth 0: 묶음 없음, 1: 폴더나 ZIP 아래, 2: ZIP 안의 폴더 아래
+  function playlistRow(t, i, depth) {
+    const about = [t.artist, t.album].filter(Boolean).join(' · ') || (depth ? '' : t.place);
     const li = row({ tile: 'track', thumb: t.uri, name: t.tag || t.title, sub: about });
     li.dataset.i = li.dataset.at = i;
-    li.classList.toggle('inGroup', inGroup);
+    li.classList.toggle('inGroup', depth > 0);
+    li.classList.toggle('deep', depth > 1);
     li.querySelector('.main').prepend(el('span', 'idx', i + 1));
     li.append(el('span', 'dur', fmt(t.duration)), action('trash', '목록에서 빼기', () => removeTracks([t])));
     return li;
@@ -194,15 +197,37 @@
   function renderPlaylist() {
     const ul = $('playlist'), list = playlist.tracks, q = query.trim().toLowerCase(), rows = document.createDocumentFragment();
     const groups = groupsOf(list), nameOf = groupNames(groups);
+    const foundIn = g => g.tracks.map((t, n) => [t, g.start + n]).filter(([t]) => !q || matches(t, q));
+    const folded = key => !q && foldedGroups.has(key);
     let shown = 0;
-    for (const g of groups) {
-      const found = g.tracks.map((t, n) => [t, g.start + n]).filter(([t]) => !q || matches(t, q));
-      if (!found.length) continue;
-      const inGroup = g.tracks.length > 1;
-      if (inGroup) rows.append(groupRow(g, nameOf(g)));
-      shown += found.length;
-      if (inGroup && !q && foldedGroups.has(g.dir)) continue;
-      for (const [t, i] of found) rows.append(playlistRow(t, i, inGroup));
+    for (let n = 0; n < groups.length;) {
+      // 같은 폴더나 ZIP의 묶음은 붙어 있다. ZIP 안에 폴더가 있으면 ZIP 줄 아래에 폴더 줄을 둔다.
+      let end = n + 1;
+      while (end < groups.length && groups[end].dir === groups[n].dir) end++;
+      const inner = groups.slice(n, end).map(g => [g, foundIn(g)]).filter(([, f]) => f.length);
+      n = end;
+      if (!inner.length) continue;
+      const g = inner[0][0];
+      if (inner.some(([s]) => s.subdir)) {
+        const all = groups.filter(s => s.dir === g.dir);
+        const zip = { key: g.dir, dir: g.dir, subdir: '', place: g.place, start: all[0].start, tracks: all.flatMap(s => s.tracks) };
+        rows.append(groupRow(zip, g.place));
+        for (const [, f] of inner) shown += f.length;
+        if (folded(zip.key)) continue;
+        for (const [s, f] of inner) {
+          if (s.subdir) rows.append(groupRow(s, s.subdir.split('/').join(' › '), 1));
+          if (s.subdir && folded(s.key)) continue;
+          for (const [t, i] of f) rows.append(playlistRow(t, i, s.subdir ? 2 : 1));
+        }
+        continue;
+      }
+      for (const [s, f] of inner) {
+        const inGroup = s.tracks.length > 1;
+        if (inGroup) rows.append(groupRow(s, nameOf(s)));
+        shown += f.length;
+        if (inGroup && folded(s.key)) continue;
+        for (const [t, i] of f) rows.append(playlistRow(t, i, inGroup ? 1 : 0));
+      }
     }
     ul.textContent = '';
     ul.append(rows);

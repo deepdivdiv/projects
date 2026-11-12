@@ -56,6 +56,9 @@
 #playlist li.inGroup .tile { width: 34px; height: 34px; }
 #playlist .groupRow { padding-left: 0; margin-top: 8px; cursor: default; }
 #playlist .groupRow:first-child { margin-top: 0; }
+/* ZIP 줄 아래의 ZIP 안 폴더 줄과 그 곡 */
+#playlist .groupRow.subGroup { margin-left: 26px; margin-top: 2px; }
+#playlist li.inGroup.deep { margin-left: 52px; }
 #playlist .groupRow.on { background: none; box-shadow: none; }
 #playlist .groupRow.picked, #playlist .groupRow.picked:hover { background: rgba(var(--ink),.16); }
 #playlist .groupRow .main { padding: 5px 0; }
