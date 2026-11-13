@@ -13,6 +13,8 @@ on:
       - 'ios/**'
       - 'www/**'
       - 'docs/**'
+      - 'pwa/**'
+      - 'store/**'
       - 'capacitor.config.json'
       - 'package.json'
       - 'package-lock.json'
@@ -85,7 +87,7 @@ jobs:
           TAG="ios-v${{ steps.ver.outputs.version }}-${{ github.run_number }}"
           gh release create "$TAG" out/DIV_AUDIO_APP.ipa \
             --title "DIV AUDIO APP iOS ${{ steps.ver.outputs.version }} (#${{ github.run_number }})" \
-            --notes "서명 안 된 iOS 빌드입니다. 설치 방법: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" \
+            --notes "서명 안 된 iOS 빌드입니다. 설치 방법: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ipa/" \
             --latest
 
   pages:
@@ -102,20 +104,32 @@ jobs:
           name: ipa
           path: site-ipa
 
+      # 사이트 맨 앞(/)은 아이폰 Safari에서 '홈 화면에 추가'로 설치하는 웹앱,
+      # /ipa/는 AltStore·Sideloadly용 IPA 설치 안내 페이지다.
       - name: Assemble site
         env:
           VERSION: ${{ needs.build.outputs.version }}
           BUILD: ${{ needs.build.outputs.build }}
-          BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ipa
         run: |
-          mkdir -p site
-          cp -R docs/. site/
-          cp site-ipa/DIV_AUDIO_APP.ipa site/
+          mkdir -p site/ipa
+          cp -R www/. site/
+          cp pwa/webbridge.js pwa/sw.js pwa/manifest.webmanifest site/
           cp store/graphics/icon_512.png site/icon.png
           cp store/privacy-policy.html site/privacy.html
-          SIZE=$(stat -c%s site/DIV_AUDIO_APP.ipa)
+          sed -i "s/__BUILD__/${{ github.run_number }}/" site/sw.js
+          HEAD='<link rel="manifest" href="manifest.webmanifest">\n<meta name="theme-color" content="#000000">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n<meta name="apple-mobile-web-app-title" content="DIV AUDIO">\n<link rel="apple-touch-icon" href="icon.png">\n<link rel="icon" href="icon.png">'
+          sed -i "s|</head>|$HEAD\n</head>|" site/index.html
+          sed -i 's|<script src="bridge.js"></script>|<script src="webbridge.js"></script>\n<script src="bridge.js"></script>|' site/index.html
+          grep -q 'webbridge.js' site/index.html && grep -q 'manifest.webmanifest' site/index.html
+
+          cp -R docs/. site/ipa/
+          cp site-ipa/DIV_AUDIO_APP.ipa site/ipa/
+          cp site/icon.png site/privacy.html site/ipa/
+          cd site/ipa
+          SIZE=$(stat -c%s DIV_AUDIO_APP.ipa)
           DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          cat > site/altstore.json <<EOF
+          cat > altstore.json <<EOF
           {
             "name": "DIV AUDIO APP",
             "identifier": "com.snet.musicapk.source",
@@ -136,7 +150,7 @@ jobs:
             }]
           }
           EOF
-          sed -i "s/__VERSION__/$VERSION ($BUILD)/g; s/__DATE__/${DATE%T*}/g" site/index.html
+          sed -i "s/__VERSION__/$VERSION ($BUILD)/g; s/__DATE__/${DATE%T*}/g" index.html
 
       - uses: actions/configure-pages@v5
 

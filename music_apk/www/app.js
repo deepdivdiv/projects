@@ -6,7 +6,7 @@
   let browsing = null, folder = null, index = 0, position = 0, duration = 0, playing = false;
   const SPEEDS = [1, 1.25, 1.5, 1.75, 2];
   const isIOS = !!(window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'ios');
-  const SAVED_TEXT = isIOS ? '파일 앱 > DIV AUDIO APP > 내보내기에 저장했습니다.' : 'Download 폴더에 저장했습니다.';
+  const SAVED_TEXT = B.web ? '저장했습니다.' : isIOS ?'파일 앱 > DIV AUDIO APP > 내보내기에 저장했습니다.' : 'Download 폴더에 저장했습니다.';
   let storeMode = false, sheetColl = null, systemFontLoaded = false;
   let speed = 1, busyTimer = 0, toastTimer = 0, infoToken = null, lastExport = null;
   let dragging = false, sheetMode = null, editing = null, artToken = 0, currentArt = null;
@@ -281,7 +281,8 @@
     $('miniIcon').setAttribute('d', playing ? PAUSE : PLAY);
   }
   async function disconnect(d) {
-    if (!confirm(`'${d.name}' 폴더 연결을 해제할까요?\n폰의 파일은 지워지지 않습니다.`)) return;
+    const note = B.web ? `'${d.name}'을(를) 앱에서 지울까요?\n'파일' 앱의 원본은 지워지지 않습니다.` : `'${d.name}' 폴더 연결을 해제할까요?\n폰의 파일은 지워지지 않습니다.`;
+    if (!confirm(note)) return;
     const r = await B.removeFolder(d.tree);
     if (r.granted) browse(''); else showAccess();
   }
@@ -293,7 +294,11 @@
     $('browseList').textContent = ''; $('crumbs').textContent = ''; $('browseInfo').textContent = '';
     $('browseList').hidden = true;
     $('browseTitle').textContent = 'DIV AUDIO APP';
-    if (storeMode) {
+    if (B.web) {
+      $('accessTitle').textContent = '음악을 가져와 주세요';
+      $('accessText').textContent = "'파일' 앱에서 음원이나 ZIP을 고르면 앱 안에 저장됩니다. 폴더째 넣으려면 '파일' 앱에서 폴더를 길게 눌러 '압축'한 뒤 그 ZIP을 고르세요.";
+      $('btnAccess').textContent = '음악 가져오기';
+    } else if (storeMode) {
       $('accessTitle').textContent = '음악 폴더를 연결해 주세요';
       $('accessText').textContent = '음악이 들어 있는 폴더를 고르면 하위 폴더와 ZIP까지 앱에서 볼 수 있습니다.';
       $('btnAccess').textContent = '음악 폴더 연결';
@@ -883,7 +888,7 @@
     }, null, 2);
   }
   const backupName = () => `DAA_북마크백업_${stamp()}.json`;
-  if (isIOS) $('btnBackupSave').textContent = '전체 백업 파일 저장 (파일 앱)';
+  if (isIOS || B.web) $('btnBackupSave').textContent = '전체 백업 파일 저장 (파일 앱)';
   $('btnBackupSave').onclick = async () => {
     if (!marks().length) { toast('저장된 북마크가 없습니다.'); return; }
     try {
@@ -1591,6 +1596,7 @@
   $('btnConnect').onclick = async () => { await B.requestAccess(); browse(''); };
   B.hasAccess().then(({ granted, store, version }) => {
     storeMode = !!store;
+    if (B.web) $('btnConnect').textContent = '가져오기';
     $('appVersion').textContent = `DIV AUDIO APP 버전 ${version || ''}`;
     renderTabs();
     if (granted) start(); else if (libTab !== 'folder') setTab(libTab); else showAccess();

@@ -39,6 +39,12 @@
     return;
   }
 
+  // 웹앱(PWA) 배포본에는 webbridge.js가 함께 실려서 실제로 재생한다.
+  if (window.WebBridge) {
+    window.Bridge = window.WebBridge;
+    return;
+  }
+
   // ---- 브라우저 미리보기용 ----
   const ROOT = '/storage/emulated/0', MUSIC = ROOT + '/Music';
   const tracks = (name, lens) => lens.map((s, i) => ({ uri: name + i, title: `${String(i + 1).padStart(2, '0')}_${name}`, duration: s * 1000 }));

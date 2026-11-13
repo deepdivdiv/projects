@@ -1,0 +1,15 @@
+{
+  "name": "DIV AUDIO APP",
+  "short_name": "DIV AUDIO",
+  "description": "폴더와 ZIP 파일째로 듣는 오디오 플레이어",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
