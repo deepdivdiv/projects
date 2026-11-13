@@ -4,19 +4,30 @@ const CACHE = 'daa-__BUILD__';
 const FILES = ['./', 'index.html', 'style.css', 'theme.css', 'licenses.js', 'gestures.js', 'libutil.js', 'webbridge.js', 'bridge.js', 'app.js', 'manifest.webmanifest', 'icon.png'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE)
+    .then(c => c.addAll(FILES.map(f => new Request(f, { cache: 'reload' }))))
+    .then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
-// 먼저 네트워크에서 최신 파일을 받고, 인터넷이 안 되면 캐시를 쓴다.
+
+// 폰에 저장된 파일로 바로 띄우고, 최신 파일은 뒤에서 받아 두었다가 다음 실행 때 쓴다.
+// 신호가 약한 곳(지하철, 엘리베이터)에서도 네트워크를 기다리지 않아서 앱이 즉시 열린다.
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin || url.pathname.includes('/ipa/')) return;
-  e.respondWith(
-    fetch(e.request).then(res => {
-      if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); }
+  const page = e.request.mode === 'navigate';
+  e.respondWith(caches.open(CACHE).then(async cache => {
+    const cached = await cache.match(page ? 'index.html' : e.request, { ignoreSearch: true });
+    const fresh = fetch(e.request, { cache: 'no-cache' }).then(res => {
+      if (res.ok && res.type === 'basic') cache.put(page ? 'index.html' : e.request, res.clone());
       return res;
-    }).catch(() => caches.match(e.request, { ignoreSearch: true }).then(r => r || caches.match('index.html')))
-  );
+    });
+    if (cached) {
+      e.waitUntil(fresh.catch(() => {}));
+      return cached;
+    }
+    return fresh.catch(() => cache.match('index.html'));
+  }));
 });
