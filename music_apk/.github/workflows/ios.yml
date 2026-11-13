@@ -1,0 +1,148 @@
+# DIV AUDIO APP iOS 빌드 + 설치 페이지 배포.
+# 윈도우 PC에서는 iOS 앱을 빌드할 수 없어서 GitHub의 macOS 서버에서 빌드한다.
+# 1) 서명 안 된 .ipa를 만들어 GitHub Release에 올리고
+# 2) docs/ 설치 페이지 + .ipa + AltStore 소스를 GitHub Pages에 배포한다.
+# 아이폰 설치는 AltStore / SideStore / Sideloadly가 본인 Apple ID로 서명해서 한다.
+name: iOS build & install page
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'ios/**'
+      - 'www/**'
+      - 'docs/**'
+      - 'capacitor.config.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/ios.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ios-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+      build: ${{ steps.ver.outputs.build }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Read version
+        id: ver
+        run: |
+          PBX=ios/App/App.xcodeproj/project.pbxproj
+          echo "version=$(grep -m1 'MARKETING_VERSION' $PBX | sed -E 's/.*= *([^;]+);/\1/')" >> "$GITHUB_OUTPUT"
+          echo "build=$(grep -m1 'CURRENT_PROJECT_VERSION' $PBX | sed -E 's/.*= *([^;]+);/\1/')" >> "$GITHUB_OUTPUT"
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Copy web assets into the iOS project
+        run: npx cap sync ios
+
+      - name: Build (unsigned)
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p out/Payload
+          cp -R build/Build/Products/Release-iphoneos/App.app out/Payload/
+          cd out && zip -qry DIV_AUDIO_APP.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ipa
+          path: out/DIV_AUDIO_APP.ipa
+          retention-days: 14
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="ios-v${{ steps.ver.outputs.version }}-${{ github.run_number }}"
+          gh release create "$TAG" out/DIV_AUDIO_APP.ipa \
+            --title "DIV AUDIO APP iOS ${{ steps.ver.outputs.version }} (#${{ github.run_number }})" \
+            --notes "서명 안 된 iOS 빌드입니다. 설치 방법: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" \
+            --latest
+
+  pages:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ipa
+          path: site-ipa
+
+      - name: Assemble site
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          BUILD: ${{ needs.build.outputs.build }}
+          BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: |
+          mkdir -p site
+          cp -R docs/. site/
+          cp site-ipa/DIV_AUDIO_APP.ipa site/
+          cp store/graphics/icon_512.png site/icon.png
+          cp store/privacy-policy.html site/privacy.html
+          SIZE=$(stat -c%s site/DIV_AUDIO_APP.ipa)
+          DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          cat > site/altstore.json <<EOF
+          {
+            "name": "DIV AUDIO APP",
+            "identifier": "com.snet.musicapk.source",
+            "apps": [{
+              "name": "DIV AUDIO APP",
+              "bundleIdentifier": "com.snet.musicapk",
+              "developerName": "DIV",
+              "localizedDescription": "기기에 저장된 음원과 압축 파일을 폴더째로 재생하는 오디오 플레이어",
+              "iconURL": "$BASE/icon.png",
+              "versions": [{
+                "version": "$VERSION",
+                "buildVersion": "$BUILD",
+                "date": "$DATE",
+                "size": $SIZE,
+                "downloadURL": "$BASE/DIV_AUDIO_APP.ipa",
+                "minOSVersion": "15.0"
+              }]
+            }]
+          }
+          EOF
+          sed -i "s/__VERSION__/$VERSION ($BUILD)/g; s/__DATE__/${DATE%T*}/g" site/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

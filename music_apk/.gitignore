@@ -1,6 +1,22 @@
 node_modules/
+
+# 빌드 결과물 (Release로 배포)
 *.apk
 *.aab
-build.log
-test.log
+*.ipa
+out/
+build/
+release/
+
+# 서명 키 — 절대 커밋 금지
 keystore/
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+
+# 로그·개인 백업
+*.log
+DAA_*.json
+
+.DS_Store

@@ -1,0 +1,57 @@
+# DIV AUDIO APP iOS 빌드. 윈도우 PC에서는 iOS 앱을 빌드할 수 없어서 GitHub의 macOS 서버에서 빌드한다.
+# 결과물(서명 안 된 .ipa)은 Actions 실행 화면의 Artifacts에서 받는다.
+# Sideloadly / AltStore로 본인 Apple ID 서명을 하면 아이폰에 설치할 수 있다.
+name: music_apk iOS build
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'music_apk/ios/**'
+      - 'music_apk/www/**'
+      - 'music_apk/package.json'
+      - 'music_apk/package-lock.json'
+      - '.github/workflows/music-apk-ios.yml'
+
+jobs:
+  build:
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: music_apk
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Copy web assets into the iOS project
+        run: npx cap sync ios
+
+      - name: Build (unsigned)
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p out/Payload
+          cp -R build/Build/Products/Release-iphoneos/App.app out/Payload/
+          cd out && zip -qry DIV_AUDIO_APP_unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DIV_AUDIO_APP_unsigned_ipa
+          path: music_apk/out/DIV_AUDIO_APP_unsigned.ipa
+          retention-days: 14

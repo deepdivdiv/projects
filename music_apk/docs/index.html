@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DIV AUDIO APP 설치</title>
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<style>
+  :root { --bg: #0b0b10; --card: #17171f; --line: #2a2a36; --text: #f2f2f7; --dim: #9a9aab; --accent: #ff5a7a; --ok: #3ddc97; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 16px 64px; }
+  header { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; }
+  header img { width: 72px; height: 72px; border-radius: 16px; }
+  h1 { font-size: 24px; margin: 0; }
+  .meta { color: var(--dim); font-size: 14px; }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin: 14px 0; }
+  .btn { display: block; text-align: center; text-decoration: none; font-weight: 700; color: #fff; background: var(--accent); border-radius: 12px; padding: 14px; margin: 10px 0; }
+  .btn.sub { background: transparent; border: 1px solid var(--line); color: var(--text); font-weight: 600; }
+  ol, ul { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  .note { border-color: #5a4a1a; background: #221d0e; font-size: 15px; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--ok); border: 1px solid var(--ok); border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 2px; }
+  code { background: #23232d; padding: 1px 6px; border-radius: 6px; font-size: 14px; }
+  a { color: var(--accent); }
+  footer { color: var(--dim); font-size: 13px; text-align: center; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon.png" alt="">
+    <div>
+      <h1>DIV AUDIO APP</h1>
+      <div class="meta">iOS 버전 __VERSION__ · __DATE__ · iOS 15 이상</div>
+    </div>
+  </header>
+
+  <section class="note">
+    이 앱은 App Store가 아닌 <b>직접 설치(사이드로딩)</b> 방식으로 배포됩니다.
+    무료 Apple ID로 서명하므로 <b>7일마다 다시 서명(갱신)</b>해야 하고, 한 번에 최대 3개 앱까지 설치할 수 있습니다.
+  </section>
+
+  <section>
+    <h2>방법 1. AltStore / SideStore <span class="tag">추천</span></h2>
+    <p>AltStore 또는 SideStore가 아이폰에 이미 설치되어 있다면 버튼 한 번으로 설치됩니다. 갱신도 앱이 알아서 처리합니다.</p>
+    <a class="btn" id="alt-install" href="#">AltStore로 설치</a>
+    <a class="btn sub" id="side-install" href="#">SideStore로 설치</a>
+    <a class="btn sub" id="alt-source" href="#">AltStore에 소스 추가 (업데이트 자동 알림)</a>
+    <p class="meta">AltStore가 없다면: PC에 <a href="https://altstore.io" target="_blank" rel="noopener">AltServer</a>를 설치하고, 아이폰을 USB로 연결한 뒤 AltServer 메뉴에서 <code>Install AltStore</code>를 누르세요.</p>
+  </section>
+
+  <section>
+    <h2>방법 2. Sideloadly (Windows / Mac PC)</h2>
+    <ol>
+      <li>PC에서 아래 버튼으로 <code>DIV_AUDIO_APP.ipa</code>를 내려받습니다.</li>
+      <li><a href="https://sideloadly.io" target="_blank" rel="noopener">Sideloadly</a>를 설치하고 실행합니다. (Windows는 iTunes·iCloud 설치 필요)</li>
+      <li>아이폰을 USB로 연결하고, ipa 파일을 Sideloadly 창에 끌어다 놓습니다.</li>
+      <li>Apple ID를 입력하고 <b>Start</b>를 누릅니다.</li>
+    </ol>
+    <a class="btn sub" href="DIV_AUDIO_APP.ipa" download>IPA 파일 내려받기</a>
+  </section>
+
+  <section>
+    <h2>설치 후 아이폰에서 꼭 할 일</h2>
+    <ol>
+      <li><b>개발자 모드 켜기</b> (iOS 16 이상): 설정 → 개인정보 보호 및 보안 → 개발자 모드 → 켬 → 재시동</li>
+      <li><b>개발자 신뢰</b>: 설정 → 일반 → VPN 및 기기 관리 → 내 Apple ID 선택 → 신뢰</li>
+      <li>앱을 실행하고 음악 폴더 접근을 허용합니다.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <a href="privacy.html">개인정보처리방침</a>
+  </footer>
+</main>
+<script>
+  // AltStore/SideStore 설치 링크는 절대 주소가 필요해서 현재 페이지 주소로 만든다.
+  const base = new URL('.', location.href).href;
+  const ipa = encodeURIComponent(base + 'DIV_AUDIO_APP.ipa');
+  document.getElementById('alt-install').href = 'altstore://install?url=' + ipa;
+  document.getElementById('side-install').href = 'sidestore://install?url=' + ipa;
+  document.getElementById('alt-source').href = 'altstore://source?url=' + encodeURIComponent(base + 'altstore.json');
+</script>
+</body>
+</html>
